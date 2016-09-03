@@ -1,3 +1,20 @@
+# ProTrekkr
+
+This a fork of a fork of ProTrekkr. 
+
+Lots of code will be ripped out. Tears will be shed.
+
+Some ideas:
+
+- reorganize folder structure
+- reduce global variables 
+- remove unneeded features
+- samplerates other that 44.1 kHz
+- lua API 
+- Sporth plugin
+- more internal effects
+
+
 This repo contains a fork of ProTrekkr, now with linux JACK Audio support.
 
 see http://code.google.com/p/protrekkr/
