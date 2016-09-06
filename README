@@ -13,6 +13,7 @@ Some ideas:
 - lua API 
 - Sporth plugin
 - more internal effects
+- Conversion to C99 (code isn't really c++ anyways)
 
 
 This repo contains a fork of ProTrekkr, now with linux JACK Audio support.
