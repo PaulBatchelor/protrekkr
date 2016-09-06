@@ -81,11 +81,8 @@ extern float sp_Tvol_Mod[MAX_TRACKS];
 
 int Display_Pointer = FALSE;
 
-int CONSOLE_WIDTH;
-int CHANNELS_WIDTH;
-int TRACKS_WIDTH;
-int CONSOLE_HEIGHT;
-int CONSOLE_HEIGHT2;
+ptk_data ptk;
+
 int fluzy = -1;
 int Scopish = SCOPE_ZONE_MOD_DIR;
 char Scopish_LeftRight = FALSE;
@@ -1630,7 +1627,7 @@ int Screen_Update(void)
     if(redraw_everything)
     {
         SetColor(COL_BLACK);
-        Fillrect(0, 0, CONSOLE_WIDTH, CONSOLE_HEIGHT);
+        Fillrect(0, 0, ptk.CONSOLE_WIDTH, ptk.CONSOLE_HEIGHT);
 
         last_index = -1;
         Gui_Draw_Button_Box(MIN_VUMETER - 4, 6, (MAX_VUMETER - MIN_VUMETER) + 6, 16, "", BUTTON_NORMAL | BUTTON_DISABLED);

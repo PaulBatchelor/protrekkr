@@ -952,18 +952,18 @@ int Switch_FullScreen(int Width, int Height)
     }
     Cur_Width = Width;
     Cur_Height = Height;
-    CONSOLE_WIDTH = Cur_Width;
-    CHANNELS_WIDTH = Cur_Width - 20;
-    TRACKS_WIDTH = Cur_Width - 20 - PAT_COL_NOTE;
-    CONSOLE_HEIGHT = Cur_Height;
-    CONSOLE_HEIGHT2 = Cur_Height;
+    ptk.CONSOLE_WIDTH = Cur_Width;
+    ptk.CHANNELS_WIDTH = Cur_Width - 20;
+    ptk.TRACKS_WIDTH = Cur_Width - 20 - PAT_COL_NOTE;
+    ptk.CONSOLE_HEIGHT = Cur_Height;
+    ptk.CONSOLE_HEIGHT2 = Cur_Height;
     MAX_PATT_SCREEN_X = Cur_Width - 19;
     Set_Pattern_Size();
-    restx = CONSOLE_WIDTH - 640;
-    resty = CONSOLE_HEIGHT - 492;
-    CONSOLE_HEIGHT2 = CONSOLE_HEIGHT - 42;
+    restx = ptk.CONSOLE_WIDTH - 640;
+    resty = ptk.CONSOLE_HEIGHT - 492;
+    ptk.CONSOLE_HEIGHT2 = ptk.CONSOLE_HEIGHT - 42;
     fsize = 638 + restx;
-    Visible_Columns = CONSOLE_WIDTH / 128;
+    Visible_Columns = ptk.CONSOLE_WIDTH / 128;
 
     // Flush any pending rects
     Nbr_Update_Rects = 0;

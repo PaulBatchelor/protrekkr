@@ -299,7 +299,7 @@ void draw_pated(int track, int line, int petrack, int row)
 
     // Clear headers line
     SetColor(COL_PATTERN_LO_BACK);
-    bjbox(1, y, CONSOLE_WIDTH - 20, 12 + 8);
+    bjbox(1, y, ptk.CONSOLE_WIDTH - 20, 12 + 8);
 
     dover = PAT_COL_NOTE;
 
@@ -509,7 +509,7 @@ Skip_Header2:
     SetColor(COL_PATTERN_LO_BACK);
     bjbox(1,
           y,
-          CONSOLE_WIDTH - 20,
+          ptk.CONSOLE_WIDTH - 20,
           (Cur_Height - 372) + Patterns_Lines_Offset
          );
 
@@ -1079,7 +1079,7 @@ void draw_pated_highlight(int track, int line, int petrack, int row, int ypos)
         }
 
         SetColor(COL_PATTERN_LO_BACK);
-        bjbox(1, ypos, CHANNELS_WIDTH - 1, 16);
+        bjbox(1, ypos, ptk.CHANNELS_WIDTH - 1, 16);
 
         dover = PAT_COL_NOTE;
         Last_Pixel = dover;
@@ -2638,7 +2638,7 @@ void Mouse_Wheel_Pattern_Ed(int roll_amount, int allow)
     if(allow)
     {
         // Scroll the patterns
-        if(zcheckMouse_nobutton(0, 182, CONSOLE_WIDTH, (Cur_Height - 354) + Patterns_Lines_Offset) == 1)
+        if(zcheckMouse_nobutton(0, 182, ptk.CONSOLE_WIDTH, (Cur_Height - 354) + Patterns_Lines_Offset) == 1)
         {
             Pattern_Line += roll_amount;
             if(Continuous_Scroll && !Cur_Position) if(Pattern_Line < 0) Pattern_Line = 0;
@@ -2679,7 +2679,7 @@ void Mouse_Sliders_Right_Pattern_Ed(void)
     int sched_line;
 
     // Position the caret on the specified track/column with the mouse
-    if(zcheckMouse(1, 183 + 15, CHANNELS_WIDTH, (Cur_Height - 371) + Patterns_Lines_Offset))
+    if(zcheckMouse(1, 183 + 15, ptk.CHANNELS_WIDTH, (Cur_Height - 371) + Patterns_Lines_Offset))
     {
         int In_Scrolling = FALSE;
         Get_Column_Over_Mouse(&Track_Under_Caret,
@@ -2694,7 +2694,7 @@ void Mouse_Sliders_Right_Pattern_Ed(void)
     // Go to the row selected with the mouse
     if(!Songplaying)
     {
-        if(zcheckMouse(1, 183 + 15, CHANNELS_WIDTH, (Cur_Height - 371) + Patterns_Lines_Offset))
+        if(zcheckMouse(1, 183 + 15, ptk.CHANNELS_WIDTH, (Cur_Height - 371) + Patterns_Lines_Offset))
         {
             if(!is_recording)
             {
@@ -3346,7 +3346,7 @@ void Set_Track_Zoom(int track, TRACK_TYPE type)
 
         case TRACK_MEDIUM:
             Clear_Track_Zoom(track);
-            if(Get_Track_Real_Size(track) >= TRACKS_WIDTH)
+            if(Get_Track_Real_Size(track) >= ptk.TRACKS_WIDTH)
             {
                 // Track is too damn large to be displayed with medium font
                 Set_Track_Zoom(track, TRACK_SMALL);
@@ -3357,7 +3357,7 @@ void Set_Track_Zoom(int track, TRACK_TYPE type)
             Cur_Char_size[track] = PAT_COL_CHAR_LARGE;
             Cur_Char_Function[track].Fnc = Large_Letter;
             Cur_Note_Function[track].Fnc = blitlargenote;
-            if(Get_Track_Real_Size(track) >= TRACKS_WIDTH)
+            if(Get_Track_Real_Size(track) >= ptk.TRACKS_WIDTH)
             {
                 // Track is too damn large to be displayed with large font
                 Set_Track_Zoom(track, TRACK_MEDIUM);

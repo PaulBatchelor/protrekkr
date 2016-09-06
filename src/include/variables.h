@@ -331,10 +331,6 @@ extern int snamesel;
 
 extern int last_index;
 
-extern int CONSOLE_WIDTH;
-extern int CHANNELS_WIDTH;
-extern int TRACKS_WIDTH;
-extern int CONSOLE_HEIGHT;
 extern int Scopish;
 
 extern int Pos_Tbl_Synth_OSC1;
@@ -353,7 +349,6 @@ extern int resty;
 extern int rs_coef;
 
 extern SDL_Surface *Main_Screen;
-extern int CONSOLE_HEIGHT2;
 
 extern float left_float_render;
 extern float right_float_render;
@@ -546,5 +541,15 @@ int Init_Scopes_Buffers(void);
 
 void Remove_Title(void);
 void Switch_Cmd_Playing(int Enable);
+
+typedef struct {
+    int CONSOLE_WIDTH;
+    int CONSOLE_HEIGHT;
+    int CONSOLE_HEIGHT2;
+    int CHANNELS_WIDTH;
+    int TRACKS_WIDTH;
+} ptk_data;
+
+extern ptk_data ptk;
 
 #endif

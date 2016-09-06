@@ -209,8 +209,8 @@ int Display_Requester(LPREQUESTER Requester, int Action)
         Size_Y = (((Nbr_Lines + 5) * Font_Height) + 18);
     }
 
-    Pos_X = (CONSOLE_WIDTH - Size_X) / 2;
-    Pos_Y = (CONSOLE_HEIGHT - Size_Y) / 2;
+    Pos_X = (ptk.CONSOLE_WIDTH - Size_X) / 2;
+    Pos_Y = (ptk.CONSOLE_HEIGHT - Size_Y) / 2;
 
     Req_Back = SDL_AllocSurface(SDL_SWSURFACE, Size_X + 1, Size_Y + 1, 32, 0xff0000, 0xff00, 0xff, 0xff000000);
     if(Req_Back)
