@@ -78,7 +78,7 @@ extern para303 tb303[2];
 
 // ------------------------------------------------------
 // Functions
-int LoadPtk(char *FileName);
+int LoadPtk(ptk_data *ptk, char *FileName);
 int SavePtk(char *FileName, int NewFormat, int Simulate, Uint8 *Memory);
 void Backup_Module(char *FileName);
 int Pack_Module(char *FileName);
@@ -99,7 +99,7 @@ void Reset_Song_Length(void);
 void Clear_Input(void);
 int File_Exist(char *Format, char *Directory, char *FileName);
 int File_Exist_Req(char *Format, char *Directory, char *FileName);
-void Init_Tracker_Context_After_ModLoad(void);
+void Init_Tracker_Context_After_ModLoad(ptk_data *ptk);
 int Read_Data(void *value, int size, int amount, FILE *handle);
 int Read_Data_Swap(void *value, int size, int amount, FILE *handle);
 int Write_Data(void *value, int size, int amount, FILE *handle);

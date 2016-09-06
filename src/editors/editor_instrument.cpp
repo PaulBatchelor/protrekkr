@@ -1204,7 +1204,7 @@ void Dump_Instruments_Synths_List(int xr, int yr)
     int Nbr_Splits;
     int Font;
 
-    switch(Scopish)
+    switch(ptk.Scopish)
     {
         case SCOPE_ZONE_INSTR_LIST:
         case SCOPE_ZONE_SYNTH_LIST:
@@ -1224,7 +1224,7 @@ void Dump_Instruments_Synths_List(int xr, int yr)
                         bjbox(xr - 1, yr + (counter * 12) + 1, Cur_Width - 413, 12);
                     }
 
-                    switch(Scopish)
+                    switch(ptk.Scopish)
                     {
                         // View instruments
                         case SCOPE_ZONE_INSTR_LIST:
@@ -1425,7 +1425,7 @@ void Actualize_Instruments_Synths_List(int modeac)
     int j;
     int Nbr_Entries = 0;
 
-    switch(Scopish)
+    switch(ptk.Scopish)
     {
         case SCOPE_ZONE_INSTR_LIST:
         case SCOPE_ZONE_SYNTH_LIST:
@@ -1468,7 +1468,7 @@ void Actualize_Instruments_Synths_List(int modeac)
             Dump_Instruments_Synths_List(395, 41);
 
             Gui_Draw_Button_Box(394, 24, Cur_Width - 522, 16, "", BUTTON_NORMAL | BUTTON_DISABLED);
-            switch(Scopish)
+            switch(ptk.Scopish)
             {
                 case SCOPE_ZONE_INSTR_LIST:
 

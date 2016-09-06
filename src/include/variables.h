@@ -304,6 +304,25 @@ typedef struct
     int cStatus;
 } MARKER, *LPMARKER;
 
+typedef struct {
+    int CONSOLE_WIDTH;
+    int CONSOLE_HEIGHT;
+    int CONSOLE_HEIGHT2;
+    int CHANNELS_WIDTH;
+    int TRACKS_WIDTH;
+
+    /* do we need these? */
+    int c_l_tvol;
+    int c_r_tvol;
+    int c_l_cvol;
+    int c_r_cvol;
+
+    int Display_Pointer;
+
+    int Scopish;
+    char Scopish_LeftRight;
+} ptk_data;
+
 // ------------------------------------------------------
 // Variables
 extern int SamplesPerTick;
@@ -330,8 +349,6 @@ extern char userscreen;
 extern int snamesel;
 
 extern int last_index;
-
-extern int Scopish;
 
 extern int Pos_Tbl_Synth_OSC1;
 extern int Pos_Tbl_Synth_OSC2;
@@ -435,7 +452,7 @@ extern char Channels_Effects[MAX_TRACKS];
 // Functions
 void ResetFilters(int tr);
 void WavRenderizer();
-void Newmod(void);
+void Newmod(ptk_data *ptk);
 void GetBackMouse(void);
 void SeqFill(int st, int en, char n);
 void PutBackMouse(void);
@@ -447,7 +464,7 @@ void Clear_Instrument_Dat(int n_index, int split, int lenfir);
 void AllocateWave(int n_index, int split, long lenfir,
                   int samplechans, int clear,
                   short *Waveform1, short *Waveform2);
-void LoadFile(int Freeindex, const char *str);
+void LoadFile(ptk_data *ptk, int Freeindex, const char *str);
 void RefreshSample(void);
 void value_box(int x, int y, int val, int flags);
 void value_box3(int x, int y, char val, int flags);
@@ -498,8 +515,8 @@ void IniCsParNames(void);
 void UpSynth(int peac,int number);
 void ComputeStereo(int channel);
 void FixStereo(int channel);
-void Keyboard_Handler(void);
-void Mouse_Handler(void);
+void Keyboard_Handler(ptk_data *ptk);
+void Mouse_Handler(ptk_data *ptk);
 int Get_Track_Over_Mouse(int Mouse, int *Was_Scrolling, int Left);
 int Get_Line_Over_Mouse(void);
 void Get_Column_Over_Mouse(int *track, int *column,
@@ -529,26 +546,18 @@ int Next_Line_Pattern_Auto(int *position, int lines, int *line);
 int Get_Free_Midi_Sub_Channel(int track);
 int Search_Corresponding_Midi_Sub_Channel(int track, Uint32 Datas);
 int Get_Midi_Channel(int midi_channel);
-void Draw_Scope_Files_Button(void);
+void Draw_Scope_Files_Button(ptk_data *ptk);
 
 void Actualize_Master(char gode);
 void Display_Master_Comp(void);
 void Display_Master_Volume(void);
 void Display_Shuffle(void);
 void Actualize_Input(void);
-void Draw_Scope(void);
+void Draw_Scope(ptk_data *ptk);
 int Init_Scopes_Buffers(void);
 
 void Remove_Title(void);
 void Switch_Cmd_Playing(int Enable);
-
-typedef struct {
-    int CONSOLE_WIDTH;
-    int CONSOLE_HEIGHT;
-    int CONSOLE_HEIGHT2;
-    int CHANNELS_WIDTH;
-    int TRACKS_WIDTH;
-} ptk_data;
 
 extern ptk_data ptk;
 

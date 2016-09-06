@@ -87,7 +87,7 @@ short *Swap_New_Sample(short *buffer, int sample, int bank);
 
 // ------------------------------------------------------
 // Prepare the tracker interface once a module has been loaded
-void Init_Tracker_Context_After_ModLoad(void)
+void Init_Tracker_Context_After_ModLoad(ptk_data *ptk)
 {
 #if !defined(__WINAMP__)
     Track_Under_Caret = 0;
@@ -105,7 +105,7 @@ void Init_Tracker_Context_After_ModLoad(void)
     Post_Song_Init();
 
 #if !defined(__WINAMP__)
-    Draw_Scope();
+    Draw_Scope(ptk);
     gui_track = 0;
 #endif
 
@@ -135,7 +135,7 @@ void Init_Tracker_Context_After_ModLoad(void)
 #if !defined(__WINAMP__)
     Display_Song_Length();
 
-    Scopish = SCOPE_ZONE_MOD_DIR;
+    ptk->Scopish = SCOPE_ZONE_MOD_DIR;
     //Draw_Scope_Files_Button();
 
     Reset_Tracks_To_Render();
@@ -149,7 +149,7 @@ void Init_Tracker_Context_After_ModLoad(void)
 
 // ------------------------------------------------------
 // Load a module file
-int LoadPtk(char *FileName)
+int LoadPtk(ptk_data *ptk, char *FileName)
 {
     int Ye_Old_Phony_Value;
     int New_adsr = FALSE;
@@ -756,7 +756,7 @@ Read_Mod_File:
         }
 
         // Init the tracker context
-        Init_Tracker_Context_After_ModLoad();
+        Init_Tracker_Context_After_ModLoad(ptk);
 
 #if !defined(__WINAMP__)
         Status_Box("Module loaded sucessfully...");

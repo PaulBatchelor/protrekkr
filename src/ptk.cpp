@@ -79,13 +79,10 @@ extern int pos_scope_latency;
 
 extern float sp_Tvol_Mod[MAX_TRACKS];
 
-int Display_Pointer = FALSE;
 
 ptk_data ptk;
 
 int fluzy = -1;
-int Scopish = SCOPE_ZONE_MOD_DIR;
-char Scopish_LeftRight = FALSE;
 int rev_counter2 = 0;
 char Visible_Columns = 0;
 int rs_coef = 32768;
@@ -163,10 +160,6 @@ int player_line = 0;
 char actuloop = 0;
 int namesize = 8;
 
-int c_l_tvol = 32768;
-int c_r_tvol = 32768;
-int c_l_cvol = 32768;
-int c_r_cvol = 32768;
 
 int snamesel = INPUT_NONE;
 
@@ -207,8 +200,8 @@ extern int Ticks_Synchro_Left;
 extern int Ticks_Synchro_Right;
 extern int Continuous_Scroll;
 
-void Draw_Scope(void);
-void Draw_Scope_Files_Button(void);
+void Draw_Scope(ptk_data *ptk);
+void Draw_Scope_Files_Button(ptk_data *ptk);
 void Display_Tracks_To_Render(void);
 void Solo_Track(int track_to_solo);
 
@@ -632,7 +625,7 @@ OSStatus CompletionRoutine(SystemSoundActionID inAction, void *UserDat)
 
 // ------------------------------------------------------
 // Update the world
-int Screen_Update(void)
+int Screen_Update(ptk_data *ptk)
 {
     int FineTune_Value;
     int i;
@@ -665,7 +658,7 @@ int Screen_Update(void)
         }
     }
 
-    if(Scopish == SCOPE_ZONE_SCOPE) Draw_Scope();
+    if(ptk->Scopish == SCOPE_ZONE_SCOPE) Draw_Scope(ptk);
 
     // Sample ed.
     Draw_Wave_Data();
@@ -727,31 +720,31 @@ int Screen_Update(void)
         // Files list slider
         if(gui_action == GUI_CMD_SET_FILES_LIST_SLIDER)
         {
-            lt_ykar[Scopish] = Mouse.y - 72;
+            lt_ykar[ptk->Scopish] = Mouse.y - 72;
             Actualize_Files_List(0);
         }
 
         // File selection
         if(gui_action == GUI_CMD_SET_FILES_LIST_SELECT_FILE)
         {
-            if(lt_items[Scopish])
+            if(lt_items[ptk->Scopish])
             {
-                int broadcast = lt_index[Scopish] + (Mouse.y - 43) / (Font_Height + 1);
+                int broadcast = lt_index[ptk->Scopish] + (Mouse.y - 43) / (Font_Height + 1);
                 if(Get_FileType(broadcast) != _A_SEP)
                 {
                     last_index = -1;
-                    if(broadcast != lt_curr[Scopish])
+                    if(broadcast != lt_curr[ptk->Scopish])
                     {
-                        lt_curr[Scopish] = broadcast;
+                        lt_curr[ptk->Scopish] = broadcast;
                         Actualize_Files_List(1);
                     }
                     else
                     {
-                        switch(Get_FileType(lt_curr[Scopish]))
+                        switch(Get_FileType(lt_curr[ptk->Scopish]))
                         {
                             case _A_FILE:
                                 Stop_Current_Instrument();
-                                LoadFile(Current_Instrument, Get_FileName(lt_curr[Scopish]));
+                                LoadFile(ptk, Current_Instrument, Get_FileName(lt_curr[ptk->Scopish]));
                                 break;
                             case _A_SUBDIR:
                                 Set_Current_Dir();
@@ -767,20 +760,20 @@ int Screen_Update(void)
         // Play a .wav
         if(gui_action == GUI_CMD_SET_FILES_LIST_PLAY_WAV)
         {
-            if(lt_items[Scopish])
+            if(lt_items[ptk->Scopish])
             {
-                int broadcast = lt_index[Scopish] + (Mouse.y - 43) / 12;
+                int broadcast = lt_index[ptk->Scopish] + (Mouse.y - 43) / 12;
                 last_index = -1;
-                lt_curr[Scopish] = broadcast;
-                switch(Get_FileType(lt_curr[Scopish]))
+                lt_curr[ptk->Scopish] = broadcast;
+                switch(Get_FileType(lt_curr[ptk->Scopish]))
                 {
                     case _A_FILE:
                         Actualize_Files_List(1);
 #if defined(__WIN32__)
-                        PlaySound(Get_FileName(lt_curr[Scopish]), NULL, SND_FILENAME | SND_ASYNC);
+                        PlaySound(Get_FileName(lt_curr[ptk->Scopish]), NULL, SND_FILENAME | SND_ASYNC);
 #endif
 #if defined(__MACOSX__)
-                        if(FSPathMakeRef((Uint8 *) Get_FileName(lt_curr[Scopish]), &soundFileRef, NULL) == noErr)
+                        if(FSPathMakeRef((Uint8 *) Get_FileName(lt_curr[ptk->Scopish]), &soundFileRef, NULL) == noErr)
                         {
                             SystemSoundGetActionID(&soundFileRef, &WavActionID);
                             SystemSoundSetCompletionRoutine(WavActionID,
@@ -795,7 +788,7 @@ int Screen_Update(void)
                         FILE *fptr;
                         char temp[1024];
 
-                        sprintf(temp, "aplay %s & > /dev/null", Get_FileName(lt_curr[Scopish]));
+                        sprintf(temp, "aplay %s & > /dev/null", Get_FileName(lt_curr[ptk->Scopish]));
                         fptr = popen(temp, "r");
                         pclose(fptr);
 #endif
@@ -1077,7 +1070,7 @@ int Screen_Update(void)
         {
             Actualize_Master(teac);
             Actupated(0);
-            Draw_Scope();
+            Draw_Scope(ptk);
             Display_Tracks_To_Render();
             Actualize_Track_Ed(0);
             Actualize_Track_Fx_Ed(0);
@@ -1476,7 +1469,7 @@ int Screen_Update(void)
 
         if(gui_action == GUI_CMD_NEW_MODULE)
         {
-            Newmod();
+            Newmod(ptk);
         }
 
         if(gui_action == GUI_CMD_UPDATE_SEQ_ED)
@@ -1612,7 +1605,7 @@ int Screen_Update(void)
 
         if(gui_action == GUI_CMD_REFRESH_PALETTE)
         {
-            Display_Pointer = TRUE;
+            ptk->Display_Pointer = TRUE;
         }
 
         if(gui_action == GUI_CMD_EXIT)
@@ -1627,7 +1620,7 @@ int Screen_Update(void)
     if(redraw_everything)
     {
         SetColor(COL_BLACK);
-        Fillrect(0, 0, ptk.CONSOLE_WIDTH, ptk.CONSOLE_HEIGHT);
+        Fillrect(0, 0, ptk->CONSOLE_WIDTH, ptk->CONSOLE_HEIGHT);
 
         last_index = -1;
         Gui_Draw_Button_Box(MIN_VUMETER - 4, 6, (MAX_VUMETER - MIN_VUMETER) + 6, 16, "", BUTTON_NORMAL | BUTTON_DISABLED);
@@ -1636,7 +1629,7 @@ int Screen_Update(void)
         Display_Master_Volume();
         Display_Shuffle();
 
-        Draw_Scope_Files_Button();
+        Draw_Scope_Files_Button(ptk);
 
         if(!Done_Tip)
         {
@@ -1745,8 +1738,8 @@ int Screen_Update(void)
     // Checking for mouse and keyboard events ------------------------------------
     if(!In_Requester)
     {
-        Mouse_Handler();
-        Keyboard_Handler();
+        Mouse_Handler(ptk);
+        Keyboard_Handler(ptk);
     }
     else
     {
@@ -1844,7 +1837,7 @@ int Screen_Update(void)
 
 // ------------------------------------------------------
 // Attempt to load any supported file format
-void LoadFile(int Freeindex, const char *str)
+void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
 {
     long Datalen = 0;
     int ld0 = 0;
@@ -1920,7 +1913,7 @@ void LoadFile(int Freeindex, const char *str)
             // name / number of channels
             SongStop();
             AUDIO_Stop();
-            LoadAmigaMod(name, FileName, found_mod, digibooster);
+            LoadAmigaMod(ptk, name, FileName, found_mod, digibooster);
             Renew_Sample_Ed();
             fclose(in);
             gui_action = GUI_CMD_NONE;
@@ -1976,7 +1969,7 @@ void LoadFile(int Freeindex, const char *str)
             sprintf(name, "%s", FileName);
             SongStop();
             AUDIO_Stop();
-            LoadPtk(name);
+            LoadPtk(ptk, name);
             Renew_Sample_Ed();
             AUDIO_Play();
         }
@@ -2360,7 +2353,7 @@ void SongStop(void)
 
 // ------------------------------------------------------
 // Create a new song
-void Newmod(void)
+void Newmod(ptk_data *ptk)
 {
     int i;
     int Old_Prg;
@@ -2522,7 +2515,7 @@ void Newmod(void)
     Reset_Song_Length();
     Display_Song_Length();
 
-    Draw_Scope();
+    Draw_Scope(ptk);
 
     Status_Box("Zzaapp done.");
 
@@ -3304,7 +3297,7 @@ int Raw_Keys_to_Send[] =
 
 // ------------------------------------------------------
 // KeyBoard ShortCut Handler
-void Keyboard_Handler(void)
+void Keyboard_Handler(ptk_data *ptk)
 {
     int Cur_Position = Get_Song_Position();
     int Done_Value;
@@ -4288,15 +4281,15 @@ void Keyboard_Handler(void)
                 // Display instruments list
                 if(Keys[SDLK_i - UNICODE_OFFSET1])
                 {
-                    Scopish = SCOPE_ZONE_INSTR_LIST;
-                    Draw_Scope_Files_Button();
+                    ptk->Scopish = SCOPE_ZONE_INSTR_LIST;
+                    Draw_Scope_Files_Button(ptk);
                 }
 
                 // Display synths list
                 if(Keys[SDLK_s - UNICODE_OFFSET1])
                 {
-                    Scopish = SCOPE_ZONE_SYNTH_LIST;
-                    Draw_Scope_Files_Button();
+                    ptk->Scopish = SCOPE_ZONE_SYNTH_LIST;
+                    Draw_Scope_Files_Button(ptk);
                 }
 
             }
@@ -5112,7 +5105,7 @@ char zcheckMouse(int x, int y, int xs, int ys)
 
 // ------------------------------------------------------
 // Mouse Handler
-void Mouse_Handler(void)
+void Mouse_Handler(ptk_data *ptk)
 {
     int Cur_Position = Get_Song_Position();
     int i;
@@ -5128,7 +5121,7 @@ void Mouse_Handler(void)
         Mouse_Wheel_Pattern_Ed(-MouseWheel_Multiplier, !Songplaying && !is_recording);
 
         // Scroll the files list
-        switch(Scopish)
+        switch(ptk->Scopish)
         {
             case SCOPE_ZONE_INSTR_LIST:
             case SCOPE_ZONE_SYNTH_LIST:
@@ -5152,7 +5145,7 @@ void Mouse_Handler(void)
                 // Scroll the files lists
                 if(zcheckMouse(393, 41, (Cur_Width - 394), 136) == 1)
                 {
-                    lt_index[Scopish]--;
+                    lt_index[ptk->Scopish]--;
                     gui_action = GUI_CMD_FILELIST_SCROLL;
                 }
                 break;
@@ -5181,7 +5174,7 @@ void Mouse_Handler(void)
         // Scroll the pattern
         Mouse_Wheel_Pattern_Ed(MouseWheel_Multiplier, !Songplaying && !is_recording);
 
-        switch(Scopish)
+        switch(ptk->Scopish)
         {
             case SCOPE_ZONE_INSTR_LIST:
             case SCOPE_ZONE_SYNTH_LIST:
@@ -5205,7 +5198,7 @@ void Mouse_Handler(void)
                 // Scroll the files lists
                 if(zcheckMouse(393, 41, (Cur_Width - 394), 136) == 1)
                 {
-                    lt_index[Scopish]++;
+                    lt_index[ptk->Scopish]++;
                     gui_action = GUI_CMD_FILELIST_SCROLL;
                 }
                 break;
@@ -5229,7 +5222,7 @@ void Mouse_Handler(void)
 
     if(Mouse.button & MOUSE_LEFT_BUTTON)
     {
-        switch(Scopish)
+        switch(ptk->Scopish)
         {
             case SCOPE_ZONE_INSTR_LIST:
             case SCOPE_ZONE_SYNTH_LIST:
@@ -5275,81 +5268,81 @@ void Mouse_Handler(void)
         // Modules dir.
         if(zcheckMouse(Cur_Width - 126, 24, 18, 16))
         {
-            Scopish = SCOPE_ZONE_MOD_DIR;
-            Draw_Scope_Files_Button();
+            ptk->Scopish = SCOPE_ZONE_MOD_DIR;
+            Draw_Scope_Files_Button(ptk);
         }
 
         // Instruments dir.
         if(zcheckMouse(Cur_Width - 108, 24, 18, 16))
         {
-            Scopish = SCOPE_ZONE_INSTR_DIR;
-            Draw_Scope_Files_Button();
+            ptk->Scopish = SCOPE_ZONE_INSTR_DIR;
+            Draw_Scope_Files_Button(ptk);
         }
 
         // Samples dir.
         if(zcheckMouse(Cur_Width - 90, 24, 18, 16))
         {
-            Scopish = SCOPE_ZONE_SAMPLE_DIR;
-            Draw_Scope_Files_Button();
+            ptk->Scopish = SCOPE_ZONE_SAMPLE_DIR;
+            Draw_Scope_Files_Button(ptk);
         }
 
         // Presets dir.
         if(zcheckMouse(Cur_Width - 72, 24, 18, 16))
         {
-            Scopish = SCOPE_ZONE_PRESET_DIR;
-            Draw_Scope_Files_Button();
+            ptk->Scopish = SCOPE_ZONE_PRESET_DIR;
+            Draw_Scope_Files_Button(ptk);
         }
 
         // Reverbs dir.
         if(zcheckMouse(Cur_Width - 54, 24, 18, 16))
         {
-            Scopish = SCOPE_ZONE_REVERB_DIR;
-            Draw_Scope_Files_Button();
+            ptk->Scopish = SCOPE_ZONE_REVERB_DIR;
+            Draw_Scope_Files_Button(ptk);
         }
 
         // Patterns dir.
         if(zcheckMouse(Cur_Width - 36, 24, 18, 16))
         {
-            Scopish = SCOPE_ZONE_PATTERN_DIR;
-            Draw_Scope_Files_Button();
+            ptk->Scopish = SCOPE_ZONE_PATTERN_DIR;
+            Draw_Scope_Files_Button(ptk);
         }
 
         // Patterns dir.
         if(zcheckMouse(Cur_Width - 18, 24, 18, 16))
         {
-            Scopish = SCOPE_ZONE_MIDICFG_DIR;
-            Draw_Scope_Files_Button();
+            ptk->Scopish = SCOPE_ZONE_MIDICFG_DIR;
+            Draw_Scope_Files_Button(ptk);
         }
 
         // Tracks scopes.
         if(zcheckMouse(Cur_Width - 54, 6, 18, 16))
         {
-            if(Scopish != SCOPE_ZONE_SCOPE)
+            if(ptk->Scopish != SCOPE_ZONE_SCOPE)
             {
-                Scopish_LeftRight = FALSE;
-                Scopish = SCOPE_ZONE_SCOPE;
-                Draw_Scope_Files_Button();
+                ptk->Scopish_LeftRight = FALSE;
+                ptk->Scopish = SCOPE_ZONE_SCOPE;
+                Draw_Scope_Files_Button(ptk);
             }
-            if(Scopish == SCOPE_ZONE_SCOPE && Scopish_LeftRight == TRUE)
+            if(ptk->Scopish == SCOPE_ZONE_SCOPE && ptk->Scopish_LeftRight == TRUE)
             {
-                Scopish_LeftRight = FALSE;
-                Scopish = SCOPE_ZONE_SCOPE;
-                Draw_Scope_Files_Button();
+                ptk->Scopish_LeftRight = FALSE;
+                ptk->Scopish = SCOPE_ZONE_SCOPE;
+                Draw_Scope_Files_Button(ptk);
             }
         }
 
         // Instruments list
         if(zcheckMouse(Cur_Width - 36, 6, 18, 16))
         {
-            Scopish = SCOPE_ZONE_INSTR_LIST;
-            Draw_Scope_Files_Button();
+            ptk->Scopish = SCOPE_ZONE_INSTR_LIST;
+            Draw_Scope_Files_Button(ptk);
         }
 
         // Synths list
         if(zcheckMouse(MAX_PATT_SCREEN_X + 1, 6, 18, 16))
         {
-            Scopish = SCOPE_ZONE_SYNTH_LIST;
-            Draw_Scope_Files_Button();
+            ptk->Scopish = SCOPE_ZONE_SYNTH_LIST;
+            Draw_Scope_Files_Button(ptk);
         }
 
         Mouse_Left_303_Ed();
@@ -5365,7 +5358,7 @@ void Mouse_Handler(void)
             gui_action = GUI_CMD_UPDATE_PATTERN_ED;
         }
 
-        switch(Scopish)
+        switch(ptk->Scopish)
         {
             case SCOPE_ZONE_INSTR_LIST:
             case SCOPE_ZONE_SYNTH_LIST:
@@ -5774,7 +5767,7 @@ void Mouse_Handler(void)
             gui_action = GUI_CMD_PLAY_SONG;
         }
 
-        switch(Scopish)
+        switch(ptk->Scopish)
         {
             case SCOPE_ZONE_INSTR_LIST:
             case SCOPE_ZONE_SYNTH_LIST:
@@ -5924,17 +5917,17 @@ void Mouse_Handler(void)
         // Stereo scopes.
         if(zcheckMouse(Cur_Width - 54, 6, 18, 16))
         {
-            if(Scopish != SCOPE_ZONE_SCOPE)
+            if(ptk->Scopish != SCOPE_ZONE_SCOPE)
             {
-                Scopish_LeftRight = TRUE;
-                Scopish = SCOPE_ZONE_SCOPE;
-                Draw_Scope_Files_Button();
+                ptk->Scopish_LeftRight = TRUE;
+                ptk->Scopish = SCOPE_ZONE_SCOPE;
+                Draw_Scope_Files_Button(ptk);
             }
-            if(Scopish == SCOPE_ZONE_SCOPE && Scopish_LeftRight == FALSE)
+            if(ptk->Scopish == SCOPE_ZONE_SCOPE && ptk->Scopish_LeftRight == FALSE)
             {
-                Scopish_LeftRight = TRUE;
-                Scopish = SCOPE_ZONE_SCOPE;
-                Draw_Scope_Files_Button();
+                ptk->Scopish_LeftRight = TRUE;
+                ptk->Scopish = SCOPE_ZONE_SCOPE;
+                Draw_Scope_Files_Button(ptk);
             }
         }
 
@@ -5951,7 +5944,7 @@ void Mouse_Handler(void)
         Mouse_Right_Master_Ed();
 
         // Play a .wav
-        switch(Scopish)
+        switch(ptk->Scopish)
         {
             case SCOPE_ZONE_INSTR_LIST:
             case SCOPE_ZONE_SYNTH_LIST:
@@ -6489,7 +6482,7 @@ char *table_channels_scopes[] =
     "R",
 };
 
-void Draw_Scope(void)
+void Draw_Scope(ptk_data *ptk)
 {
     int i;
     int pixel_color = COL_SCOPESSAMPLES;
@@ -6507,13 +6500,13 @@ void Draw_Scope(void)
     if(offset_scope < 0) offset_scope = 0;
     if(offset_scope > (AUDIO_Latency / 2) - 1) offset_scope = (AUDIO_Latency / 2) - 1;
 
-    if(Scopish == SCOPE_ZONE_SCOPE)
+    if(ptk->Scopish == SCOPE_ZONE_SCOPE)
     {
         SetColor(COL_BACKGROUND);
         Fillrect(394, 42, Cur_Width, 178);
 
         cur_pos_x = 0;
-        if(Scopish_LeftRight)
+        if(ptk->Scopish_LeftRight)
         {
             // Left / Right
             ptrTbl_Dat = &Scope_Table_Dats[Scope_Table[2].offset];
@@ -6653,9 +6646,9 @@ void Display_Dirs_Icons(int Idx)
     Gui_Draw_Button_Box(Cur_Width - 18, 6, 16, 16, "Sy", Tab_Highlight[8 + Idx] | BUTTON_TEXT_CENTERED);
 }
 
-void Draw_Scope_Files_Button(void)
+void Draw_Scope_Files_Button(ptk_data *ptk)
 {
-    switch(Scopish)
+    switch(ptk->Scopish)
     {
         case SCOPE_ZONE_SCOPE:
             SetColor(COL_BACKGROUND);
@@ -6693,7 +6686,7 @@ void Draw_Scope_Files_Button(void)
             Actualize_Files_List(0);
             Gui_Draw_Button_Box(Cur_Width - 54, 6, 16, 16, "\255", BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
 
-            switch(Scopish)
+            switch(ptk->Scopish)
             {
                 case SCOPE_ZONE_MOD_DIR:
                     Display_Dirs_Icons(3);
@@ -6822,4 +6815,17 @@ void Note_Jazz_Off(int note)
 #endif
 #endif
 
+}
+
+void ptk_init(ptk_data *ptk)
+{
+    ptk->c_l_tvol = 32768;
+    ptk->c_r_tvol = 32768;
+    ptk->c_l_cvol = 32768;
+    ptk->c_r_cvol = 32768;
+
+    ptk->Display_Pointer = FALSE;
+    
+    ptk->Scopish = SCOPE_ZONE_MOD_DIR;
+    ptk->Scopish_LeftRight = FALSE;
 }

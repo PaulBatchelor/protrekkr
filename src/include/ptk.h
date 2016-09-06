@@ -133,7 +133,7 @@ extern HWND Main_Window;
 // Functions
 int Init_Context(void);
 void Destroy_Context(void);
-int Screen_Update(void);
+int Screen_Update(ptk_data *ptk);
 void STDCALL Mixer(Uint8 *Buffer, Uint32 Len);
 SDL_Surface *Load_Skin_Picture(char *name);
 LPJAZZ_KEY Get_Jazz_Key_Off(JAZZ_KEY Pool[MAX_TRACKS][MAX_POLYPHONY], int Note);
@@ -144,5 +144,6 @@ void Send_Note(int Note, int Raw_Note, int One_Channel);
 void Note_Jazz(int track, int note, float volume);
 void Note_Jazz_Off(int note);
 void Display_Beat_Time(void);
+void ptk_init(ptk_data *ptk);
 
 #endif

@@ -91,7 +91,6 @@ REQUESTER Title_Requester =
 const SDL_VideoInfo *Screen_Info;
 int Startup_Width;
 int Startup_Height;
-extern int Display_Pointer;
 int Burn_Title;
 SDL_Surface *Main_Screen;
 SDL_SysWMinfo WMInfo;
@@ -384,7 +383,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
     int in_note;
     char Win_Coords[64];
     Uint32 ExePath_Size = MAX_PATH;
-
+    ptk_init(&ptk);
 #if defined(__MACOSX__)
     Uint32 Path_Length;
 #endif
@@ -631,7 +630,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 
     if(argc != 1)
     {
-        LoadFile(0, argv[1]);
+        LoadFile(&ptk, 0, argv[1]);
     }
 
     while(!Prog_End)
@@ -877,11 +876,11 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
             }
         }
 
-        if(Display_Pointer) Display_Mouse_Pointer(Mouse.old_x, Mouse.old_y, TRUE);
+        if(ptk.Display_Pointer) Display_Mouse_Pointer(Mouse.old_x, Mouse.old_y, TRUE);
 
-        if(!Screen_Update()) break;
+        if(!Screen_Update(&ptk)) break;
 
-        if(Display_Pointer) Display_Mouse_Pointer(Mouse.x, Mouse.y, FALSE);
+        if(ptk.Display_Pointer) Display_Mouse_Pointer(Mouse.x, Mouse.y, FALSE);
 
         // Flush all pending blits
         if(Nbr_Update_Rects) SDL_UpdateRects(Main_Screen, Nbr_Update_Rects, Update_Stack);

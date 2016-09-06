@@ -285,7 +285,7 @@ float Scale_AmigaMod_Value(int value, float scale1, float scale2)
 
 // ------------------------------------------------------
 // Load a .mod, .ft or .digi file
-void LoadAmigaMod(char *Name, const char *FileName, int channels, int digibooster)
+void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels, int digibooster)
 {
     FILE *in;
     int t_hi;
@@ -1172,7 +1172,7 @@ void LoadAmigaMod(char *Name, const char *FileName, int channels, int digibooste
 
             Load_Old_Reverb_Presets(0);
 
-            Init_Tracker_Context_After_ModLoad();
+            Init_Tracker_Context_After_ModLoad(ptk);
 
         }
         else

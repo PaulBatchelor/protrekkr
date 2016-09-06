@@ -45,7 +45,6 @@ extern int Cur_Height;
 extern int Continuous_Scroll;
 extern char AutoSave;
 extern char AutoBackup;
-extern char Scopish_LeftRight;
 extern char Jazz_Edit;
 extern char Accidental;
 extern char Use_Shadows;
@@ -126,7 +125,7 @@ void SaveConfig(void)
         Write_Data(&rawrender_multi, sizeof(char), 1, out);
         Write_Data(&rawrender_target, sizeof(char), 1, out);
         Write_Data(&Large_Patterns, sizeof(char), 1, out);
-        Write_Data(&Scopish_LeftRight, sizeof(char), 1, out);
+        Write_Data(&ptk.Scopish_LeftRight, sizeof(char), 1, out);
  
         Write_Data(&Paste_Across, sizeof(char), 1, out);
         Write_Data(&Jazz_Edit, sizeof(char), 1, out);
@@ -237,7 +236,7 @@ void LoadConfig(void)
             Read_Data(&rawrender_multi, sizeof(char), 1, in);
             Read_Data(&rawrender_target, sizeof(char), 1, in);
             Read_Data(&Large_Patterns, sizeof(char), 1, in);
-            Read_Data(&Scopish_LeftRight, sizeof(char), 1, in);
+            Read_Data(&ptk.Scopish_LeftRight, sizeof(char), 1, in);
 
             Read_Data(&Paste_Across, sizeof(char), 1, in);
             Read_Data(&Jazz_Edit, sizeof(char), 1, in);
