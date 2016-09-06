@@ -39,7 +39,7 @@
 #include <SDL/SDL.h>
 
 #include "../support/include/main.h"
-#include "../../release/distrib/replay/lib/include/replay.h"
+#include "../replay/lib/include/replay.h"
 
 // ------------------------------------------------------
 // Constants

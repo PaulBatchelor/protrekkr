@@ -57,7 +57,7 @@
 #include "../editors/include/editor_track.h"
 #include "../editors/include/editor_pattern.h"
 
-#include "../../release/distrib/replay/lib/include/endianness.h"
+#include "../replay/lib/include/endianness.h"
 
 // ------------------------------------------------------
 // Variables

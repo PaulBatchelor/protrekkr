@@ -44,9 +44,9 @@
 #endif
 
 #if !defined(__STAND_ALONE__)
-#include "../../../../src/midi/include/midi.h"
-#include "../../../../src/include/variables.h"
-#include "../../../../src/include/ptk.h"
+#include "../../../src/midi/include/midi.h"
+#include "../../../src/include/variables.h"
+#include "../../../src/include/ptk.h"
 #endif
 
 // ------------------------------------------------------

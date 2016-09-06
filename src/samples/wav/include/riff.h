@@ -24,7 +24,7 @@
 #include "ddc.h"
 
 #include <stdint.h>
-#include "../../../../release/distrib/replay/lib/include/endianness.h"
+#include "../../../replay/lib/include/endianness.h"
 
 #define WAVE_FORMAT_IEEE_FLOAT 0x0003
 #define WAVE_FORMAT_PCM 1

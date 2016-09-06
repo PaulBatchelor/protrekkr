@@ -6,30 +6,53 @@ LIBS = src/extralibs/tinyxml/tinyxml.o \
        src/extralibs/tinyxml/tinyxmlerror.o \
        -lasound -lSDL -lsdldraw -lz -ljack -lpthread
 
-FLAGS = -g -O3 -fno-strict-aliasing -ffast-math -fno-rtti -fexceptions -Wno-write-strings -Wno-multichar -Lsrc/extralibs/sdl_draw -Lsrc/extralibs/zlib-1.2.3 \
-        -D __LINUX__ -D __GCC__ -D __LINUX_ALSASEQ__ -D __MOT_SWAP__
+FLAGS = -g -O3 -fno-strict-aliasing -ffast-math -fno-rtti -fexceptions 
+FLAGS += -Wno-write-strings -Wno-multichar -Lsrc/extralibs/sdl_draw 
+FLAGS += -Lsrc/extralibs/zlib-1.2.3 
+FLAGS += -D __LINUX__ -D __GCC__ -D __LINUX_ALSASEQ__ -D __MOT_SWAP__
 
 OBJS = ptk.o \
-	  editor_303.o editor_pattern.o editor_sequencer.o editor_track.o editor_track_fx.o \
-          patterns_blocks.o editor_synth.o editor_sample.o editor_fx_setup.o editor_setup.o \
-          editor_diskio.o editor_reverb.o editor_instrument.o editor_midi.o \
-          samples_pack.o files_list.o files.o mods.o patterns.o reverbs.o midi_cfg.o \
-          bits.o pack.o tinypack.o words.o wputils.o \
-          config.o 303s.o synths.o insts.o ptps.o \
-          midi.o RtMidi.o midi_dispatch.o \
-          timer.o main.o \
-          misc_draw.o draw_primitives.o requesters.o xml.o gadgets.o \
-          samples_ops.o aiff.o riff.o \
-          spline.o tb_303.o wavpack.o samples_unpack.o replay.o synth.o endianness.o \
-          sounddriver_linux.o
+	editor_303.o \
+	editor_pattern.o \
+	editor_sequencer.o \
+	editor_track.o \
+	editor_track_fx.o \
+  	patterns_blocks.o \
+	editor_synth.o \
+	editor_sample.o \
+	editor_fx_setup.o \
+	editor_setup.o \
+  	editor_diskio.o \
+	editor_reverb.o \
+	editor_instrument.o \
+	editor_midi.o \
+	samples_pack.o \
+	files_list.o \
+	files.o \
+	mods.o \
+	patterns.o \
+	reverbs.o \
+	midi_cfg.o \
+	bits.o pack.o tinypack.o words.o wputils.o \
+	config.o 303s.o synths.o insts.o ptps.o \
+	midi.o RtMidi.o midi_dispatch.o \
+	timer.o main.o \
+	misc_draw.o draw_primitives.o requesters.o xml.o gadgets.o \
+	samples_ops.o aiff.o riff.o \
+	spline.o tb_303.o wavpack.o \
+	samples_unpack.o replay.o synth.o endianness.o \
+	sounddriver_linux.o
 
 all: protrekkr
 
 clean: RemObj
+	(cd src/extralibs/sdl_draw; make -f makefile.linux clean)
+	(cd src/extralibs/tinyxml; make clean)
+	(cd src/extralibs/zlib-1.2.3; make clean)
+	rm -rf bin/protrekkr
 
 RemObj:
 	-rm -f $(OBJS)
-	rm -rf bin/protrekkr
 
 protrekkr: bin/protrekkr 
 bin/protrekkr: $(OBJS)
@@ -159,28 +182,28 @@ aiff.o: src/samples/aiff/aiff.cpp
 riff.o: src/samples/wav/riff.cpp
 	$(CXX) -c -o $(@) $(FLAGS) $<
 
-spline.o: release/distrib/replay/lib/spline.cpp
+spline.o: src/replay/lib/spline.cpp
 	$(CXX) -c -o $(@) $(FLAGS) $<
 
-tb_303.o: release/distrib/replay/lib/tb_303.cpp
+tb_303.o: src/replay/lib/tb_303.cpp
 	$(CXX) -c -o $(@) $(FLAGS) $<
 
-wavpack.o: release/distrib/replay/lib/wavpack.cpp
+wavpack.o: src/replay/lib/wavpack.cpp
 	$(CXX) -c -o $(@) $(FLAGS) $<
 
-samples_unpack.o: release/distrib/replay/lib/samples_unpack.cpp
+samples_unpack.o: src/replay/lib/samples_unpack.cpp
 	$(CXX) -c -o $(@) $(FLAGS) $<
 
-replay.o: release/distrib/replay/lib/replay.cpp
+replay.o: src/replay/lib/replay.cpp
 	$(CXX) -c -o $(@) $(FLAGS) $<
 
-synth.o: release/distrib/replay/lib/synth.cpp
+synth.o: src/replay/lib/synth.cpp
 	$(CXX) -c -o $(@) $(FLAGS) $<
 
-endianness.o: release/distrib/replay/lib/endianness.cpp
+endianness.o: src/replay/lib/endianness.cpp
 	$(CXX) -c -o $(@) $(FLAGS) $<
 
-sounddriver_linux.o: release/distrib/replay/lib/sounddriver/sounddriver_linux.cpp
+sounddriver_linux.o: src/replay/lib/sounddriver/sounddriver_linux.cpp
 	$(CXX) -c -o $(@) $(FLAGS) $<
 
 bits.o: src/samples/wavpack/bits.cpp
