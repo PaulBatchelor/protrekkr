@@ -2644,7 +2644,7 @@ void Sp_Player(void)
 
             for(int ct = 0; ct < Songtracks; ct++)
             {
-                int efactor = Get_Pattern_Offset(pSequence[Song_Position], ct, Pattern_Line);
+                int efactor = Get_Pattern_Offset(ptk, pSequence[Song_Position], ct, Pattern_Line);
                 
                 // Store the notes & instruments numbers
                 for(i = 0; i < Channels_MultiNotes[ct]; i++)
@@ -4569,7 +4569,7 @@ void Do_Effects_Tick_0(void)
 
     for(int trackef = 0; trackef < Songtracks; trackef++)
     {
-        int tefactor = Get_Pattern_Offset(pSequence[Song_Position], trackef, Pattern_Line);
+        int tefactor = Get_Pattern_Offset(ptk, pSequence[Song_Position], trackef, Pattern_Line);
 
         for(j = 0; j < Channels_Effects[trackef]; j++)
         {
@@ -4715,7 +4715,7 @@ void Do_Pattern_Loop(int track)
     int pltr_eff_row[MAX_FX];
     int pltr_dat_row[MAX_FX];
 
-    int tefactor = Get_Pattern_Offset(pSequence[Song_Position], track, Pattern_Line);
+    int tefactor = Get_Pattern_Offset(ptk, pSequence[Song_Position], track, Pattern_Line);
 
     for(j = 0; j < Channels_Effects[track]; j++)
     {
@@ -4789,7 +4789,7 @@ void Do_Effects_Ticks_X(void)
 
     for(int trackef = 0; trackef < Songtracks; trackef++)
     {
-        int tefactor = Get_Pattern_Offset(pSequence[Song_Position], trackef, Pattern_Line);
+        int tefactor = Get_Pattern_Offset(ptk, pSequence[Song_Position], trackef, Pattern_Line);
 
         // Get the notes for this track
         for(i = 0; i < Channels_MultiNotes[trackef]; i++)
@@ -6521,7 +6521,7 @@ float Mas_Compressor_Master(float input, float *rms_sum, float *buffer, float *e
 
 // ------------------------------------------------------
 // Return an index in a pattern's module
-int Get_Pattern_Offset(int pattern, int track, int row)
+int Get_Pattern_Offset(ptk_data *ptk, int pattern, int track, int row)
 {
     return((track * PATTERN_BYTES) + (row * PATTERN_ROW_LEN) + (pattern * PATTERN_LEN));
 }

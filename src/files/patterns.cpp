@@ -40,7 +40,7 @@ void Load_Pattern_Data(int (*Read_Function)(void *, int ,int, FILE *),
                       FILE *in,
                       int version)
 {
-    int Cur_Position = Get_Song_Position();
+    int Cur_Position = Get_Song_Position(ptk);
 
     int Old_Curr_Buff_Block = Curr_Buff_Block;
     Curr_Buff_Block = NBR_COPY_BLOCKS - 1;
@@ -67,13 +67,13 @@ void Load_Pattern_Data(int (*Read_Function)(void *, int ,int, FILE *),
         {
             Buff_Full[Curr_Buff_Block] = TRUE;
             memcpy(BuffBlock[Curr_Buff_Block], Final_Mem_Out, Size_Out);
-            Paste_Block(Cur_Position, Paste_Across, FALSE);
+            Paste_Block(ptk, Cur_Position, Paste_Across, FALSE);
             free(Final_Mem_Out);
         }
         free(Pack_Mem);
     }
     Curr_Buff_Block = Old_Curr_Buff_Block;
-    Actupated(0);
+    Actupated(ptk, 0);
 }
 
 // ------------------------------------------------------
@@ -82,13 +82,13 @@ void Save_Pattern_Data(int (*Write_Function)(void *, int ,int, FILE *),
                       int (*Write_Function_Swap)(void *, int ,int, FILE *),
                       FILE *in)
 {
-    int Cur_Position = Get_Song_Position();
+    int Cur_Position = Get_Song_Position(ptk);
 
     int Old_Curr_Buff_Block = Curr_Buff_Block;
 
-    Copy_Buff(NBR_COPY_BLOCKS - 1, Curr_Buff_Block);
+    Copy_Buff(ptk, NBR_COPY_BLOCKS - 1, Curr_Buff_Block);
     Curr_Buff_Block = NBR_COPY_BLOCKS - 1;
-    Copy_Selection_To_Buffer(Cur_Position);
+    Copy_Selection_To_Buffer(ptk, Cur_Position);
 
     Calc_selection();
 
@@ -107,7 +107,7 @@ void Save_Pattern_Data(int (*Write_Function)(void *, int ,int, FILE *),
         free(Final_Mem_Out);
     }
     Curr_Buff_Block = Old_Curr_Buff_Block;
-    Actupated(0);
+    Actupated(ptk, 0);
 }
 
 // ------------------------------------------------------
@@ -140,7 +140,7 @@ void LoadPattern(char *FileName)
 
             Read_Data(Selection_Name, sizeof(char), 20, in);
             Load_Pattern_Data(Read_Data, Read_Data_Swap, in, version);
-            Actupated(0);
+            Actupated(ptk, 0);
 
             Status_Box("Pattern data loaded ok.");
         }

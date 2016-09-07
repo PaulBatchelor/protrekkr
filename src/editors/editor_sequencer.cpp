@@ -87,7 +87,7 @@ void SeqInsert(int st);
 void SeqCopy(int st);
 void Display_Seq_Buffer(void);
 void SeqPaste(int st);
-void Bound_Patt_Pos(void);
+void Bound_Patt_Pos(ptk_data *ptk);
 
 void Draw_Sequencer_Ed(void)
 {
@@ -139,7 +139,7 @@ void Draw_Sequencer_Ed(void)
     Gui_Draw_Button_Box(652, (Cur_Height - 56), 60, 16, "Song", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
 }
 
-void Actualize_Seq_Ed(char gode)
+void Actualize_Seq_Ed(ptk_data *ptk, char gode)
 {
     if(userscreen == USER_SCREEN_SEQUENCER)
     {
@@ -159,7 +159,7 @@ void Actualize_Seq_Ed(char gode)
         for(int lseq = -3; lseq < 4; lseq++)
         {
             int rel;
-            int Cur_Position = Get_Song_Position();
+            int Cur_Position = Get_Song_Position(ptk);
             rel = lseq + Cur_Position;
             if(rel > -1 && rel < Song_Length)
             {
@@ -178,7 +178,7 @@ void Actualize_Seq_Ed(char gode)
                 PrintString(261, (Cur_Height - 95) + lseq * 12, USE_FONT, "000");
             }
         } // for end
-        Actupated(0);
+        Actupated(ptk, 0);
 
         // From instrument
         if(gode == 0 || gode == 1)
@@ -221,12 +221,12 @@ void Actualize_Seq_Ed(char gode)
     }
 }
 
-void Mouse_Left_Sequencer_Ed(void)
+void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
 {
     int i;
     int j;
     int k;
-    int Cur_Position = Get_Song_Position();
+    int Cur_Position = Get_Song_Position(ptk);
 
     if(userscreen == USER_SCREEN_SEQUENCER)
     {
@@ -239,18 +239,18 @@ void Mouse_Left_Sequencer_Ed(void)
                 {
                     for(k = 0; k < transpose_semitones; k++)
                     {
-                        Instrument_Semitone_Up_Sel(Cur_Position, Get_Real_Selection(FALSE), 1, Remap_From);
+                        Instrument_Semitone_Up_Sel(ptk, Cur_Position, Get_Real_Selection(ptk, FALSE), 1, Remap_From);
                     }
                 }
                 else
                 {
                     for(k = 0; k < -transpose_semitones; k++)
                     {
-                        Instrument_Semitone_Down_Sel(Cur_Position, Get_Real_Selection(FALSE), 1, Remap_From);
+                        Instrument_Semitone_Down_Sel(ptk, Cur_Position, Get_Real_Selection(ptk, FALSE), 1, Remap_From);
                     }
                 }
             }
-            Instrument_Remap_Sel(Cur_Position, Get_Real_Selection(FALSE), Remap_From, Remap_To);
+            Instrument_Remap_Sel(ptk, Cur_Position, Get_Real_Selection(ptk, FALSE), Remap_From, Remap_To);
         }
         // Remap Track
         if(zcheckMouse(590, (Cur_Height - 56), 60, 16))
@@ -261,18 +261,18 @@ void Mouse_Left_Sequencer_Ed(void)
                 {
                     for(k = 0; k < transpose_semitones; k++)
                     {
-                        Instrument_Semitone_Up_Sel(Cur_Position, Select_Track(Track_Under_Caret), 1, Remap_From);
+                        Instrument_Semitone_Up_Sel(ptk, Cur_Position, Select_Track(ptk, Track_Under_Caret), 1, Remap_From);
                     }
                 }
                 else
                 {
                     for(k = 0; k < -transpose_semitones; k++)
                     {
-                        Instrument_Semitone_Down_Sel(Cur_Position, Select_Track(Track_Under_Caret), 1, Remap_From);
+                        Instrument_Semitone_Down_Sel(ptk, Cur_Position, Select_Track(ptk, Track_Under_Caret), 1, Remap_From);
                     }
                 }
             }
-            Instrument_Remap_Sel(Cur_Position, Select_Track(Track_Under_Caret), Remap_From, Remap_To);
+            Instrument_Remap_Sel(ptk, Cur_Position, Select_Track(ptk, Track_Under_Caret), Remap_From, Remap_To);
         }
         // Remap Pattern
         if(zcheckMouse(652, (Cur_Height - 76), 60, 16))
@@ -285,18 +285,18 @@ void Mouse_Left_Sequencer_Ed(void)
                     {
                         for(k = 0; k < transpose_semitones; k++)
                         {
-                            Instrument_Semitone_Up_Sel(Cur_Position, Select_Track(i), 1, Remap_From);
+                            Instrument_Semitone_Up_Sel(ptk, Cur_Position, Select_Track(ptk, i), 1, Remap_From);
                         }
                     }
                     else
                     {
                         for(k = 0; k < -transpose_semitones; k++)
                         {
-                            Instrument_Semitone_Down_Sel(Cur_Position, Select_Track(i), 1, Remap_From);
+                            Instrument_Semitone_Down_Sel(ptk, Cur_Position, Select_Track(ptk, i), 1, Remap_From);
                         }
                     }
                 }
-                Instrument_Remap_Sel(Cur_Position, Select_Track(i), Remap_From, Remap_To);
+                Instrument_Remap_Sel(ptk, Cur_Position, Select_Track(ptk, i), Remap_From, Remap_To);
             }
         }
         // Remap Song
@@ -331,18 +331,18 @@ void Mouse_Left_Sequencer_Ed(void)
                                 {
                                     for(k = 0; k < transpose_semitones; k++)
                                     {
-                                        Instrument_Semitone_Up_Sel(j, Select_Track(i), 1, Remap_From);
+                                        Instrument_Semitone_Up_Sel(ptk, j, Select_Track(ptk, i), 1, Remap_From);
                                     }
                                 }
                                 else
                                 {
                                     for(k = 0; k < -transpose_semitones; k++)
                                     {
-                                        Instrument_Semitone_Down_Sel(j, Select_Track(i), 1, Remap_From);
+                                        Instrument_Semitone_Down_Sel(ptk, j, Select_Track(ptk, i), 1, Remap_From);
                                     }
                                 }
                             }
-                            Instrument_Remap_Sel(j, Select_Track(i), Remap_From, Remap_To);
+                            Instrument_Remap_Sel(ptk, j, Select_Track(ptk, i), Remap_From, Remap_To);
                         }
                         Done_Pattern[pSequence[j]] = TRUE;
                     }
@@ -623,7 +623,7 @@ void Mouse_Left_Sequencer_Ed(void)
         {
             int posindex = ((Mouse.y - ((Cur_Height - 131) + 1)) / 12) - 3;
             posindex += Cur_Position;
-            Toggle_Track_On_Off_Status(posindex, (Mouse.x - 123) / 8);
+            Toggle_Track_On_Off_Status(ptk, posindex, (Mouse.x - 123) / 8);
         }
 
         // Scroll the positions
@@ -664,9 +664,9 @@ void Mouse_Left_Sequencer_Ed(void)
     }
 }
 
-void Mouse_Right_Sequencer_Ed(void)
+void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
 {
-    int Cur_Position = Get_Song_Position();
+    int Cur_Position = Get_Song_Position(ptk);
     int i;
 
     if(userscreen == USER_SCREEN_SEQUENCER)
@@ -761,7 +761,7 @@ void Mouse_Right_Sequencer_Ed(void)
         {
             int posindex = ((Mouse.y - ((Cur_Height - 131) + 1)) / 12) - 3;
             posindex += Cur_Position;
-            Solo_Track_On_Off(posindex, (Mouse.x - 123) / 8);
+            Solo_Track_On_Off(ptk, posindex, (Mouse.x - 123) / 8);
         }
 
         // Insert 10 positions
@@ -802,7 +802,7 @@ void Mouse_Right_Sequencer_Ed(void)
     }
 }
 
-void Actualize_Sequencer(void)
+void Actualize_Sequencer(ptk_data *ptk)
 {
     int value;
     int Cur_Position;
@@ -814,8 +814,8 @@ void Actualize_Sequencer(void)
         if(Song_Position > Song_Length - 1)
         {
             Song_Position = Song_Length - 1;
-            Bound_Patt_Pos();
-            Actupated(0);
+            Bound_Patt_Pos(ptk);
+            Actupated(ptk, 0);
         }
         for(i = 0; i < MAX_TRACKS; i++)
         {
@@ -828,14 +828,14 @@ void Actualize_Sequencer(void)
         if(Song_Position > Song_Length - 1)
         {
             Song_Position = Song_Length - 1;
-            Bound_Patt_Pos();
-            Actupated(0);
+            Bound_Patt_Pos(ptk);
+            Actupated(ptk, 0);
         }
         // Keep the coherency
         Song_Position_Visual = Song_Position;
         Pattern_Line_Visual = Pattern_Line;
     }
-    Cur_Position = Get_Song_Position();
+    Cur_Position = Get_Song_Position(ptk);
 
     value = pSequence[Cur_Position];
     if(value > 127) pSequence[Cur_Position] = 127;
@@ -847,7 +847,7 @@ void Actualize_Sequencer(void)
     if(Rows_Decimal) Gui_Draw_Arrows_Number_Box(188, 82, patternLines[pSequence[Cur_Position]], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     else value_box(188, 82, patternLines[pSequence[Cur_Position]], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     Gui_Draw_Arrows_Number_Box(188, 64, Song_Length, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
-    if(userscreen == USER_SCREEN_SEQUENCER) Actualize_Seq_Ed(0);
+    if(userscreen == USER_SCREEN_SEQUENCER) Actualize_Seq_Ed(ptk, 0);
 }
 
 void SeqFill(int st, int en, char n)
@@ -961,7 +961,7 @@ void Display_Seq_Buffer(void)
 
 // ------------------------------------------------------
 // Turn a channel active state on/off
-void Toggle_Track_On_Off_Status(int posindex, int seqindex)
+void Toggle_Track_On_Off_Status(ptk_data *ptk, int posindex, int seqindex)
 {
     if(posindex >= 0 && posindex < Song_Length)
     {
@@ -977,14 +977,14 @@ void Toggle_Track_On_Off_Status(int posindex, int seqindex)
             CHAN_ACTIVE_STATE[posindex][seqindex] = FALSE;
             CHAN_HISTORY_STATE[posindex][seqindex] = FALSE;
         }
-        Actupated(0);
+        Actupated(ptk, 0);
         gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
 }
 
 // ------------------------------------------------------
 // Turn all channel active states on/off but one
-void Solo_Track_On_Off(int posindex, int seqindex)
+void Solo_Track_On_Off(ptk_data *ptk, int posindex, int seqindex)
 {
     int Already_Solo;
 
@@ -1032,7 +1032,7 @@ void Solo_Track_On_Off(int posindex, int seqindex)
         // Active it
         CHAN_ACTIVE_STATE[posindex][seqindex] = TRUE;
         CHAN_HISTORY_STATE[posindex][seqindex] = FALSE;
-        Actupated(0);
+        Actupated(ptk, 0);
         gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
 }

@@ -46,8 +46,8 @@
 // Functions
 void Draw_Master_Ed(void);
 void Actualize_Master_Ed(char gode);
-void Mouse_Left_Master_Ed(void);
-void Mouse_Right_Master_Ed(void);
+void Mouse_Left_Master_Ed(ptk_data *ptk);
+void Mouse_Right_Master_Ed(ptk_data *ptk);
 void Mouse_Sliders_Master_Ed(void);
 void Actualize_Fx_Ed(char gode);
 

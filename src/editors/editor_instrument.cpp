@@ -1197,14 +1197,14 @@ void Mouse_Sliders_Right_Instrument_Ed(void)
 
 // ------------------------------------------------------
 // Display the instruments or synths list on screen
-void Dump_Instruments_Synths_List(int xr, int yr)
+void Dump_Instruments_Synths_List(ptk_data *ptk, int xr, int yr)
 {
     char Line[200];
     int i;
     int Nbr_Splits;
     int Font;
 
-    switch(ptk.Scopish)
+    switch(ptk->Scopish)
     {
         case SCOPE_ZONE_INSTR_LIST:
         case SCOPE_ZONE_SYNTH_LIST:
@@ -1224,7 +1224,7 @@ void Dump_Instruments_Synths_List(int xr, int yr)
                         bjbox(xr - 1, yr + (counter * 12) + 1, Cur_Width - 413, 12);
                     }
 
-                    switch(ptk.Scopish)
+                    switch(ptk->Scopish)
                     {
                         // View instruments
                         case SCOPE_ZONE_INSTR_LIST:
@@ -1417,7 +1417,7 @@ void Dump_Instruments_Synths_List(int xr, int yr)
 
 // ------------------------------------------------------
 // Redraw the instruments or synths list
-void Actualize_Instruments_Synths_List(int modeac)
+void Actualize_Instruments_Synths_List(ptk_data *ptk, int modeac)
 {
     int const brolim = Instrs_items - 11;
     char Line[200];
@@ -1425,7 +1425,7 @@ void Actualize_Instruments_Synths_List(int modeac)
     int j;
     int Nbr_Entries = 0;
 
-    switch(ptk.Scopish)
+    switch(ptk->Scopish)
     {
         case SCOPE_ZONE_INSTR_LIST:
         case SCOPE_ZONE_SYNTH_LIST:
@@ -1468,7 +1468,7 @@ void Actualize_Instruments_Synths_List(int modeac)
             Dump_Instruments_Synths_List(395, 41);
 
             Gui_Draw_Button_Box(394, 24, Cur_Width - 522, 16, "", BUTTON_NORMAL | BUTTON_DISABLED);
-            switch(ptk.Scopish)
+            switch(ptk->Scopish)
             {
                 case SCOPE_ZONE_INSTR_LIST:
 

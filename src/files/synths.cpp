@@ -445,7 +445,7 @@ void LoadSynth(char *FileName)
 
         Actualize_Instrument_Ed(0, 0);
         Actualize_DiskIO_Ed(0);
-        Actualize_Patterned();
+        Actualize_Patterned(ptk);
         Status_Box("Synthesizer program loaded ok.");
         fclose(in);
     }

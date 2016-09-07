@@ -598,7 +598,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
     Midi_GetAll();
 #endif
 
-    if(!Init_Context())
+    if(!Init_Context(&ptk))
     {
         SDL_Quit();
         exit(0);
@@ -919,7 +919,7 @@ void Message_Error(char *Message)
 
 // ------------------------------------------------------
 // Swap window/fullscreen mode
-int Switch_FullScreen(int Width, int Height)
+int Switch_FullScreen(ptk_data *ptk, int Width, int Height)
 {
     Env_Change = TRUE;
     if(Width < SCREEN_WIDTH) Width = SCREEN_WIDTH;
@@ -957,7 +957,7 @@ int Switch_FullScreen(int Width, int Height)
     ptk.CONSOLE_HEIGHT = Cur_Height;
     ptk.CONSOLE_HEIGHT2 = Cur_Height;
     MAX_PATT_SCREEN_X = Cur_Width - 19;
-    Set_Pattern_Size();
+    Set_Pattern_Size(ptk);
     restx = ptk.CONSOLE_WIDTH - 640;
     resty = ptk.CONSOLE_HEIGHT - 492;
     ptk.CONSOLE_HEIGHT2 = ptk.CONSOLE_HEIGHT - 42;

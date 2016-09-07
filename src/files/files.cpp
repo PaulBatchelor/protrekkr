@@ -141,7 +141,7 @@ void Init_Tracker_Context_After_ModLoad(ptk_data *ptk)
     Reset_Tracks_To_Render();
 
     Refresh_UI_Context();
-    Unselect_Selection();
+    Unselect_Selection(ptk);
 
 #endif
 
@@ -290,7 +290,7 @@ Read_Mod_File:
         allow_save = TRUE;
 #endif
 
-        Clear_Patterns_Pool();
+        Clear_Patterns_Pool(ptk);
 
 #if !defined(__NO_MIDI__) && !defined(__WINAMP__)
         Midi_Reset();
@@ -336,7 +336,7 @@ Read_Mod_File:
 
         Read_Mod_Data(pSequence, sizeof(char), 256, in);
 
-        Clear_Patterns_Pool();
+        Clear_Patterns_Pool(ptk);
 
         // Load the patterns rows infos
         if(!Ntk_Beta)
@@ -1151,7 +1151,7 @@ void rtrim_string(char *string, int maxlen)
 
 // ------------------------------------------------------
 // Entry point function for modules saving
-int SavePtk(char *FileName, int NewFormat, int Simulate, Uint8 *Memory)
+int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *Memory)
 {
     FILE *in;
     int i;
@@ -1537,7 +1537,7 @@ int SavePtk(char *FileName, int NewFormat, int Simulate, Uint8 *Memory)
             fclose(in);
             last_index = -1;
             Read_SMPT();
-            Actualize_Files_List(0);
+            Actualize_Files_List(ptk, 0);
 
             if(Ok_Memory)
             {
@@ -1666,7 +1666,7 @@ void Backup_Module(char *FileName)
 
 // ------------------------------------------------------
 // Pack & save .ptk module
-int Pack_Module(char *FileName)
+int Pack_Module(ptk_data *ptk, char *FileName)
 {
     FILE *output;
     char name[128];
@@ -1691,12 +1691,12 @@ int Pack_Module(char *FileName)
     // Save the new one
     sprintf(Temph, "%s"SLASH"%s.ptk", Dir_Mods, FileName);
 
-    int Len = SavePtk("", FALSE, SAVE_CALCLEN, NULL);
+    int Len = SavePtk(ptk, "", FALSE, SAVE_CALCLEN, NULL);
 
     Depack_Size = Len;
 
     Uint8 *Final_Mem = (Uint8 *) malloc(Len);
-    SavePtk(FileName, FALSE, SAVE_WRITEMEM, Final_Mem);
+    SavePtk(ptk, FileName, FALSE, SAVE_WRITEMEM, Final_Mem);
 
     Final_Mem_Out = Pack_Data(Final_Mem, &Len);
 
@@ -1721,19 +1721,19 @@ int Pack_Module(char *FileName)
     Status_Box(name);
     Read_SMPT();
     last_index = -1;
-    Actualize_Files_List(0);
+    Actualize_Files_List(ptk, 0);
     return(FALSE);
 }
 
 // ------------------------------------------------------
 // Return the length of a compressed module
-int TestMod(void)
+int TestMod(ptk_data *ptk)
 {
     Uint8 *Final_Mem_Out;
-    int Len = SavePtk("", TRUE, SAVE_CALCLEN, NULL);
+    int Len = SavePtk(ptk, "", TRUE, SAVE_CALCLEN, NULL);
 
     Uint8 *Final_Mem = (Uint8 *) malloc(Len);
-    SavePtk("", TRUE, SAVE_WRITEMEM, Final_Mem);
+    SavePtk(ptk, "", TRUE, SAVE_WRITEMEM, Final_Mem);
 
     Final_Mem_Out = Pack_Data(Final_Mem, &Len);
 
@@ -2200,7 +2200,7 @@ void AllocateWave(int n_index, int split, long lenfir,
 // ------------------------------------------------------
 // Clear any pending input
 #if !defined(__WINAMP__)
-void Clear_Input(void)
+void Clear_Input(ptk_data *ptk)
 {
     if(snamesel == INPUT_303_PATTERN)
     {
@@ -2225,7 +2225,7 @@ void Clear_Input(void)
     if(snamesel == INPUT_INSTRUMENT_NAME)
     {
         snamesel = INPUT_NONE;
-        Actualize_Patterned();
+        Actualize_Patterned(ptk);
     }
 
     if(snamesel == INPUT_REVERB_NAME)

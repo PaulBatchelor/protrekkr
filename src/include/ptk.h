@@ -131,7 +131,7 @@ extern HWND Main_Window;
 
 // ------------------------------------------------------
 // Functions
-int Init_Context(void);
+int Init_Context(ptk_data *ptk);
 void Destroy_Context(void);
 int Screen_Update(ptk_data *ptk);
 void STDCALL Mixer(Uint8 *Buffer, Uint32 Len);

@@ -85,9 +85,12 @@ char Dir_Patterns[MAX_PATH];
 char Dir_Samples[MAX_PATH];
 char *cur_dir;
 
+/* TODO: remove global variable hack */
+extern ptk_data *g_ptk;
+
 // ------------------------------------------------------
 // Functions
-void Clear_Files_List(void)
+void Clear_Files_List(ptk_data *ptk)
 {
     for(int listcleaner = 0; listcleaner < 2048; listcleaner++)
     {
@@ -95,25 +98,25 @@ void Clear_Files_List(void)
     }
 }
 
-void Add_Entry(const char *Name, int Type)
+void Add_Entry(ptk_data *ptk, const char *Name, int Type)
 {
-    sprintf(SMPT_LIST[list_counter[ptk.Scopish]].Name, Name);
-    SMPT_LIST[list_counter[ptk.Scopish]].Type = Type;
-    lt_items[ptk.Scopish]++;
-    list_counter[ptk.Scopish]++;
+    sprintf(SMPT_LIST[list_counter[ptk->Scopish]].Name, Name);
+    SMPT_LIST[list_counter[ptk->Scopish]].Type = Type;
+    lt_items[ptk->Scopish]++;
+    list_counter[ptk->Scopish]++;
 }
 
-void Insert_Entry(char *Name, int Type, int idx)
+void Insert_Entry(ptk_data *ptk, char *Name, int Type, int idx)
 {
     int i;
-    for(i = list_counter[ptk.Scopish] - 1; i >= idx; i--)
+    for(i = list_counter[ptk->Scopish] - 1; i >= idx; i--)
     {
         memcpy(&SMPT_LIST[i + 1], &SMPT_LIST[i], sizeof(FILEENTRY));
     }
     sprintf(SMPT_LIST[idx].Name, Name);
     SMPT_LIST[idx].Type = Type;
-    lt_items[ptk.Scopish]++;
-    list_counter[ptk.Scopish]++;
+    lt_items[ptk->Scopish]++;
+    list_counter[ptk->Scopish]++;
 }
 
 char *Get_FileName(int idx)
@@ -179,7 +182,7 @@ int FileComp_Files(const void *elem1, const void *elem2)
     
     Sort_Letter = 0;
     Sort_Type = Get_FileType(0);
-    for(i = 0; i < list_counter[ptk.Scopish]; i++)
+    for(i = 0; i < list_counter[ptk->Scopish]; i++)
     {
         // Make sure we're in the same ensemble
         Cur_Type = Get_FileType(i);
@@ -189,7 +192,7 @@ int FileComp_Files(const void *elem1, const void *elem2)
             if(Sort_Letter != Cur_Letter)
             {
                 Sort_Letter = Cur_Letter;
-                Insert_Entry("", _A_SEP, i);
+                Insert_Entry(ptk, "", _A_SEP, i);
             }
         }
         else
@@ -199,7 +202,7 @@ int FileComp_Files(const void *elem1, const void *elem2)
     }
 }*/
 
-void Set_Current_Dir(void)
+void Set_Current_Dir(ptk_data *ptk)
 {
     char filename[MAX_PATH];
 
@@ -208,9 +211,9 @@ void Set_Current_Dir(void)
 
     if (tmp && *tmp == '/') *tmp = 0;
     if (strrchr(Dir_Act, '/') == Dir_Act &&
-        !strcmp(Get_FileName(lt_curr[ptk.Scopish]), ".."))
+        !strcmp(Get_FileName(lt_curr[ptk->Scopish]), ".."))
     {
-        switch(ptk.Scopish)
+        switch(ptk->Scopish)
         {
             case SCOPE_ZONE_MOD_DIR:
                 strcpy(Dir_Mods, "/");
@@ -243,17 +246,17 @@ void Set_Current_Dir(void)
     if (!strcmp(Dir_Act, "/"))
     {
         strcpy(filename, "/");
-        strcat(filename, Get_FileName(lt_curr[ptk.Scopish]));
+        strcat(filename, Get_FileName(lt_curr[ptk->Scopish]));
     }
     else
     {
-        strcpy(filename, Get_FileName(lt_curr[ptk.Scopish]));
+        strcpy(filename, Get_FileName(lt_curr[ptk->Scopish]));
     }
 #else
-    strcpy(filename, Get_FileName(lt_curr[ptk.Scopish]));
+    strcpy(filename, Get_FileName(lt_curr[ptk->Scopish]));
 #endif
  
-    switch(ptk.Scopish)
+    switch(ptk->Scopish)
     {
         case SCOPE_ZONE_MOD_DIR:
             CHDIR(filename);
@@ -287,6 +290,7 @@ void Set_Current_Dir(void)
 }
 
 #if defined(__LINUX__) || defined(__MACOSX__)
+/*TODO is there a way to remove global variables from this ?*/
 int list_file(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf)
 {
     int i;
@@ -310,7 +314,7 @@ int list_file(const char *fpath, const struct stat *sb, int typeflag, struct FTW
                     }
                     
                     nbr_dirs++;
-                    Add_Entry(&fpath[len_name], _A_SUBDIR);
+                    Add_Entry(g_ptk, &fpath[len_name], _A_SUBDIR);
                     break;
 
                 case FTW_F:
@@ -324,7 +328,7 @@ int list_file(const char *fpath, const struct stat *sb, int typeflag, struct FTW
                         }
                     }
                     
-                    Add_Entry(&fpath[len_name], _A_FILE);
+                    Add_Entry(g_ptk, &fpath[len_name], _A_FILE);
                     break;
             }
         }
@@ -353,12 +357,12 @@ void CopyStringBSTRToC(BSTR in,
 
 // ------------------------------------------------------
 // Fill the list with the content of the relevant directory
-void Read_SMPT(void)
+void Read_SMPT(ptk_data *ptk)
 {
     int i;
 
-    lt_items[ptk.Scopish] = 0;  
-    list_counter[ptk.Scopish] = 0;
+    lt_items[ptk->Scopish] = 0;  
+    list_counter[ptk->Scopish] = 0;
 
 #if defined(__WIN32__)
     struct _finddata_t c_file;
@@ -368,7 +372,7 @@ void Read_SMPT(void)
 
     nbr_dirs = 0;
 
-    switch(ptk.Scopish)
+    switch(ptk->Scopish)
     {
         case SCOPE_ZONE_MOD_DIR:
             cur_dir = Dir_Mods;
@@ -402,7 +406,7 @@ void Read_SMPT(void)
 
     if((hFile = _findfirst(Dir_Act, &c_file)) == -1L)
     {
-        Add_Entry("No files in current directory.", 0);
+        Add_Entry(ptk, "No files in current directory.", 0);
     }
     else
     {
@@ -413,7 +417,7 @@ void Read_SMPT(void)
                strcmp(c_file.name, ".."))
             {
                 nbr_dirs++;
-                Add_Entry(c_file.name, _A_SUBDIR);
+                Add_Entry(ptk, c_file.name, _A_SUBDIR);
             }
         }
 
@@ -426,7 +430,7 @@ void Read_SMPT(void)
                    strcmp(c_file.name, ".."))
                 {
                     nbr_dirs++;
-                    Add_Entry(c_file.name, _A_SUBDIR);
+                    Add_Entry(ptk, c_file.name, _A_SUBDIR);
                 }
             }
         }
@@ -438,29 +442,29 @@ void Read_SMPT(void)
             // The first file
             if(!(c_file.attrib & _A_SUBDIR))
             {
-                Add_Entry(c_file.name, 0);
+                Add_Entry(ptk, c_file.name, 0);
             }
             // Find the rest of the files
             while(_findnext(hFile, &c_file) == 0)
             {
                 if(!(c_file.attrib & _A_SUBDIR))
                 {
-                    Add_Entry(c_file.name, 0);
+                    Add_Entry(ptk, c_file.name, 0);
                 }
             } // while      
             _findclose(hFile);
 
             if(sort_files)
             {
-                qsort(&SMPT_LIST[0], list_counter[ptk.Scopish], sizeof(FILEENTRY), &FileComp_Files);
+                qsort(&SMPT_LIST[0], list_counter[ptk->Scopish], sizeof(FILEENTRY), &FileComp_Files);
                 //Insert_List_Separators();
             }
             //else
             {
-                Insert_Entry("", _A_SEP, 0);
+                Insert_Entry(ptk, "", _A_SEP, 0);
             }
-            Insert_Entry("..", _A_SUBDIR, 0);
-            Insert_Entry(".", _A_SUBDIR, 0);
+            Insert_Entry(ptk, "..", _A_SUBDIR, 0);
+            Insert_Entry(ptk, ".", _A_SUBDIR, 0);
         }
     }
 
@@ -470,10 +474,10 @@ void Read_SMPT(void)
 
     Ptr_Drives = List_Drives;
     i = 0;
-    if(Ptr_Drives[0]) Add_Entry("", _A_SEP);
+    if(Ptr_Drives[0]) Add_Entry(ptk, "", _A_SEP);
     while(Ptr_Drives[0])
     {
-        Add_Entry(Ptr_Drives, _A_SUBDIR);
+        Add_Entry(ptk, Ptr_Drives, _A_SUBDIR);
         Ptr_Drives += strlen(Ptr_Drives) + 1;
     }
 
@@ -497,7 +501,7 @@ void Read_SMPT(void)
         {
             // Convert it first
             CopyStringBSTRToC(dl->dol_Name, BString, sizeof(BString));
-            Add_Entry(BString, _A_SUBDIR);
+            Add_Entry(ptk, BString, _A_SUBDIR);
         }
         UnLockDosList(flags);
     }
@@ -515,7 +519,7 @@ void Read_SMPT(void)
                 if(dp->d_type == DT_DIR)
                 {
                     nbr_dirs++;
-                    Add_Entry(dp->d_name, _A_SUBDIR);
+                    Add_Entry(ptk, dp->d_name, _A_SUBDIR);
                 }
             }
             closedir(dirp);
@@ -529,7 +533,7 @@ void Read_SMPT(void)
             {
                 if(dp->d_type != DT_DIR)
                 {
-                    Add_Entry(dp->d_name, 0);
+                    Add_Entry(ptk, dp->d_name, 0);
                 }
             }
             closedir(dirp);
@@ -537,15 +541,15 @@ void Read_SMPT(void)
 
         if(sort_files)
         {
-            qsort(&SMPT_LIST[0], list_counter[ptk.Scopish], sizeof(FILEENTRY), &FileComp_Files);
+            qsort(&SMPT_LIST[0], list_counter[ptk->Scopish], sizeof(FILEENTRY), &FileComp_Files);
             //Insert_List_Separators();
         }
         //else
         {
-            Insert_Entry("", _A_SEP, 0);
+            Insert_Entry(ptk, "", _A_SEP, 0);
         }
         // Insert parent directory at the top
-        Insert_Entry("/", _A_SUBDIR, 0);
+        Insert_Entry(ptk, "/", _A_SUBDIR, 0);
     }
 
 #else
@@ -555,27 +559,27 @@ void Read_SMPT(void)
 
     if(sort_files)
     {
-        qsort(&SMPT_LIST[0], list_counter[ptk.Scopish], sizeof(FILEENTRY), &FileComp_Files);
+        qsort(&SMPT_LIST[0], list_counter[ptk->Scopish], sizeof(FILEENTRY), &FileComp_Files);
         //Insert_List_Separators();
     }
     //else
     {
-        Insert_Entry("", _A_SEP, 0);
+        Insert_Entry(ptk, "", _A_SEP, 0);
     }
     // Always insert them at the top of the list
-    Insert_Entry("../", _A_SUBDIR, 0);
-    Insert_Entry("./", _A_SUBDIR, 0);
+    Insert_Entry(ptk, "../", _A_SUBDIR, 0);
+    Insert_Entry(ptk, "./", _A_SUBDIR, 0);
 
 #endif
 
     // Insert a separator between files and directories
     if(nbr_dirs)
     {
-        for(i = list_counter[ptk.Scopish] - 1; i >= 0; i--)
+        for(i = list_counter[ptk->Scopish] - 1; i >= 0; i--)
         {
             if(SMPT_LIST[i].Type == _A_FILE)
             {
-                Insert_Entry("", _A_SEP, i + 1);
+                Insert_Entry(ptk, "", _A_SEP, i + 1);
                 break;
             }
         }
@@ -584,14 +588,14 @@ void Read_SMPT(void)
 
 // ------------------------------------------------------
 // Display the files list on screen
-void Dump_Files_List(int xr, int yr)
+void Dump_Files_List(ptk_data *ptk, int xr, int yr)
 {
-    int y = lt_index[ptk.Scopish];
+    int y = lt_index[ptk->Scopish];
     FILE *File;
     char Size_String[64];
     int space = Font_Height + 1;
 
-    switch(ptk.Scopish)
+    switch(ptk->Scopish)
     {
         case SCOPE_ZONE_MOD_DIR:
         case SCOPE_ZONE_INSTR_DIR:
@@ -606,7 +610,7 @@ void Dump_Files_List(int xr, int yr)
             // Current dir background
             Gui_Draw_Button_Box(394, 24, Cur_Width - 522, 16, "", BUTTON_NORMAL | BUTTON_DISABLED);
 
-            switch(ptk.Scopish)
+            switch(ptk->Scopish)
             {
                 case SCOPE_ZONE_MOD_DIR:
                     PrintString(398, 26, USE_FONT, Dir_Mods, (Cur_Width - 522));
@@ -631,16 +635,16 @@ void Dump_Files_List(int xr, int yr)
                     break;
             }
 
-            if(lt_items[ptk.Scopish])
+            if(lt_items[ptk->Scopish])
             {
                 for(int counter = 0; counter < NBR_ITEMS; counter++)
                 {
                     int rel_val = y + counter;
 
-                    if(y + counter < lt_items[ptk.Scopish])
+                    if(y + counter < lt_items[ptk->Scopish])
                     {
                         // Highlight bar in files requester.
-                        if(y + counter == lt_curr[ptk.Scopish])
+                        if(y + counter == lt_curr[ptk->Scopish])
                         {
                             SetColor(COL_PUSHED_MED);
                             bjbox(xr - 1, yr + (counter * space) + 2, (Cur_Width - 413), space);
@@ -690,11 +694,11 @@ void Dump_Files_List(int xr, int yr)
 
 // ------------------------------------------------------
 // Redraw the files list
-void Actualize_Files_List(int modeac)
+void Actualize_Files_List(ptk_data *ptk, int modeac)
 {
-    int const brolim = lt_items[ptk.Scopish] - NBR_ITEMS;
+    int const brolim = lt_items[ptk->Scopish] - NBR_ITEMS;
 
-    switch(ptk.Scopish)
+    switch(ptk->Scopish)
     {
         case SCOPE_ZONE_MOD_DIR:
         case SCOPE_ZONE_INSTR_DIR:
@@ -706,31 +710,31 @@ void Actualize_Files_List(int modeac)
 
             if(modeac == 0)
             {
-                if(lt_ykar[ptk.Scopish] > 70) lt_ykar[ptk.Scopish] = 70;
-                if(lt_ykar[ptk.Scopish] < 0) lt_ykar[ptk.Scopish] = 0;
-                lt_index[ptk.Scopish] = (lt_ykar[ptk.Scopish] * brolim) / 70;
+                if(lt_ykar[ptk->Scopish] > 70) lt_ykar[ptk->Scopish] = 70;
+                if(lt_ykar[ptk->Scopish] < 0) lt_ykar[ptk->Scopish] = 0;
+                lt_index[ptk->Scopish] = (lt_ykar[ptk->Scopish] * brolim) / 70;
             }
 
-            if(lt_index[ptk.Scopish] > brolim) lt_index[ptk.Scopish] = brolim;
-            if(lt_index[ptk.Scopish] < 0) lt_index[ptk.Scopish] = 0;
+            if(lt_index[ptk->Scopish] > brolim) lt_index[ptk->Scopish] = brolim;
+            if(lt_index[ptk->Scopish] < 0) lt_index[ptk->Scopish] = 0;
             if(modeac != 0)
             {
                 if(brolim)
                 {
-                    lt_ykar[ptk.Scopish] = (lt_index[ptk.Scopish] * 70) / brolim;
+                    lt_ykar[ptk->Scopish] = (lt_index[ptk->Scopish] * 70) / brolim;
                 }
                 else
                 {
-                    lt_ykar[ptk.Scopish] = (lt_index[ptk.Scopish] * 70);
+                    lt_ykar[ptk->Scopish] = (lt_index[ptk->Scopish] * 70);
                 }
             }
 
             // Draw the files slider
-            Draw_Lists_Slider(lt_ykar[ptk.Scopish]);
-            if(last_index != lt_index[ptk.Scopish])
+            Draw_Lists_Slider(ptk, lt_ykar[ptk->Scopish]);
+            if(last_index != lt_index[ptk->Scopish])
             {
-                Dump_Files_List(395, 41);
-                last_index = lt_index[ptk.Scopish];
+                Dump_Files_List(ptk, 395, 41);
+                last_index = lt_index[ptk->Scopish];
             }
             break;
     }
@@ -738,7 +742,7 @@ void Actualize_Files_List(int modeac)
 
 // ------------------------------------------------------
 // Draw the slider beside the list
-void Draw_Lists_Slider(int idx)
+void Draw_Lists_Slider(ptk_data *ptk, int idx)
 {
     SetColor(COL_BLACK);
     bjbox(Cur_Width - 18, 42, 18, 136);
@@ -755,9 +759,9 @@ void Draw_Lists_Slider(int idx)
 
 // ------------------------------------------------------
 // Move the lists up & down
-void Files_List_Move(int Amount)
+void Files_List_Move(ptk_data *ptk, int Amount)
 {
-    switch(ptk.Scopish)
+    switch(ptk->Scopish)
     {
         case SCOPE_ZONE_INSTR_LIST:
         case SCOPE_ZONE_SYNTH_LIST:
@@ -782,11 +786,11 @@ void Files_List_Move(int Amount)
             {
                 if(abs(Amount) > 1)
                 {
-                    Prev_Prefix();
+                    Prev_Prefix(ptk);
                 }
                 else
                 {
-                    lt_index[ptk.Scopish] -= Amount;
+                    lt_index[ptk->Scopish] -= Amount;
                 }
                 gui_action = GUI_CMD_FILELIST_SCROLL;
             }
@@ -796,11 +800,11 @@ void Files_List_Move(int Amount)
             {
                 if(abs(Amount) > 1)
                 {
-                    Next_Prefix();
+                    Next_Prefix(ptk);
                 }
                 else
                 {
-                    lt_index[ptk.Scopish] += Amount;
+                    lt_index[ptk->Scopish] += Amount;
                 }
                 gui_action = GUI_CMD_FILELIST_SCROLL;
             }
@@ -811,17 +815,17 @@ void Files_List_Move(int Amount)
 // ------------------------------------------------------
 // Move an index in the files list
 // Return TRUE if any boundary has been reached.
-int Move_Idx(int *Idx, int Amount)
+int Move_Idx(ptk_data *ptk, int *Idx, int Amount)
 {
     *Idx += Amount;
     if(*Idx < 0)
     {
-        lt_index[ptk.Scopish] = 0;
+        lt_index[ptk->Scopish] = 0;
         return TRUE;
     }
-    if(*Idx > lt_items[ptk.Scopish] - NBR_ITEMS)
+    if(*Idx > lt_items[ptk->Scopish] - NBR_ITEMS)
     {
-        lt_index[ptk.Scopish] = lt_items[ptk.Scopish] - NBR_ITEMS;
+        lt_index[ptk->Scopish] = lt_items[ptk->Scopish] - NBR_ITEMS;
         return TRUE;
     }
     return FALSE;
@@ -829,37 +833,37 @@ int Move_Idx(int *Idx, int Amount)
 
 // ------------------------------------------------------
 // Go to previous prefix in a file list
-void Prev_Prefix(void)
+void Prev_Prefix(ptk_data *ptk)
 {
     char Cur_Letter;
     char Start_Letter;
     int Done_Sep;
-    int Idx = lt_index[ptk.Scopish];
+    int Idx = lt_index[ptk->Scopish];
 
     // Adjust to a real entry
     Done_Sep = FALSE;
     if(Get_FileType(Idx) == _A_SUBDIR)
     {
-        Move_Idx(&Idx, -1);
+        Move_Idx(ptk, &Idx, -1);
     }
     while(Get_FileType(Idx) == _A_SEP)
     {
         Done_Sep = TRUE;
-        if(Move_Idx(&Idx, -1)) return;
+        if(Move_Idx(ptk, &Idx, -1)) return;
     }
     if(Get_FileType(Idx) == _A_SUBDIR)
     {
-        lt_index[ptk.Scopish] = Idx;
+        lt_index[ptk->Scopish] = Idx;
         return;
     }
 
     Start_Letter = toupper(Get_FileName(Idx)[0]);
-    if(Move_Idx(&Idx, -1)) return;
+    if(Move_Idx(ptk, &Idx, -1)) return;
     if(!Done_Sep)
     {
         while(Get_FileType(Idx) == _A_SEP)
         {
-            if(Move_Idx(&Idx, -1)) return;
+            if(Move_Idx(ptk, &Idx, -1)) return;
             if(Get_FileType(Idx) != _A_SEP)
             {
                 Start_Letter = toupper(Get_FileName(Idx)[0]);
@@ -874,19 +878,19 @@ void Prev_Prefix(void)
     }
     while(Start_Letter == Cur_Letter)
     {
-        if(Move_Idx(&Idx, -1)) return;
+        if(Move_Idx(ptk, &Idx, -1)) return;
         Cur_Letter = toupper(Get_FileName(Idx)[0]);
     }
-    lt_index[ptk.Scopish] = Idx + 1;
+    lt_index[ptk->Scopish] = Idx + 1;
 }
 
 // ------------------------------------------------------
 // Go to next prefix in a file list
-void Next_Prefix(void)
+void Next_Prefix(ptk_data *ptk)
 {
     char Cur_Letter;
     char Start_Letter;
-    int Idx = lt_index[ptk.Scopish];
+    int Idx = lt_index[ptk->Scopish];
     int Was_Dir;
 
     Was_Dir = FALSE;
@@ -895,28 +899,28 @@ void Next_Prefix(void)
     if(Get_FileType(Idx) == _A_SUBDIR)
     {
         Was_Dir = TRUE;
-        Move_Idx(&Idx, 1);
+        Move_Idx(ptk, &Idx, 1);
     }
     while(Get_FileType(Idx) == _A_SEP)
     {
-        if(Move_Idx(&Idx, 1)) return;
+        if(Move_Idx(ptk, &Idx, 1)) return;
     }
     if(Get_FileType(Idx) == _A_SUBDIR)
     {
-        lt_index[ptk.Scopish] = Idx;
+        lt_index[ptk->Scopish] = Idx;
         return;
     }
     if(!Was_Dir)
     {
         Start_Letter = toupper(Get_FileName(Idx)[0]);
-        if(Move_Idx(&Idx, 1)) return;
+        if(Move_Idx(ptk, &Idx, 1)) return;
         Cur_Letter = toupper(Get_FileName(Idx)[0]);
         while(Start_Letter == Cur_Letter ||
               Get_FileType(Idx) == _A_SEP)
         {
-            if(Move_Idx(&Idx, 1)) return;
+            if(Move_Idx(ptk, &Idx, 1)) return;
             Cur_Letter = toupper(Get_FileName(Idx)[0]);
         }
     }
-    lt_index[ptk.Scopish] = Idx;
+    lt_index[ptk->Scopish] = Idx;
 }

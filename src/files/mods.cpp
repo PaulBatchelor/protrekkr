@@ -344,7 +344,7 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
             Songplaying = FALSE;
 
             Free_Samples();
-            Clear_Patterns_Pool();
+            Clear_Patterns_Pool(ptk);
 
 #if !defined(__NO_MIDI__) && !defined(__WINAMP__)
             Midi_Reset();

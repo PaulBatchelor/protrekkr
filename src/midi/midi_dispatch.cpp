@@ -390,7 +390,7 @@ void Midi_Edit_Set_Row(int Data)
 {
     if(!is_recording && !Songplaying)
     {
-        int Pos = Get_Song_Position();
+        int Pos = Get_Song_Position(ptk);
         int Rows = patternLines[pSequence[Pos]];
         float factor = ((float) Rows / 127.0f);
         
@@ -443,7 +443,7 @@ void Midi_Edit_Set_Instrument(int Data)
 // Switch track on/off (LIVE)
 void Midi_Edit_Track_On_Off(int Data)
 {
-    Ext_Pos_Switch = Get_Song_Position();
+    Ext_Pos_Switch = Get_Song_Position(ptk);
     Ext_Track_Switch = Track_Under_Caret;
     gui_action = GUI_CMD_SWITCH_TRACK_STATUS;
 }

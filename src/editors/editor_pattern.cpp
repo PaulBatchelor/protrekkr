@@ -256,12 +256,12 @@ int Patterns_Lines_Offset = 0;
 // Functions
 int Get_Nibble_Color(int In_Prev_Next, int row, int column, int multi, int Shadow);
 int Get_Nibble_Color_Highlight(int row, int column);
-void Display_Patt_Line(int In_Prev_Next, int Shadow_Pattern, int y, int rel, int track, int tVisible_Columns, int pattern);
+void Display_Patt_Line(ptk_data *ptk, int In_Prev_Next, int Shadow_Pattern, int y, int rel, int track, int tVisible_Columns, int pattern);
 void Solo_Track(int track_to_solo);
 
 // ------------------------------------------------------
 // Draw a pattern on screen
-void draw_pated(int track, int line, int petrack, int row)
+void draw_pated(ptk_data *ptk, int track, int line, int petrack, int row)
 {
     int rel = 0;
     int liner;
@@ -282,11 +282,11 @@ void draw_pated(int track, int line, int petrack, int row)
     int y;
     int idx_icons_fx;
 
-    Cur_Position = Get_Song_Position();
+    Cur_Position = Get_Song_Position(ptk);
 
     int tVisible_Columns = Visible_Columns;
 
-    int max_size = Get_Visible_Tracks_Size((gui_track + Visible_Columns));
+    int max_size = Get_Visible_Tracks_Size(ptk, (gui_track + Visible_Columns));
     if(max_size < MAX_PATT_SCREEN_X)
     {
         if((gui_track + tVisible_Columns) < Songtracks)
@@ -299,7 +299,7 @@ void draw_pated(int track, int line, int petrack, int row)
 
     // Clear headers line
     SetColor(COL_PATTERN_LO_BACK);
-    bjbox(1, y, ptk.CONSOLE_WIDTH - 20, 12 + 8);
+    bjbox(1, y, ptk->CONSOLE_WIDTH - 20, 12 + 8);
 
     dover = PAT_COL_NOTE;
 
@@ -351,7 +351,7 @@ void draw_pated(int track, int line, int petrack, int row)
 
         // Zoom on/off
         if((dover + 17) >= MAX_PATT_SCREEN_X) goto Skip_Header;
-        if(Get_Track_Zoom(cur_track) != TRACK_MEDIUM) Cur_Char_Function[cur_track].Fnc(dover, y, 27, 0, 0);
+        if(Get_Track_Zoom(ptk, cur_track) != TRACK_MEDIUM) Cur_Char_Function[cur_track].Fnc(dover, y, 27, 0, 0);
         else Cur_Char_Function[cur_track].Fnc(dover, y, 28, 0, 0);
         dover += 17;
 
@@ -509,7 +509,7 @@ Skip_Header2:
     SetColor(COL_PATTERN_LO_BACK);
     bjbox(1,
           y,
-          ptk.CONSOLE_WIDTH - 20,
+          ptk->CONSOLE_WIDTH - 20,
           (Cur_Height - 372) + Patterns_Lines_Offset
          );
 
@@ -558,7 +558,7 @@ Skip_Header2:
                         for(i = 0; i < rel2_size; i++)
                         {
                             pattern = pSequence[Cur_Position2];
-                            Display_Patt_Line(In_Prev_Next, Shadow_Pattern, y, rel, track, tVisible_Columns, pattern);
+                            Display_Patt_Line(ptk, In_Prev_Next, Shadow_Pattern, y, rel, track, tVisible_Columns, pattern);
                             y += 8;
                             rel++;
                             if(rel >= patternLines[pSequence[Cur_Position2]])
@@ -604,11 +604,11 @@ Go_Display:
             // Display the highlight line at approx the middle of the pattern
             if(liner != 0)
             {
-                Display_Patt_Line(In_Prev_Next, Shadow_Pattern, y, rel, track, tVisible_Columns, pattern);
+                Display_Patt_Line(ptk, In_Prev_Next, Shadow_Pattern, y, rel, track, tVisible_Columns, pattern);
             }
             else
             {
-                draw_pated_highlight(gui_track, line, Track_Under_Caret, Column_Under_Caret, y);
+                draw_pated_highlight(ptk, gui_track, line, Track_Under_Caret, Column_Under_Caret, y);
                 y += 8;
             }
         }
@@ -619,7 +619,7 @@ Disp:;
 
 // ------------------------------------------------------
 // Draw a pattern row
-void Display_Patt_Line(int In_Prev_Next, int Shadow_Pattern,
+void Display_Patt_Line(ptk_data *ptk, int In_Prev_Next, int Shadow_Pattern,
                        int y, int rel,
                        int track, int tVisible_Columns,
                        int pattern)
@@ -647,12 +647,12 @@ void Display_Patt_Line(int In_Prev_Next, int Shadow_Pattern,
         if(rel % patt_highlight == 0) multip = TRUE;
     }
 
-    cur_column = Get_Track_Nibble_Start(Channels_MultiNotes, Channels_Effects, track) + track;
+    cur_column = Get_Track_Nibble_Start(ptk, Channels_MultiNotes, Channels_Effects, track) + track;
 
     // Browse all tracks to seek synchro markers
     for(tracky = 0; tracky < Songtracks; tracky++)
     {
-        offset_t = Get_Pattern_Offset(pattern, tracky, rel);
+        offset_t = Get_Pattern_Offset(ptk, pattern, tracky, rel);
         unsigned char p_e_sync;
 
         for(i = 0; i < Channels_Effects[tracky]; i++)
@@ -669,7 +669,7 @@ void Display_Patt_Line(int In_Prev_Next, int Shadow_Pattern,
         cur_track = track + tracky;
 
         // Read the datas
-        offset_t = Get_Pattern_Offset(pattern, cur_track, rel);
+        offset_t = Get_Pattern_Offset(ptk, pattern, cur_track, rel);
 
         unsigned char p_a;
         unsigned char p_b;
@@ -969,7 +969,8 @@ void Display_Patt_Line(int In_Prev_Next, int Shadow_Pattern,
 
 // ------------------------------------------------------
 // Record a FX on a track using various stratagems
-void Record_Live_Fx(int Track,
+void Record_Live_Fx(ptk_data *ptk,
+                    int Track,
                     int Pattern,
                     int Line,
                     int Cmd,
@@ -986,7 +987,7 @@ void Record_Live_Fx(int Track,
 
 Write_Fx:
 
-    offset_t = Get_Pattern_Offset(Pattern, Cur_Track, Line);
+    offset_t = Get_Pattern_Offset(ptk, Pattern, Cur_Track, Line);
     for(i = 0; i < Channels_Effects[Cur_Track]; i++)
     {
         // A fx similar is already there: let's replace it with a new value
@@ -1030,7 +1031,7 @@ Write_Fx:
 
 // ------------------------------------------------------
 // Draw the caret pattern row
-void draw_pated_highlight(int track, int line, int petrack, int row, int ypos)
+void draw_pated_highlight(ptk_data *ptk, int track, int line, int petrack, int row, int ypos)
 {
     int offset_t;
     int dover;
@@ -1048,7 +1049,7 @@ void draw_pated_highlight(int track, int line, int petrack, int row, int ypos)
 
     int tVisible_Columns = Visible_Columns;
 
-    int max_size = Get_Visible_Tracks_Size((gui_track + Visible_Columns));
+    int max_size = Get_Visible_Tracks_Size(ptk, (gui_track + Visible_Columns));
     if(max_size < MAX_PATT_SCREEN_X)
     {
         if((gui_track + tVisible_Columns) < Songtracks)
@@ -1057,7 +1058,7 @@ void draw_pated_highlight(int track, int line, int petrack, int row, int ypos)
         }
     }
 
-    Cur_Position = Get_Song_Position();
+    Cur_Position = Get_Song_Position(ptk);
 
     pattern = pSequence[Cur_Position];
 
@@ -1068,7 +1069,7 @@ void draw_pated_highlight(int track, int line, int petrack, int row, int ypos)
         // Browse all tracks to seek synchro markers
         for(tracky = 0; tracky < Songtracks; tracky++)
         {
-            offset_t = Get_Pattern_Offset(pattern, tracky, line);
+            offset_t = Get_Pattern_Offset(ptk, pattern, tracky, line);
             unsigned char p_e_sync;
 
             for(i = 0; i < Channels_Effects[tracky]; i++)
@@ -1079,12 +1080,12 @@ void draw_pated_highlight(int track, int line, int petrack, int row, int ypos)
         }
 
         SetColor(COL_PATTERN_LO_BACK);
-        bjbox(1, ypos, ptk.CHANNELS_WIDTH - 1, 16);
+        bjbox(1, ypos, ptk->CHANNELS_WIDTH - 1, 16);
 
         dover = PAT_COL_NOTE;
         Last_Pixel = dover;
         Last_Pixel_Complete = dover;
-        cur_column = Get_Track_Nibble_Start(Channels_MultiNotes, Channels_Effects, track) + track;
+        cur_column = Get_Track_Nibble_Start(ptk, Channels_MultiNotes, Channels_Effects, track) + track;
 
         Real_visible = 0;
         
@@ -1093,7 +1094,7 @@ void draw_pated_highlight(int track, int line, int petrack, int row, int ypos)
             int cur_track = track + tracky;
 
             Real_visible++;
-            offset_t = Get_Pattern_Offset(pattern, cur_track, line);
+            offset_t = Get_Pattern_Offset(ptk, pattern, cur_track, line);
 
             unsigned char p_a;
             unsigned char p_b;
@@ -1441,28 +1442,28 @@ void draw_pated_highlight(int track, int line, int petrack, int row, int ypos)
                     switch(liveparam)
                     {
                         case LIVE_PARAM_SONG_VOLUME:
-                            Record_Live_Fx(cur_track, pattern, line, 0x1c, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x1c, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_SONG_BPM:
-                            Record_Live_Fx(cur_track, pattern, line, 0xf0, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0xf0, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_TRACK_CUTOFF:
-                            Record_Live_Fx(cur_track, pattern, line, 8, livevalue, FALSE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 8, livevalue, FALSE);
                             break;
                         case LIVE_PARAM_TRACK_RESONANCE:
-                            Record_Live_Fx(cur_track, pattern, line, 0x14, livevalue, FALSE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x14, livevalue, FALSE);
                             break;
                         case LIVE_PARAM_TRACK_REVERB_SEND:
-                            Record_Live_Fx(cur_track, pattern, line, 0x11, livevalue, FALSE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x11, livevalue, FALSE);
                             break;
                         case LIVE_PARAM_TRACK_THRESHOLD:
-                            Record_Live_Fx(cur_track, pattern, line, 0x12, livevalue, FALSE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x12, livevalue, FALSE);
                             break;
                         case LIVE_PARAM_TRACK_CLAMP:
-                            Record_Live_Fx(cur_track, pattern, line, 0x13, livevalue, FALSE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x13, livevalue, FALSE);
                             break;
                         case LIVE_PARAM_TRACK_LFO_CARRIER:
-                            Record_Live_Fx(cur_track, pattern, line, 0x16, livevalue, FALSE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x16, livevalue, FALSE);
                             break;
                         case LIVE_PARAM_TRACK_PANNING:
                             if(livevalue > 0x80) livevalue = 0x80;
@@ -1472,46 +1473,46 @@ void draw_pated_highlight(int track, int line, int petrack, int row, int ypos)
                             *(RawPatterns + offset_t + PATTERN_VOLUME) = livevalue;
                             break;
                         case LIVE_PARAM_303_1_CUTOFF:
-                            Record_Live_Fx(cur_track, pattern, line, 0x33, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x33, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_303_2_CUTOFF:
-                            Record_Live_Fx(cur_track, pattern, line, 0x34, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x34, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_303_1_RESONANCE:
-                            Record_Live_Fx(cur_track, pattern, line, 0x35, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x35, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_303_2_RESONANCE:
-                            Record_Live_Fx(cur_track, pattern, line, 0x36, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x36, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_303_1_ENVMOD:
-                            Record_Live_Fx(cur_track, pattern, line, 0x37, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x37, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_303_2_ENVMOD:
-                            Record_Live_Fx(cur_track, pattern, line, 0x38, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x38, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_303_1_DECAY:
-                            Record_Live_Fx(cur_track, pattern, line, 0x39, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x39, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_303_2_DECAY:
-                            Record_Live_Fx(cur_track, pattern, line, 0x3a, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x3a, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_303_1_ACCENT:
-                            Record_Live_Fx(cur_track, pattern, line, 0x3b, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x3b, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_303_2_ACCENT:
-                            Record_Live_Fx(cur_track, pattern, line, 0x3c, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x3c, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_303_1_TUNE:
-                            Record_Live_Fx(cur_track, pattern, line, 0x3d, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x3d, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_303_2_TUNE:
-                            Record_Live_Fx(cur_track, pattern, line, 0x3e, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x3e, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_303_1_VOLUME:
-                            Record_Live_Fx(cur_track, pattern, line, 0x41, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x41, livevalue, TRUE);
                             break;
                         case LIVE_PARAM_303_2_VOLUME:
-                            Record_Live_Fx(cur_track, pattern, line, 0x42, livevalue, TRUE);
+                            Record_Live_Fx(ptk, cur_track, pattern, line, 0x42, livevalue, TRUE);
                             break;
                     } // Close switch
 
@@ -1549,7 +1550,7 @@ void draw_pated_highlight(int track, int line, int petrack, int row, int ypos)
 
 // ------------------------------------------------------
 // Update the displayed pattern data
-void Actupated(int modac)
+void Actupated(ptk_data *ptk, int modac)
 {
     int nlines;
     int i;
@@ -1569,7 +1570,7 @@ void Actupated(int modac)
         Pattern_Line_Visual = Pattern_Line;
     }
 
-    Cur_Position = Get_Song_Position();
+    Cur_Position = Get_Song_Position(ptk);
     nlines = patternLines[pSequence[Cur_Position]];
 
     if(Cur_Position != 0 || Cur_Position < (Song_Length - 1))
@@ -1580,7 +1581,7 @@ void Actupated(int modac)
             {
                 nlines = patternLines[pSequence[Cur_Position - 1]];
                 Pattern_Line = nlines + Pattern_Line;
-                Unselect_Selection();
+                Unselect_Selection(ptk);
                 gui_action = GUI_CMD_PREVIOUS_POSITION;
                 return;
             }
@@ -1589,7 +1590,7 @@ void Actupated(int modac)
                 if(Pattern_Line >= nlines)
                 {
                     Pattern_Line -= nlines;
-                    Unselect_Selection();
+                    Unselect_Selection(ptk);
                     gui_action = GUI_CMD_NEXT_POSITION;
                     return;
                 }
@@ -1609,7 +1610,7 @@ void Actupated(int modac)
         if(Pattern_Line >= nlines) Pattern_Line = nlines - 1;
     }
 
-    int max_channel_dat = Get_Max_Nibble_Track(Channels_MultiNotes, Channels_Effects, Track_Under_Caret) - 1;
+    int max_channel_dat = Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, Track_Under_Caret) - 1;
     if(Column_Under_Caret > max_channel_dat)
     {
         if(Track_Under_Caret < Songtracks - 1)
@@ -1629,11 +1630,11 @@ void Actupated(int modac)
         Track_Under_Caret--;
         if(Track_Under_Caret < 0)
         {
-            max_channel_dat = Get_Max_Nibble_Track(Channels_MultiNotes, Channels_Effects, Songtracks - 1) - 1;
+            max_channel_dat = Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, Songtracks - 1) - 1;
         }
         else
         {
-            max_channel_dat = Get_Max_Nibble_Track(Channels_MultiNotes, Channels_Effects, Track_Under_Caret) - 1;
+            max_channel_dat = Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, Track_Under_Caret) - 1;
         }
         gui_action = GUI_CMD_SET_FOCUS_TRACK;
         Column_Under_Caret = max_channel_dat;
@@ -1647,7 +1648,7 @@ void Actupated(int modac)
         gui_action = GUI_CMD_SET_FOCUS_TRACK;
         gui_track = 0;
     }
-    Visible_Columns = Get_Visible_Complete_Tracks();
+    Visible_Columns = Get_Visible_Complete_Tracks(ptk);
 
     // Keep the caret in focus
     if(Track_Under_Caret < 0)
@@ -1689,7 +1690,7 @@ void Actupated(int modac)
     }
 
     // ----
-    Set_Track_Slider(gui_track);
+    Set_Track_Slider(ptk, gui_track);
 
     // We need to check if the column where Track_Under_Caret is can't be displayed
     // after the correction
@@ -1698,13 +1699,13 @@ void Actupated(int modac)
         if(Track_Under_Caret >= gui_track + Visible_Columns)
         {
             gui_track = Track_Under_Caret - (Visible_Columns - 1);
-            Set_Track_Slider(gui_track);
+            Set_Track_Slider(ptk, gui_track);
         }
     }
 
-    Cur_Line = Get_Pattern_Line();
+    Cur_Line = Get_Pattern_Line(ptk);
 
-    draw_pated(gui_track, Cur_Line, Track_Under_Caret, Column_Under_Caret);
+    draw_pated(ptk, gui_track, Cur_Line, Track_Under_Caret, Column_Under_Caret);
 
     if(Continuous_Scroll)
     {
@@ -1715,7 +1716,7 @@ void Actupated(int modac)
             Max_Lines_Song += patternLines[pSequence[i]];
         }
         // Slider for the entire song
-        Realslider_Vert(MAX_PATT_SCREEN_X + 1, 200, Get_Song_Line(),
+        Realslider_Vert(MAX_PATT_SCREEN_X + 1, 200, Get_Song_Line(ptk),
                         DISPLAYED_LINES,
                         DISPLAYED_LINES + Max_Lines_Song,
                         (Cur_Height - 452) + Patterns_Lines_Offset,
@@ -1733,11 +1734,11 @@ void Actupated(int modac)
 
 // ------------------------------------------------------
 // Draw the slider and the buttons located at the right of the pattern
-void Draw_Pattern_Right_Stuff()
+void Draw_Pattern_Right_Stuff(ptk_data *ptk)
 {
     int cur_line;
 
-    cur_line = Get_Pattern_Line();
+    cur_line = Get_Pattern_Line(ptk);
 
     SetColor(COL_BLACK);
     Fillrect(MAX_PATT_SCREEN_X, 184, MAX_PATT_SCREEN_X + 20, (Cur_Height - 251) + (16 * 5) + Patterns_Lines_Offset);
@@ -1748,12 +1749,12 @@ void Draw_Pattern_Right_Stuff()
     Gui_Draw_Button_Box(MAX_PATT_SCREEN_X + 1, 184, 16, 14, "\01", BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     Gui_Draw_Button_Box(MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + Patterns_Lines_Offset, 16, 14, "\02", BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
 
-    Draw_Blocks_Buffers_Status();
+    Draw_Blocks_Buffers_Status(ptk);
 }
 
 // ------------------------------------------------------
 // Display the status of the selection buffers
-void Draw_Blocks_Buffers_Status()
+void Draw_Blocks_Buffers_Status(ptk_data *ptk)
 {
     int High[] =
     {
@@ -1781,7 +1782,7 @@ void Draw_Blocks_Buffers_Status()
 
 // ------------------------------------------------------
 // Actually the extra data associated with the pattern
-void Actualize_Patterned(void)
+void Actualize_Patterned(ptk_data *ptk)
 {
     if(Current_Edit_Steps < 0) Current_Edit_Steps = 16;
     if(Current_Edit_Steps > 16) Current_Edit_Steps = 0;
@@ -1838,7 +1839,7 @@ int Get_Nibble_Color_Highlight(int row, int column)
 
 // ------------------------------------------------------
 // Return the size in pixel of a given track
-int Get_Track_Size(int Track, int *Column)
+int Get_Track_Size(ptk_data *ptk, int Track, int *Column)
 {
     int i;
     int dover = 0;
@@ -1953,7 +1954,7 @@ int Get_Track_Size(int Track, int *Column)
 
 // ------------------------------------------------------
 // Return the real size (with all elements) in pixel of a given track
-int Get_Track_Real_Size(int Track)
+int Get_Track_Real_Size(ptk_data *ptk, int Track)
 {
     int i;
     int dover = 0;
@@ -2035,7 +2036,7 @@ int Get_Track_Real_Size(int Track)
 
 // ------------------------------------------------------
 // Return the size in pixel of all visible tracks
-int Get_Visible_Tracks_Size(int max_tracks)
+int Get_Visible_Tracks_Size(ptk_data *ptk, int max_tracks)
 {
     int i;
     int size = 0;
@@ -2043,7 +2044,7 @@ int Get_Visible_Tracks_Size(int max_tracks)
 
     for(i = gui_track; i < max_tracks; i++)
     {
-        size += Get_Track_Size(i, &column);
+        size += Get_Track_Size(ptk, i, &column);
         if(size >= MAX_PATT_SCREEN_X) break;
     }
     return(size);
@@ -2051,7 +2052,7 @@ int Get_Visible_Tracks_Size(int max_tracks)
 
 // ------------------------------------------------------
 // Return the index of the track located under the mouse pointer
-int Get_Track_Over_Mouse(int Mouse, int *Was_Scrolling, int Left)
+int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
 {
     int i;
     int bound_left = 0;
@@ -2081,7 +2082,7 @@ int Get_Track_Over_Mouse(int Mouse, int *Was_Scrolling, int Left)
                 Pattern_Delay_Horiz_Right = 0;
                 Pattern_First_Delay_Horiz_Right = 200.0f;
                 if(under_mouse > (Songtracks - 1)) under_mouse = Songtracks - 1;
-                if(!Left) Column_Under_Caret = Get_Last_Track_Column(under_mouse);
+                if(!Left) Column_Under_Caret = Get_Last_Track_Column(ptk, under_mouse);
                 if(Was_Scrolling) *Was_Scrolling = TRUE;
             }
         }
@@ -2114,7 +2115,7 @@ int Get_Track_Over_Mouse(int Mouse, int *Was_Scrolling, int Left)
                     Pattern_Delay_Horiz_Right_Slow = 0;
                     Pattern_First_Delay_Horiz_Right_Slow = 200.0f;
                     if(under_mouse > (Songtracks - 1)) under_mouse = Songtracks - 1;
-                    if(!Left) Column_Under_Caret = Get_Last_Track_Column(under_mouse);
+                    if(!Left) Column_Under_Caret = Get_Last_Track_Column(ptk, under_mouse);
                     if(Was_Scrolling) *Was_Scrolling = TRUE;
                 }
             }
@@ -2133,7 +2134,7 @@ int Get_Track_Over_Mouse(int Mouse, int *Was_Scrolling, int Left)
         // From 0
         mouse_coord -= PAT_COL_NOTE;
         found_track = FALSE;
-        int max_size = Get_Visible_Tracks_Size((gui_track + Visible_Columns));
+        int max_size = Get_Visible_Tracks_Size(ptk, (gui_track + Visible_Columns));
         int tVisible_Columns = Visible_Columns;
         if(max_size < Last_Pixel)
         {
@@ -2144,7 +2145,7 @@ int Get_Track_Over_Mouse(int Mouse, int *Was_Scrolling, int Left)
         }
         for(i = gui_track; i < (gui_track + tVisible_Columns); i++)
         {
-            track_size = Get_Track_Size(i, NULL);
+            track_size = Get_Track_Size(ptk, i, NULL);
             bound_right += track_size;
             if(mouse_coord >= bound_left && mouse_coord < bound_right)
             {
@@ -2208,7 +2209,7 @@ int Get_Track_Over_Mouse(int Mouse, int *Was_Scrolling, int Left)
 
 // ------------------------------------------------------
 // Return the index of a track column according to a coordinate
-int Get_Column_Idx(int track, int mouse_coord)
+int Get_Column_Idx(ptk_data *ptk, int track, int mouse_coord)
 {
     int ret_value = 0;
     int old_dover = 0;
@@ -2317,14 +2318,14 @@ int Get_Column_Idx(int track, int mouse_coord)
         if(mouse_coord >= old_dover && mouse_coord < dover) return(ret_value);
         ret_value++;
     }
-    int Last_Col = Get_Last_Track_Column(track);
+    int Last_Col = Get_Last_Track_Column(ptk, track);
     if(ret_value > Last_Col) ret_value = Last_Col;
     return(ret_value);
 }
 
 // ------------------------------------------------------
 // Return the last column of a track
-int Get_Last_Track_Column(int track)
+int Get_Last_Track_Column(ptk_data *ptk, int track)
 {
     // Notes + Volume + Panning + Fx
     return(((Channels_MultiNotes[track] * 3) +
@@ -2334,7 +2335,7 @@ int Get_Last_Track_Column(int track)
 
 // ------------------------------------------------------
 // Return the last visible column and track
-int Get_Last_Column_And_Track(int *track)
+int Get_Last_Column_And_Track(ptk_data *ptk, int *track)
 {
     int i;
     int dover = 0;
@@ -2347,7 +2348,7 @@ int Get_Last_Column_And_Track(int *track)
     *track = gui_track;
     for(i = gui_track; i < Songtracks; i++)
     {
-        channel_size = Get_Track_Size(i, NULL);
+        channel_size = Get_Track_Size(ptk, i, NULL);
         if((pixel_visible_tracks + channel_size - 1) >= MAX_PATT_SCREEN_X)
         {
             break;
@@ -2466,7 +2467,8 @@ int Get_Last_Column_And_Track(int *track)
 
 // ------------------------------------------------------
 // Return the index of the column located under the mouse pointer
-void Get_Column_Over_Mouse(int *track, int *column,
+void Get_Column_Over_Mouse(ptk_data *ptk, 
+                           int *track, int *column,
                            int check_boundaries,
                            int *Was_Scrolling,
                            int Left)
@@ -2486,19 +2488,19 @@ void Get_Column_Over_Mouse(int *track, int *column,
     mouse = Mouse.x;
 
 get_tracks_boundaries:
-    tmp_track = Get_Track_Over_Mouse(mouse, Was_Scrolling, Left);
+    tmp_track = Get_Track_Over_Mouse(ptk, mouse, Was_Scrolling, Left);
     mouse_coord = mouse - PAT_COL_NOTE;
 
     for(i = tmp_track - 1; i >= gui_track; i--)
     {
-        track_size = Get_Track_Size(i, NULL);
+        track_size = Get_Track_Size(ptk, i, NULL);
         mouse_coord -= track_size;
     }
-    tmp_column = Get_Column_Idx(tmp_track, mouse_coord);
+    tmp_column = Get_Column_Idx(ptk, tmp_track, mouse_coord);
 
     if(check_boundaries)
     {
-        last_column = Get_Last_Column_And_Track(&last_track);
+        last_column = Get_Last_Column_And_Track(ptk, &last_track);
         if(tmp_track >= last_track && tmp_column >= last_column)
         {
             mouse--;
@@ -2521,9 +2523,9 @@ get_tracks_boundaries:
 
 // ------------------------------------------------------
 // return the index of the row located under the mouse pointer
-int Get_Line_Over_Mouse(void)
+int Get_Line_Over_Mouse(ptk_data *ptk)
 {
-    int Cur_Position = Get_Song_Position();
+    int Cur_Position = Get_Song_Position(ptk);
 
     int mouse_line = (Mouse.y - (183 + 17));
     // (Highlight line is doubled)
@@ -2538,7 +2540,7 @@ int Get_Line_Over_Mouse(void)
 
 // ------------------------------------------------------
 // Return the number of tracks completly displayed on screen
-int Get_Visible_Complete_Tracks(void)
+int Get_Visible_Complete_Tracks(ptk_data *ptk)
 {
     int pixel_visible_tracks = PAT_COL_NOTE;
     int channel_size;
@@ -2547,7 +2549,7 @@ int Get_Visible_Complete_Tracks(void)
 
     for(i = gui_track; i < Songtracks; i++)
     {
-        channel_size = Get_Track_Size(i, NULL);
+        channel_size = Get_Track_Size(ptk, i, NULL);
         if((pixel_visible_tracks + channel_size - 1) >= MAX_PATT_SCREEN_X)
         {
             break;
@@ -2560,10 +2562,10 @@ int Get_Visible_Complete_Tracks(void)
 
 // ------------------------------------------------------
 // Return the number of tracks partially displayed on screen
-int Get_Visible_Partial_Tracks(void)
+int Get_Visible_Partial_Tracks(ptk_data *ptk)
 {
     int tracks = Visible_Columns;
-    int max_size = Get_Visible_Tracks_Size((gui_track + Visible_Columns));
+    int max_size = Get_Visible_Tracks_Size(ptk, (gui_track + Visible_Columns));
     if(max_size < MAX_PATT_SCREEN_X)
     {
         if((gui_track + tracks) < Songtracks)
@@ -2576,7 +2578,7 @@ int Get_Visible_Partial_Tracks(void)
 
 // ------------------------------------------------------
 // Make sure the position isn't beyond current pattern lines range
-void Bound_Patt_Pos(void)
+void Bound_Patt_Pos(ptk_data *ptk)
 {
     if(Pattern_Line >= patternLines[pSequence[Song_Position]])
     {
@@ -2587,7 +2589,7 @@ void Bound_Patt_Pos(void)
 // ------------------------------------------------------
 // Reset the mouse scrolling timing
 // Each time the right mouse button is pressed
-void Reset_Pattern_Scrolling_Horiz(void)
+void Reset_Pattern_Scrolling_Horiz(ptk_data *ptk)
 {
     Pattern_Delay_Horiz_Left = 0;
     Pattern_Delay_Horiz_Right = 0;
@@ -2601,9 +2603,9 @@ void Reset_Pattern_Scrolling_Horiz(void)
 
 // ------------------------------------------------------
 // Set the layout of the horizontal tracks slider and bound the caret
-void Set_Track_Slider(int pos)
+void Set_Track_Slider(ptk_data *ptk, int pos)
 {
-    Visible_Columns = Get_Visible_Complete_Tracks();
+    Visible_Columns = Get_Visible_Complete_Tracks(ptk);
     if(Track_Under_Caret >= pos + Visible_Columns)
     {
         Track_Under_Caret = pos + Visible_Columns;
@@ -2631,14 +2633,14 @@ void Set_Track_Slider(int pos)
 
 // ------------------------------------------------------
 // Handle the mouse wheel event
-void Mouse_Wheel_Pattern_Ed(int roll_amount, int allow)
+void Mouse_Wheel_Pattern_Ed(ptk_data *ptk, int roll_amount, int allow)
 {
-    int Cur_Position = Get_Song_Position();
+    int Cur_Position = Get_Song_Position(ptk);
 
     if(allow)
     {
         // Scroll the patterns
-        if(zcheckMouse_nobutton(0, 182, ptk.CONSOLE_WIDTH, (Cur_Height - 354) + Patterns_Lines_Offset) == 1)
+        if(zcheckMouse_nobutton(0, 182, ptk->CONSOLE_WIDTH, (Cur_Height - 354) + Patterns_Lines_Offset) == 1)
         {
             Pattern_Line += roll_amount;
             if(Continuous_Scroll && !Cur_Position) if(Pattern_Line < 0) Pattern_Line = 0;
@@ -2649,7 +2651,7 @@ void Mouse_Wheel_Pattern_Ed(int roll_amount, int allow)
                     Pattern_Line = patternLines[pSequence[Cur_Position]] - 1;
                 }
             }
-            Actupated(0);
+            Actupated(ptk, 0);
         }
     }
 
@@ -2657,7 +2659,7 @@ void Mouse_Wheel_Pattern_Ed(int roll_amount, int allow)
     if(zcheckMouse(POS_HORIZ_SLIDER - 1, (Cur_Height - 171) + Patterns_Lines_Offset,
                    (Cur_Width - (POS_HORIZ_SLIDER + 1)), 16))
     {
-        Visible_Columns = Get_Visible_Complete_Tracks();
+        Visible_Columns = Get_Visible_Complete_Tracks(ptk);
 
         gui_track += -roll_amount;
         if(gui_track < 0)
@@ -2668,37 +2670,37 @@ void Mouse_Wheel_Pattern_Ed(int roll_amount, int allow)
         {
             gui_track = ((Songtracks - Visible_Columns));
         }
-        Actupated(1);
+        Actupated(ptk, 1);
     }
 }
 
 // ------------------------------------------------------
 // Handle the sliders event (right mouse button)
-void Mouse_Sliders_Right_Pattern_Ed(void)
+void Mouse_Sliders_Right_Pattern_Ed(ptk_data *ptk)
 {
     int sched_line;
 
     // Position the caret on the specified track/column with the mouse
-    if(zcheckMouse(1, 183 + 15, ptk.CHANNELS_WIDTH, (Cur_Height - 371) + Patterns_Lines_Offset))
+    if(zcheckMouse(1, 183 + 15, ptk->CHANNELS_WIDTH, (Cur_Height - 371) + Patterns_Lines_Offset))
     {
         int In_Scrolling = FALSE;
-        Get_Column_Over_Mouse(&Track_Under_Caret,
+        Get_Column_Over_Mouse(ptk, &Track_Under_Caret,
                               &Column_Under_Caret,
                               FALSE,
                               &In_Scrolling,
                               FALSE);
-        Actupated(0);
+        Actupated(ptk, 0);
         gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
 
     // Go to the row selected with the mouse
     if(!Songplaying)
     {
-        if(zcheckMouse(1, 183 + 15, ptk.CHANNELS_WIDTH, (Cur_Height - 371) + Patterns_Lines_Offset))
+        if(zcheckMouse(1, 183 + 15, ptk->CHANNELS_WIDTH, (Cur_Height - 371) + Patterns_Lines_Offset))
         {
             if(!is_recording)
             {
-                sched_line = Get_Line_Over_Mouse();
+                sched_line = Get_Line_Over_Mouse(ptk);
 
                 if(Pattern_Scrolling_Vert)
                 {
@@ -2720,14 +2722,14 @@ void Mouse_Sliders_Right_Pattern_Ed(void)
                     Pattern_Line = sched_line;
                 }
             }
-            Actupated(0);
+            Actupated(ptk, 0);
         }
     }
 }
 
 // ------------------------------------------------------
 // Handle the sliders event (left mouse button)
-void Mouse_Sliders_Pattern_Ed(void)
+void Mouse_Sliders_Pattern_Ed(ptk_data *ptk)
 {
     // Current track slider (horizontal)
     if(zcheckMouse(POS_HORIZ_SLIDER - 1, (Cur_Height - 171) + Patterns_Lines_Offset,
@@ -2738,11 +2740,11 @@ void Mouse_Sliders_Pattern_Ed(void)
         // Normalize and scale
         Pos_Mouse = Pos_Mouse / ((float) (Cur_Width - (POS_HORIZ_SLIDER - 1)));
         if(Pos_Mouse > 1.0f) Pos_Mouse = 1.0f;
-        Visible_Columns = Get_Visible_Complete_Tracks();
+        Visible_Columns = Get_Visible_Complete_Tracks(ptk);
 
         Pos_Mouse = Pos_Mouse * ((Songtracks - Visible_Columns) + 1);
         gui_track = (int) Pos_Mouse;
-        Actupated(1);
+        Actupated(ptk, 1);
     }
 
     if(Continuous_Scroll)
@@ -2784,8 +2786,8 @@ void Mouse_Sliders_Pattern_Ed(void)
                 i++;
             }
             Pattern_Line = final_row;
-            Goto_Song_Position(i);
-            Actupated(0);
+            Goto_Song_Position(ptk, i);
+            Actupated(ptk, 0);
         }
     }
     else
@@ -2794,7 +2796,7 @@ void Mouse_Sliders_Pattern_Ed(void)
         if(zcheckMouse(MAX_PATT_SCREEN_X + 1, 200 + (Continuous_Scroll * 80), 16 + 1, (Cur_Height - 452) - (Continuous_Scroll * 80) + Patterns_Lines_Offset) & !Songplaying)
         {
             int final_row;
-            int Cur_Position = Get_Song_Position();
+            int Cur_Position = Get_Song_Position(ptk);
             int max_length = patternLines[pSequence[Cur_Position]] + DISPLAYED_LINES;
             int Center = Slider_Get_Center(DISPLAYED_LINES, max_length, ((Cur_Height - 452) - (Continuous_Scroll * 80)) + Patterns_Lines_Offset);
             float Pos_Mouse = ((float) ((Mouse.y - (200 + (Continuous_Scroll * 80))) - 
@@ -2809,7 +2811,7 @@ void Mouse_Sliders_Pattern_Ed(void)
             if(final_row < 0) final_row = 0;
             if(final_row > patternLines[pSequence[Cur_Position]] - 1) final_row = patternLines[pSequence[Cur_Position]] - 1;
             Pattern_Line = final_row;
-            Actupated(0);
+            Actupated(ptk, 0);
         }
     }
 
@@ -2818,14 +2820,14 @@ void Mouse_Sliders_Pattern_Ed(void)
     {
         int track;
         int column;
-        Get_Column_Over_Mouse(&track, &column, FALSE, NULL, TRUE);
-        Mark_Block_End(column, track, Get_Line_Over_Mouse(), 3);
+        Get_Column_Over_Mouse(ptk, &track, &column, FALSE, NULL, TRUE);
+        Mark_Block_End(ptk, column, track, Get_Line_Over_Mouse(ptk), 3);
     }
 }
 
 // ------------------------------------------------------
 // Handle the left mouse button event
-void Mouse_Left_Pattern_Ed(void)
+void Mouse_Left_Pattern_Ed(ptk_data *ptk)
 {
     int i;
     int start_mute_check_x;
@@ -2837,28 +2839,28 @@ void Mouse_Left_Pattern_Ed(void)
         int track;
         int column;
         int In_Scrolling = FALSE;
-        Get_Column_Over_Mouse(&track, &column, FALSE, NULL, TRUE);
-        Mark_Block_Start(column, track, Get_Line_Over_Mouse());
+        Get_Column_Over_Mouse(ptk, &track, &column, FALSE, NULL, TRUE);
+        Mark_Block_Start(ptk, column, track, Get_Line_Over_Mouse(ptk));
     }
 
     // Prev row
     if(zcheckMouse(MAX_PATT_SCREEN_X + 1, 184, 16 + 1, 14) & !Songplaying)
     {
-        Goto_Previous_Row();
+        Goto_Previous_Row(ptk);
     }
 
     // Next row
     if(zcheckMouse(MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + Patterns_Lines_Offset, 16 + 1, 14) & !Songplaying)
     {
-        Goto_Next_Row();
+        Goto_Next_Row(ptk);
     }
 
     // Set buffer 1
     if(zcheckMouse(MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 1) + Patterns_Lines_Offset, 16 + 1, 14))
     {
         Curr_Buff_Block = 0;
-        Draw_Pattern_Right_Stuff();
-        Actupated(0);
+        Draw_Pattern_Right_Stuff(ptk);
+        Actupated(ptk, 0);
         teac = 0;
         gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
@@ -2866,8 +2868,8 @@ void Mouse_Left_Pattern_Ed(void)
     if(zcheckMouse(MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 2) + Patterns_Lines_Offset, 16 + 1, 14))
     {
         Curr_Buff_Block = 1;
-        Draw_Pattern_Right_Stuff();
-        Actupated(0);
+        Draw_Pattern_Right_Stuff(ptk);
+        Actupated(ptk, 0);
         teac = 0;
         gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
@@ -2875,8 +2877,8 @@ void Mouse_Left_Pattern_Ed(void)
     if(zcheckMouse(MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 3) + Patterns_Lines_Offset, 16 + 1, 14))
     {
         Curr_Buff_Block = 2;
-        Draw_Pattern_Right_Stuff();
-        Actupated(0);
+        Draw_Pattern_Right_Stuff(ptk);
+        Actupated(ptk, 0);
         teac = 0;
         gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
@@ -2884,15 +2886,15 @@ void Mouse_Left_Pattern_Ed(void)
     if(zcheckMouse(MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 4) + Patterns_Lines_Offset, 16 + 1, 14))
     {
         Curr_Buff_Block = 3;
-        Draw_Pattern_Right_Stuff();
-        Actupated(0);
+        Draw_Pattern_Right_Stuff(ptk);
+        Actupated(ptk, 0);
         teac = 0;
         gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
 
     // Track mute
     start_mute_check_x = PAT_COL_NOTE + 1 + 4 + 1;
-    tracks = Get_Visible_Partial_Tracks();
+    tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = gui_track; i < gui_track + tracks; i++)
     {
         if(zcheckMouse(start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
@@ -2900,27 +2902,27 @@ void Mouse_Left_Pattern_Ed(void)
             gui_action = GUI_CMD_SWITCH_TRACK_MUTE_STATE;
             break;
         }
-        start_mute_check_x += Get_Track_Size(i, NULL);
+        start_mute_check_x += Get_Track_Size(ptk, i, NULL);
     }
 
     // Track on/off
     start_mute_check_x = PAT_COL_NOTE + 1 + 4 + 29 + 1;
-    tracks = Get_Visible_Partial_Tracks();
+    tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = gui_track; i < gui_track + tracks; i++)
     {
         if(zcheckMouse(start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
         {
-            int Cur_Position = Get_Song_Position();
-            int tmp_track = Get_Track_Over_Mouse(Mouse.x, NULL, FALSE);
-            Toggle_Track_On_Off_Status(Cur_Position, tmp_track);
+            int Cur_Position = Get_Song_Position(ptk);
+            int tmp_track = Get_Track_Over_Mouse(ptk, Mouse.x, NULL, FALSE);
+            Toggle_Track_On_Off_Status(ptk, Cur_Position, tmp_track);
             break;
         }
-        start_mute_check_x += Get_Track_Size(i, NULL);
+        start_mute_check_x += Get_Track_Size(ptk, i, NULL);
     }
 
     // Track zoom > large
     start_mute_check_x = PAT_COL_NOTE + 1 + 4 + (29 * 2) + 1;
-    tracks = Get_Visible_Partial_Tracks();
+    tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = gui_track; i < gui_track + tracks; i++)
     {
         if(zcheckMouse(start_mute_check_x + Cur_Char_size[i], 183, 16, 7))
@@ -2928,12 +2930,12 @@ void Mouse_Left_Pattern_Ed(void)
             gui_action = GUI_CMD_SWITCH_TRACK_LARGE_STATE;
             break;
         }
-        start_mute_check_x += Get_Track_Size(i, NULL);
+        start_mute_check_x += Get_Track_Size(ptk, i, NULL);
     }
 
     // Reduce notes
     start_mute_check_x = PAT_COL_NOTE + 4 + 1;
-    tracks = Get_Visible_Partial_Tracks();
+    tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = gui_track; i < gui_track + tracks; i++)
     {
         if(zcheckMouse(start_mute_check_x , 183 + 8, 8, 7))
@@ -2941,12 +2943,12 @@ void Mouse_Left_Pattern_Ed(void)
             gui_action = GUI_CMD_REDUCE_TRACK_NOTES;
             break;
         }
-        start_mute_check_x += Get_Track_Size(i, NULL);
+        start_mute_check_x += Get_Track_Size(ptk, i, NULL);
     }
 
     // Expand notes
     start_mute_check_x = PAT_COL_NOTE + 4 + 1 + 9;
-    tracks = Get_Visible_Partial_Tracks();
+    tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = gui_track; i < gui_track + tracks; i++)
     {
         if(zcheckMouse(start_mute_check_x, 183 + 8, 8, 7))
@@ -2954,11 +2956,11 @@ void Mouse_Left_Pattern_Ed(void)
             gui_action = GUI_CMD_EXPAND_TRACK_NOTES;
             break;
         }
-        start_mute_check_x += Get_Track_Size(i, NULL);
+        start_mute_check_x += Get_Track_Size(ptk, i, NULL);
     }
 
     // Reduce effects
-    tracks = Get_Visible_Partial_Tracks();
+    tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = 0; i < tracks; i++)
     {
         start_mute_check_x = pos_effects_icons[i] - 1;
@@ -2970,7 +2972,7 @@ void Mouse_Left_Pattern_Ed(void)
     }
 
     // Expand effects
-    tracks = Get_Visible_Partial_Tracks();
+    tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = 0; i < tracks; i++)
     {
         start_mute_check_x = pos_effects_icons[i] + 9 - 1;
@@ -2984,7 +2986,7 @@ void Mouse_Left_Pattern_Ed(void)
 
 // ------------------------------------------------------
 // Handle the right mouse button event
-void Mouse_Right_Pattern_Ed(void)
+void Mouse_Right_Pattern_Ed(ptk_data *ptk)
 {
     int start_mute_check_x;
     int tracks;
@@ -3004,56 +3006,56 @@ void Mouse_Right_Pattern_Ed(void)
 
     // Solo track
     start_mute_check_x = PAT_COL_NOTE + 1 + 4;
-    tracks = Get_Visible_Partial_Tracks();
+    tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = gui_track; i < gui_track + tracks; i++)
     {
         if(start_mute_check_x + Cur_Char_size[i] >= MAX_PATT_SCREEN_X) break;
         if(zcheckMouse(start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
         {
-            int tmp_track = Get_Track_Over_Mouse(Mouse.x, NULL, FALSE);
+            int tmp_track = Get_Track_Over_Mouse(ptk, Mouse.x, NULL, FALSE);
             Solo_Track(tmp_track);
             // Will unmute the correct track
             gui_action = GUI_CMD_SWITCH_TRACK_MUTE_STATE;
         }
-        start_mute_check_x += Get_Track_Size(i, NULL);
+        start_mute_check_x += Get_Track_Size(ptk, i, NULL);
     }
 
     // All tracks off but the selected one
     start_mute_check_x = PAT_COL_NOTE + 1 + 4 + 29;
-    tracks = Get_Visible_Partial_Tracks();
+    tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = gui_track; i < gui_track + tracks; i++)
     {
         if(start_mute_check_x + Cur_Char_size[i] >= MAX_PATT_SCREEN_X) break;
         if(zcheckMouse(start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
         {
-            int Cur_Position = Get_Song_Position();
-            int tmp_track = Get_Track_Over_Mouse(Mouse.x, NULL, FALSE);
-            Solo_Track_On_Off(Cur_Position, tmp_track);
+            int Cur_Position = Get_Song_Position(ptk);
+            int tmp_track = Get_Track_Over_Mouse(ptk, Mouse.x, NULL, FALSE);
+            Solo_Track_On_Off(ptk, Cur_Position, tmp_track);
             break;
         }
-        start_mute_check_x += Get_Track_Size(i, NULL);
+        start_mute_check_x += Get_Track_Size(ptk, i, NULL);
     }
 
     // Track zoom > small
     start_mute_check_x = PAT_COL_NOTE + 1 + 4 + (29 * 2);
-    tracks = Get_Visible_Partial_Tracks();
+    tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = gui_track; i < gui_track + tracks; i++)
     {
         if(start_mute_check_x + Cur_Char_size[i] >= MAX_PATT_SCREEN_X) break;
         if(zcheckMouse(start_mute_check_x + Cur_Char_size[i], 183, 16, 7)) gui_action = GUI_CMD_SWITCH_TRACK_SMALL_STATE;
-        start_mute_check_x += Get_Track_Size(i, NULL);
+        start_mute_check_x += Get_Track_Size(ptk, i, NULL);
     }
 
     // Prev page
     if(zcheckMouse(MAX_PATT_SCREEN_X + 1, 184, 16 + 1, 14) & !Songplaying)
     {
-        Goto_Previous_Page();
+        Goto_Previous_Page(ptk);
     }
 
     // Next page
     if(zcheckMouse(MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + Patterns_Lines_Offset, 16 + 1, 14) & !Songplaying)
     {
-        Goto_Next_Page();
+        Goto_Next_Page(ptk);
     }
 }
 
@@ -3104,135 +3106,135 @@ void Solo_Track(int track_to_solo)
 
 // ------------------------------------------------------
 // Move one row above
-void Goto_Previous_Row(void)
+void Goto_Previous_Row(ptk_data *ptk)
 {
-    int Cur_Position = Get_Song_Position();
+    int Cur_Position = Get_Song_Position(ptk);
 
-    Select_Block_Keyboard(BLOCK_MARK_ROWS);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS);
     Pattern_Line--;
     if(Continuous_Scroll && !Cur_Position) if(Pattern_Line < 0) Pattern_Line = 0;
-    Actupated(0);
-    Select_Block_Keyboard(BLOCK_MARK_ROWS);
+    Actupated(ptk, 0);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS);
 }
 
 // ------------------------------------------------------
 // Move one row below
-void Goto_Next_Row(void)
+void Goto_Next_Row(ptk_data *ptk)
 {
-    int Cur_Position = Get_Song_Position();
+    int Cur_Position = Get_Song_Position(ptk);
 
-    Select_Block_Keyboard(BLOCK_MARK_ROWS);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS);
     Pattern_Line++;
     if(Continuous_Scroll && (Cur_Position == Song_Length - 1)) if(Pattern_Line >= patternLines[pSequence[Cur_Position]]) Pattern_Line = patternLines[pSequence[Cur_Position]] - 1;
-    Actupated(0);
-    Select_Block_Keyboard(BLOCK_MARK_ROWS);
+    Actupated(ptk, 0);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS);
 }
 
 // ------------------------------------------------------
 // Move one page above
-void Goto_Previous_Page(void)
+void Goto_Previous_Page(ptk_data *ptk)
 {
-    int Cur_Position = Get_Song_Position();
+    int Cur_Position = Get_Song_Position(ptk);
 
-    Select_Block_Keyboard(BLOCK_MARK_ROWS);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS);
     Pattern_Line -= 16;
     if(!is_recording && !Continuous_Scroll) if(Pattern_Line < 0) Pattern_Line = 0;
     if(Continuous_Scroll && !Cur_Position) if(Pattern_Line < 0) Pattern_Line = 0;
-    Actupated(0);
-    Select_Block_Keyboard(BLOCK_MARK_ROWS);
+    Actupated(ptk, 0);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS);
 }
 
 // ------------------------------------------------------
 // Move one page below
-void Goto_Next_Page(void)
+void Goto_Next_Page(ptk_data *ptk)
 {
-    int Cur_Position = Get_Song_Position();
+    int Cur_Position = Get_Song_Position(ptk);
 
-    Select_Block_Keyboard(BLOCK_MARK_ROWS);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS);
     Pattern_Line += 16;
     if(!is_recording && !Continuous_Scroll) if(Pattern_Line >= patternLines[pSequence[Cur_Position]]) Pattern_Line = patternLines[pSequence[Cur_Position]] - 1;
     if(Continuous_Scroll && (Cur_Position == Song_Length - 1)) if(Pattern_Line >= patternLines[pSequence[Cur_Position]]) Pattern_Line = patternLines[pSequence[Cur_Position]] - 1;
-    Actupated(0);
-    Select_Block_Keyboard(BLOCK_MARK_ROWS);
+    Actupated(ptk, 0);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS);
 }
 
 // ------------------------------------------------------
 // Move one column on the left
-void Goto_Previous_Column(void)
+void Goto_Previous_Column(ptk_data *ptk)
 {
-    Select_Block_Keyboard(BLOCK_MARK_TRACKS);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_TRACKS);
     Column_Under_Caret--;
-    Actupated(0);
-    Select_Block_Keyboard(BLOCK_MARK_TRACKS);
+    Actupated(ptk, 0);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_TRACKS);
     gui_action = GUI_CMD_SET_FOCUS_TRACK;
 }
 
 // ------------------------------------------------------
 // Move one column on the right
-void Goto_Next_Column(void)
+void Goto_Next_Column(ptk_data *ptk)
 {
-    Select_Block_Keyboard(BLOCK_MARK_TRACKS);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_TRACKS);
     Column_Under_Caret++;
-    Actupated(0);
-    Select_Block_Keyboard(BLOCK_MARK_TRACKS);
+    Actupated(ptk, 0);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_TRACKS);
     gui_action = GUI_CMD_SET_FOCUS_TRACK;
 }
 
 // ------------------------------------------------------
 // Move to the top left of the pattern
-void Goto_Top_Left(void)
+void Goto_Top_Left(ptk_data *ptk)
 {
-    Select_Block_Keyboard(BLOCK_MARK_ROWS | BLOCK_MARK_TRACKS);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS | BLOCK_MARK_TRACKS);
     if(!Get_LCtrl()) Pattern_Line = 0;
     else
     {
         Column_Under_Caret = 0;
         Track_Under_Caret = 0;
     }
-    Actupated(0);
-    Select_Block_Keyboard(BLOCK_MARK_ROWS | BLOCK_MARK_TRACKS);
+    Actupated(ptk, 0);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS | BLOCK_MARK_TRACKS);
     gui_action = GUI_CMD_SET_FOCUS_TRACK;
 }
 
 // ------------------------------------------------------
 // Move to the bottom right of the pattern
-void Goto_Bottom_Right(void)
+void Goto_Bottom_Right(ptk_data *ptk)
 {
-    Select_Block_Keyboard(BLOCK_MARK_ROWS | BLOCK_MARK_TRACKS);
-    if(!Get_LCtrl()) Pattern_Line = patternLines[pSequence[Get_Song_Position()]] - 1;
+    Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS | BLOCK_MARK_TRACKS);
+    if(!Get_LCtrl()) Pattern_Line = patternLines[pSequence[Get_Song_Position(ptk)]] - 1;
     else
     {
         Column_Under_Caret = 0;
         Track_Under_Caret = Songtracks - 1;
     }
-    Actupated(0);
+    Actupated(ptk, 0);
     gui_action = GUI_CMD_SET_FOCUS_TRACK;
-    Select_Block_Keyboard(BLOCK_MARK_ROWS | BLOCK_MARK_TRACKS);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS | BLOCK_MARK_TRACKS);
 }
 
 // ------------------------------------------------------
 // Move to a given row of the pattern
-void Goto_Row(int row)
+void Goto_Row(ptk_data *ptk, int row)
 {
-    Select_Block_Keyboard(BLOCK_MARK_ROWS);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS);
     Pattern_Line = row;
-    Actupated(0);
-    Select_Block_Keyboard(BLOCK_MARK_ROWS);
+    Actupated(ptk, 0);
+    Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS);
 }
 
 // ------------------------------------------------------
 // Go to a given song position
-void Goto_Song_Position(int Position)
+void Goto_Song_Position(ptk_data *ptk, int Position)
 {
     Song_Position = Position;
-    Bound_Patt_Pos();
-    Actualize_Sequencer();
-    Actupated(0);
+    Bound_Patt_Pos(ptk);
+    Actualize_Sequencer(ptk);
+    Actupated(ptk, 0);
 }
 
 // ------------------------------------------------------
 // Return the current sequence position
-int Get_Song_Position(void)
+int Get_Song_Position(ptk_data *ptk)
 {
     if(Songplaying) return(Song_Position_Visual);
     else return(Song_Position);
@@ -3240,7 +3242,7 @@ int Get_Song_Position(void)
 
 // ------------------------------------------------------
 // Return the current pattern line
-int Get_Pattern_Line(void)
+int Get_Pattern_Line(ptk_data *ptk)
 {
     if(Songplaying) return(Pattern_Line_Visual);
     else return(Pattern_Line);
@@ -3248,12 +3250,12 @@ int Get_Pattern_Line(void)
 
 // ------------------------------------------------------
 // Return the current row in the entire song
-int Get_Song_Line(void)
+int Get_Song_Line(ptk_data *ptk)
 {
     int i;
     int Cur_Lines_Song;
 
-    int Start_Pos = Get_Song_Position();
+    int Start_Pos = Get_Song_Position(ptk);
     Cur_Lines_Song = 0;
     for(i = 0; i < Start_Pos; i++)
     {
@@ -3265,47 +3267,47 @@ int Get_Song_Line(void)
 
 // ------------------------------------------------------
 // Set all the tracks to small size font
-void Reset_Patterns_Zoom(void)
+void Reset_Patterns_Zoom(ptk_data *ptk)
 {
     int i;
 
     for(i = 0; i < MAX_TRACKS; i++)
     {
-        Set_Track_Zoom(i, (TRACK_TYPE) Global_Patterns_Font);
+        Set_Track_Zoom(ptk, i, (TRACK_TYPE) Global_Patterns_Font);
     }
 }
 
 // ------------------------------------------------------
 // Toggle the zoom status of a track
-void Toggle_Track_Zoom(int track, int large)
+void Toggle_Track_Zoom(ptk_data *ptk, int track, int large)
 {
     if(large)
     {
-        if(Get_Track_Zoom(track) == TRACK_LARGE)
+        if(Get_Track_Zoom(ptk, track) == TRACK_LARGE)
         {
-            Set_Track_Zoom(track, TRACK_MEDIUM);
+            Set_Track_Zoom(ptk, track, TRACK_MEDIUM);
         }
         else
         {
-            Set_Track_Zoom(track, TRACK_LARGE);
+            Set_Track_Zoom(ptk, track, TRACK_LARGE);
         }
     }
     else
     {
-        if(Get_Track_Zoom(track) == TRACK_SMALL)
+        if(Get_Track_Zoom(ptk, track) == TRACK_SMALL)
         {
-            Set_Track_Zoom(track, TRACK_MEDIUM);
+            Set_Track_Zoom(ptk, track, TRACK_MEDIUM);
         }
         else
         {
-            Set_Track_Zoom(track, TRACK_SMALL);
+            Set_Track_Zoom(ptk, track, TRACK_SMALL);
         }
     }
 }
 
 // ------------------------------------------------------
 // Return the type of a track
-TRACK_TYPE Get_Track_Zoom(int track)
+TRACK_TYPE Get_Track_Zoom(ptk_data *ptk, int track)
 {
     switch(Cur_Char_size[track])
     {
@@ -3325,7 +3327,7 @@ TRACK_TYPE Get_Track_Zoom(int track)
 
 // ------------------------------------------------------
 // Force a track to be zoomed out
-void Clear_Track_Zoom(int track)
+void Clear_Track_Zoom(ptk_data *ptk, int track)
 {
     Cur_Char_size[track] = PAT_COL_CHAR;
     Cur_Char_Function[track].Fnc = Letter;
@@ -3334,7 +3336,7 @@ void Clear_Track_Zoom(int track)
 
 // ------------------------------------------------------
 // Set the zoom status of a track
-void Set_Track_Zoom(int track, TRACK_TYPE type)
+void Set_Track_Zoom(ptk_data *ptk, int track, TRACK_TYPE type)
 {
     switch(type)
     {
@@ -3345,11 +3347,11 @@ void Set_Track_Zoom(int track, TRACK_TYPE type)
             break;
 
         case TRACK_MEDIUM:
-            Clear_Track_Zoom(track);
-            if(Get_Track_Real_Size(track) >= ptk.TRACKS_WIDTH)
+            Clear_Track_Zoom(ptk, track);
+            if(Get_Track_Real_Size(ptk, track) >= ptk->TRACKS_WIDTH)
             {
                 // Track is too damn large to be displayed with medium font
-                Set_Track_Zoom(track, TRACK_SMALL);
+                Set_Track_Zoom(ptk, track, TRACK_SMALL);
             }
             break;
 
@@ -3357,10 +3359,10 @@ void Set_Track_Zoom(int track, TRACK_TYPE type)
             Cur_Char_size[track] = PAT_COL_CHAR_LARGE;
             Cur_Char_Function[track].Fnc = Large_Letter;
             Cur_Note_Function[track].Fnc = blitlargenote;
-            if(Get_Track_Real_Size(track) >= ptk.TRACKS_WIDTH)
+            if(Get_Track_Real_Size(ptk, track) >= ptk->TRACKS_WIDTH)
             {
                 // Track is too damn large to be displayed with large font
-                Set_Track_Zoom(track, TRACK_MEDIUM);
+                Set_Track_Zoom(ptk, track, TRACK_MEDIUM);
             }
             break;
     }
@@ -3368,7 +3370,7 @@ void Set_Track_Zoom(int track, TRACK_TYPE type)
 
 // ------------------------------------------------------
 // Define the number of lines to display for a pattern
-void Set_Pattern_Size()
+void Set_Pattern_Size(ptk_data *ptk)
 {
     if(Large_Patterns)
     {

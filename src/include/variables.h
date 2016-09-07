@@ -304,24 +304,7 @@ typedef struct
     int cStatus;
 } MARKER, *LPMARKER;
 
-typedef struct {
-    int CONSOLE_WIDTH;
-    int CONSOLE_HEIGHT;
-    int CONSOLE_HEIGHT2;
-    int CHANNELS_WIDTH;
-    int TRACKS_WIDTH;
-
-    /* do we need these? */
-    int c_l_tvol;
-    int c_r_tvol;
-    int c_l_cvol;
-    int c_r_cvol;
-
-    int Display_Pointer;
-
-    int Scopish;
-    char Scopish_LeftRight;
-} ptk_data;
+#include "ptk_data.h"
 
 // ------------------------------------------------------
 // Variables
@@ -451,7 +434,7 @@ extern char Channels_Effects[MAX_TRACKS];
 // ------------------------------------------------------
 // Functions
 void ResetFilters(int tr);
-void WavRenderizer();
+void WavRenderizer(ptk_data *ptk);
 void Newmod(ptk_data *ptk);
 void GetBackMouse(void);
 void SeqFill(int st, int en, char n);
@@ -485,14 +468,14 @@ void out_nibble(int x, int y, int color, int number);
 void SongPlay(void);
 void SongStop(void);
 void Free_Samples(void);
-void draw_pated(int track, int line, int petrack, int row);
-void Actupated(int modac);
+void draw_pated(ptk_data *ptk, int track, int line, int petrack, int row);
+void Actupated(ptk_data *ptk, int modac);
 
 void KillInst(int inst_nbr, int all_splits);
 void Stop_Current_Instrument(void);
 void draw_lfoed(void);
 void draw_tracked(void);
-void DeleteInstrument(void);
+void DeleteInstrument(ptk_data *ptk);
 void Sp_Player(void);             
 void Pre_Song_Init(void);
 void Reverb_work(void);
@@ -523,32 +506,33 @@ void Get_Column_Over_Mouse(int *track, int *column,
                            int check_boundaries,
                            int *Was_Scrolling,
                            int Left);
-void Set_Track_Slider(int pos);
+void Set_Track_Slider(ptk_data *ptk, int pos);
 #define BLOCK_MARK_TRACKS 1
 #define BLOCK_MARK_ROWS 2
-void Mark_Block_Start(int start_nibble, int start_track, int start_line);
-void Mark_Block_End(int end_nibble, int start_track, int start_line, int Modif);
-int Delete_Selection(int Position);
-void Insert_Selection(int Cur_Track, int Position);
-void Remove_Selection(int Cur_Track, int Position);
-void Copy_Selection(int Position);
-void Cut_Selection(int Position);
-void Interpolate_Block(int Position);
-void Randomize_Block(int Position);
-void Semitone_Up_Block(int Position);
-void Semitone_Down_Block(int Position);
-void Instrument_Semitone_Up_Block(int Position);
-void Instrument_Semitone_Down_Block(int Position);
-void Unselect_Selection(void);
-void Select_Block_Keyboard(int Type);
-void Calc_selection(void);
-int Next_Line_Pattern_Auto(int *position, int lines, int *line);
-int Get_Free_Midi_Sub_Channel(int track);
+/* TODO: Once again... lots duplicate declarations.. */
+void Mark_Block_Start(ptk_data *ptk, int start_nibble, int start_track, int start_line);
+void Mark_Block_End(ptk_data *ptk, int end_nibble, int start_track, int start_line, int Modif);
+int Delete_Selection(ptk_data *ptk, int Position);
+void Insert_Selection(ptk_data *ptk, int Cur_Track, int Position);
+void Remove_Selection(ptk_data *ptk, int Cur_Track, int Position);
+void Copy_Selection(ptk_data *ptk, int Position);
+void Cut_Selection(ptk_data *ptk, int Position);
+void Interpolate_Block(ptk_data *ptk, int Position);
+void Randomize_Block(ptk_data *ptk, int Position);
+void Semitone_Up_Block(ptk_data *ptk, int Position);
+void Semitone_Down_Block(ptk_data *ptk, int Position);
+void Instrument_Semitone_Up_Block(ptk_data *ptk, int Position);
+void Instrument_Semitone_Down_Block(ptk_data *ptk, int Position);
+void Unselect_Selection(ptk_data *ptk);
+void Select_Block_Keyboard(ptk_data *ptk, int Type);
+void Calc_selection(ptk_data *ptk);
+int Next_Line_Pattern_Auto(ptk_data *ptk, int *position, int lines, int *line);
+int Get_Free_Midi_Sub_Channel(ptk_data *ptk, int track);
 int Search_Corresponding_Midi_Sub_Channel(int track, Uint32 Datas);
 int Get_Midi_Channel(int midi_channel);
 void Draw_Scope_Files_Button(ptk_data *ptk);
 
-void Actualize_Master(char gode);
+void Actualize_Master(ptk_data *ptk, char gode);
 void Display_Master_Comp(void);
 void Display_Master_Volume(void);
 void Display_Shuffle(void);
@@ -559,6 +543,6 @@ int Init_Scopes_Buffers(void);
 void Remove_Title(void);
 void Switch_Cmd_Playing(int Enable);
 
-extern ptk_data ptk;
+//extern ptk_data ptk;
 
 #endif

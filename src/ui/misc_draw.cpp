@@ -1547,7 +1547,7 @@ void outfloat_small(int x, int y, float cant, int mode, int size, int flags)
 
 // ------------------------------------------------------
 // Draw the editors buttons bar
-void Draw_Editors_Bar(int Highlight)
+void Draw_Editors_Bar(ptk_data *ptk, int Highlight)
 {
     int Highlight_Tab[] =
     {
@@ -1581,9 +1581,9 @@ void Draw_Editors_Bar(int Highlight)
         }
         Highlight_Tab[Highlight] = BUTTON_PUSHED;
         Large_Patterns = FALSE;
-        Set_Pattern_Size();
-        Draw_Pattern_Right_Stuff();
-        Actupated(0);
+        Set_Pattern_Size(ptk);
+        Draw_Pattern_Right_Stuff(ptk);
+        Actupated(ptk, 0);
     }
     else
     {
@@ -1591,8 +1591,8 @@ void Draw_Editors_Bar(int Highlight)
         SetColor(COL_BLACK);
         bjbox(0, (Cur_Height - 172) + Patterns_Lines_Offset, Cur_Width, 19);
         Highlight_Tab[USER_SCREEN_LARGE_PATTERN] = BUTTON_PUSHED;
-        Draw_Pattern_Right_Stuff();
-        Actupated(0);
+        Draw_Pattern_Right_Stuff(ptk);
+        Actupated(ptk, 0);
     }
     
     if(Patterns_Lines_Offset == 0)
@@ -1679,8 +1679,8 @@ void Refresh_UI_Context(void)
     Display_Master_Comp();
     Display_Master_Volume();
     Display_Shuffle();
-    Actualize_Master(0);
-    Actualize_Master(4);
+    Actualize_Master(ptk, 0);
+    Actualize_Master(ptk, 4);
 
     Actualize_Seq_Ed(0);
     Actualize_Track_Ed(0);
@@ -1689,7 +1689,7 @@ void Refresh_UI_Context(void)
     Actualize_Sample_Ed(0);
     Actualize_Fx_Ed(0);
     Actualize_Track_Fx_Ed(0);
-    Actualize_Patterned();
+    Actualize_Patterned(ptk);
     Actualize_Instruments_Synths_List(0);
     Display_Beat_Time();
 }

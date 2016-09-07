@@ -181,7 +181,7 @@ void LoadInst(char *FileName)
             } // Exist Sample
         }
         fclose(in);
-        Actualize_Patterned();
+        Actualize_Patterned(ptk);
         Actualize_Instrument_Ed(2, 0);
         Actualize_Synth_Ed(UPDATE_SYNTH_ED_ALL);
         Status_Box("Instrument loaded ok.");
@@ -281,7 +281,7 @@ void SaveInst(void)
         Read_SMPT();
         last_index = -1;
         Actualize_Files_List(0);
-        Actualize_Patterned();
+        Actualize_Patterned(ptk);
         Status_Box("Instrument saved succesfully."); 
     }
     else

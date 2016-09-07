@@ -60,16 +60,16 @@ extern int lt_curr[SCOPE_LAST_DIR];
 
 // ------------------------------------------------------
 // Functions
-void Set_Current_Dir(void);
-void Read_SMPT(void);
-void Dump_Files_List(int xr, int yr);
-void Actualize_Files_List(int modeac);
-void Clear_Files_List(void);
-char *Get_FileName(int idx);
-int Get_FileType(int idx);
-void Draw_Lists_Slider(int idx);
-void Files_List_Move(int Amount);
-void Prev_Prefix(void);
-void Next_Prefix(void);
+void Set_Current_Dir(ptk_data *ptk);
+void Read_SMPT(ptk_data *ptk);
+void Dump_Files_List(ptk_data *ptk, int xr, int yr);
+void Actualize_Files_List(ptk_data *ptk, int modeac);
+void Clear_Files_List(ptk_data *ptk);
+char *Get_FileName(ptk_data *ptk, int idx);
+int Get_FileType(ptk_data *ptk, int idx);
+void Draw_Lists_Slider(ptk_data *ptk, int idx);
+void Files_List_Move(ptk_data *ptk, int Amount);
+void Prev_Prefix(ptk_data *ptk);
+void Next_Prefix(ptk_data *ptk);
 
 #endif

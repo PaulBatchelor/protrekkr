@@ -57,8 +57,9 @@ int Allow_Button;
 int Allow_Button_Pushed;
 int Allow_Phase_Distortion_OSC1 = TRUE;
 int Allow_Phase_Distortion_OSC2 = TRUE;
-   
-void Actualize_Patterned(void);
+
+/* TODO: is this needed? */   
+void Actualize_Patterned(ptk_data *ptk);
 void Actualize_SynthParSlider(void);
 void Actualize_Sequencer(void);
 void Renew_Sample_Ed(void);

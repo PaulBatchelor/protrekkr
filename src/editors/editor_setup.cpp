@@ -133,7 +133,7 @@ void Draw_Master_Ed(void)
     Gui_Draw_Button_Box(734, (Cur_Height - 125), 42, 16, "Accid.", BUTTON_NORMAL | BUTTON_DISABLED);
 }
 
-void Actualize_Master_Ed(char gode)
+void Actualize_Master_Ed(ptk_data *ptk, char gode)
 {
     int Real_Palette_Idx;
 
@@ -188,7 +188,7 @@ void Actualize_Master_Ed(char gode)
                 }
             }
         }
-        if(gode == 7) Actupated(0);
+        if(gode == 7) Actupated(ptk, 0);
 
         // Use decimal numbering for rows
         if(gode == 0 || gode == 8)
@@ -233,8 +233,8 @@ void Actualize_Master_Ed(char gode)
                 Gui_Draw_Button_Box(446, (Cur_Height - 45), 29, 16, "On", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
                 Gui_Draw_Button_Box(446 + 31, (Cur_Height - 45), 29, 16, "Off", BUTTON_PUSHED | BUTTON_TEXT_CENTERED);
             }
-            Draw_Pattern_Right_Stuff();
-            Actupated(0);
+            Draw_Pattern_Right_Stuff(ptk);
+            Actupated(ptk, 0);
         }
 
         // Full screen
@@ -373,7 +373,7 @@ void Actualize_Master_Ed(char gode)
             {
                 Gui_Draw_Button_Box(780, (Cur_Height - 125), 14, 16, "#", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
             }
-            if(gode == 19) Actupated(0);
+            if(gode == 19) Actupated(ptk, 0);
         }
 
         // Bevel on/off
@@ -388,7 +388,7 @@ void Actualize_Master_Ed(char gode)
                     Gui_Draw_Button_Box(520 + 18 + (18 + 108) + 2 + 20, (Cur_Height - 105), 40, 16, "Shades", BUTTON_PUSHED | BUTTON_TEXT_CENTERED);
                     break;
             }
-            Actupated(0);
+            Actupated(ptk, 0);
         }
 
         // Set default size of patterns
@@ -430,7 +430,7 @@ void Actualize_Master_Ed(char gode)
     }
 }
 
-void Mouse_Right_Master_Ed(void)
+void Mouse_Right_Master_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_SETUP_EDIT)
     {
@@ -479,7 +479,7 @@ void Mouse_Right_Master_Ed(void)
     }
 }
 
-void Mouse_Left_Master_Ed(void)
+void Mouse_Left_Master_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_SETUP_EDIT)
     {
@@ -543,8 +543,8 @@ void Mouse_Left_Master_Ed(void)
             Rows_Decimal = TRUE;
             teac = 0;
             gui_action = GUI_CMD_UPDATE_SETUP_ED;
-            Actualize_Sequencer();
-            Actupated(0);
+            Actualize_Sequencer(ptk);
+            Actupated(ptk, 0);
         }
 
         // Rows decimal off
@@ -553,8 +553,8 @@ void Mouse_Left_Master_Ed(void)
             Rows_Decimal = FALSE;
             teac = 0;
             gui_action = GUI_CMD_UPDATE_SETUP_ED;
-            Actualize_Sequencer();
-            Actupated(0);
+            Actualize_Sequencer(ptk);
+            Actupated(ptk, 0);
         }
 
         // See prev/next pattern
@@ -563,7 +563,7 @@ void Mouse_Left_Master_Ed(void)
             See_Prev_Next_Pattern = TRUE;
             teac = 13;
             gui_action = GUI_CMD_UPDATE_SETUP_ED;
-            Actupated(0);
+            Actupated(ptk, 0);
         }
 
         // See prev/next pattern
@@ -572,7 +572,7 @@ void Mouse_Left_Master_Ed(void)
             See_Prev_Next_Pattern = FALSE;
             teac = 13;
             gui_action = GUI_CMD_UPDATE_SETUP_ED;
-            Actupated(0);
+            Actupated(ptk, 0);
         }
 
         // Continuous scroll

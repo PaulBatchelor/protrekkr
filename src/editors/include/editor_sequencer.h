@@ -53,12 +53,12 @@ extern int Ext_Track_Switch;
 // ------------------------------------------------------
 // Functions
 void Draw_Sequencer_Ed(void);
-void Actualize_Seq_Ed(char gode);
-void Mouse_Left_Sequencer_Ed(void);
-void Mouse_Right_Sequencer_Ed(void);
-void Actualize_Sequencer(void);
+void Actualize_Seq_Ed(ptk_data *ptk, char gode);
+void Mouse_Left_Sequencer_Ed(ptk_data *ptk);
+void Mouse_Right_Sequencer_Ed(ptk_data *ptk);
+void Actualize_Sequencer(ptk_data *ptk);
 void Anat(int posil);
-void Toggle_Track_On_Off_Status(int posindex, int seqindex);
-void Solo_Track_On_Off(int posindex, int seqindex);
+void Toggle_Track_On_Off_Status(ptk_data *ptk, int posindex, int seqindex);
+void Solo_Track_On_Off(ptk_data *ptk, int posindex, int seqindex);
 
 #endif

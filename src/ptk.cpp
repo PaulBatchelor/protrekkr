@@ -81,6 +81,8 @@ extern float sp_Tvol_Mod[MAX_TRACKS];
 
 
 ptk_data ptk;
+/*TODO: remove need for global pointer */
+ptk_data *g_ptk = &ptk;
 
 int fluzy = -1;
 int rev_counter2 = 0;
@@ -466,7 +468,7 @@ int Load_Font_Datas(char *name)
 
 // ------------------------------------------------------
 // Load the necessary datas and initialize the interface
-int Init_Context(void)
+int Init_Context(ptk_data *ptk)
 {
 #if defined(__WIN32__)
     srand(GetTickCount());
@@ -507,7 +509,7 @@ int Init_Context(void)
     namesize = 8;
     IniCsParNames();
 
-    Clear_Files_List();
+    Clear_Files_List(ptk);
 
 #if !defined(__NO_MIDI__)
     midiin_changed = 2;
@@ -523,13 +525,13 @@ int Init_Context(void)
 
     CHDIR(Prog_Path);
 
-    if(!Init_Block_Work()) return(FALSE);
+    if(!Init_Block_Work(ptk)) return(FALSE);
 
 #if !defined(__NO_MIDI__)
     Midi_Reset();
 #endif
 
-    if(!Alloc_Patterns_Pool())
+    if(!Alloc_Patterns_Pool(ptk))
     {
         Message_Error("Can't allocate room for patterns.");
         return(FALSE);
@@ -578,7 +580,7 @@ int Init_Context(void)
     SDL_SetColorKey(FONT_LOW, SDL_SRCCOLORKEY, 0);
     SDL_SetColorKey(POINTER, SDL_SRCCOLORKEY, 0);
 
-    Timer = SDL_AddTimer(1000, Timer_Ptr, NULL);
+    Timer = SDL_AddTimer(1000, Timer_Ptr, &ptk);
 
     return(TRUE);
 }
@@ -721,7 +723,7 @@ int Screen_Update(ptk_data *ptk)
         if(gui_action == GUI_CMD_SET_FILES_LIST_SLIDER)
         {
             lt_ykar[ptk->Scopish] = Mouse.y - 72;
-            Actualize_Files_List(0);
+            Actualize_Files_List(ptk, 0);
         }
 
         // File selection
@@ -730,26 +732,26 @@ int Screen_Update(ptk_data *ptk)
             if(lt_items[ptk->Scopish])
             {
                 int broadcast = lt_index[ptk->Scopish] + (Mouse.y - 43) / (Font_Height + 1);
-                if(Get_FileType(broadcast) != _A_SEP)
+                if(Get_FileType(ptk, broadcast) != _A_SEP)
                 {
                     last_index = -1;
                     if(broadcast != lt_curr[ptk->Scopish])
                     {
                         lt_curr[ptk->Scopish] = broadcast;
-                        Actualize_Files_List(1);
+                        Actualize_Files_List(ptk, 1);
                     }
                     else
                     {
-                        switch(Get_FileType(lt_curr[ptk->Scopish]))
+                        switch(Get_FileType(ptk, lt_curr[ptk->Scopish]))
                         {
                             case _A_FILE:
                                 Stop_Current_Instrument();
-                                LoadFile(ptk, Current_Instrument, Get_FileName(lt_curr[ptk->Scopish]));
+                                LoadFile(ptk, Current_Instrument, Get_FileName(ptk, lt_curr[ptk->Scopish]));
                                 break;
                             case _A_SUBDIR:
-                                Set_Current_Dir();
+                                Set_Current_Dir(ptk);
                                 Read_SMPT();
-                                Actualize_Files_List(0);
+                                Actualize_Files_List(ptk, 0);
                                 break;
                         }
                     }
@@ -765,10 +767,10 @@ int Screen_Update(ptk_data *ptk)
                 int broadcast = lt_index[ptk->Scopish] + (Mouse.y - 43) / 12;
                 last_index = -1;
                 lt_curr[ptk->Scopish] = broadcast;
-                switch(Get_FileType(lt_curr[ptk->Scopish]))
+                switch(Get_FileType(ptk, lt_curr[ptk->Scopish]))
                 {
                     case _A_FILE:
-                        Actualize_Files_List(1);
+                        Actualize_Files_List(ptk, 1);
 #if defined(__WIN32__)
                         PlaySound(Get_FileName(lt_curr[ptk->Scopish]), NULL, SND_FILENAME | SND_ASYNC);
 #endif
@@ -788,7 +790,7 @@ int Screen_Update(ptk_data *ptk)
                         FILE *fptr;
                         char temp[1024];
 
-                        sprintf(temp, "aplay %s & > /dev/null", Get_FileName(lt_curr[ptk->Scopish]));
+                        sprintf(temp, "aplay %s & > /dev/null", Get_FileName(ptk, lt_curr[ptk->Scopish]));
                         fptr = popen(temp, "r");
                         pclose(fptr);
 #endif
@@ -813,7 +815,7 @@ int Screen_Update(ptk_data *ptk)
         {
             Current_Instrument = Instrs_index + (Mouse.y - 43) / 12;
             Actualize_Instruments_Synths_List(1);
-            Actualize_Patterned();
+            Actualize_Patterned(ptk);
             RefreshSample();
             Renew_Sample_Ed();
             Actualize_Synth_Ed(UPDATE_SYNTH_ED_ALL);
@@ -823,121 +825,121 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_PREVIOUS_POSITION)
         {
-            Goto_Song_Position(Song_Position - 1);
+            Goto_Song_Position(ptk, Song_Position - 1);
         }
 
         if(gui_action == GUI_CMD_NEXT_POSITION)
         {
-            Goto_Song_Position(Song_Position + 1);
+            Goto_Song_Position(ptk, Song_Position + 1);
         }
 
         if(gui_action == GUI_CMD_SET_PATTERN_LENGTH)
         {
-            Actualize_Sequencer();
-            Actupated(0);
+            Actualize_Sequencer(ptk);
+            Actupated(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_PREV_PATT)
         {
             pSequence[Song_Position]--;
-            Bound_Patt_Pos();
-            Actualize_Sequencer();
-            Actupated(0);
+            Bound_Patt_Pos(ptk);
+            Actualize_Sequencer(ptk);
+            Actupated(ptk, 0);
             Anat(Song_Position);
         }
 
         if(gui_action == GUI_CMD_NEXT_PATT)
         {
             pSequence[Song_Position]++;
-            Bound_Patt_Pos();
-            Actualize_Sequencer();
-            Actupated(0);
+            Bound_Patt_Pos(ptk);
+            Actualize_Sequencer(ptk);
+            Actupated(ptk, 0);
             Anat(Song_Position);
         }
 
         if(gui_action == GUI_CMD_GOTO_PREVIOUS_ROW)
         {
-            Goto_Previous_Row();
+            Goto_Previous_Row(ptk);
         }
 
         if(gui_action == GUI_CMD_GOTO_NEXT_ROW)
         {
-            Goto_Next_Row();
+            Goto_Next_Row(ptk);
         }
 
         if(gui_action == GUI_CMD_REDUCE_SONG_LENGTH)
         {
             Song_Length--;
-            Actualize_Sequencer();
-            Actupated(0);
+            Actualize_Sequencer(ptk);
+            Actupated(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_INCREASE_SONG_LENGTH)
         {
             Song_Length++;
-            Actualize_Sequencer();
-            Actupated(0);
+            Actualize_Sequencer(ptk);
+            Actupated(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_UPDATE_SEQUENCER)
         {
-            Actualize_Sequencer();
+            Actualize_Sequencer(ptk);
         }
 
         if(gui_action == GUI_CMD_SWITCH_TRACK_STATUS)
         {
-            Toggle_Track_On_Off_Status(Ext_Pos_Switch, Ext_Track_Switch);
-            Actualize_Sequencer();
+            Toggle_Track_On_Off_Status(ptk, Ext_Pos_Switch, Ext_Track_Switch);
+            Actualize_Sequencer(ptk);
         }
 
         if(gui_action == GUI_CMD_UPDATE_PATTERN)
         {
-            Actupated(0);
+            Actupated(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_SET_FOCUS_TRACK_EXTERNAL)
         {
-            Actupated(0);
-            Actualize_Track_Ed(0);
+            Actupated(ptk, 0);
+            Actualize_Track_Ed(ptk, 0);
             Actualize_Track_Fx_Ed(0);
         }
 
         if(gui_action == GUI_CMD_SET_FOCUS_TRACK)
         {
-            Actualize_Track_Ed(0);
+            Actualize_Track_Ed(ptk, 0);
             Actualize_Track_Fx_Ed(0);
         }
 
         if(gui_action == GUI_CMD_LOWER_OCTAVE)
         {
             Current_Octave--;
-            Actualize_Patterned();
+            Actualize_Patterned(ptk);
         }
 
         if(gui_action == GUI_CMD_HIGHER_OCTAVE)
         {
             Current_Octave++;
-            Actualize_Patterned();
+            Actualize_Patterned(ptk);
         }
 
         if(gui_action == GUI_CMD_DECREASE_STEP_ADD)
         {
             Current_Edit_Steps--;
             if(Current_Edit_Steps < 0) Current_Edit_Steps = 0;
-            Actualize_Patterned();
+            Actualize_Patterned(ptk);
         }
 
         if(gui_action == GUI_CMD_INCREASE_STEP_ADD)
         {
             Current_Edit_Steps++;
             if(Current_Edit_Steps > 16) Current_Edit_Steps = 16;
-            Actualize_Patterned();
+            Actualize_Patterned(ptk);
         }
 
         if(gui_action == GUI_CMD_SELECT_INSTR_EXTERNAL)
         {
             Clear_Input();
-            Actualize_Patterned();
+            Actualize_Patterned(ptk);
             RefreshSample();
             Renew_Sample_Ed();
             Actualize_Synth_Ed(UPDATE_SYNTH_ED_ALL);
@@ -947,7 +949,7 @@ int Screen_Update(ptk_data *ptk)
         {
             Current_Instrument--;
             Clear_Input();
-            Actualize_Patterned();
+            Actualize_Patterned(ptk);
             RefreshSample();
             Renew_Sample_Ed();
             Actualize_Synth_Ed(UPDATE_SYNTH_ED_ALL);
@@ -957,7 +959,7 @@ int Screen_Update(ptk_data *ptk)
         {
             Current_Instrument++;
             Clear_Input();
-            Actualize_Patterned();
+            Actualize_Patterned(ptk);
             RefreshSample();
             Renew_Sample_Ed();
             Actualize_Synth_Ed(UPDATE_SYNTH_ED_ALL);
@@ -970,48 +972,48 @@ int Screen_Update(ptk_data *ptk)
             if(CHAN_MUTE_STATE[tmp_track] == 0) CHAN_MUTE_STATE[tmp_track] = 1;
             else CHAN_MUTE_STATE[tmp_track] = 0;
 
-            if(userscreen == USER_SCREEN_TRACK_EDIT) Actualize_Track_Ed(10);
-            Actupated(0);
+            if(userscreen == USER_SCREEN_TRACK_EDIT) Actualize_Track_Ed(ptk, 10);
+            Actupated(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_SWITCH_TRACK_LARGE_STATE)
         {
-            Toggle_Track_Zoom(Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), TRUE);
-            Actupated(0);
+            Toggle_Track_Zoom(ptk, Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), TRUE);
+            Actupated(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_SWITCH_TRACK_SMALL_STATE)
         {
-            Toggle_Track_Zoom(Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), FALSE);
-            Actupated(0);
+            Toggle_Track_Zoom(ptk, Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), FALSE);
+            Actupated(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_REDUCE_TRACK_NOTES)
         {
-            Track_Sub_Notes(Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), 1);
-            Actupated(0);
-            Actualize_Track_Ed(14);
+            Track_Sub_Notes(ptk, Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), 1);
+            Actupated(ptk, 0);
+            Actualize_Track_Ed(ptk, 14);
         }
 
         if(gui_action == GUI_CMD_EXPAND_TRACK_NOTES)
         {
-            Track_Add_Notes(Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), 1);
-            Actupated(0);
-            Actualize_Track_Ed(14);
+            Track_Add_Notes(ptk, Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), 1);
+            Actupated(ptk, 0);
+            Actualize_Track_Ed(ptk, 14);
         }
 
         if(gui_action == GUI_CMD_REDUCE_TRACK_EFFECTS)
         {
-            Track_Sub_Effects(Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), 1);
-            Actupated(0);
-            Actualize_Track_Ed(14);
+            Track_Sub_Effects(ptk, Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), 1);
+            Actupated(ptk, 0);
+            Actualize_Track_Ed(ptk, 14);
         }
 
         if(gui_action == GUI_CMD_EXPAND_TRACK_EFFECTS)
         {
-            Track_Add_Effects(Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), 1);
-            Actupated(0);
-            Actualize_Track_Ed(14);
+            Track_Add_Effects(ptk, Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), 1);
+            Actupated(ptk, 0);
+            Actualize_Track_Ed(ptk, 14);
         }
 
         if(gui_action == GUI_CMD_PLAY_SONG)
@@ -1026,7 +1028,7 @@ int Screen_Update(ptk_data *ptk)
             Nbr_Sub_NoteOff = 0;
             is_editing = 0;
             Notify_Edit();
-            SongStop();
+            SongStop(ptk);
         }
 
         if(gui_action == GUI_CMD_RECORD_303)
@@ -1040,27 +1042,27 @@ int Screen_Update(ptk_data *ptk)
             is_editing ^= 1;
             is_recording_2 = 0;
             Nbr_Sub_NoteOff = 0;
-            SongStop();
-            Actupated(0);
+            SongStop(ptk);
+            Actupated(ptk, 0);
             Notify_Edit();
         }
 
         if(gui_action == GUI_CMD_RECORD_MODE)
         {
-            SongStop();
+            SongStop(ptk);
             is_recording ^= 1;
             is_recording_2 = 0;
             Nbr_Sub_NoteOff = 0;
             is_editing = 0;
             key_record_first_time = TRUE;
             Clear_Midi_Channels_Pool();
-            Actupated(0);
+            Actupated(ptk, 0);
             Notify_Edit();
         }
 
         if(gui_action == GUI_CMD_CHANGE_BPM_TICKS_NBR)
         {
-            Actualize_Master(teac);
+            Actualize_Master(ptk, teac);
             Display_Beat_Time();
         }
 
@@ -1068,18 +1070,18 @@ int Screen_Update(ptk_data *ptk)
            gui_action == GUI_CMD_INSERT_TRACK ||
            gui_action == GUI_CMD_DELETE_TRACK)
         {
-            Actualize_Master(teac);
-            Actupated(0);
+            Actualize_Master(ptk, teac);
+            Actupated(ptk, 0);
             Draw_Scope(ptk);
             Display_Tracks_To_Render();
-            Actualize_Track_Ed(0);
+            Actualize_Track_Ed(ptk, 0);
             Actualize_Track_Fx_Ed(0);
         }
 
         if(gui_action == GUI_CMD_SET_TRACK_CUTOFF_FREQ)
         {
             TCut[Track_Under_Caret] = float(Mouse.x - 88);
-            Actualize_Track_Ed(1);
+            Actualize_Track_Ed(ptk, 1);
             liveparam = LIVE_PARAM_TRACK_CUTOFF;
             livevalue = (Mouse.x - 88) * 2;
         }
@@ -1087,7 +1089,7 @@ int Screen_Update(ptk_data *ptk)
         if(gui_action == GUI_CMD_SET_TRACK_RESONANCE)
         {
             FRez[Track_Under_Caret] = Mouse.x - 88;
-            Actualize_Track_Ed(2);
+            Actualize_Track_Ed(ptk, 2);
             liveparam = LIVE_PARAM_TRACK_RESONANCE;
             livevalue = (Mouse.x - 88) * 2;
         }
@@ -1095,18 +1097,18 @@ int Screen_Update(ptk_data *ptk)
         if(gui_action == GUI_CMD_SET_TRACK_INERTIA)
         {
             ICut[Track_Under_Caret] = (Mouse.x - 88.0f) * 0.00006103515625f;
-            Actualize_Track_Ed(3);
+            Actualize_Track_Ed(ptk, 3);
         }
 
         if(gui_action == GUI_CMD_UPDATE_TRACK_ED)
         {
-            Actualize_Track_Ed(teac);
+            Actualize_Track_Ed(ptk, teac);
         }
 
         if(gui_action == GUI_CMD_SET_TRACK_THRESHOLD)
         {
             DThreshold[Track_Under_Caret] = float((Mouse.x - 318) * 256);
-            Actualize_Track_Ed(7);
+            Actualize_Track_Ed(ptk, 7);
             liveparam = LIVE_PARAM_TRACK_THRESHOLD;
             livevalue = (Mouse.x - 318) * 2;
         }
@@ -1114,7 +1116,7 @@ int Screen_Update(ptk_data *ptk)
         if(gui_action == GUI_CMD_SET_TRACK_CLAMP)
         {
             DClamp[Track_Under_Caret] = float((Mouse.x - 318) * 256);
-            Actualize_Track_Ed(8);
+            Actualize_Track_Ed(ptk, 8);
             liveparam = LIVE_PARAM_TRACK_CLAMP;
             livevalue = (Mouse.x - 318) * 2;
         }
@@ -1122,7 +1124,7 @@ int Screen_Update(ptk_data *ptk)
         if(gui_action == GUI_CMD_SET_TRACK_REVERB_SEND)
         {
             DSend[Track_Under_Caret] = float(((float) Mouse.x - 318) / 128.0f);
-            Actualize_Track_Ed(5);
+            Actualize_Track_Ed(ptk, 5);
             liveparam = LIVE_PARAM_TRACK_REVERB_SEND;
             livevalue = (Mouse.x - 318) * 2;
         }
@@ -1130,7 +1132,7 @@ int Screen_Update(ptk_data *ptk)
         if(gui_action == GUI_CMD_SET_TRACK_PANNING)
         {
             TPan[Track_Under_Caret] = ((float) Mouse.x - 318) / 128.0f;
-            Actualize_Track_Ed(9);
+            Actualize_Track_Ed(ptk, 9);
             liveparam = LIVE_PARAM_TRACK_PANNING;
             livevalue = Mouse.x - 318;
         }
@@ -1141,18 +1143,18 @@ int Screen_Update(ptk_data *ptk)
             if(!Large_Patterns)
             {
                 Large_Patterns = TRUE;
-                Set_Pattern_Size();
-                Draw_Pattern_Right_Stuff();
-                Actupated(0);
+                Set_Pattern_Size(ptk);
+                Draw_Pattern_Right_Stuff(ptk);
+                Actupated(ptk, 0);
                 Draw_Editors_Bar(USER_SCREEN_LARGE_PATTERN);
             }
             else
             {
                 userscreen = curr_tab_highlight;
                 Large_Patterns = FALSE;
-                Set_Pattern_Size();
-                Draw_Pattern_Right_Stuff();
-                Actupated(0);
+                Set_Pattern_Size(ptk);
+                Draw_Pattern_Right_Stuff(ptk);
+                Actupated(ptk, 0);
                 Draw_Editors_Bar(-1);
                 Refresh_UI_Context();
             }
@@ -1185,7 +1187,7 @@ int Screen_Update(ptk_data *ptk)
             retletter[71] = FALSE;
             userscreen = USER_SCREEN_TRACK_EDIT;
             Draw_Track_Ed();
-            Actualize_Track_Ed(0);
+            Actualize_Track_Ed(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_SELECT_INSTRUMENT_EDIT)
@@ -1215,7 +1217,7 @@ int Screen_Update(ptk_data *ptk)
             retletter[71] = FALSE;
             userscreen = USER_SCREEN_SEQUENCER;
             Draw_Sequencer_Ed();
-            Actualize_Seq_Ed(0);
+            Actualize_Seq_Ed(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_SELECT_SCREEN_SETUP_EDIT)
@@ -1348,7 +1350,7 @@ int Screen_Update(ptk_data *ptk)
 
             Read_SMPT();
             last_index = -1;
-            Actualize_Files_List(0);
+            Actualize_Files_List(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_SAVE_INSTRUMENT)
@@ -1393,7 +1395,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_FILELIST_SCROLL)
         {
-            Actualize_Files_List(1);
+            Actualize_Files_List(ptk, 1);
         }
 
         if(gui_action == GUI_CMD_INSTR_SYNTH_SCROLL)
@@ -1409,19 +1411,19 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SAVE_MODULE)
         {
-            if(snamesel == INPUT_NONE) Pack_Module(name);
+            if(snamesel == INPUT_NONE) Pack_Module(ptk, name);
         }
 
         // Save a .ptp module
         if(gui_action == GUI_CMD_SAVE_FINAL)
         {
-            if(snamesel == INPUT_NONE) SavePtk(name, TRUE, SAVE_WRITE, NULL);
+            if(snamesel == INPUT_NONE) SavePtk(ptk, name, TRUE, SAVE_WRITE, NULL);
         }
 
         // Calculate the approximate size of a .ptp module
         if(gui_action == GUI_CMD_CALC_FINAL)
         {
-            Final_Mod_Length = TestMod();
+            Final_Mod_Length = TestMod(ptk);
             outlong(254, (Cur_Height - 94), Final_Mod_Length, 7);
         }
 
@@ -1474,7 +1476,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_UPDATE_SEQ_ED)
         {
-            Actualize_Seq_Ed(0);
+            Actualize_Seq_Ed(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_UPDATE_FX_ED)
@@ -1515,7 +1517,7 @@ int Screen_Update(ptk_data *ptk)
         if(gui_action == GUI_CMD_PREVIOUS_16_INSTR)
         {
             Current_Instrument -= 16;
-            Actualize_Patterned();
+            Actualize_Patterned(ptk);
             RefreshSample();
             Renew_Sample_Ed();
             Actualize_Synth_Ed(UPDATE_SYNTH_ED_ALL);
@@ -1524,7 +1526,7 @@ int Screen_Update(ptk_data *ptk)
         if(gui_action == GUI_CMD_NEXT_16_INSTR)
         {
             Current_Instrument += 16;
-            Actualize_Patterned();
+            Actualize_Patterned(ptk);
             RefreshSample();
             Renew_Sample_Ed();
             Actualize_Synth_Ed(UPDATE_SYNTH_ED_ALL);
@@ -1532,60 +1534,60 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_UPDATE_PATTERN_ED)
         {
-            Actualize_Patterned();
+            Actualize_Patterned(ptk);
         }
 
         if(gui_action == GUI_CMD_REDUCE_POSITIONS_10)
         {
             Song_Position -= 10;
-            Bound_Patt_Pos();
-            Actualize_Sequencer();
-            Actupated(0);
+            Bound_Patt_Pos(ptk);
+            Actualize_Sequencer(ptk);
+            Actupated(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_INCREASE_POSITIONS_10)
         {
             Song_Position += 10;
-            Bound_Patt_Pos();
-            Actualize_Sequencer();
-            Actupated(0);
+            Bound_Patt_Pos(ptk);
+            Actualize_Sequencer(ptk);
+            Actupated(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_REDUCE_PATTERNS_10)
         {
             if(pSequence[Song_Position] > 9) pSequence[Song_Position] -= 10;
             else pSequence[Song_Position] = 0;
-            Bound_Patt_Pos();
+            Bound_Patt_Pos(ptk);
             Anat(Song_Position);
-            Actualize_Sequencer();
-            Actupated(0);
+            Actualize_Sequencer(ptk);
+            Actupated(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_INCREASE_PATTERNS_10)
         {
             if(pSequence[Song_Position] < 118) pSequence[Song_Position] += 10;
             else pSequence[Song_Position] = 127;
-            Bound_Patt_Pos();
+            Bound_Patt_Pos(ptk);
             Anat(Song_Position);
-            Actualize_Sequencer();
-            Actupated(0);
+            Actualize_Sequencer(ptk);
+            Actupated(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_RENDER_WAV)
         {
-            if(snamesel == INPUT_NONE) WavRenderizer();
+            if(snamesel == INPUT_NONE) WavRenderizer(ptk);
         }
 
         if(gui_action == GUI_CMD_TIMED_REFRESH_SEQUENCER)
         {
-            Actualize_Sequencer();
-            player_pos = Get_Song_Position();
+            Actualize_Sequencer(ptk);
+            player_pos = Get_Song_Position(ptk);
         }
 
         if(gui_action == GUI_CMD_DELETE_INSTRUMENT)
         {
             Clear_Input();
-            DeleteInstrument();
+            DeleteInstrument(ptk);
         }
 
         if(gui_action == GUI_CMD_SAVE_SYNTH)
@@ -1699,7 +1701,7 @@ int Screen_Update(ptk_data *ptk)
 
         Refresh_UI_Context();
 
-        Actualize_Files_List(0);
+        Actualize_Files_List(ptk, 0);
 
         // Vu meters background
         SetColor(COL_BLACK);
@@ -1707,20 +1709,20 @@ int Screen_Update(ptk_data *ptk)
         SetColor(COL_BACKGROUND);
         Fillrect(MIN_VUMETER, 10, MAX_VUMETER - 1, 19);
 
-        Draw_Pattern_Right_Stuff();
-        Actupated(0);
+        Draw_Pattern_Right_Stuff(ptk);
+        Actupated(ptk, 0);
     }
 
     if(gui_thread_action)
     {
         gui_thread_action = FALSE;
-        Actupated(0);
+        Actupated(ptk, 0);
     }
     if(gui_bpm_action)
     {
         gui_bpm_action = FALSE;
         Display_Beat_Time();
-        Actualize_Master(2);
+        Actualize_Master(ptk, 2);
         Display_Shuffle();
     }
 
@@ -1728,10 +1730,10 @@ int Screen_Update(ptk_data *ptk)
     {
         if(!sr_isrecording)
         {
-            Actualize_Track_Ed(15);
+            Actualize_Track_Ed(ptk, 15);
             Actualize_Track_Fx_Ed(11);
         }
-        Actupated(0);
+        Actupated(ptk, 0);
         player_line = Pattern_Line_Visual;
     }
 
@@ -1827,7 +1829,7 @@ int Screen_Update(ptk_data *ptk)
 
     if(Check_Requester(&Exit_Requester) == 1)
     {
-        SongStop();
+        SongStop(ptk);
         Status_Box("Seppuku...");
         return(FALSE);
     }
@@ -1911,7 +1913,7 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
         {
             sprintf(name, "%s", FileName);
             // name / number of channels
-            SongStop();
+            SongStop(ptk);
             AUDIO_Stop();
             LoadAmigaMod(ptk, name, FileName, found_mod, digibooster);
             Renew_Sample_Ed();
@@ -1967,7 +1969,7 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
                 strcmp(extension, "PROTREKO") == 0)
         {
             sprintf(name, "%s", FileName);
-            SongStop();
+            SongStop(ptk);
             AUDIO_Stop();
             LoadPtk(ptk, name);
             Renew_Sample_Ed();
@@ -2083,7 +2085,7 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
                             }
 
                             sprintf(SampleName[Freeindex][Current_Instrument_Split], "%s", FileName);
-                            Actualize_Patterned();
+                            Actualize_Patterned(ptk);
                             Actualize_Instrument_Ed(2, 0);
                             Renew_Sample_Ed();
                             switch(bits)
@@ -2186,7 +2188,7 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
                             }
 
                             sprintf(SampleName[Freeindex][Current_Instrument_Split], "%s", FileName);
-                            Actualize_Patterned();
+                            Actualize_Patterned(ptk);
                             Actualize_Instrument_Ed(2, 0);
                             Renew_Sample_Ed();
                             switch(bits)
@@ -2339,7 +2341,7 @@ void Notify_Play(void)
 
 // ------------------------------------------------------
 // Stop replaying
-void SongStop(void)
+void SongStop(ptk_data *ptk)
 {
     Ptk_Stop();
     Gui_Draw_Button_Box(8, 28, 39, 16, "\04", BUTTON_NORMAL | BUTTON_RIGHT_MOUSE | BUTTON_TEXT_CENTERED);
@@ -2348,7 +2350,7 @@ void SongStop(void)
     // Make sure the visuals stay
     Song_Position = Song_Position_Visual;
     Pattern_Line = Pattern_Line_Visual;
-    Actualize_Master(5);
+    Actualize_Master(ptk, 5);
 }
 
 // ------------------------------------------------------
@@ -2359,7 +2361,7 @@ void Newmod(ptk_data *ptk)
     int Old_Prg;
 
     Clear_Input();
-    SongStop();
+    SongStop(ptk);
     Stop_Current_Instrument();
 
 #if !defined(__NO_MIDI__)
@@ -2372,7 +2374,7 @@ void Newmod(ptk_data *ptk)
         Current_Instrument = 0;
         seditor = 0;
         Final_Mod_Length = 0;
-        Actualize_Master(0);
+        Actualize_Master(ptk, 0);
         for(i = 0; i < MAX_INSTRS; i++)
         {
             Old_Prg = Synthprg[i];
@@ -2403,7 +2405,7 @@ void Newmod(ptk_data *ptk)
             Synthprg[i] = 0;
         }
         Final_Mod_Length = 0;
-        Actualize_Master(0);
+        Actualize_Master(ptk, 0);
         Current_Instrument = 0;
     }
 
@@ -2414,7 +2416,7 @@ void Newmod(ptk_data *ptk)
         {
             patternLines[api] = 64;
         }
-        Clear_Patterns_Pool();
+        Clear_Patterns_Pool(ptk);
         nPatterns = 1;
         Set_Default_Channels_Polyphony();
         for(int inico = 0; inico < 256; inico++)
@@ -2440,10 +2442,10 @@ void Newmod(ptk_data *ptk)
         rawrender_from = 0;
         rawrender_to = 0;
         Final_Mod_Length = 0;
-        Actualize_Sequencer();
-        Actualize_Patterned();
-        Actualize_Master(0);
-        Actupated(0);
+        Actualize_Sequencer(ptk);
+        Actualize_Patterned(ptk);
+        Actualize_Master(ptk, 0);
+        Actupated(ptk, 0);
         Reset_Tracks_To_Render();
     }
 
@@ -2675,7 +2677,7 @@ int Must_Render_Track(int Idx)
     return TRUE;
 }
 
-void WavRenderizer()
+void WavRenderizer(ptk_data *ptk)
 {
     plx = 0;
     char buffer[MAX_PATH];
@@ -2710,7 +2712,7 @@ void WavRenderizer()
     {
         max_tracks_to_render = 1;
         do_multi = FALSE;
-        SongStop();
+        SongStop(ptk);
     }
 
     for(j = 0; j < max_tracks_to_render; j++)
@@ -2720,7 +2722,7 @@ void WavRenderizer()
             rendered_track++;
             if(do_multi)
             {
-                SongStop();
+                SongStop(ptk);
                 sprintf(buffer_name, "%s_%x.wav", name, j);
             }
             else
@@ -2906,7 +2908,7 @@ void WavRenderizer()
     }
 
 Stop_WavRender:
-    SongStop();
+    SongStop(ptk);
     Post_Song_Init();
     Songplaying = FALSE;
 
@@ -2958,15 +2960,15 @@ Stop_WavRender:
 
     last_index = -1;
     Read_SMPT();
-    Actualize_Files_List(0);
+    Actualize_Files_List(ptk, 0);
 
     Status_Box(buffer);
-    Actupated(0);
+    Actupated(ptk, 0);
 }
 
 // ------------------------------------------------------
 // Delete an instrument
-void DeleteInstrument(void)
+void DeleteInstrument(ptk_data *ptk)
 {
     int i;
     int Old_Prg;
@@ -2985,7 +2987,7 @@ void DeleteInstrument(void)
 
         ResetSynthParameters(&PARASynth[Current_Instrument]);
         Synthprg[Current_Instrument] = 0;
-        Actualize_Master(0);
+        Actualize_Master(ptk, 0);
         Final_Mod_Length = 0;
         Actualize_Synth_Ed(UPDATE_SYNTH_ED_ALL);
         Status_Box("Synth deleted.");
@@ -2995,7 +2997,7 @@ void DeleteInstrument(void)
     {
         seditor = 0;
         Final_Mod_Length = 0;
-        Actualize_Master(0);
+        Actualize_Master(ptk, 0);
         Old_Prg = Synthprg[Current_Instrument];
         KillInst(Current_Instrument, FALSE);
         Synthprg[Current_Instrument] = Old_Prg;
@@ -3007,14 +3009,14 @@ void DeleteInstrument(void)
         Renew_Sample_Ed();
         Status_Box("Instrument deleted.");
         RefreshSample();
-        Actualize_Master(0);
+        Actualize_Master(ptk, 0);
     }
 
     if(ZzaappOMatic == ZZAAPP_ALL || ZzaappOMatic == ZZAAPP_INSTRUMENTS)
     {
         seditor = 0;
         Final_Mod_Length = 0;
-        Actualize_Master(0);
+        Actualize_Master(ptk, 0);
         Old_Prg = Synthprg[Current_Instrument];
         KillInst(Current_Instrument, TRUE);
         Synthprg[Current_Instrument] = Old_Prg;
@@ -3026,7 +3028,7 @@ void DeleteInstrument(void)
         Renew_Sample_Ed();
         Status_Box("Instrument deleted.");
         RefreshSample();
-        Actualize_Master(0);
+        Actualize_Master(ptk, 0);
     }
     Actualize_Instruments_Synths_List(0);
 }
@@ -3122,6 +3124,8 @@ void ShowInfo(void)
 // Function called each second mainly for autosaving purposes
 Uint32 Timer_CallBack(Uint32 interval, void *param)
 {
+
+    ptk_data *ptk = (ptk_data *)param;
     if(Req_TimeOut)
     {
         Req_Timer++;
@@ -3135,7 +3139,7 @@ Uint32 Timer_CallBack(Uint32 interval, void *param)
         // Autosave module
         if(wait_AutoSave > Values_AutoSave[AutoSave])
         {
-            Pack_Module(name);
+            Pack_Module(ptk, name);
         }
     }
 
@@ -3299,7 +3303,7 @@ int Raw_Keys_to_Send[] =
 // KeyBoard ShortCut Handler
 void Keyboard_Handler(ptk_data *ptk)
 {
-    int Cur_Position = Get_Song_Position();
+    int Cur_Position = Get_Song_Position(ptk);
     int Done_Value;
 
     // Exit tracker
@@ -3368,24 +3372,24 @@ void Keyboard_Handler(ptk_data *ptk)
     // Previous track
     if(Get_LShift() && !Get_LCtrl() && Keys[SDLK_TAB])
     {
-        Unselect_Selection();
+        Unselect_Selection(ptk);
         Track_Under_Caret--;
         Column_Under_Caret = 0;
-        Actupated(0);
+        Actupated(ptk, 0);
         gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
 
     // Next track
     if(!Get_LShift() && !Get_LCtrl() && Keys[SDLK_TAB])
     {
-        Unselect_Selection();
+        Unselect_Selection(ptk);
         Track_Under_Caret++;
         if(Track_Under_Caret >= Songtracks)
         {
             Track_Under_Caret = 0;
         }
         Column_Under_Caret = 0;
-        Actupated(0);
+        Actupated(ptk, 0);
         gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
 
@@ -3399,19 +3403,19 @@ void Keyboard_Handler(ptk_data *ptk)
     if(!Get_LShift() && Get_LCtrl() && Keys[SDLK_TAB])
 #endif
     {
-        Unselect_Selection();
+        Unselect_Selection(ptk);
         Column_Under_Caret += Table_Right_Tab_Notes[Column_Under_Caret];
         if(Column_Under_Caret >= (Channels_MultiNotes[Track_Under_Caret] * 3)) Column_Under_Caret = 0;
-        Actupated(0);
+        Actupated(ptk, 0);
     }
 
     // Previous note
     if(Get_LShift() && Get_LCtrl() && Keys[SDLK_TAB])
     {
-        Unselect_Selection();
+        Unselect_Selection(ptk);
         Column_Under_Caret -= Table_Left_Tab_Notes[Column_Under_Caret];
         if(Column_Under_Caret < 0) Column_Under_Caret = (Channels_MultiNotes[Track_Under_Caret] * 3) - 3;
-        Actupated(0);
+        Actupated(ptk, 0);
     }
 
     if(!is_recording)
@@ -3421,7 +3425,7 @@ void Keyboard_Handler(ptk_data *ptk)
             // Jump to row 0
             if(Keys[SDLK_F5])
             {
-                if(Pattern_Line != 0) Goto_Row(0);
+                if(Pattern_Line != 0) Goto_Row(ptk, 0);
             }
 
             // Jump to row 16
@@ -3429,7 +3433,7 @@ void Keyboard_Handler(ptk_data *ptk)
             {
                 int line = patternLines[pSequence[Cur_Position]] / 4;
                 if(line > patternLines[pSequence[Cur_Position]] - 1) line = patternLines[pSequence[Cur_Position]] - 1;
-                if(Pattern_Line != line) Goto_Row(line);
+                if(Pattern_Line != line) Goto_Row(ptk, line);
             }
 
             // Jump to row 32
@@ -3438,7 +3442,7 @@ void Keyboard_Handler(ptk_data *ptk)
                 int line = patternLines[pSequence[Cur_Position]] / 4;
                 line *= 2;
                 if(line > patternLines[pSequence[Cur_Position]] - 1) line = patternLines[pSequence[Cur_Position]] - 1;
-                if(Pattern_Line != line) Goto_Row(line);
+                if(Pattern_Line != line) Goto_Row(ptk, line);
             }
 
             // Jump to row 48
@@ -3447,7 +3451,7 @@ void Keyboard_Handler(ptk_data *ptk)
                 int line = patternLines[pSequence[Cur_Position]] / 4;
                 line *= 3;
                 if(line > patternLines[pSequence[Cur_Position]] - 1) line = patternLines[pSequence[Cur_Position]] - 1;
-                if(Pattern_Line != line) Goto_Row(line);
+                if(Pattern_Line != line) Goto_Row(ptk, line);
             }
 
             // Jump to row 63
@@ -3456,56 +3460,56 @@ void Keyboard_Handler(ptk_data *ptk)
                 int line = patternLines[pSequence[Cur_Position]] / 4;
                 line *= 4;
                 if(line > patternLines[pSequence[Cur_Position]] - 1) line = patternLines[pSequence[Cur_Position]] - 1;
-                if(Pattern_Line != line) Goto_Row(line);
+                if(Pattern_Line != line) Goto_Row(ptk, line);
             }
         }
 
         // Top left of pattern
         if(Keys[SDLK_HOME])
         {
-            Goto_Top_Left();
+            Goto_Top_Left(ptk);
         }
 
         // Bottom right of pattern
         if(Keys[SDLK_END])
         {
-            Goto_Bottom_Right();
+            Goto_Bottom_Right(ptk);
         }
 
         // Previous column or previous track
         if(Keys[SDLK_LEFT] && !Get_LCtrl() && !Get_LAlt())
         {
-            Goto_Previous_Column();
+            Goto_Previous_Column(ptk);
         }
 
         // Next column or next track
         if(Keys[SDLK_RIGHT] && !Get_LCtrl() && !Get_LAlt())
         {
-            Goto_Next_Column();
+            Goto_Next_Column(ptk);
         }
 
         // Previous row
         if(Keys[SDLK_UP] && !Songplaying)
         {
-            Goto_Previous_Row();
+            Goto_Previous_Row(ptk);
         }
 
         // Next row
         if(Keys[SDLK_DOWN] && !Songplaying)
         {
-            Goto_Next_Row();
+            Goto_Next_Row(ptk);
         }
 
         // Previous page (16 rows)
         if(Keys[SDLK_PAGEUP] && !Songplaying)
         {
-            Goto_Previous_Page();
+            Goto_Previous_Page(ptk);
         }
 
         // Next page (16 rows)
         if(Keys[SDLK_PAGEDOWN] && !Songplaying)
         {
-            Goto_Next_Page();
+            Goto_Next_Page(ptk);
         }
 
         // Previous pattern
@@ -3523,10 +3527,10 @@ void Keyboard_Handler(ptk_data *ptk)
         if(Keys[SDLK_INSERT] && is_editing)
         {
             // INSERT
-            if(Get_LShift()) Insert_Pattern_Line(Cur_Position);
+            if(Get_LShift()) Insert_Pattern_Line(ptk, Cur_Position);
             else
             {
-                Insert_Selection(Track_Under_Caret, Cur_Position);
+                Insert_Selection(ptk, Track_Under_Caret, Cur_Position);
             }
         }
 
@@ -3540,12 +3544,12 @@ void Keyboard_Handler(ptk_data *ptk)
                     if(Pattern_Line)
                     {
                         Pattern_Line--;
-                        Remove_Pattern_Line(Cur_Position);
+                        Remove_Pattern_Line(ptk, Cur_Position);
                     }
                 }
                 else
                 {
-                    Remove_Selection(Track_Under_Caret, Cur_Position);
+                    Remove_Selection(ptk, Track_Under_Caret, Cur_Position);
                 }
             }
         }
@@ -4274,8 +4278,8 @@ void Keyboard_Handler(ptk_data *ptk)
                 {
                     if(CHAN_MUTE_STATE[Track_Under_Caret] == 0) CHAN_MUTE_STATE[Track_Under_Caret] = 1;
                     else CHAN_MUTE_STATE[Track_Under_Caret] = 0;
-                    if(userscreen == USER_SCREEN_TRACK_EDIT) Actualize_Track_Ed(10);
-                    Actupated(0);
+                    if(userscreen == USER_SCREEN_TRACK_EDIT) Actualize_Track_Ed(ptk, 10);
+                    Actupated(ptk, 0);
                 }
 
                 // Display instruments list
@@ -4302,22 +4306,22 @@ void Keyboard_Handler(ptk_data *ptk)
                 if(Keys[SDLK_1] || Keys[SDLK_KP1])
                 {
                     Curr_Buff_Block = 0;
-                    Actupated(0);
+                    Actupated(ptk, 0);
                 }
                 if(Keys[SDLK_2] || Keys[SDLK_KP2])
                 {
                     Curr_Buff_Block = 1;
-                    Actupated(0);
+                    Actupated(ptk, 0);
                 }
                 if(Keys[SDLK_3] || Keys[SDLK_KP3])
                 {
                     Curr_Buff_Block = 2;
-                    Actupated(0);
+                    Actupated(ptk, 0);
                 }
                 if(Keys[SDLK_4] || Keys[SDLK_KP4])
                 {
                     Curr_Buff_Block = 3;
-                    Actupated(0);
+                    Actupated(ptk, 0);
                 }
 
                 if(Keys[SDLK_LEFT])
@@ -4349,8 +4353,8 @@ void Keyboard_Handler(ptk_data *ptk)
                         // Will unmute the correct track
                         if(CHAN_MUTE_STATE[Track_Under_Caret] == 0) CHAN_MUTE_STATE[Track_Under_Caret] = 1;
                         else CHAN_MUTE_STATE[Track_Under_Caret] = 0;
-                        if(userscreen == USER_SCREEN_TRACK_EDIT) Actualize_Track_Ed(10);
-                        Actupated(0);
+                        if(userscreen == USER_SCREEN_TRACK_EDIT) Actualize_Track_Ed(ptk, 10);
+                        Actupated(ptk, 0);
                     }
                 }
 
@@ -4372,7 +4376,7 @@ void Keyboard_Handler(ptk_data *ptk)
                    block_start_track[Curr_Buff_Block] != -1 &&
                    block_end_track[Curr_Buff_Block] != -1)
                 {
-                    Cut_Selection(Cur_Position);
+                    Cut_Selection(ptk, Cur_Position);
                 }
 
                 // Copy selected block
@@ -4380,19 +4384,19 @@ void Keyboard_Handler(ptk_data *ptk)
                    block_start_track[Curr_Buff_Block] != -1 &&
                    block_end_track[Curr_Buff_Block] != -1)
                 {
-                    Copy_Selection(Cur_Position);
+                    Copy_Selection(ptk, Cur_Position);
                 }
 
                 // Interpolate the values of a selected block
                 if(Keys[SDLK_i - UNICODE_OFFSET2] && is_editing)
                 {
-                    Interpolate_Block(Cur_Position);
+                    Interpolate_Block(ptk, Cur_Position);
                 }
 
                 // Randomize the values of a selected block
                 if(Keys[SDLK_r - UNICODE_OFFSET2] && is_editing)
                 {
-                    Randomize_Block(Cur_Position);
+                    Randomize_Block(ptk, Cur_Position);
                 }
 
                 // Randomize the values of a selected block
@@ -4411,42 +4415,42 @@ void Keyboard_Handler(ptk_data *ptk)
                 // Paste the block buffer into a pattern
                 if(Keys[SDLK_v - UNICODE_OFFSET2] && block_start_track_nibble[Curr_Buff_Block] != -1 && block_end_track_nibble[Curr_Buff_Block] != -1 && is_editing)
                 {
-                    Paste_Block(Cur_Position, Paste_Across, TRUE);
+                    Paste_Block(ptk, Cur_Position, Paste_Across, TRUE);
                 }
 
                 // Transpose the selection 1 semitone higher
                 if(Keys[SDLK_u - UNICODE_OFFSET2] && is_editing)
                 {
-                    if(Get_LShift()) Instrument_Semitone_Up_Block(Cur_Position);
-                    else Semitone_Up_Block(Cur_Position);
+                    if(Get_LShift()) Instrument_Semitone_Up_Block(ptk, Cur_Position);
+                    else Semitone_Up_Block(ptk, Cur_Position);
                 }
 
                 // Transpose the selection 1 semitone lower
                 if(Keys[SDLK_d - UNICODE_OFFSET2] && is_editing)
                 {
-                    if(Get_LShift()) Instrument_Semitone_Down_Block(Cur_Position);
-                    else Semitone_Down_Block(Cur_Position);
+                    if(Get_LShift()) Instrument_Semitone_Down_Block(ptk, Cur_Position);
+                    else Semitone_Down_Block(ptk, Cur_Position);
                 }
 
                 // Transpose the selection 1 octave higher
                 if(Keys[SDLK_k - UNICODE_OFFSET2] && is_editing)
                 {
-                    if(Get_LShift()) Instrument_Octave_Up_Block(Cur_Position);
-                    else Octave_Up_Block(Cur_Position);
+                    if(Get_LShift()) Instrument_Octave_Up_Block(ptk, Cur_Position);
+                    else Octave_Up_Block(ptk, Cur_Position);
                 }
 
                 // Transpose the selection 1 octave lower
                 if(Keys[SDLK_l - UNICODE_OFFSET2] && is_editing)
                 {
-                    if(Get_LShift()) Instrument_Octave_Down_Block(Cur_Position);
-                    else Octave_Down_Block(Cur_Position);
+                    if(Get_LShift()) Instrument_Octave_Down_Block(ptk, Cur_Position);
+                    else Octave_Down_Block(ptk, Cur_Position);
                 }
 
                 // Select the current track or the current pattern
                 if(Keys[SDLK_a - UNICODE_OFFSET2])
                 {
-                    if(Get_LShift()) Select_Pattern_Block();
-                    else Select_Track_Block();
+                    if(Get_LShift()) Select_Pattern_Block(ptk);
+                    else Select_Track_Block(ptk);
                 }
             }
         }
@@ -4488,13 +4492,13 @@ void Keyboard_Handler(ptk_data *ptk)
                 // Select the current note/instrument
                 if(Keys[SDLK_a])
                 {
-                    Select_Note_Block();
+                    Select_Note_Block(ptk);
                 }
 
                 // Select the current track or the current pattern
                 if(Keys[SDLK_a - UNICODE_OFFSET1])
                 {
-                    if(Get_LShift()) Select_All_Notes_Block();
+                    if(Get_LShift()) Select_All_Notes_Block(ptk);
                 }
 
             }
@@ -4581,14 +4585,14 @@ void Keyboard_Handler(ptk_data *ptk)
                             Pattern_Line += Current_Edit_Steps;
                             if(!Current_Edit_Steps)
                             {
-                                Goto_Next_Column();
+                                Goto_Next_Column(ptk);
                                 Done_Value = TRUE;
                             }
                         }
                     }
                     else
                     {
-                        if(!Delete_Selection(Cur_Position))
+                        if(!Delete_Selection(ptk, Cur_Position))
                         {
                             oldval = 0;
                             if(Column_Under_Caret == (1 + (i * 3))) oldval = 255;
@@ -4619,13 +4623,13 @@ void Keyboard_Handler(ptk_data *ptk)
                                 Pattern_Line += Current_Edit_Steps;
                                 if(!Current_Edit_Steps)
                                 {
-                                    Goto_Next_Column();
+                                    Goto_Next_Column(ptk);
                                     Done_Value = TRUE;
                                 }
                             }
                         }
                     }
-                    Actupated(0);
+                    Actupated(ptk, 0);
                 }
 
                 if(!Done_Value)
@@ -4699,13 +4703,13 @@ void Keyboard_Handler(ptk_data *ptk)
                                 Pattern_Line += Current_Edit_Steps;
                                 if(!Current_Edit_Steps)
                                 {
-                                    Goto_Next_Column();
+                                    Goto_Next_Column(ptk);
                                 }
                             }
                         }
                         else
                         {
-                            if(!Delete_Selection(Cur_Position))
+                            if(!Delete_Selection(ptk, Cur_Position))
                             {
                                 oldval = 0;
                                 if(Column_Under_Caret == (2 + (i * 3))) oldval = 255;
@@ -4736,12 +4740,12 @@ void Keyboard_Handler(ptk_data *ptk)
                                     Pattern_Line += Current_Edit_Steps;
                                     if(!Current_Edit_Steps)
                                     {
-                                        Goto_Next_Column();
+                                        Goto_Next_Column(ptk);
                                     }
                                 }
                             }
                         }
-                        Actupated(0);
+                        Actupated(ptk, 0);
                     }
                 }
             }
@@ -4899,7 +4903,7 @@ void Keyboard_Handler(ptk_data *ptk)
                         // Note
                         if(retnote > -1)
                         {
-                            xoffseted = Get_Pattern_Offset(pSequence[Cur_Position], Track_Under_Caret, line);
+                            xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], Track_Under_Caret, line);
 
                             // Select the sub channel
                             pos = i;
@@ -4947,7 +4951,7 @@ void Keyboard_Handler(ptk_data *ptk)
                             {
                                 if(is_recording_2)
                                 {
-                                    xoffseted = Get_Pattern_Offset(pSequence[Cur_Position], Channel->Channel, line);
+                                    xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], Channel->Channel, line);
                                     pos = Channel->Sub_Channel;
                                     if(pos > (Channels_MultiNotes[Track_Under_Caret] - 1))
                                     {
@@ -4976,7 +4980,7 @@ No_Key:;
                             Pattern_Line += Current_Edit_Steps;
                             if(!Current_Edit_Steps)
                             {
-                                Goto_Next_Column();
+                                Goto_Next_Column(ptk);
                             }
                         }
                     }
@@ -4985,11 +4989,11 @@ No_Key:;
                 {
                     if(old_key_Pattern_Line != Pattern_Line)
                     {
-                        Actualize_Sequencer();
+                        Actualize_Sequencer(ptk);
                     }
                     old_key_Pattern_Line = Pattern_Line;
                 }
-                Actupated(0);
+                Actupated(ptk, 0);
             }
         }
 
@@ -5013,7 +5017,7 @@ No_Key:;
 
             if(in_note)
             {
-                xoffseted = Get_Pattern_Offset(pSequence[Cur_Position], Track_Under_Caret, Pattern_Line);
+                xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], Track_Under_Caret, Pattern_Line);
 
                 *(RawPatterns + xoffseted + PATTERN_NOTE1 + column) = NOTE_OFF;
                 *(RawPatterns + xoffseted + PATTERN_INSTR1 + column) = NO_INSTR;
@@ -5023,10 +5027,10 @@ No_Key:;
                     Pattern_Line += Current_Edit_Steps;
                     if(!Current_Edit_Steps)
                     {
-                        Goto_Next_Column();
+                        Goto_Next_Column(ptk);
                     }
                 }
-                Actupated(0);
+                Actupated(ptk, 0);
             }
         }
 
@@ -5050,9 +5054,9 @@ No_Key:;
 
             if(in_note)
             {
-                xoffseted = Get_Pattern_Offset(pSequence[Cur_Position], Track_Under_Caret, Pattern_Line);
+                xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], Track_Under_Caret, Pattern_Line);
 
-                if(!Delete_Selection(Cur_Position))
+                if(!Delete_Selection(ptk, Cur_Position))
                 {
                     // Delete the note under the caret
                     *(RawPatterns + xoffseted + PATTERN_NOTE1 + column) = NO_NOTE;
@@ -5063,11 +5067,11 @@ No_Key:;
                         Pattern_Line += Current_Edit_Steps;
                         if(!Current_Edit_Steps)
                         {
-                            Goto_Next_Column();
+                            Goto_Next_Column(ptk);
                         }
                     }
                 }
-                Actupated(0);
+                Actupated(ptk, 0);
             }
         }
     }
@@ -5107,7 +5111,7 @@ char zcheckMouse(int x, int y, int xs, int ys)
 // Mouse Handler
 void Mouse_Handler(ptk_data *ptk)
 {
-    int Cur_Position = Get_Song_Position();
+    int Cur_Position = Get_Song_Position(ptk);
     int i;
 
     if(gui_action == GUI_CMD_NOP) gui_action = GUI_CMD_NONE;
@@ -5118,7 +5122,7 @@ void Mouse_Handler(ptk_data *ptk)
     if(Mouse.wheel == 1)
     {
         // Scroll the pattern
-        Mouse_Wheel_Pattern_Ed(-MouseWheel_Multiplier, !Songplaying && !is_recording);
+        Mouse_Wheel_Pattern_Ed(ptk, -MouseWheel_Multiplier, !Songplaying && !is_recording);
 
         // Scroll the files list
         switch(ptk->Scopish)
@@ -5172,7 +5176,7 @@ void Mouse_Handler(ptk_data *ptk)
     if(Mouse.wheel == -1)
     {
         // Scroll the pattern
-        Mouse_Wheel_Pattern_Ed(MouseWheel_Multiplier, !Songplaying && !is_recording);
+        Mouse_Wheel_Pattern_Ed(ptk, MouseWheel_Multiplier, !Songplaying && !is_recording);
 
         switch(ptk->Scopish)
         {
@@ -5250,7 +5254,7 @@ void Mouse_Handler(ptk_data *ptk)
         Mouse_Sliders_Fx_Ed();
         Mouse_Sliders_Track_Ed();
         Mouse_Sliders_Master_Shuffle();
-        Mouse_Sliders_Pattern_Ed();
+        Mouse_Sliders_Pattern_Ed(ptk);
         Mouse_Sliders_Reverb_Ed();
     }
     else
@@ -5362,7 +5366,7 @@ void Mouse_Handler(ptk_data *ptk)
         {
             case SCOPE_ZONE_INSTR_LIST:
             case SCOPE_ZONE_SYNTH_LIST:
-                Files_List_Move(1);
+                Files_List_Move(ptk, 1);
 
                 // Select
                 if(zcheckMouse(393, 43, Cur_Width - 412, 133))
@@ -5378,7 +5382,7 @@ void Mouse_Handler(ptk_data *ptk)
             case SCOPE_ZONE_PATTERN_DIR:
             case SCOPE_ZONE_MIDICFG_DIR:
             case SCOPE_ZONE_SAMPLE_DIR:
-                Files_List_Move(1);
+                Files_List_Move(ptk, 1);
 
                 // Select a file
                 if(zcheckMouse(393, 43, Cur_Width - 412, 133))
@@ -5495,11 +5499,11 @@ void Mouse_Handler(ptk_data *ptk)
             {
                 Songtracks = 1;
                 // Just clear it
-                Reset_Track(pSequence[Song_Position], Track_Under_Caret);
+                Reset_Track(ptk, pSequence[Song_Position], Track_Under_Caret);
             }
             else
             {
-                Delete_Track();
+                Delete_Track(ptk);
             }
             gui_action = GUI_CMD_DELETE_TRACK;
             teac = 4;
@@ -5514,7 +5518,7 @@ void Mouse_Handler(ptk_data *ptk)
             }
             else
             {
-                Insert_Track();
+                Insert_Track(ptk);
                 gui_action = GUI_CMD_INSERT_TRACK;
                 teac = 4;
             }
@@ -5563,41 +5567,41 @@ void Mouse_Handler(ptk_data *ptk)
         {
             for(i = 0; i < Songtracks; i++)
             {
-                Set_Track_Zoom(i, TRACK_SMALL);
+                Set_Track_Zoom(ptk, i, TRACK_SMALL);
             }
-            Actupated(0);
-            Set_Track_Slider(gui_track);
+            Actupated(ptk, 0);
+            Set_Track_Slider(ptk, gui_track);
         }
         // Zoom'em normal
         if(zcheckMouse(332 + (18 * 1), 126, 16, 16))
         {
             for(i = 0; i < Songtracks; i++)
             {
-                Set_Track_Zoom(i, TRACK_MEDIUM);
+                Set_Track_Zoom(ptk, i, TRACK_MEDIUM);
             }
-            Actupated(0);
-            Set_Track_Slider(gui_track);
+            Actupated(ptk, 0);
+            Set_Track_Slider(ptk, gui_track);
         }
         // Zoom'em large
         if(zcheckMouse(332 + (18 * 2), 126, 16, 16))
         {
             for(i = 0; i < Songtracks; i++)
             {
-                Set_Track_Zoom(i, TRACK_LARGE);
+                Set_Track_Zoom(ptk, i, TRACK_LARGE);
             }
-            Actupated(0);
-            Set_Track_Slider(gui_track);
+            Actupated(ptk, 0);
+            Set_Track_Slider(ptk, gui_track);
         }
 
         // Select track
         if(zcheckMouse(8, 152, 61, 10))
         {
-            Select_Track_Block();
+            Select_Track_Block(ptk);
         }
         // Select note
         if(zcheckMouse(8, 164, 61, 10))
         {
-            Select_Note_Block();
+            Select_Note_Block(ptk);
         }
         // Cut
         if(zcheckMouse(8 + 63, 152, 61, 10))
@@ -5605,7 +5609,7 @@ void Mouse_Handler(ptk_data *ptk)
             if(block_start_track[Curr_Buff_Block] != -1 &&
                block_end_track[Curr_Buff_Block] != -1)
             {
-                Cut_Selection(Cur_Position);
+                Cut_Selection(ptk, Cur_Position);
             }
         }
         // Copy
@@ -5614,7 +5618,7 @@ void Mouse_Handler(ptk_data *ptk)
             if(block_start_track[Curr_Buff_Block] != -1 &&
                block_end_track[Curr_Buff_Block] != -1)
             {
-                Copy_Selection(Cur_Position);
+                Copy_Selection(ptk, Cur_Position);
             }
         }
         // Paste
@@ -5624,7 +5628,7 @@ void Mouse_Handler(ptk_data *ptk)
                block_end_track_nibble[Curr_Buff_Block] != -1 &&
                is_editing)
             {
-                Paste_Block(Cur_Position, Paste_Across, TRUE);
+                Paste_Block(ptk, Cur_Position, Paste_Across, TRUE);
             }
         }
         // Delete
@@ -5632,39 +5636,39 @@ void Mouse_Handler(ptk_data *ptk)
         {
             if(is_editing)
             {
-                Delete_Selection(Cur_Position);
-                Actupated(0);
+                Delete_Selection(ptk, Cur_Position);
+                Actupated(ptk, 0);
             }
         }
         // Interpolate
         if(zcheckMouse(8 + (63 * 3), 152, 61, 10))
         {
-            if(is_editing) Interpolate_Block(Cur_Position);
+            if(is_editing) Interpolate_Block(ptk, Cur_Position);
         }
         // Randomize
         if(zcheckMouse(8 + (63 * 3), 164, 61, 10))
         {
-            if(is_editing) Randomize_Block(Cur_Position);
+            if(is_editing) Randomize_Block(ptk, Cur_Position);
         }
         // Semitone up
         if(zcheckMouse(8 + (63 * 4), 152, 61, 10))
         {
-            if(is_editing) Semitone_Up_Block(Cur_Position);
+            if(is_editing) Semitone_Up_Block(ptk, Cur_Position);
         }
         // Semitone down
         if(zcheckMouse(8 + (63 * 4), 164, 61, 10))
         {
-            if(is_editing) Semitone_Down_Block(Cur_Position);
+            if(is_editing) Semitone_Down_Block(ptk, Cur_Position);
         }
         // Octave up
         if(zcheckMouse(8 + (63 * 5), 152, 61, 10))
         {
-            if(is_editing) Octave_Up_Block(Cur_Position);
+            if(is_editing) Octave_Up_Block(ptk, Cur_Position);
         }
         // Octave down
         if(zcheckMouse(8 + (63 * 5), 164, 61, 10))
         {
-            if(is_editing) Octave_Down_Block(Cur_Position);
+            if(is_editing) Octave_Down_Block(ptk, Cur_Position);
         }
 
         // Switch small / large patterns
@@ -5702,16 +5706,16 @@ void Mouse_Handler(ptk_data *ptk)
         if(zcheckMouse(20 + (TAB_LARG * 11), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SETUP_MIDI || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_MIDI_SETUP;
 
         Mouse_Left_Track_Fx_Ed();
-        Mouse_Left_Sequencer_Ed();
+        Mouse_Left_Sequencer_Ed(ptk);
         Mouse_Left_Reverb_Ed();
         Mouse_Left_Midi_Ed();
         Mouse_Left_DiskIO_Ed();
-        Mouse_Left_Track_Ed();
+        Mouse_Left_Track_Ed(ptk);
         Mouse_Left_Instrument_Ed();
         Mouse_Left_Fx_Ed();
         Mouse_Left_Synth_Ed();
-        Mouse_Left_Master_Ed();
-        Mouse_Left_Pattern_Ed();
+        Mouse_Left_Master_Ed(ptk);
+        Mouse_Left_Pattern_Ed(ptk);
     }
 
     // Middle mouse button
@@ -5723,8 +5727,8 @@ void Mouse_Handler(ptk_data *ptk)
     // Right mouse button
     if(Mouse.button_oneshot & MOUSE_RIGHT_BUTTON)
     {
-        Reset_Pattern_Scrolling_Horiz();
-        Mouse_Right_Pattern_Ed();
+        Reset_Pattern_Scrolling_Horiz(ptk);
+        Mouse_Right_Pattern_Ed(ptk);
 
         if(zcheckMouse(188, 82, 16, 16))
         {
@@ -5771,7 +5775,7 @@ void Mouse_Handler(ptk_data *ptk)
         {
             case SCOPE_ZONE_INSTR_LIST:
             case SCOPE_ZONE_SYNTH_LIST:
-                Files_List_Move(10);
+                Files_List_Move(ptk, 10);
                 break;
 
 
@@ -5782,7 +5786,7 @@ void Mouse_Handler(ptk_data *ptk)
             case SCOPE_ZONE_PATTERN_DIR:
             case SCOPE_ZONE_MIDICFG_DIR:
             case SCOPE_ZONE_SAMPLE_DIR:
-                Files_List_Move(10);
+                Files_List_Move(ptk, 10);
                 break;
         }
 
@@ -5841,7 +5845,7 @@ void Mouse_Handler(ptk_data *ptk)
             tLength -= 10;
             if(tLength < 1) tLength = 1;
             Song_Length = tLength;
-            Actupated(0);
+            Actupated(ptk, 0);
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
         // Song_Length + 10
@@ -5851,7 +5855,7 @@ void Mouse_Handler(ptk_data *ptk)
             tLength += 10;
             if(tLength > 255) tLength = 255;
             Song_Length = tLength;
-            Actupated(0);
+            Actupated(ptk, 0);
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
 
@@ -5886,32 +5890,32 @@ void Mouse_Handler(ptk_data *ptk)
         // Select pattern
         if(zcheckMouse(8, 152, 61, 10))
         {
-            Select_Pattern_Block();
+            Select_Pattern_Block(ptk);
         }
         // Select notes
         if(zcheckMouse(8, 164, 61, 10))
         {
-            Select_All_Notes_Block();
+            Select_All_Notes_Block(ptk);
         }
         // Semitone up
         if(zcheckMouse(8 + (63 * 4), 152, 61, 10))
         {
-            if(is_editing) Instrument_Semitone_Up_Block(Cur_Position);
+            if(is_editing) Instrument_Semitone_Up_Block(ptk, Cur_Position);
         }
         // Semitone down
         if(zcheckMouse(8 + (63 * 4), 164, 61, 10))
         {
-            if(is_editing) Instrument_Semitone_Down_Block(Cur_Position);
+            if(is_editing) Instrument_Semitone_Down_Block(ptk, Cur_Position);
         }
         // Instrument octave up
         if(zcheckMouse(8 + (63 * 5), 152, 61, 10))
         {
-            if(is_editing) Instrument_Octave_Up_Block(Cur_Position);
+            if(is_editing) Instrument_Octave_Up_Block(ptk, Cur_Position);
         }
         // Instrument octave down
         if(zcheckMouse(8 + (63 * 5), 164, 61, 10))
         {
-            if(is_editing) Instrument_Octave_Down_Block(Cur_Position);
+            if(is_editing) Instrument_Octave_Down_Block(ptk, Cur_Position);
         }
 
         // Stereo scopes.
@@ -5937,11 +5941,11 @@ void Mouse_Handler(ptk_data *ptk)
         Mouse_Right_Midi_Ed();
         Mouse_Right_DiskIO_Ed();
         Mouse_Right_Sample_Ed();
-        Mouse_Right_Track_Ed();
+        Mouse_Right_Track_Ed(ptk);
         Mouse_Right_Instrument_Ed();
-        Mouse_Right_Sequencer_Ed();
+        Mouse_Right_Sequencer_Ed(ptk);
         Mouse_Right_Synth_Ed();
-        Mouse_Right_Master_Ed();
+        Mouse_Right_Master_Ed(ptk);
 
         // Play a .wav
         switch(ptk->Scopish)
@@ -5971,7 +5975,7 @@ void Mouse_Handler(ptk_data *ptk)
 
     if(Mouse.button & MOUSE_RIGHT_BUTTON)
     {
-        Mouse_Sliders_Right_Pattern_Ed();
+        Mouse_Sliders_Right_Pattern_Ed(ptk);
         Mouse_Sliders_Right_Instrument_Ed();
         Mouse_Sliders_Right_Reverb_Ed();
     }
@@ -6180,7 +6184,7 @@ void Mouse_Sliders_Master_Shuffle(void)
     }
 }
 
-void Actualize_Master(char gode)
+void Actualize_Master(ptk_data *ptk, char gode)
 {
     if(gode == 0 || gode == 1 || gode == 2)
     {
@@ -6221,8 +6225,8 @@ void Actualize_Master(char gode)
     {
         Gui_Draw_Arrows_Number_Box2(324, 28, Songtracks, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
 
-        if(userscreen == USER_SCREEN_SEQUENCER) Actualize_Seq_Ed(0);
-        Actupated(0);
+        if(userscreen == USER_SCREEN_SEQUENCER) Actualize_Seq_Ed(ptk, 0);
+        Actupated(ptk, 0);
     }
 
     SamplesPerTick = (int) ((60 * MIX_RATE) / (BeatsPerMin * TicksPerBeat));
@@ -6492,7 +6496,7 @@ void Draw_Scope(ptk_data *ptk)
     int nibble_pos;
     int offset_scope = pos_scope_latency;
     LPDAT_POS_SCOPE ptrTbl_Dat;
-    int scope_pos = Get_Song_Position();
+    int scope_pos = Get_Song_Position(ptk);
     int active_channel;
     int cur_pos_x = 394;
     int max_right = Cur_Width - 395;
@@ -6682,8 +6686,8 @@ void Draw_Scope_Files_Button(ptk_data *ptk)
         case SCOPE_ZONE_SAMPLE_DIR:
 
             Read_SMPT();
-            Dump_Files_List(395, 41);
-            Actualize_Files_List(0);
+            Dump_Files_List(ptk, 395, 41);
+            Actualize_Files_List(ptk, 0);
             Gui_Draw_Button_Box(Cur_Width - 54, 6, 16, 16, "\255", BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
 
             switch(ptk->Scopish)

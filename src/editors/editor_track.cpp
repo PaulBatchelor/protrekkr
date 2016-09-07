@@ -68,7 +68,7 @@ void Draw_Track_Ed(void)
     Gui_Draw_Button_Box(710, (Cur_Height - 60), 60, 16, "Effects", BUTTON_NORMAL | BUTTON_DISABLED | BUTTON_NO_BORDER);
 }
    
-void Actualize_Track_Ed(char gode)
+void Actualize_Track_Ed(ptk_data *ptk, char gode)
 {
     if(userscreen == USER_SCREEN_TRACK_EDIT)
     {
@@ -303,7 +303,7 @@ void Actualize_Track_Ed(char gode)
             Gui_Draw_Arrows_Number_Box2(647, (Cur_Height - 85), Channels_MultiNotes[Track_Under_Caret], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
             if(gode)
             {
-                Actupated(0);
+                Actupated(ptk, 0);
             }
         }
 
@@ -320,19 +320,19 @@ void Actualize_Track_Ed(char gode)
             Gui_Draw_Arrows_Number_Box2(647, (Cur_Height - 60), Channels_Effects[Track_Under_Caret], BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
             if(gode)
             {
-                Actupated(0);
+                Actupated(ptk, 0);
             }
         }
         
         if(trkchan == TRUE)
         {
-            Actupated(0);
+            Actupated(ptk, 0);
             trkchan = FALSE;
         }
     } // Userscreen match found
 }
 
-void Mouse_Left_Track_Ed(void)
+void Mouse_Left_Track_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_TRACK_EDIT)
     {
@@ -499,13 +499,13 @@ void Mouse_Left_Track_Ed(void)
         // Multi notes
         if(zcheckMouse(647, (Cur_Height - 85), 16, 16) == 1)
         {
-            Track_Sub_Notes(Track_Under_Caret, 1);
+            Track_Sub_Notes(ptk, Track_Under_Caret, 1);
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
             teac = 14;
         }
         if(zcheckMouse(647 + 44, (Cur_Height - 85), 16, 16) == 1)
         {
-            Track_Add_Notes(Track_Under_Caret, 1);
+            Track_Add_Notes(ptk, Track_Under_Caret, 1);
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
             teac = 14;
         }
@@ -513,13 +513,13 @@ void Mouse_Left_Track_Ed(void)
         // Number of effects
         if(zcheckMouse(647, (Cur_Height - 60), 16, 16) == 1)
         {
-            Track_Sub_Effects(Track_Under_Caret, 1);
+            Track_Sub_Effects(ptk, Track_Under_Caret, 1);
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
             teac = 16;
         }
         if(zcheckMouse(647 + 44, (Cur_Height - 60), 16, 16) == 1)
         {
-            Track_Add_Effects(Track_Under_Caret, 1);
+            Track_Add_Effects(ptk, Track_Under_Caret, 1);
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
             teac = 16;
         }
@@ -527,7 +527,7 @@ void Mouse_Left_Track_Ed(void)
     } // Userscreen 1
 }
 
-void Mouse_Right_Track_Ed(void)
+void Mouse_Right_Track_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_TRACK_EDIT)
     {
@@ -580,13 +580,13 @@ void Mouse_Right_Track_Ed(void)
         // Multi notes
         if(zcheckMouse(647, (Cur_Height - 85), 16, 16) == 1)
         {
-            Track_Sub_Notes(Track_Under_Caret, 10);
+            Track_Sub_Notes(ptk, Track_Under_Caret, 10);
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
             teac = 14;
         }
         if(zcheckMouse(647 + 44, (Cur_Height - 85), 16, 16) == 1)
         {
-            Track_Add_Notes(Track_Under_Caret, 10);
+            Track_Add_Notes(ptk, Track_Under_Caret, 10);
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
             teac = 14;
         }
@@ -609,7 +609,7 @@ void Mouse_Sliders_Track_Ed(void)
 
 // ------------------------------------------------------
 // Add a given amount of notes to a track
-void Track_Add_Notes(int Track_Nbr, int Amount)
+void Track_Add_Notes(ptk_data *ptk, int Track_Nbr, int Amount)
 {
     Channels_MultiNotes[Track_Nbr] += Amount;
     if(Channels_MultiNotes[Track_Nbr] > MAX_POLYPHONY) Channels_MultiNotes[Track_Nbr] = MAX_POLYPHONY;
@@ -617,66 +617,66 @@ void Track_Add_Notes(int Track_Nbr, int Amount)
     {
         Channels_Polyphony[Track_Nbr] = Channels_MultiNotes[Track_Nbr];
     }
-    if(Get_Track_Zoom(Track_Nbr) == TRACK_LARGE && Get_Track_Real_Size(Track_Nbr) >= ptk.TRACKS_WIDTH)
+    if(Get_Track_Zoom(ptk, Track_Nbr) == TRACK_LARGE && Get_Track_Real_Size(ptk, Track_Nbr) >= ptk->TRACKS_WIDTH)
     {
-        Set_Track_Zoom(Track_Nbr, TRACK_MEDIUM);
+        Set_Track_Zoom(ptk, Track_Nbr, TRACK_MEDIUM);
     }
-    if(Get_Track_Zoom(Track_Nbr) == TRACK_MEDIUM && Get_Track_Real_Size(Track_Nbr) >= ptk.TRACKS_WIDTH)
+    if(Get_Track_Zoom(ptk, Track_Nbr) == TRACK_MEDIUM && Get_Track_Real_Size(ptk, Track_Nbr) >= ptk->TRACKS_WIDTH)
     {
-        Set_Track_Zoom(Track_Nbr, TRACK_SMALL);
+        Set_Track_Zoom(ptk, Track_Nbr, TRACK_SMALL);
     }
 }
 
 // ------------------------------------------------------
 // Remove a given amount of notes from a track
-void Track_Sub_Notes(int Track_Nbr, int Amount)
+void Track_Sub_Notes(ptk_data *ptk, int Track_Nbr, int Amount)
 {
     Channels_MultiNotes[Track_Nbr] -= Amount;
     if(Channels_MultiNotes[Track_Nbr] < 1)
     {
         Channels_MultiNotes[Track_Nbr] = 1;
     }
-    if(Get_Track_Zoom(Track_Nbr) == TRACK_LARGE && Get_Track_Real_Size(Track_Nbr) >= ptk.TRACKS_WIDTH)
+    if(Get_Track_Zoom(ptk, Track_Nbr) == TRACK_LARGE && Get_Track_Real_Size(ptk, Track_Nbr) >= ptk->TRACKS_WIDTH)
     {
-        Set_Track_Zoom(Track_Nbr, TRACK_MEDIUM);
+        Set_Track_Zoom(ptk, Track_Nbr, TRACK_MEDIUM);
     }
-    if(Get_Track_Zoom(Track_Nbr) == TRACK_MEDIUM && Get_Track_Real_Size(Track_Nbr) >= ptk.TRACKS_WIDTH)
+    if(Get_Track_Zoom(ptk, Track_Nbr) == TRACK_MEDIUM && Get_Track_Real_Size(ptk, Track_Nbr) >= ptk->TRACKS_WIDTH)
     {
-        Set_Track_Zoom(Track_Nbr, TRACK_SMALL);
+        Set_Track_Zoom(ptk, Track_Nbr, TRACK_SMALL);
     }
 }
 
 // ------------------------------------------------------
 // Add a given amount of effects to a track
-void Track_Add_Effects(int Track_Nbr, int Amount)
+void Track_Add_Effects(ptk_data *ptk, int Track_Nbr, int Amount)
 {
     Channels_Effects[Track_Nbr] += Amount;
     if(Channels_Effects[Track_Nbr] > MAX_FX)
     {
         Channels_Effects[Track_Nbr] = MAX_FX;
     }
-    if(Get_Track_Zoom(Track_Nbr) == TRACK_LARGE && Get_Track_Real_Size(Track_Nbr) >= ptk.TRACKS_WIDTH)
+    if(Get_Track_Zoom(ptk, Track_Nbr) == TRACK_LARGE && Get_Track_Real_Size(ptk, Track_Nbr) >= ptk->TRACKS_WIDTH)
     {
-        Set_Track_Zoom(Track_Nbr, TRACK_MEDIUM);
+        Set_Track_Zoom(ptk, Track_Nbr, TRACK_MEDIUM);
     }
-    if(Get_Track_Zoom(Track_Nbr) == TRACK_MEDIUM && Get_Track_Real_Size(Track_Nbr) >= ptk.TRACKS_WIDTH)
+    if(Get_Track_Zoom(ptk, Track_Nbr) == TRACK_MEDIUM && Get_Track_Real_Size(ptk, Track_Nbr) >= ptk->TRACKS_WIDTH)
     {
-        Set_Track_Zoom(Track_Nbr, TRACK_SMALL);
+        Set_Track_Zoom(ptk, Track_Nbr, TRACK_SMALL);
     }
 }
 
 // ------------------------------------------------------
 // Remove a given amount of effects from a track
-void Track_Sub_Effects(int Track_Nbr, int Amount)
+void Track_Sub_Effects(ptk_data *ptk, int Track_Nbr, int Amount)
 {
     Channels_Effects[Track_Nbr] -= Amount;
     if(Channels_Effects[Track_Nbr] < 1) Channels_Effects[Track_Nbr] = 1;
-    if(Get_Track_Zoom(Track_Nbr) == TRACK_LARGE && Get_Track_Real_Size(Track_Nbr) >= ptk.TRACKS_WIDTH)
+    if(Get_Track_Zoom(ptk, Track_Nbr) == TRACK_LARGE && Get_Track_Real_Size(ptk, Track_Nbr) >= ptk->TRACKS_WIDTH)
     {
-        Set_Track_Zoom(Track_Nbr, TRACK_MEDIUM);
+        Set_Track_Zoom(ptk, Track_Nbr, TRACK_MEDIUM);
     }
-    if(Get_Track_Zoom(Track_Nbr) == TRACK_MEDIUM && Get_Track_Real_Size(Track_Nbr) >= ptk.TRACKS_WIDTH)
+    if(Get_Track_Zoom(ptk, Track_Nbr) == TRACK_MEDIUM && Get_Track_Real_Size(ptk, Track_Nbr) >= ptk->TRACKS_WIDTH)
     {
-        Set_Track_Zoom(Track_Nbr, TRACK_SMALL);
+        Set_Track_Zoom(ptk, Track_Nbr, TRACK_SMALL);
     }
 }

@@ -37,6 +37,7 @@
 #include "tb_303.h"
 #include "cubic_spline.h"
 #include "spline.h"
+#include "../../../include/ptk_data.h"
 #if defined(__WIN32__)
 #include "../sounddriver/include/sounddriver_windows.h"
 #elif defined(__LINUX__)
@@ -495,7 +496,8 @@ float Mas_Compressor_Track(int Track, float input, float *rms_sum, float *Buffer
 float Do_RMS(float input, float *rms_sum, float *buffer);
 #endif
 int Get_Free_Sub_Channel(int channel, int polyphony);
-int Get_Pattern_Offset(int pattern, int track, int row);
+/*TODO: why is this defined twice? see editor_pattern.h */
+int Get_Pattern_Offset(ptk_data *ptk, int pattern, int track, int row);
 void InitRevervbFilter(void);
 void Set_Spline_Boundaries(unsigned int Position,
                            unsigned int *Boundaries,
