@@ -97,8 +97,6 @@ char Current_Instrument_Split = 0;
 
 int player_pos = -1;
 
-int retletter[256];
-int tretletter = 0;
 int posletter = 0;
 int last_index = -1;
 int gui_action = GUI_CMD_NOP;
@@ -1150,9 +1148,9 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SELECT_DISKIO_EDIT)
         {
-            retletter[71] = TRUE;
-            Actualize_Input();
-            retletter[71] = FALSE;
+            ptk->retletter[71] = TRUE;
+            Actualize_Input(ptk);
+            ptk->retletter[71] = FALSE;
             userscreen = USER_SCREEN_DISKIO_EDIT;
             Draw_DiskIO_Ed(ptk);
             Actualize_DiskIO_Ed(ptk, 0);
@@ -1160,9 +1158,9 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SELECT_REVERB_EDIT)
         {
-            retletter[71] = TRUE;
-            Actualize_Input();
-            retletter[71] = FALSE;
+            ptk->retletter[71] = TRUE;
+            Actualize_Input(ptk);
+            ptk->retletter[71] = FALSE;
             userscreen = USER_SCREEN_REVERB_EDIT;
             Draw_Reverb_Ed(ptk);
             Actualize_Reverb_Ed(ptk, 0);
@@ -1170,9 +1168,9 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SELECT_TRACK_EDIT)
         {
-            retletter[71] = TRUE;
-            Actualize_Input();
-            retletter[71] = FALSE;
+            ptk->retletter[71] = TRUE;
+            Actualize_Input(ptk);
+            ptk->retletter[71] = FALSE;
             userscreen = USER_SCREEN_TRACK_EDIT;
             Draw_Track_Ed(ptk);
             Actualize_Track_Ed(ptk, 0);
@@ -1180,9 +1178,9 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SELECT_INSTRUMENT_EDIT)
         {
-            retletter[71] = TRUE;
-            Actualize_Input();
-            retletter[71] = FALSE;
+            ptk->retletter[71] = TRUE;
+            Actualize_Input(ptk);
+            ptk->retletter[71] = FALSE;
             userscreen = USER_SCREEN_INSTRUMENT_EDIT;
             Draw_Instrument_Ed(ptk);
             Actualize_Instrument_Ed(ptk, 2, 0);
@@ -1190,9 +1188,9 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SELECT_FX_EDIT)
         {
-            retletter[71] = TRUE;
-            Actualize_Input();
-            retletter[71] = FALSE;
+            ptk->retletter[71] = TRUE;
+            Actualize_Input(ptk);
+            ptk->retletter[71] = FALSE;
             userscreen = USER_SCREEN_FX_SETUP_EDIT;
             Draw_Fx_Ed(ptk);
             Actualize_Fx_Ed(ptk, teac);
@@ -1200,9 +1198,9 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SELECT_SEQUENCER)
         {
-            retletter[71] = TRUE;
-            Actualize_Input();
-            retletter[71] = FALSE;
+            ptk->retletter[71] = TRUE;
+            Actualize_Input(ptk);
+            ptk->retletter[71] = FALSE;
             userscreen = USER_SCREEN_SEQUENCER;
             Draw_Sequencer_Ed(ptk);
             Actualize_Seq_Ed(ptk, 0);
@@ -1210,9 +1208,9 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SELECT_SCREEN_SETUP_EDIT)
         {
-            retletter[71] = TRUE;
-            Actualize_Input();
-            retletter[71] = FALSE;
+            ptk->retletter[71] = TRUE;
+            Actualize_Input(ptk);
+            ptk->retletter[71] = FALSE;
             userscreen = USER_SCREEN_SETUP_EDIT;
             Draw_Master_Ed(ptk);
             Actualize_Master_Ed(ptk, 0);
@@ -1220,9 +1218,9 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SELECT_MIDI_SETUP)
         {
-            //retletter[71] = TRUE;
-            //Actualize_Input();
-            //retletter[71] = FALSE;
+            //ptk->retletter[71] = TRUE;
+            //Actualize_Input(ptk);
+            //ptk->retletter[71] = FALSE;
             //userscreen = USER_SCREEN_SETUP_MIDI;
             //Draw_Midi_Ed(ptk);
             //Actualize_Midi_Ed(ptk, 0);
@@ -1230,9 +1228,9 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SELECT_SYNTH_EDIT)
         {
-            retletter[71] = TRUE;
-            Actualize_Input();
-            retletter[71] = FALSE;
+            ptk->retletter[71] = TRUE;
+            Actualize_Input(ptk);
+            ptk->retletter[71] = FALSE;
             userscreen = USER_SCREEN_SYNTH_EDIT;
             Draw_Synth_Ed(ptk);
             Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_ALL);
@@ -1240,9 +1238,9 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SELECT_TRACK_FX_EDIT)
         {
-            retletter[71] = TRUE;
-            Actualize_Input();
-            retletter[71] = FALSE;
+            ptk->retletter[71] = TRUE;
+            Actualize_Input(ptk);
+            ptk->retletter[71] = FALSE;
             userscreen = USER_SCREEN_TRACK_FX_EDIT;
             Draw_Track_Fx_Ed(ptk);
             Actualize_Track_Fx_Ed(ptk, teac);
@@ -1250,9 +1248,9 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SELECT_SAMPLE_EDIT)
         {
-            retletter[71] = TRUE;
-            Actualize_Input();
-            retletter[71] = FALSE;
+            ptk->retletter[71] = TRUE;
+            Actualize_Input(ptk);
+            ptk->retletter[71] = FALSE;
             userscreen = USER_SCREEN_SAMPLE_EDIT;
             Draw_Sample_Ed(ptk);
             Actualize_Sample_Ed(ptk, 0);
@@ -1260,9 +1258,9 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SELECT_TB303_EDIT)
         {
-            retletter[71] = TRUE;
-            Actualize_Input();
-            retletter[71] = FALSE;
+            ptk->retletter[71] = TRUE;
+            Actualize_Input(ptk);
+            ptk->retletter[71] = FALSE;
             userscreen = USER_SCREEN_TB303_EDIT;
             Draw_303_Ed(ptk);
         }
@@ -3131,65 +3129,65 @@ Uint32 Timer_CallBack(Uint32 interval, void *param)
 
 // ------------------------------------------------------
 // Validate or cancel an user input
-void Actualize_Input(void)
+void Actualize_Input(ptk_data *ptk)
 {
     switch(snamesel)
     {
         // Module name
         case INPUT_MODULE_NAME:
-            Actualize_Name(retletter, name);
+            Actualize_Name(ptk->retletter, name);
             gui_action = GUI_CMD_UPDATE_DISKIO_ED;
             break;
 
         // Instrument name
         case INPUT_INSTRUMENT_NAME:
-            Actualize_Name(retletter, nameins[Current_Instrument]);
+            Actualize_Name(ptk->retletter, nameins[Current_Instrument]);
             gui_action = GUI_CMD_UPDATE_PATTERN_ED;
             break;
 
         // Synth name
         case INPUT_SYNTH_NAME:
-            Actualize_Name(retletter, PARASynth[Current_Instrument].presetname);
+            Actualize_Name(ptk->retletter, PARASynth[Current_Instrument].presetname);
             teac = UPDATE_SYNTH_CHANGE_NAME;
             gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             break;
 
         // Module artist
         case INPUT_MODULE_ARTIST:
-            Actualize_Name(retletter, artist);
+            Actualize_Name(ptk->retletter, artist);
             gui_action = GUI_CMD_UPDATE_DISKIO_ED;
             break;
 
         // Module style
         case INPUT_MODULE_STYLE:
-            Actualize_Name(retletter, style);
+            Actualize_Name(ptk->retletter, style);
             gui_action = GUI_CMD_UPDATE_DISKIO_ED;
             break;
 
         // 303 pattern
         case INPUT_303_PATTERN:
-            Actualize_Name(retletter, tb303[sl3].pattern_name[tb303[sl3].selectedpattern]);
+            Actualize_Name(ptk->retletter, tb303[sl3].pattern_name[tb303[sl3].selectedpattern]);
             teac = 18;
             gui_action = GUI_CMD_UPDATE_MIDI_303_ED;
             break;
 
         // Reverb
         case INPUT_REVERB_NAME:
-            Actualize_Name(retletter, Reverb_Name);
+            Actualize_Name(ptk->retletter, Reverb_Name);
             teac = UPDATE_REVERB_ED_CHANGE_NAME;
             gui_action = GUI_CMD_UPDATE_REVERB_ED;
             break;
 
         // Selection
         case INPUT_SELECTION_NAME:
-            Actualize_Name(retletter, Selection_Name);
+            Actualize_Name(ptk->retletter, Selection_Name);
             teac = 3;
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
             break;
 
         // Reverb
         case INPUT_MIDI_NAME:
-            Actualize_Name(retletter, Midi_Name);
+            Actualize_Name(ptk->retletter, Midi_Name);
             teac = UPDATE_MIDI_ED_CHANGE_NAME;
             gui_action = GUI_CMD_UPDATE_MIDI_ED;
             break;
@@ -3562,421 +3560,421 @@ void Keyboard_Handler(ptk_data *ptk)
     {
         if(Keys[SDLK_a])
         {
-            retletter[1] = TRUE;
+            ptk->retletter[1] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_b])
         {
-            retletter[2] = TRUE;
+            ptk->retletter[2] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_c])
         {
-            retletter[3] = TRUE;
+            ptk->retletter[3] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_d])
         {
-            retletter[4] = TRUE;
+            ptk->retletter[4] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_e])
         {
-            retletter[5] = TRUE;
+            ptk->retletter[5] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_f])
         {
-            retletter[6] = TRUE;
+            ptk->retletter[6] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_g])
         {
-            retletter[7] = TRUE;
+            ptk->retletter[7] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_h])
         {
-            retletter[8] = TRUE;
+            ptk->retletter[8] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_i])
         {
-            retletter[9] = TRUE;
+            ptk->retletter[9] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_j])
         {
-            retletter[10] = TRUE;
+            ptk->retletter[10] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_k])
         {
-            retletter[11] = TRUE;
+            ptk->retletter[11] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_l])
         {
-            retletter[12] = TRUE;
+            ptk->retletter[12] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_m])
         {
-            retletter[13] = TRUE;
+            ptk->retletter[13] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_n])
         {
-            retletter[14] = TRUE;
+            ptk->retletter[14] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_o])
         {
-            retletter[15] = TRUE;
+            ptk->retletter[15] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_p])
         {
-            retletter[16] = TRUE;
+            ptk->retletter[16] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_q])
         {
-            retletter[17] = TRUE;
+            ptk->retletter[17] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_r])
         {
-            retletter[18] = TRUE;
+            ptk->retletter[18] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_s])
         {
-            retletter[19] = TRUE;
+            ptk->retletter[19] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_t])
         {
-            retletter[20] = TRUE;
+            ptk->retletter[20] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_u])
         {
-            retletter[21] = TRUE;
+            ptk->retletter[21] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_v])
         {
-            retletter[22] = TRUE;
+            ptk->retletter[22] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_w])
         {
-            retletter[23] = TRUE;
+            ptk->retletter[23] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_x])
         {
-            retletter[24] = TRUE;
+            ptk->retletter[24] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_y])
         {
-            retletter[25] = TRUE;
+            ptk->retletter[25] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_z])
         {
-            retletter[26] = TRUE;
+            ptk->retletter[26] = TRUE;
             reelletter = TRUE;
         }
 
         if(Keys['A'])
         {
-            retletter[41] = TRUE;
+            ptk->retletter[41] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['B'])
         {
-            retletter[42] = TRUE;
+            ptk->retletter[42] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['C'])
         {
-            retletter[43] = TRUE;
+            ptk->retletter[43] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['D'])
         {
-            retletter[44] = TRUE;
+            ptk->retletter[44] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['E'])
         {
-            retletter[45] = TRUE;
+            ptk->retletter[45] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['F'])
         {
-            retletter[46] = TRUE;
+            ptk->retletter[46] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['G'])
         {
-            retletter[47] = TRUE;
+            ptk->retletter[47] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['H'])
         {
-            retletter[48] = TRUE;
+            ptk->retletter[48] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['I'])
         {
-            retletter[49] = TRUE;
+            ptk->retletter[49] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['J'])
         {
-            retletter[50] = TRUE;
+            ptk->retletter[50] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['K'])
         {
-            retletter[51] = TRUE;
+            ptk->retletter[51] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['L'])
         {
-            retletter[52] = TRUE;
+            ptk->retletter[52] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['M'])
         {
-            retletter[53] = TRUE;
+            ptk->retletter[53] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['N'])
         {
-            retletter[54] = TRUE;
+            ptk->retletter[54] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['O'])
         {
-            retletter[55] = TRUE;
+            ptk->retletter[55] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['P'])
         {
-            retletter[56] = TRUE;
+            ptk->retletter[56] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['Q'])
         {
-            retletter[57] = TRUE;
+            ptk->retletter[57] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['R'])
         {
-            retletter[58] = TRUE;
+            ptk->retletter[58] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['S'])
         {
-            retletter[59] = TRUE;
+            ptk->retletter[59] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['T'])
         {
-            retletter[60] = TRUE;
+            ptk->retletter[60] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['U'])
         {
-            retletter[61] = TRUE;
+            ptk->retletter[61] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['V'])
         {
-            retletter[62] = TRUE;
+            ptk->retletter[62] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['W'])
         {
-            retletter[63] = TRUE;
+            ptk->retletter[63] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['X'])
         {
-            retletter[64] = TRUE;
+            ptk->retletter[64] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['Y'])
         {
-            retletter[65] = TRUE;
+            ptk->retletter[65] = TRUE;
             reelletter = TRUE;
         }
         if(Keys['Z'])
         {
-            retletter[66] = TRUE;
+            ptk->retletter[66] = TRUE;
             reelletter = TRUE;
         }
 
         if(Keys[SDLK_KP0])
         {
-            retletter[27] = TRUE;
+            ptk->retletter[27] = TRUE;
             reelletter = TRUE;
         }
         if(Keys_Unicode['0'])
         {
-            retletter[27] = TRUE;
+            ptk->retletter[27] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_KP1])
         {
-            retletter[28] = TRUE;
+            ptk->retletter[28] = TRUE;
             reelletter = TRUE;
         }
         if(Keys_Unicode['1'])
         {
-            retletter[28] = TRUE;
+            ptk->retletter[28] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_KP2])
         {
-            retletter[29] = TRUE;
+            ptk->retletter[29] = TRUE;
             reelletter = TRUE;
         }
         if(Keys_Unicode['2'])
         {
-            retletter[29] = TRUE;
+            ptk->retletter[29] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_KP3])
         {
-            retletter[30] = TRUE;
+            ptk->retletter[30] = TRUE;
             reelletter = TRUE;
         }
         if(Keys_Unicode['3'])
         {
-            retletter[30] = TRUE;
+            ptk->retletter[30] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_KP4])
         {
-            retletter[31] = TRUE;
+            ptk->retletter[31] = TRUE;
             reelletter = TRUE;
         }
         if(Keys_Unicode['4'])
         {
-            retletter[31] = TRUE;
+            ptk->retletter[31] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_KP5])
         {
-            retletter[32] = TRUE;
+            ptk->retletter[32] = TRUE;
             reelletter = TRUE;
         }
         if(Keys_Unicode['5'])
         {
-            retletter[32] = TRUE;
+            ptk->retletter[32] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_KP6])
         {
-            retletter[33] = TRUE;
+            ptk->retletter[33] = TRUE;
             reelletter = TRUE;
         }
         if(Keys_Unicode['6'])
         {
-            retletter[33] = TRUE;
+            ptk->retletter[33] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_KP7])
         {
-            retletter[34] = TRUE;
+            ptk->retletter[34] = TRUE;
             reelletter = TRUE;
         }
         if(Keys_Unicode['7'])
         {
-            retletter[34] = TRUE;
+            ptk->retletter[34] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_KP8])
         {
-            retletter[35] = TRUE;
+            ptk->retletter[35] = TRUE;
             reelletter = TRUE;
         }
         if(Keys_Unicode['8'])
         {
-            retletter[35] = TRUE;
+            ptk->retletter[35] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_KP9])
         {
-            retletter[36] = TRUE;
+            ptk->retletter[36] = TRUE;
             reelletter = TRUE;
         }
         if(Keys_Unicode['9'])
         {
-            retletter[36] = TRUE;
+            ptk->retletter[36] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_BACKSPACE])
         {
-            retletter[37] = TRUE;
+            ptk->retletter[37] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_SPACE])
         {
-            retletter[38] = TRUE;
+            ptk->retletter[38] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_RETURN])
         {
-            retletter[39] = TRUE;
+            ptk->retletter[39] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_KP_ENTER])
         {
-            retletter[39] = TRUE;
+            ptk->retletter[39] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_PERIOD])
         {
-            retletter[40] = TRUE;
+            ptk->retletter[40] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_COMMA])
         {
-            retletter[67] = TRUE;
+            ptk->retletter[67] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_SLASH])
         {
-            retletter[68] = TRUE;
+            ptk->retletter[68] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_MINUS])
         {
-            retletter[69] = TRUE;
+            ptk->retletter[69] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_EQUALS])
         {
-            retletter[70] = TRUE;
+            ptk->retletter[70] = TRUE;
             reelletter = TRUE;
         }
         if(Keys[SDLK_ESCAPE])
         {
-            retletter[71] = TRUE;
+            ptk->retletter[71] = TRUE;
             reelletter = TRUE;
         }
     }
 
     if(reelletter)
     {
-        Actualize_Input();
+        Actualize_Input(ptk);
     }
     // -------------------------------------------
 

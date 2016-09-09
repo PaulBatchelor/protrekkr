@@ -471,7 +471,7 @@ void Actualize_Master(ptk_data *ptk, char gode);
 void Display_Master_Comp(void);
 void Display_Master_Volume(void);
 void Display_Shuffle(void);
-void Actualize_Input(void);
+void Actualize_Input(ptk_data *ptk);
 void Draw_Scope(ptk_data *ptk);
 int Init_Scopes_Buffers(void);
 

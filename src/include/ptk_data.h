@@ -31,5 +31,7 @@ typedef struct {
     int ctipoftheday;
     char sas;
     int ltretvalue;
+
+    int retletter[256];
 } ptk_data;
 #endif
