@@ -1864,8 +1864,7 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
 
     const char *FileName = str;
 
-    if(FileName != NULL && (in = fopen(FileName, "rb")) != NULL)
-    {
+    if(FileName != NULL && (in = fopen(FileName, "rb")) != NULL) {
         char extension[10];
         int extension_AIFF[3];
         char extension_digi[21];
@@ -1893,26 +1892,22 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
 
         // Look for sound/noise/star/protracker module
         found_mod = 0;
-        for(i = 0; i < sizeof(mt_tags) / sizeof(int); i++)
-        {
-            if(Swap_32(mt_tags[i]) == modext)
-            {
+        for(i = 0; i < sizeof(mt_tags) / sizeof(int); i++) {
+            if(Swap_32(mt_tags[i]) == modext) {
                 found_mod = mt_channels[i];
                 break;
             }
         }
         
         // Look for a digibooster v1.x module
-        if(strcmp(extension_digi, "DIGI Booster module") == 0)
-        {
+        if(strcmp(extension_digi, "DIGI Booster module") == 0) {
             digibooster = TRUE;
             // Retrieve the number of channels
             fseek(in, 25, SEEK_SET);
             fread(&found_mod, sizeof(char), 1, in);
         }
 
-        if(found_mod)
-        {
+        if(found_mod) {
             sprintf(name, "%s", FileName);
             // name / number of channels
             SongStop(ptk);
