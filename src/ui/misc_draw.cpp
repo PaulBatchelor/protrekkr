@@ -1641,10 +1641,10 @@ void Refresh_UI_Context(ptk_data *ptk)
             Draw_Instrument_Ed(ptk);
             break;
         case USER_SCREEN_SEQUENCER:
-            Draw_Sequencer_Ed();
+            Draw_Sequencer_Ed(ptk);
             break;
         case USER_SCREEN_TRACK_EDIT:
-            Draw_Track_Ed();
+            Draw_Track_Ed(ptk);
             break;
         case USER_SCREEN_SETUP_EDIT:
             Draw_Master_Ed(ptk);
@@ -1659,13 +1659,13 @@ void Refresh_UI_Context(ptk_data *ptk)
             Draw_Sample_Ed(ptk);
             break;
         case USER_SCREEN_FX_SETUP_EDIT:
-            Draw_Fx_Ed();
+            Draw_Fx_Ed(ptk);
             break;
         case USER_SCREEN_TRACK_FX_EDIT:
             Draw_Track_Fx_Ed(ptk);
             break;
         case USER_SCREEN_LARGE_PATTERN:
-            Draw_Editors_Bar(USER_SCREEN_LARGE_PATTERN);
+            Draw_Editors_Bar(ptk, USER_SCREEN_LARGE_PATTERN);
             break;
     }
     seditor = 0;
@@ -1683,7 +1683,7 @@ void Refresh_UI_Context(ptk_data *ptk)
     Actualize_Master(ptk, 4);
 
     Actualize_Seq_Ed(ptk, 0);
-    Actualize_Track_Ed(0);
+    Actualize_Track_Ed(ptk, 0);
     Actualize_Master_Ed(ptk, 0);
     Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_ALL);
     Actualize_Sample_Ed(ptk, 0);
@@ -1839,7 +1839,7 @@ void bjbox(int x, int y, int sx, int sy)
 
 // ------------------------------------------------------
 // Display a status message at the bottom of the screen
-void Status_Box(ptk, ptk_data *ptk, char const *str)
+void Status_Box(ptk_data *ptk, char const *str)
 {
     Gui_Draw_Button_Box(0, ptk->CONSOLE_HEIGHT - 21, fsize, 18, str, BUTTON_NORMAL | BUTTON_DISABLED);
 }

@@ -108,7 +108,7 @@ void Draw_Reverb_Ed(ptk_data *ptk)
 {
     //Gadgets_Reverb.Create_List(Gadgets_Reverb_List, &Reverb_IDs);
 
-    Draw_Editors_Bar(USER_SCREEN_REVERB_EDIT);
+    Draw_Editors_Bar(ptk, USER_SCREEN_REVERB_EDIT);
 
     Gui_Draw_Button_Box(0, (Cur_Height - 153), fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
     Gui_Draw_Flat_Box("Reverb customizer");

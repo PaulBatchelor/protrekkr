@@ -62,7 +62,7 @@ void Display_Cur_copy_Buffer(void);
 
 void Draw_303_Ed(ptk_data *ptk)
 {
-    Draw_Editors_Bar(USER_SCREEN_TB303_EDIT);
+    Draw_Editors_Bar(ptk, USER_SCREEN_TB303_EDIT);
 
     Gui_Draw_Button_Box(0, (Cur_Height - 153), fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
     Gui_Draw_Flat_Box("303 Units");

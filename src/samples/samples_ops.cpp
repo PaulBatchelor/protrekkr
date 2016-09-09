@@ -49,7 +49,7 @@ extern short *Player_WR[MAX_TRACKS][MAX_POLYPHONY];
 
 // ------------------------------------------------------
 // Rotate a selection to the left by a given amount
-int Sample_Rotate_Left(int32 range_start, int32 range_end, int amount)
+int Sample_Rotate_Left(ptk_data *ptk, int32 range_start, int32 range_end, int amount)
 {
     int32 i;
     int j;
@@ -88,7 +88,7 @@ int Sample_Rotate_Left(int32 range_start, int32 range_end, int amount)
 
 // ------------------------------------------------------
 // Rotate a selection to the right by a given amount
-int Sample_Rotate_Right(int32 range_start, int32 range_end, int amount)
+int Sample_Rotate_Right(ptk_data *ptk, int32 range_start, int32 range_end, int amount)
 {
     int32 i;
     int j;
@@ -127,7 +127,7 @@ int Sample_Rotate_Right(int32 range_start, int32 range_end, int amount)
 
 // ------------------------------------------------------
 // Swap the data of a selection
-int Sample_Reverse(int32 range_start, int32 range_end)
+int Sample_Reverse(ptk_data *ptk, int32 range_start, int32 range_end)
 {
     int32 i;
     short sample;
@@ -163,7 +163,7 @@ int Sample_Reverse(int32 range_start, int32 range_end)
 
 // ------------------------------------------------------
 // Convert a selection into a whole sample
-int Sample_Crop(int32 range_start, int32 range_end)
+int Sample_Crop(ptk_data *ptk, int32 range_start, int32 range_end)
 {
     int32 i;
     short *NewBuffer[2];
@@ -223,7 +223,7 @@ int Sample_Crop(int32 range_start, int32 range_end)
 
 // ------------------------------------------------------
 // Copy part of a sample
-int Sample_Copy(int32 range_start, int32 range_end)
+int Sample_Copy(ptk_data *ptk, int32 range_start, int32 range_end)
 {
     int i;
     short *dest_mono;
@@ -272,7 +272,7 @@ int Sample_Copy(int32 range_start, int32 range_end)
 
 // ------------------------------------------------------
 // Paste a back buffer into a sample
-int Sample_Paste(int32 range_start)
+int Sample_Paste(ptk_data *ptk, int32 range_start)
 {
     int32 i;
     short *NewBuffer[2];
@@ -357,7 +357,7 @@ int Sample_Paste(int32 range_start)
 
 // ------------------------------------------------------
 // Cut part of a sample
-int Sample_Cut(int32 range_start, int32 range_end, int do_copy)
+int Sample_Cut(ptk_data *ptk, int32 range_start, int32 range_end, int do_copy)
 {
     int32 i;
     short *NewBuffer[2];
@@ -390,7 +390,7 @@ int Sample_Cut(int32 range_start, int32 range_end, int do_copy)
 
         if(do_copy)
         {
-            if(!Sample_Copy(range_start, range_end))
+            if(!Sample_Copy(ptk, range_start, range_end))
             {
                 free(NewBuffer[1]);
                 free(NewBuffer[0]);
@@ -453,7 +453,7 @@ int Sample_Cut(int32 range_start, int32 range_end, int do_copy)
 
 // ------------------------------------------------------
 // Adjust DC of a sample
-void Sample_DC_Adjust(int32 range_start, int32 range_end)
+void Sample_DC_Adjust(ptk_data *ptk, int32 range_start, int32 range_end)
 {
     int32 i;
     char nc = SampleChannels[Current_Instrument][Current_Instrument_Split];
@@ -495,7 +495,7 @@ void Sample_DC_Adjust(int32 range_start, int32 range_end)
 
 // ------------------------------------------------------
 // Maximize a sample
-void Sample_Maximize(int32 range_start, int32 range_end)
+void Sample_Maximize(ptk_data *ptk, int32 range_start, int32 range_end)
 {
     int32 i;
     char nc = SampleChannels[Current_Instrument][Current_Instrument_Split];
@@ -544,7 +544,7 @@ void Sample_Maximize(int32 range_start, int32 range_end)
 
 // ------------------------------------------------------
 // Zeroize a sample
-void Sample_Zeroize(int32 range_start, int32 range_end)
+void Sample_Zeroize(ptk_data *ptk, int32 range_start, int32 range_end)
 {
     int32 i;
     char nc = SampleChannels[Current_Instrument][Current_Instrument_Split];
@@ -564,7 +564,7 @@ void Sample_Zeroize(int32 range_start, int32 range_end)
 
 // ------------------------------------------------------
 // Fade a sample in
-void Sample_FadeIn(int32 range_start, int32 range_end)
+void Sample_FadeIn(ptk_data *ptk, int32 range_start, int32 range_end)
 {
     int i;
     char nc = SampleChannels[Current_Instrument][Current_Instrument_Split];
@@ -598,7 +598,7 @@ void Sample_FadeIn(int32 range_start, int32 range_end)
 
 // ------------------------------------------------------
 // Fade a sample out
-void Sample_FadeOut(int32 range_start, int32 range_end)
+void Sample_FadeOut(ptk_data *ptk, int32 range_start, int32 range_end)
 {
     int32 i;
     Status_Box(ptk, "Fade Out Selection...");
@@ -636,7 +636,7 @@ void Sample_FadeOut(int32 range_start, int32 range_end)
 
 // ------------------------------------------------------
 // Half a sample
-void Sample_Half(int32 range_start, int32 range_end)
+void Sample_Half(ptk_data *ptk, int32 range_start, int32 range_end)
 {
     int32 i;
 
@@ -664,7 +664,7 @@ void Sample_Half(int32 range_start, int32 range_end)
 
 // ------------------------------------------------------
 // Duplicate the current selection
-int Sample_Duplicate(int32 range_start, int32 range_end)
+int Sample_Duplicate(ptk_data *ptk, int32 range_start, int32 range_end)
 {
     int32 i;
     short *NewBuffer[2];
@@ -749,7 +749,7 @@ int Sample_Duplicate(int32 range_start, int32 range_end)
 
 // ------------------------------------------------------
 // Insert zeroes into a sample the length of the selection buffer
-int Sample_InsertZero(int32 range_start, int32 range_end)
+int Sample_InsertZero(ptk_data *ptk, int32 range_start, int32 range_end)
 {
     int32 i;
     short *NewBuffer[2];

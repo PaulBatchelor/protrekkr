@@ -550,7 +550,7 @@ int Init_Context(ptk_data *ptk)
     }
 
     Set_Default_Channels_Polyphony();
-    init_sample_bank();
+    init_sample_bank(ptk);
     Pre_Song_Init(ptk);
     Post_Song_Init(ptk);
 
@@ -774,10 +774,10 @@ int Screen_Update(ptk_data *ptk)
                     case _A_FILE:
                         Actualize_Files_List(ptk, 1);
 #if defined(__WIN32__)
-                        PlaySound(Get_FileName(lt_curr[ptk->Scopish]), NULL, SND_FILENAME | SND_ASYNC);
+                        PlaySound(Get_FileName(ptk, lt_curr[ptk->Scopish]), NULL, SND_FILENAME | SND_ASYNC);
 #endif
 #if defined(__MACOSX__)
-                        if(FSPathMakeRef((Uint8 *) Get_FileName(lt_curr[ptk->Scopish]), &soundFileRef, NULL) == noErr)
+                        if(FSPathMakeRef((Uint8 *) Get_FileName(ptk, lt_curr[ptk->Scopish]), &soundFileRef, NULL) == noErr)
                         {
                             SystemSoundGetActionID(&soundFileRef, &WavActionID);
                             SystemSoundSetCompletionRoutine(WavActionID,
@@ -969,7 +969,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SWITCH_TRACK_MUTE_STATE)
         {
-            int tmp_track = Get_Track_Over_Mouse(Mouse.x, NULL, FALSE);
+            int tmp_track = Get_Track_Over_Mouse(ptk, Mouse.x, NULL, FALSE);
 
             if(CHAN_MUTE_STATE[tmp_track] == 0) CHAN_MUTE_STATE[tmp_track] = 1;
             else CHAN_MUTE_STATE[tmp_track] = 0;
@@ -980,47 +980,47 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SWITCH_TRACK_LARGE_STATE)
         {
-            Toggle_Track_Zoom(ptk, Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), TRUE);
+            Toggle_Track_Zoom(ptk, Get_Track_Over_Mouse(ptk, Mouse.x, NULL, FALSE), TRUE);
             Actupated(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_SWITCH_TRACK_SMALL_STATE)
         {
-            Toggle_Track_Zoom(ptk, Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), FALSE);
+            Toggle_Track_Zoom(ptk, Get_Track_Over_Mouse(ptk, Mouse.x, NULL, FALSE), FALSE);
             Actupated(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_REDUCE_TRACK_NOTES)
         {
-            Track_Sub_Notes(ptk, Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), 1);
+            Track_Sub_Notes(ptk, Get_Track_Over_Mouse(ptk, Mouse.x, NULL, FALSE), 1);
             Actupated(ptk, 0);
             Actualize_Track_Ed(ptk, 14);
         }
 
         if(gui_action == GUI_CMD_EXPAND_TRACK_NOTES)
         {
-            Track_Add_Notes(ptk, Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), 1);
+            Track_Add_Notes(ptk, Get_Track_Over_Mouse(ptk, Mouse.x, NULL, FALSE), 1);
             Actupated(ptk, 0);
             Actualize_Track_Ed(ptk, 14);
         }
 
         if(gui_action == GUI_CMD_REDUCE_TRACK_EFFECTS)
         {
-            Track_Sub_Effects(ptk, Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), 1);
+            Track_Sub_Effects(ptk, Get_Track_Over_Mouse(ptk, Mouse.x, NULL, FALSE), 1);
             Actupated(ptk, 0);
             Actualize_Track_Ed(ptk, 14);
         }
 
         if(gui_action == GUI_CMD_EXPAND_TRACK_EFFECTS)
         {
-            Track_Add_Effects(ptk, Get_Track_Over_Mouse(Mouse.x, NULL, FALSE), 1);
+            Track_Add_Effects(ptk, Get_Track_Over_Mouse(ptk, Mouse.x, NULL, FALSE), 1);
             Actupated(ptk, 0);
             Actualize_Track_Ed(ptk, 14);
         }
 
         if(gui_action == GUI_CMD_PLAY_SONG)
         {
-            SongPlay();
+            SongPlay(ptk);
         }
 
         if(gui_action == GUI_CMD_STOP_SONG)
@@ -1148,7 +1148,7 @@ int Screen_Update(ptk_data *ptk)
                 Set_Pattern_Size(ptk);
                 Draw_Pattern_Right_Stuff(ptk);
                 Actupated(ptk, 0);
-                Draw_Editors_Bar(USER_SCREEN_LARGE_PATTERN);
+                Draw_Editors_Bar(ptk, USER_SCREEN_LARGE_PATTERN);
             }
             else
             {
@@ -1157,7 +1157,7 @@ int Screen_Update(ptk_data *ptk)
                 Set_Pattern_Size(ptk);
                 Draw_Pattern_Right_Stuff(ptk);
                 Actupated(ptk, 0);
-                Draw_Editors_Bar(-1);
+                Draw_Editors_Bar(ptk, -1);
                 Refresh_UI_Context(ptk);
             }
         }
@@ -1188,7 +1188,7 @@ int Screen_Update(ptk_data *ptk)
             Actualize_Input();
             retletter[71] = FALSE;
             userscreen = USER_SCREEN_TRACK_EDIT;
-            Draw_Track_Ed();
+            Draw_Track_Ed(ptk);
             Actualize_Track_Ed(ptk, 0);
         }
 
@@ -1208,7 +1208,7 @@ int Screen_Update(ptk_data *ptk)
             Actualize_Input();
             retletter[71] = FALSE;
             userscreen = USER_SCREEN_FX_SETUP_EDIT;
-            Draw_Fx_Ed();
+            Draw_Fx_Ed(ptk);
             Actualize_Fx_Ed(ptk, teac);
         }
 
@@ -1218,7 +1218,7 @@ int Screen_Update(ptk_data *ptk)
             Actualize_Input();
             retletter[71] = FALSE;
             userscreen = USER_SCREEN_SEQUENCER;
-            Draw_Sequencer_Ed();
+            Draw_Sequencer_Ed(ptk);
             Actualize_Seq_Ed(ptk, 0);
         }
 
@@ -1362,7 +1362,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_MODULE_INFOS)
         {
-            ShowInfo();
+            ShowInfo(ptk);
         }
 
         if(gui_action == GUI_CMD_REFRESH_TB303_PARAMS)
@@ -1652,7 +1652,7 @@ int Screen_Update(ptk_data *ptk)
         Gui_Draw_Button_Box(0, 24, 96, 78, "", BUTTON_NORMAL | BUTTON_DISABLED);
         
         Gui_Draw_Button_Box(8, 46, 80, 16, "\254", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
-        Notify_Play();
+        Notify_Play(ptk);
         StartRec();
         Notify_Edit();
 
@@ -2269,7 +2269,7 @@ void SongPlay(ptk_data *ptk)
     Post_Song_Init(ptk);
     Ptk_Play(ptk);
 
-    Notify_Play();
+    Notify_Play(ptk);
 }
 
 // ------------------------------------------------------
@@ -2315,7 +2315,7 @@ void Switch_Cmd_Playing(int Enable)
             
 // ------------------------------------------------------
 // Display playing status
-void Notify_Play(void)
+void Notify_Play(ptk_data *ptk)
 {
     if(Songplaying)
     {
@@ -2804,7 +2804,7 @@ void WavRenderizer(ptk_data *ptk)
             switch(rawrender_target)
             {
                 case RENDER_TO_FILE:
-                    SongPlay();
+                    SongPlay(ptk);
                     while(Song_Position < Max_Position && done == FALSE)
                     {
                         GetPlayerValues(ptk);
@@ -2843,7 +2843,7 @@ void WavRenderizer(ptk_data *ptk)
                             memset(Sample_Buffer[1], 0, Mem_Buffer_Size * 2);
                         }
                         Pos_In_Memory = 0;
-                        SongPlay();
+                        SongPlay(ptk);
                         while(Song_Position < Max_Position && done == FALSE)
                         {
                             if(!Mem_Buffer_Size)
@@ -3085,7 +3085,7 @@ void Set_Default_Channels_Polyphony(void)
 
 // ------------------------------------------------------
 // Show song informations (summing instruments and patterns)
-void ShowInfo(void)
+void ShowInfo(ptk_data *ptk)
 {
     char tmp[256];
     int pattsize = nPatterns * PATTERN_LEN;

@@ -217,7 +217,7 @@ char Names_Tbl_Synth_Misc[(sizeof(Tbl_Synth_Misc) / sizeof(int))][24];
 
 void Draw_Synth_Ed(ptk_data *ptk)
 {
-    Draw_Editors_Bar(USER_SCREEN_SYNTH_EDIT);
+    Draw_Editors_Bar(ptk, USER_SCREEN_SYNTH_EDIT);
 
     Gui_Draw_Button_Box(0, (Cur_Height - 153), fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
     Gui_Draw_Flat_Box("Instrument Editor [Synth]");

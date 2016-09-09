@@ -2160,7 +2160,7 @@ void Reset_Track(ptk_data *ptk, int Position, int Track)
     {
         CHAN_ACTIVE_STATE[i][Track] = TRUE;
     }
-    ComputeStereo(Track);
+    ComputeStereo(ptk, Track);
     FixStereo(ptk, Track);
 
     Set_Track_Zoom(ptk, Track, (TRACK_TYPE) Global_Patterns_Font);
@@ -2252,7 +2252,7 @@ void Copy_Track(ptk_data *ptk, int Position, int Track_Src, int Track_Dst)
     {
         CHAN_ACTIVE_STATE[i][Track_Dst] = CHAN_ACTIVE_STATE[i][Track_Src];
     }
-    ComputeStereo(Track_Dst);
+    ComputeStereo(ptk, Track_Dst);
     FixStereo(ptk, Track_Dst);
 
     /* Make sure the track still look the same */

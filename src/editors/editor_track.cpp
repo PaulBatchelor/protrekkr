@@ -36,9 +36,9 @@
 
 // ------------------------------------------------------
 // Functions
-void Draw_Track_Ed(void)
+void Draw_Track_Ed(ptk_data *ptk)
 {
-    Draw_Editors_Bar(USER_SCREEN_TRACK_EDIT);
+    Draw_Editors_Bar(ptk, USER_SCREEN_TRACK_EDIT);
 
     Gui_Draw_Button_Box(0, (Cur_Height - 153), fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
     Gui_Draw_Flat_Box("Track: Properties & Fx Send");
@@ -233,7 +233,7 @@ void Actualize_Track_Ed(ptk_data *ptk, char gode)
             {
                 TPan[Track_Under_Caret] = 1.0f;
             }
-            ComputeStereo(Track_Under_Caret);
+            ComputeStereo(ptk, Track_Under_Caret);
             Realslider(308, (Cur_Height - 62), (int) (TPan[Track_Under_Caret] * 127.0f), TRUE);
         }
 

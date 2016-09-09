@@ -1729,7 +1729,7 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
             Mod_Dat_Read(&ICut[twrite], sizeof(float));
 
             Mod_Dat_Read(&TPan[twrite], sizeof(float));
-            ComputeStereo(twrite);
+            ComputeStereo(ptk, twrite);
             FixStereo(ptk, twrite);
 
             Mod_Dat_Read(&FType[twrite], sizeof(int));
@@ -2525,7 +2525,7 @@ void Post_Song_Init(ptk_data *ptk)
     for(int spl = 0; spl < MAX_TRACKS; spl++)
     {
         CCoef[spl] = float((float) CSend[spl] / 127.0f);
-        ComputeStereo(spl);
+        ComputeStereo(ptk, spl);
         FixStereo(ptk, spl);
     }
 
@@ -2738,7 +2738,7 @@ void Sp_Player(ptk_data *ptk)
                 if(pl_pan_row <= 128)
                 {
                     TPan[ct] = (float) pl_pan_row * 0.0078125f; 
-                    ComputeStereo(ct);
+                    ComputeStereo(ptk, ct);
                 }
 
                 // Don't check those fx if the channel isn't active

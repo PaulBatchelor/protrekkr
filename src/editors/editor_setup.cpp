@@ -92,7 +92,7 @@ void Draw_Master_Ed(ptk_data *ptk)
 {
     Get_Phony_Palette();
 
-    Draw_Editors_Bar(USER_SCREEN_SETUP_EDIT);
+    Draw_Editors_Bar(ptk, USER_SCREEN_SETUP_EDIT);
 
     Gui_Draw_Button_Box(0, (Cur_Height - 153), fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
     Gui_Draw_Flat_Box("UI Setup");
@@ -150,7 +150,7 @@ void Actualize_Master_Ed(ptk_data *ptk, char gode)
         // Create a new sound buffer with the new latency amount
         if(gode == 5)
         {
-            SongStop();
+            SongStop(ptk);
             AUDIO_Stop_Sound_Buffer();
             AUDIO_Create_Sound_Buffer(AUDIO_Milliseconds);
             Init_Scopes_Buffers();

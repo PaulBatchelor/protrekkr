@@ -228,7 +228,7 @@ void Gui_Draw_Button_Box(int x, int y, int sx, int sy, const char *str, int flag
 void Gui_Clear_Array(int x, int y, int sx, int sy);
 void bjbox(int x, int y, int sx, int sy);
 
-void Draw_Editors_Bar(int Highlight);
+void Draw_Editors_Bar(ptk_data *ptk, int Highlight);
 void Status_Box(ptk_data *ptk, char const *str);
 
 void Realslider(int x, int y, int val, int Enabled);

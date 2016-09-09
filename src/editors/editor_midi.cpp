@@ -83,7 +83,7 @@ void Draw_Midi_Ed(ptk_data *ptk)
 {
     char middev[80];
 
-    Draw_Editors_Bar(USER_SCREEN_SETUP_MIDI);
+    Draw_Editors_Bar(ptk, USER_SCREEN_SETUP_MIDI);
 
     Gui_Draw_Button_Box(0, (Cur_Height - 153), fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
     Gui_Draw_Flat_Box("Midi Setup");

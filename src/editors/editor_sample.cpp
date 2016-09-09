@@ -102,7 +102,7 @@ void Zoom_Out_Sel(ptk_data *ptk);
 
 void Draw_Sample_Ed(ptk_data *ptk)
 {
-    Draw_Editors_Bar(USER_SCREEN_SAMPLE_EDIT);
+    Draw_Editors_Bar(ptk, USER_SCREEN_SAMPLE_EDIT);
 
     Gui_Draw_Button_Box(0, (Cur_Height - 153), fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
     Gui_Draw_Flat_Box("");
@@ -561,7 +561,7 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
             // Rotate 1 sample left
             if(gode == SMPED_ROTATE_LEFT_1)
             {
-                if(Sample_Rotate_Left(sed_real_range_start, sed_real_range_end, 1))
+                if(Sample_Rotate_Left(ptk, sed_real_range_start, sed_real_range_end, 1))
                 {
                     Refresh_Sample(ptk, FALSE);
                 }
@@ -570,7 +570,7 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
             // Rotate 1 sample left
             if(gode == SMPED_ROTATE_RIGHT_1)
             {
-                if(Sample_Rotate_Right(sed_real_range_start, sed_real_range_end, 1))
+                if(Sample_Rotate_Right(ptk, sed_real_range_start, sed_real_range_end, 1))
                 {
                     Refresh_Sample(ptk, FALSE);
                 }
@@ -579,7 +579,7 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
             // Rotate x samples left
             if(gode == SMPED_ROTATE_LEFT_X)
             {
-                if(Sample_Rotate_Left(sed_real_range_start, sed_real_range_end, (sed_real_range_end - sed_real_range_start) / 2))
+                if(Sample_Rotate_Left(ptk, sed_real_range_start, sed_real_range_end, (sed_real_range_end - sed_real_range_start) / 2))
                 {
                     Refresh_Sample(ptk, FALSE);
                 }
@@ -588,7 +588,7 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
             // Rotate x samples right
             if(gode == SMPED_ROTATE_RIGHT_X)
             {
-                if(Sample_Rotate_Right(sed_real_range_start, sed_real_range_end, (sed_real_range_end - sed_real_range_start) / 2))
+                if(Sample_Rotate_Right(ptk, sed_real_range_start, sed_real_range_end, (sed_real_range_end - sed_real_range_start) / 2))
                 {
                     Refresh_Sample(ptk, FALSE);
                 }
@@ -597,7 +597,7 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
             // Cut Sample
             if(gode == SMPED_CUT)
             {
-                if(Sample_Cut(sed_real_range_start, sed_real_range_end, TRUE))
+                if(Sample_Cut(ptk, sed_real_range_start, sed_real_range_end, TRUE))
                 {
                     Refresh_Sample(ptk, TRUE);
                 }
@@ -606,7 +606,7 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
             // Copy Sample
             if(gode == SMPED_COPY)
             {
-                if(Sample_Copy(sed_real_range_start, sed_real_range_end))
+                if(Sample_Copy(ptk, sed_real_range_start, sed_real_range_end))
                 {
                     Display_Sample_Buffers(ptk, Allow | ReadOnly);
                 }
@@ -615,7 +615,7 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
             // Paste Sample
             if(gode == SMPED_PASTE)
             {
-                if(Sample_Paste(sed_real_range_start))
+                if(Sample_Paste(ptk, sed_real_range_start))
                 {
                     Refresh_Sample(ptk, TRUE);
                 }
@@ -624,7 +624,7 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
             // Crop Sample
             if(gode == SMPED_CROP)
             {
-                if(Sample_Crop(sed_real_range_start, sed_real_range_end))
+                if(Sample_Crop(ptk, sed_real_range_start, sed_real_range_end))
                 {
                     Refresh_Sample(ptk, TRUE);
                 }
@@ -633,7 +633,7 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
             // Reverse Sample
             if(gode == SMPED_REVERSE)
             {
-                if(Sample_Reverse(sed_real_range_start, sed_real_range_end))
+                if(Sample_Reverse(ptk, sed_real_range_start, sed_real_range_end))
                 {
                     Refresh_Sample(ptk, FALSE);
                 }
@@ -670,7 +670,7 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
             // Zap
             if(gode == SMPED_ZAP)
             {
-                if(Sample_Cut(sed_real_range_start, sed_real_range_end, FALSE))
+                if(Sample_Cut(ptk, sed_real_range_start, sed_real_range_end, FALSE))
                 {
                     Refresh_Sample(ptk, TRUE);
                 }
@@ -679,43 +679,43 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
             // DC adjust
             if(gode == SMPED_DC_ADJUST)
             {
-                Sample_DC_Adjust(sed_real_range_start, sed_real_range_end);
+                Sample_DC_Adjust(ptk, sed_real_range_start, sed_real_range_end);
             }
 
             // Maximize
             if(gode == SMPED_MAXIMIZE)
             {
-                Sample_Maximize(sed_real_range_start, sed_real_range_end);
+                Sample_Maximize(ptk, sed_real_range_start, sed_real_range_end);
             }
 
             // Zeroize
             if(gode == SMPED_ZEROIZE)
             {
-                Sample_Zeroize(sed_real_range_start, sed_real_range_end);
+                Sample_Zeroize(ptk, sed_real_range_start, sed_real_range_end);
             }
 
             // Fade In
             if(gode == SMPED_FADEIN)
             {
-                Sample_FadeIn(sed_real_range_start, sed_real_range_end);
+                Sample_FadeIn(ptk, sed_real_range_start, sed_real_range_end);
             }
 
             // Fade Out
             if(gode == SMPED_FADEOUT)
             {
-                Sample_FadeOut(sed_real_range_start, sed_real_range_end);
+                Sample_FadeOut(ptk, sed_real_range_start, sed_real_range_end);
             }
 
             // Half
             if(gode == SMPED_HALF)
             {
-                Sample_Half(sed_real_range_start, sed_real_range_end);
+                Sample_Half(ptk, sed_real_range_start, sed_real_range_end);
             }
 
             // Duplicate
             if(gode == SMPED_DUPLICATE)
             {
-                if(Sample_Duplicate(sed_real_range_start, sed_real_range_end))
+                if(Sample_Duplicate(ptk, sed_real_range_start, sed_real_range_end))
                 {
                     Refresh_Sample(ptk, TRUE);
                 }
@@ -724,7 +724,7 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
             // Insert zero
             if(gode == SMPED_INSERTZERO)
             {
-                if(Sample_InsertZero(sed_real_range_start, sed_real_range_end))
+                if(Sample_InsertZero(ptk, sed_real_range_start, sed_real_range_end))
                 {
                     Refresh_Sample(ptk, TRUE);
                 }

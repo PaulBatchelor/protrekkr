@@ -296,7 +296,7 @@ Read_Mod_File:
         Midi_Reset(ptk);
 #endif
 
-        init_sample_bank();
+        init_sample_bank(ptk);
         Pre_Song_Init(ptk);
 
         // Load the module into memory and depack it
@@ -543,7 +543,7 @@ Read_Mod_File:
             if(ICut[twrite] > 0.0078125f) ICut[twrite] = 0.0078125f;
             if(ICut[twrite] < 0.00006103515625f) ICut[twrite] = 0.00006103515625f;
             Read_Mod_Data_Swap(ptk, &TPan[twrite], sizeof(float), 1, in);
-            ComputeStereo(twrite);
+            ComputeStereo(ptk, twrite);
             FixStereo(ptk, twrite);
             Read_Mod_Data_Swap(ptk, &FType[twrite], sizeof(int), 1, in);
             Read_Mod_Data_Swap(ptk, &FRez[twrite], sizeof(int), 1, in);
@@ -1085,7 +1085,7 @@ int Read_Mod_Data_Swap(ptk_data *ptk, void *Datas, int Unit, int Length, FILE *H
 // ------------------------------------------------------
 // Check if a file exists
 #if !defined(__WINAMP__)
-int File_Exist(char *Format, char *Directory, char *FileName)
+int File_Exist(ptk_data *ptk, char *Format, char *Directory, char *FileName)
 {
     FILE *in;
     char Temph[MAX_PATH];
@@ -1110,7 +1110,7 @@ int File_Exist_Req(ptk_data *ptk, char *Format, char *Directory, char *FileName)
 
     sprintf(Temph, Format, Directory, FileName);
 
-    if(File_Exist(Format, Directory, FileName))
+    if(File_Exist(ptk, Format, Directory, FileName))
     {
         sprintf(OverWrite_Name, "File '%s' already exists, overwrite ?", Temph);
         Overwrite_Requester.Text = OverWrite_Name;

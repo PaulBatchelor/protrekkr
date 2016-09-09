@@ -52,7 +52,7 @@ extern int Ext_Track_Switch;
 
 // ------------------------------------------------------
 // Functions
-void Draw_Sequencer_Ed(void);
+void Draw_Sequencer_Ed(ptk_data *ptk);
 void Actualize_Seq_Ed(ptk_data *ptk, char gode);
 void Mouse_Left_Sequencer_Ed(ptk_data *ptk);
 void Mouse_Right_Sequencer_Ed(ptk_data *ptk);

@@ -441,7 +441,7 @@ void SeqFill(int st, int en, char n);
 void PutBackMouse(void);
 void Read_SMPT(void);
 void Initreverb(ptk_data *ptk);
-void init_sample_bank(void);
+//void init_sample_bank(void);
 int Get_Number_Of_Splits(int n_index);
 void Clear_Instrument_Dat(int n_index, int split, int lenfir);
 void AllocateWave(int n_index, int split, long lenfir,
@@ -459,14 +459,14 @@ void Check_Loops(void);
 void Skincopy(int xd, int yd, int xs, int ys, int w, int h);
 void Go303(void);
 void knob(int x, int y, unsigned char number);
-void ShowInfo(void);
+void ShowInfo(ptk_data *ptk);
 void guiDial2(const char *str);
 
 void out_decchar(int x, int y, int number, char smith);
 
 void out_nibble(int x, int y, int color, int number);
-void SongPlay(void);
-void SongStop(void);
+void SongPlay(ptk_data *ptk);
+void SongStop(ptk_data *ptk);
 void Free_Samples(void);
 void draw_pated(ptk_data *ptk, int track, int line, int petrack, int row);
 void Actupated(ptk_data *ptk, int modac);
@@ -481,7 +481,7 @@ void Pre_Song_Init(ptk_data *ptk);
 void Reverb_work(void);
 void StartRec(void);
 void Notify_Edit(void);
-void Notify_Play(void);
+void Notify_Play(ptk_data *ptk);
 void ComputeCoefs(int freq, int r, int t);
 void live303(int pltr_eff_row, int pltr_dat_row);
 float Filter(int stereo, float x, char i);
@@ -496,11 +496,11 @@ char zcheckMouse(int x, int y, int xs, int ys);
 void FadeToBlack(void);
 void IniCsParNames(void);
 void UpSynth(int peac,int number);
-void ComputeStereo(int channel);
+void ComputeStereo(ptk_data *ptk, int channel);
 void FixStereo(int channel);
 void Keyboard_Handler(ptk_data *ptk);
 void Mouse_Handler(ptk_data *ptk);
-int Get_Track_Over_Mouse(int Mouse, int *Was_Scrolling, int Left);
+int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left);
 int Get_Line_Over_Mouse(void);
 void Get_Column_Over_Mouse(int *track, int *column,
                            int check_boundaries,
@@ -542,7 +542,5 @@ int Init_Scopes_Buffers(void);
 
 void Remove_Title(void);
 void Switch_Cmd_Playing(int Enable);
-
-//extern ptk_data ptk;
 
 #endif

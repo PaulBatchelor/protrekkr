@@ -89,9 +89,9 @@ void Display_Seq_Buffer(void);
 void SeqPaste(int st);
 void Bound_Patt_Pos(ptk_data *ptk);
 
-void Draw_Sequencer_Ed(void)
+void Draw_Sequencer_Ed(ptk_data *ptk)
 {
-    Draw_Editors_Bar(USER_SCREEN_SEQUENCER);
+    Draw_Editors_Bar(ptk, USER_SCREEN_SEQUENCER);
 
     Gui_Draw_Button_Box(0, (Cur_Height - 153), fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
     Gui_Draw_Flat_Box("Sequencer");

@@ -44,7 +44,7 @@
 
 // ------------------------------------------------------
 // Functions
-void Draw_Fx_Ed(void);
+void Draw_Fx_Ed(ptk_data *ptk);
 void Actualize_Fx_Ed(char gode);
 void Mouse_Sliders_Fx_Ed(void);
 void Mouse_Right_Fx_Ed(void);

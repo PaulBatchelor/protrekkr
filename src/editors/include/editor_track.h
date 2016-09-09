@@ -44,7 +44,7 @@
 
 // ------------------------------------------------------
 // Functions
-void Draw_Track_Ed(void);
+void Draw_Track_Ed(ptk_data *ptk);
 void Actualize_Track_Ed(ptk_data *ptk, char gode);
 void Mouse_Left_Track_Ed(ptk_data *ptk);
 void Mouse_Right_Track_Ed(ptk_data *ptk);

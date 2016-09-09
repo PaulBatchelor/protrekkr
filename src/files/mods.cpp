@@ -350,7 +350,7 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
             Midi_Reset(ptk);
 #endif
 
-            init_sample_bank();
+            init_sample_bank(ptk);
             Pre_Song_Init(ptk);
             int Patterns;
 
@@ -1157,7 +1157,7 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
             for(i = 0; i < channels; i++)
             {
                 TPan[i] = mt_pannels[i];
-                ComputeStereo(i);
+                ComputeStereo(ptk, i);
                 FixStereo(ptk, i);
             }
 

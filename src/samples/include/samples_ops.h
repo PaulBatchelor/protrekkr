@@ -44,20 +44,20 @@ extern int Sample_Back_Size[4];
 
 // ------------------------------------------------------
 // Functions
-int Sample_Rotate_Left(int32 range_start, int32 range_end, int amount);
-int Sample_Rotate_Right(int32 range_start, int32 range_end, int amount);
-int Sample_Reverse(int32 range_start, int32 range_end);
-int Sample_Crop(int32 range_start, int32 range_end);
-int Sample_Copy(int32 range_start, int32 range_end);
-int Sample_Paste(int32 range_start);
-int Sample_Cut(int32 range_start, int32 range_end, int do_copy);
-void Sample_DC_Adjust(int32 range_start, int32 range_end);
-void Sample_Maximize(int32 range_start, int32 range_end);
-void Sample_Zeroize(int32 range_start, int32 range_end);
-void Sample_FadeIn(int32 range_start, int32 range_end);
-void Sample_FadeOut(int32 range_start, int32 range_end);
-void Sample_Half(int32 range_start, int32 range_end);
-int Sample_Duplicate(int32 range_start, int32 range_end);
-int Sample_InsertZero(int32 range_start, int32 range_end);
+int Sample_Rotate_Left(ptk_data *ptk, int32 range_start, int32 range_end, int amount);
+int Sample_Rotate_Right(ptk_data *ptk, int32 range_start, int32 range_end, int amount);
+int Sample_Reverse(ptk_data *ptk, int32 range_start, int32 range_end);
+int Sample_Crop(ptk_data *ptk, int32 range_start, int32 range_end);
+int Sample_Copy(ptk_data *ptk, int32 range_start, int32 range_end);
+int Sample_Paste(ptk_data *ptk, int32 range_start);
+int Sample_Cut(ptk_data *ptk, int32 range_start, int32 range_end, int do_copy);
+void Sample_DC_Adjust(ptk_data *ptk, int32 range_start, int32 range_end);
+void Sample_Maximize(ptk_data *ptk, int32 range_start, int32 range_end);
+void Sample_Zeroize(ptk_data *ptk, int32 range_start, int32 range_end);
+void Sample_FadeIn(ptk_data *ptk, int32 range_start, int32 range_end);
+void Sample_FadeOut(ptk_data *ptk, int32 range_start, int32 range_end);
+void Sample_Half(ptk_data *ptk, int32 range_start, int32 range_end);
+int Sample_Duplicate(ptk_data *ptk, int32 range_start, int32 range_end);
+int Sample_InsertZero(ptk_data *ptk, int32 range_start, int32 range_end);
 
 #endif

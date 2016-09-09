@@ -119,12 +119,12 @@ void Insert_Entry(ptk_data *ptk, char *Name, int Type, int idx)
     list_counter[ptk->Scopish]++;
 }
 
-char *Get_FileName(int idx)
+char *Get_FileName(ptk_data *ptk, int idx)
 {
     return(SMPT_LIST[idx].Name);
 }
 
-int Get_FileType(int idx)
+int Get_FileType(ptk_data *ptk, int idx)
 {
     return(SMPT_LIST[idx].Type);
 }
@@ -181,14 +181,14 @@ int FileComp_Files(const void *elem1, const void *elem2)
     int Cur_Type;
     
     Sort_Letter = 0;
-    Sort_Type = Get_FileType(0);
+    Sort_Type = Get_FileType(ptk, 0);
     for(i = 0; i < list_counter[ptk->Scopish]; i++)
     {
         // Make sure we're in the same ensemble
-        Cur_Type = Get_FileType(i);
+        Cur_Type = Get_FileType(ptk, i);
         if(Sort_Type == Cur_Type && Cur_Type == _A_FILE)
         {
-            Cur_Letter = toupper(Get_FileName(i)[0]);
+            Cur_Letter = toupper(Get_FileName(ptk, i)[0]);
             if(Sort_Letter != Cur_Letter)
             {
                 Sort_Letter = Cur_Letter;
@@ -211,7 +211,7 @@ void Set_Current_Dir(ptk_data *ptk)
 
     if (tmp && *tmp == '/') *tmp = 0;
     if (strrchr(Dir_Act, '/') == Dir_Act &&
-        !strcmp(Get_FileName(lt_curr[ptk->Scopish]), ".."))
+        !strcmp(Get_FileName(ptk, lt_curr[ptk->Scopish]), ".."))
     {
         switch(ptk->Scopish)
         {
@@ -246,14 +246,14 @@ void Set_Current_Dir(ptk_data *ptk)
     if (!strcmp(Dir_Act, "/"))
     {
         strcpy(filename, "/");
-        strcat(filename, Get_FileName(lt_curr[ptk->Scopish]));
+        strcat(filename, Get_FileName(ptk, lt_curr[ptk->Scopish]));
     }
     else
     {
-        strcpy(filename, Get_FileName(lt_curr[ptk->Scopish]));
+        strcpy(filename, Get_FileName(ptk, lt_curr[ptk->Scopish]));
     }
 #else
-    strcpy(filename, Get_FileName(lt_curr[ptk->Scopish]));
+    strcpy(filename, Get_FileName(ptk, lt_curr[ptk->Scopish]));
 #endif
  
     switch(ptk->Scopish)
@@ -650,15 +650,15 @@ void Dump_Files_List(ptk_data *ptk, int xr, int yr)
                             bjbox(xr - 1, yr + (counter * space) + 2, (Cur_Width - 413), space);
                         }
 
-                        switch(Get_FileType(rel_val))
+                        switch(Get_FileType(ptk, rel_val))
                         {
                             case _A_SUBDIR:
-                                PrintString(xr, yr + (counter * space), USE_FONT_LOW, Get_FileName(rel_val), Cur_Width - 504);
+                                PrintString(xr, yr + (counter * space), USE_FONT_LOW, Get_FileName(ptk, rel_val), Cur_Width - 504);
                                 PrintString(xr + (Cur_Width - 436), yr + (counter * space) + 1, USE_FONT_LOW, "<Dir>");
                                 break;
                             case _A_FILE:
-                                PrintString(xr, yr + (counter * space) + 1, USE_FONT, Get_FileName(rel_val), Cur_Width - 504);
-                                File = fopen(Get_FileName(rel_val), "rb");
+                                PrintString(xr, yr + (counter * space) + 1, USE_FONT, Get_FileName(ptk, rel_val), Cur_Width - 504);
+                                File = fopen(Get_FileName(ptk, rel_val), "rb");
                                 if(File)
                                 {
                                     int Size = Get_File_Size(ptk, File);
@@ -686,7 +686,7 @@ void Dump_Files_List(ptk_data *ptk, int xr, int yr)
             }
             else
             {
-                PrintString(xr, yr, USE_FONT_LOW, Get_FileName(0));
+                PrintString(xr, yr, USE_FONT_LOW, Get_FileName(ptk, 0));
             }
             break;
     }
@@ -842,44 +842,44 @@ void Prev_Prefix(ptk_data *ptk)
 
     // Adjust to a real entry
     Done_Sep = FALSE;
-    if(Get_FileType(Idx) == _A_SUBDIR)
+    if(Get_FileType(ptk, Idx) == _A_SUBDIR)
     {
         Move_Idx(ptk, &Idx, -1);
     }
-    while(Get_FileType(Idx) == _A_SEP)
+    while(Get_FileType(ptk, Idx) == _A_SEP)
     {
         Done_Sep = TRUE;
         if(Move_Idx(ptk, &Idx, -1)) return;
     }
-    if(Get_FileType(Idx) == _A_SUBDIR)
+    if(Get_FileType(ptk, Idx) == _A_SUBDIR)
     {
         lt_index[ptk->Scopish] = Idx;
         return;
     }
 
-    Start_Letter = toupper(Get_FileName(Idx)[0]);
+    Start_Letter = toupper(Get_FileName(ptk, Idx)[0]);
     if(Move_Idx(ptk, &Idx, -1)) return;
     if(!Done_Sep)
     {
-        while(Get_FileType(Idx) == _A_SEP)
+        while(Get_FileType(ptk, Idx) == _A_SEP)
         {
             if(Move_Idx(ptk, &Idx, -1)) return;
-            if(Get_FileType(Idx) != _A_SEP)
+            if(Get_FileType(ptk, Idx) != _A_SEP)
             {
-                Start_Letter = toupper(Get_FileName(Idx)[0]);
+                Start_Letter = toupper(Get_FileName(ptk, Idx)[0]);
             }
         }
     }
-    Cur_Letter = toupper(Get_FileName(Idx)[0]);
+    Cur_Letter = toupper(Get_FileName(ptk, Idx)[0]);
     if(Cur_Letter != Start_Letter)
     {
         // Renew prefix
-        Start_Letter = toupper(Get_FileName(Idx)[0]);
+        Start_Letter = toupper(Get_FileName(ptk, Idx)[0]);
     }
     while(Start_Letter == Cur_Letter)
     {
         if(Move_Idx(ptk, &Idx, -1)) return;
-        Cur_Letter = toupper(Get_FileName(Idx)[0]);
+        Cur_Letter = toupper(Get_FileName(ptk, Idx)[0]);
     }
     lt_index[ptk->Scopish] = Idx + 1;
 }
@@ -896,30 +896,30 @@ void Next_Prefix(ptk_data *ptk)
     Was_Dir = FALSE;
 
     // Adjust to a real entry
-    if(Get_FileType(Idx) == _A_SUBDIR)
+    if(Get_FileType(ptk, Idx) == _A_SUBDIR)
     {
         Was_Dir = TRUE;
         Move_Idx(ptk, &Idx, 1);
     }
-    while(Get_FileType(Idx) == _A_SEP)
+    while(Get_FileType(ptk, Idx) == _A_SEP)
     {
         if(Move_Idx(ptk, &Idx, 1)) return;
     }
-    if(Get_FileType(Idx) == _A_SUBDIR)
+    if(Get_FileType(ptk, Idx) == _A_SUBDIR)
     {
         lt_index[ptk->Scopish] = Idx;
         return;
     }
     if(!Was_Dir)
     {
-        Start_Letter = toupper(Get_FileName(Idx)[0]);
+        Start_Letter = toupper(Get_FileName(ptk, Idx)[0]);
         if(Move_Idx(ptk, &Idx, 1)) return;
-        Cur_Letter = toupper(Get_FileName(Idx)[0]);
+        Cur_Letter = toupper(Get_FileName(ptk, Idx)[0]);
         while(Start_Letter == Cur_Letter ||
-              Get_FileType(Idx) == _A_SEP)
+              Get_FileType(ptk, Idx) == _A_SEP)
         {
             if(Move_Idx(ptk, &Idx, 1)) return;
-            Cur_Letter = toupper(Get_FileName(Idx)[0]);
+            Cur_Letter = toupper(Get_FileName(ptk, Idx)[0]);
         }
     }
     lt_index[ptk->Scopish] = Idx;

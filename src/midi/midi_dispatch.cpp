@@ -244,7 +244,7 @@ void Midi_Track_Set_Panning(int Data)
         liveparam = LIVE_PARAM_TRACK_PANNING;
         livevalue = Data;
     }
-    Actualize_Track_Ed(9);
+    Actualize_Track_Ed(g_ptk, 9);
 }
 
 // ------------------------------------------------------
@@ -279,7 +279,7 @@ void Midi_Track_Set_Cutoff(int Data)
         liveparam = LIVE_PARAM_TRACK_CUTOFF;
         livevalue = Data;
     }
-    Actualize_Track_Ed(1);
+    Actualize_Track_Ed(g_ptk, 1);
 }
 
 // ------------------------------------------------------
@@ -292,7 +292,7 @@ void Midi_Track_Set_Resonance(int Data)
         liveparam = LIVE_PARAM_TRACK_RESONANCE;
         livevalue = Data;
     }
-    Actualize_Track_Ed(2);
+    Actualize_Track_Ed(g_ptk, 2);
 }
 
 // ------------------------------------------------------
@@ -305,7 +305,7 @@ void Midi_Track_Set_Reverb(int Data)
         liveparam = LIVE_PARAM_TRACK_REVERB_SEND;
         livevalue = Data;
     }
-    Actualize_Track_Ed(5);
+    Actualize_Track_Ed(g_ptk, 5);
 }
 
 // ------------------------------------------------------
@@ -318,7 +318,7 @@ void Midi_Track_Set_Disto_Threshold(int Data)
         liveparam = LIVE_PARAM_TRACK_THRESHOLD;
         livevalue = Data;
     }
-    Actualize_Track_Ed(7);
+    Actualize_Track_Ed(g_ptk, 7);
 }
 
 // ------------------------------------------------------
@@ -331,7 +331,7 @@ void Midi_Track_Set_Disto_Clamp(int Data)
         liveparam = LIVE_PARAM_TRACK_CLAMP;
         livevalue = Data;
     }
-    Actualize_Track_Ed(8);
+    Actualize_Track_Ed(g_ptk, 8);
 }
 
 // ------------------------------------------------------

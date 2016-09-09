@@ -49,9 +49,9 @@ int Table_Interpolation_Inc[] = { SPLINE_INT, CUBIC_INT, CUBIC_INT };
 void Display_Reverb_Cutoff(void);
 void Display_Reverb_Resonance(void);
 
-void Draw_Fx_Ed(void)
+void Draw_Fx_Ed(ptk_data *ptk)
 {
-    Draw_Editors_Bar(USER_SCREEN_FX_SETUP_EDIT);
+    Draw_Editors_Bar(ptk, USER_SCREEN_FX_SETUP_EDIT);
 
     Gui_Draw_Button_Box(0, (Cur_Height - 153), fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
     Gui_Draw_Flat_Box("FX Setup (Global)");
