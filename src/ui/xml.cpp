@@ -54,7 +54,10 @@ list <skin_file> skin_files;
 // - Spin (2 arrows with a number).
 // - Picture.
 
-TiXmlDocument doc("skins/skin.xml");
+
+/*TODO: is this the best way to load XML files */
+//TiXmlDocument doc("skins/skin.xml");
+TiXmlDocument doc("/usr/local/share/protrekkr/skins/skin.xml");
 char xml_error[256];
 
 extern char Window_Title[256];

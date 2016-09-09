@@ -322,6 +322,7 @@ void Load_Keyboard_Def(char *FileName)
 #else
     strcpy(KbFileName, ExePath);
     strcat(KbFileName, "/skins/");
+    //strcpy(KbFileName, "/usr/local/share/protrekkr/skins");
 #endif
 
     strcat(KbFileName, FileName);
@@ -432,18 +433,20 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
     // Maybe a better (?) solution would be to use:
     // sprintf(ExeProc, "/proc/$d/exe", getpid());
     // readlink(ExeProc, ExePath, sizeof(ExePath));
-    readlink("/proc/self/exe", ExePath, ExePath_Size);
-    int exename_len = strlen(ExePath);
-    while(exename_len--)
-    {
-        if(ExePath[exename_len] == '/')
-        {
-            ExePath[exename_len] = 0;
-            exename_len++;
-            break;
-        }
-    }
-    CHDIR(ExePath);
+    //readlink("/proc/self/exe", ExePath, ExePath_Size);
+    //int exename_len = strlen(ExePath);
+    //while(exename_len--)
+    //{
+    //    if(ExePath[exename_len] == '/')
+    //    {
+    //        ExePath[exename_len] = 0;
+    //        exename_len++;
+    //        break;
+    //    }
+    //}
+
+    /* TODO: Don't change directory */
+    //CHDIR(ExePath);
 
 #elif defined(__AMIGAOS4__) || defined(__AROS__)
     CHDIR("/PROGDIR/");
@@ -487,8 +490,9 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 #endif
 
     // Default values
-    sprintf(Keyboard_Name, "%s", "kben.txt");
-    sprintf(Keyboard_FileNames[0], "%s", "kben.txt");
+    /*TODO: handle file path better */
+    sprintf(Keyboard_Name, "%s", "/usr/local/include/protrekkr/kben.txt");
+    sprintf(Keyboard_FileNames[0], "%s", "/usr/local/include/protrekkr/kben.txt");
     sprintf(Keyboard_Labels[0], "%s", "English");
     Nbr_Keyboards = 1;
     Cur_Keyboard = Default_Keyboard;
