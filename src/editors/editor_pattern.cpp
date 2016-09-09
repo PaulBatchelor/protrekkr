@@ -1564,7 +1564,7 @@ void Actupated(ptk_data *ptk, int modac)
     if(is_editing > 1)
     {
         is_editing = 0;
-        Notify_Edit();
+        Notify_Edit(ptk);
     }
     
     if(!Songplaying)

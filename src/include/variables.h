@@ -452,7 +452,7 @@ void SongStop(ptk_data *ptk);
 void Stop_Current_Instrument(void);
 void DeleteInstrument(ptk_data *ptk);
 void StartRec(void);
-void Notify_Edit(void);
+void Notify_Edit(ptk_data *ptk);
 void Notify_Play(ptk_data *ptk);
 char zcheckMouse_nobutton(int x, int y, int xs, int ys);
 char zcheckMouse(ptk_data *ptk, int x, int y, int xs, int ys);

@@ -34,5 +34,7 @@ typedef struct {
 
     int retletter[256];
     int last_index;
+
+    int gui_action_metronome;
 } ptk_data;
 #endif

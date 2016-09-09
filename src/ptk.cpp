@@ -99,7 +99,6 @@ int player_pos = -1;
 
 int posletter = 0;
 int gui_action = GUI_CMD_NOP;
-int gui_action_metronome = GUI_CMD_NOP;
 int Column_Under_Caret = 0;
 int Track_Under_Caret = 0;
 int gui_track = 0;
@@ -690,16 +689,16 @@ int Screen_Update(ptk_data *ptk)
 
     if(actuloop) Afloop(ptk);
 
-    if(gui_action_metronome == GUI_CMD_FLASH_METRONOME_ON)
+    if(ptk->gui_action_metronome == GUI_CMD_FLASH_METRONOME_ON)
     {
         SetColor(COL_VUMETERPEAK);
         Fillrect(73, 83, 73 + 15, 83 + 15);
     }
-    if(gui_action_metronome == GUI_CMD_FLASH_METRONOME_OFF)
+    if(ptk->gui_action_metronome == GUI_CMD_FLASH_METRONOME_OFF)
     {
         Gui_Draw_Button_Box(72, 82, 16, 16, "", BUTTON_DISABLED);
     }
-    gui_action_metronome = GUI_CMD_NOP;
+    ptk->gui_action_metronome = GUI_CMD_NOP;
 
     if(gui_action != GUI_CMD_NONE)
     { // There are some for me today.....:)
@@ -1012,7 +1011,7 @@ int Screen_Update(ptk_data *ptk)
             is_recording_2 = 0;
             Nbr_Sub_NoteOff = 0;
             is_editing = 0;
-            Notify_Edit();
+            Notify_Edit(ptk);
             SongStop(ptk);
         }
 
@@ -1029,7 +1028,7 @@ int Screen_Update(ptk_data *ptk)
             Nbr_Sub_NoteOff = 0;
             SongStop(ptk);
             Actupated(ptk, 0);
-            Notify_Edit();
+            Notify_Edit(ptk);
         }
 
         if(gui_action == GUI_CMD_RECORD_MODE)
@@ -1042,7 +1041,7 @@ int Screen_Update(ptk_data *ptk)
             key_record_first_time = TRUE;
             Clear_Midi_Channels_Pool();
             Actupated(ptk, 0);
-            Notify_Edit();
+            Notify_Edit(ptk);
         }
 
         if(gui_action == GUI_CMD_CHANGE_BPM_TICKS_NBR)
@@ -1637,7 +1636,7 @@ int Screen_Update(ptk_data *ptk)
         Gui_Draw_Button_Box(8, 46, 80, 16, "\254", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
         Notify_Play(ptk);
         StartRec();
-        Notify_Edit();
+        Notify_Edit(ptk);
 
         Gui_Draw_Button_Box(98, 24, 156, 78, "", BUTTON_NORMAL | BUTTON_DISABLED);
         Gui_Draw_Button_Box(106, 28, 80, 16, "Position", BUTTON_NORMAL | BUTTON_DISABLED);
@@ -2263,7 +2262,7 @@ void StartRec(void)
 
 // ------------------------------------------------------
 // Display editing status
-void Notify_Edit(void)
+void Notify_Edit(ptk_data *ptk)
 {
     if(is_editing && !is_recording)
     {
@@ -2278,7 +2277,7 @@ void Notify_Edit(void)
         Gui_Draw_Button_Box(8, 82, 62, 16, "Edit/Rec.", BUTTON_NORMAL | BUTTON_RIGHT_MOUSE | BUTTON_TEXT_CENTERED);
     }
     Gui_Draw_Button_Box(72, 82, 16, 16, "", BUTTON_DISABLED);
-    gui_action_metronome = GUI_CMD_FLASH_METRONOME_OFF;
+    ptk->gui_action_metronome = GUI_CMD_FLASH_METRONOME_OFF;
 }
 
 // ------------------------------------------------------
@@ -6829,4 +6828,6 @@ void ptk_init(ptk_data *ptk)
     ptk->sas = FALSE;
     ptk->ltretvalue = 0;
     ptk->last_index = -1;
+
+    ptk->gui_action_metronome = GUI_CMD_NOP;
 }

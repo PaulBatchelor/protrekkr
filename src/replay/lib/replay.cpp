@@ -2560,7 +2560,7 @@ void Record_Delay_Event()
 
 // ------------------------------------------------------
 // Record and set the visual patterns lines and song positions
-void Proc_Next_Visual_Line()
+void Proc_Next_Visual_Line(ptk_data *ptk)
 {
     PosInTick_Delay++;
 
@@ -2581,10 +2581,10 @@ void Proc_Next_Visual_Line()
 
 #if !defined(__WINAMP__)
 #if !defined(__STAND_ALONE__) 
-        gui_action_metronome = GUI_CMD_FLASH_METRONOME_OFF;
+        ptk->gui_action_metronome = GUI_CMD_FLASH_METRONOME_OFF;
         if(metronome_latency)
         {
-            gui_action_metronome = GUI_CMD_FLASH_METRONOME_ON;
+            ptk->gui_action_metronome = GUI_CMD_FLASH_METRONOME_ON;
             metronome_latency = FALSE;
         }
 #endif
@@ -3194,7 +3194,7 @@ void Sp_Player(ptk_data *ptk)
         }
 
         // Replay the recorded song sequence with the sound card latency delay
-        if(Songplaying_Pattern) Proc_Next_Visual_Line();
+        if(Songplaying_Pattern) Proc_Next_Visual_Line(ptk);
     }
 
     // -------------------------------------------
