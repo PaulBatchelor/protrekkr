@@ -1667,7 +1667,7 @@ void Refresh_UI_Context(ptk_data *ptk)
             Draw_Editors_Bar(ptk, USER_SCREEN_LARGE_PATTERN);
             break;
     }
-    seditor = 0;
+    ptk->seditor = 0;
     
     //Actualize_Midi_Ed(ptk, 0);
     Actualize_Reverb_Ed(ptk, 0);

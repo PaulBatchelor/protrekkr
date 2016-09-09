@@ -24,5 +24,8 @@ typedef struct {
     int gui_lxs;
     int gui_lys;
     char trkchan;
+    int pos_space;
+    int multifactor;
+    char seditor;
 } ptk_data;
 #endif

@@ -95,7 +95,7 @@ void Draw_Instrument_Ed(ptk_data *ptk)
 
     Gui_Draw_Button_Box(0, (Cur_Height - 153), fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
 
-    switch(seditor)
+    switch(ptk->seditor)
     {
         case 0:
             Gui_Draw_Flat_Box("Instrument Editor [Sample]");
@@ -175,7 +175,7 @@ void Actualize_Instrument_Ed(ptk_data *ptk, int typex, char gode)
         }
         set_instr_global();
 
-        switch(seditor)
+        switch(ptk->seditor)
         {
             case 0:
                 Gui_Draw_Button_Box(268, (Cur_Height - 134), 88, 16, "Fine Loop Editor", Allow_Buttons | BUTTON_TEXT_CENTERED);
@@ -566,7 +566,7 @@ void Mouse_Sliders_Instrument_Ed(ptk_data *ptk)
 
 void Mouse_Left_Instrument_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && seditor == 1)
+    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 1)
     {
         if(zcheckMouse(ptk, 96, (Cur_Height - 130), 16, 16) &&
            LoopStart[Current_Instrument][Current_Instrument_Split] > 0 &&
@@ -603,12 +603,12 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
         // Return to instrument editor
         if(zcheckMouse(ptk, 427, (Cur_Height - 94), 58, 16))
         {
-            seditor = 0;
+            ptk->seditor = 0;
             gui_action = GUI_CMD_SELECT_INSTRUMENT_EDIT;
         }
     }
 
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && seditor == 0)
+    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 0)
     {
         if(zcheckMouse(ptk, 570, (Cur_Height - 134), 16, 16) && Current_Instrument_Split > 0)
         {
@@ -675,7 +675,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
         // Go to loop editor
         if(zcheckMouse(ptk, 268, (Cur_Height - 134), 88, 16) && SampleType[Current_Instrument][Current_Instrument_Split])
         {
-            seditor = 1;
+            ptk->seditor = 1;
             gui_action = GUI_CMD_SELECT_INSTRUMENT_EDIT;
         }
 
@@ -938,7 +938,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
 
 void Mouse_Right_Instrument_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && seditor == 0)
+    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 0)
     {
         if(Allow_Global_Sliders)
         {
@@ -1117,7 +1117,7 @@ void Mouse_Left_Repeat_Instrument_Ed(ptk_data *ptk)
     int32 *Cur_Loop_Start = (int32 *) &LoopStart[Current_Instrument][Current_Instrument_Split];
     int32 *Cur_Loop_End = (int32 *) &LoopEnd[Current_Instrument][Current_Instrument_Split];
 
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && seditor == 1)
+    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 1)
     {
         gui_action = GUI_CMD_NOP;
 
@@ -1153,7 +1153,7 @@ void Mouse_Sliders_Right_Instrument_Ed(ptk_data *ptk)
     int32 *Cur_Loop_Start = (int32 *) &LoopStart[Current_Instrument][Current_Instrument_Split];
     int32 *Cur_Loop_End = (int32 *) &LoopEnd[Current_Instrument][Current_Instrument_Split];
 
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && seditor == 1)
+    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 1)
     {
         gui_action = GUI_CMD_NOP;
 

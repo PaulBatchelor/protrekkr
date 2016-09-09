@@ -86,17 +86,12 @@ ptk_data ptk;
 ptk_data *g_ptk = &ptk;
 
 char Visible_Columns = 0;
-//int rs_coef = 32768;
 
-//int ptk->gui_ly = -1;
 int gui_pushed = 0;
 char teac = 0;
 int liveparam = 0;
 int livevalue = 0;
 
-int pos_space = 0;
-int multifactor = 4;
-char seditor = 0;
 int Done_Tip = FALSE;
 char tipoftheday[256];
 int ctipoftheday = 0;
@@ -2367,7 +2362,7 @@ void Newmod(ptk_data *ptk)
     {
         Free_Samples(ptk);
         Current_Instrument = 0;
-        seditor = 0;
+        ptk->seditor = 0;
         Final_Mod_Length = 0;
         Actualize_Master(ptk, 0);
         for(i = 0; i < MAX_INSTRS; i++)
@@ -2990,7 +2985,7 @@ void DeleteInstrument(ptk_data *ptk)
 
     if(ZzaappOMatic == ZZAAPP_SPLIT)
     {
-        seditor = 0;
+        ptk->seditor = 0;
         Final_Mod_Length = 0;
         Actualize_Master(ptk, 0);
         Old_Prg = Synthprg[Current_Instrument];
@@ -3009,7 +3004,7 @@ void DeleteInstrument(ptk_data *ptk)
 
     if(ZzaappOMatic == ZZAAPP_ALL || ZzaappOMatic == ZZAAPP_INSTRUMENTS)
     {
-        seditor = 0;
+        ptk->seditor = 0;
         Final_Mod_Length = 0;
         Actualize_Master(ptk, 0);
         Old_Prg = Synthprg[Current_Instrument];
@@ -3055,7 +3050,7 @@ void Stop_Current_Instrument(void)
 // Refresh the view of a sample
 void RefreshSample(ptk_data *ptk)
 {
-    seditor = 0;
+    ptk->seditor = 0;
     Current_Instrument_Split = 0;
     if(userscreen == USER_SCREEN_INSTRUMENT_EDIT)
     {
@@ -4219,7 +4214,7 @@ void Keyboard_Handler(ptk_data *ptk)
     }
 
     // Turn edit mode on/off
-    if(Keys[SDLK_ESCAPE] && snamesel == INPUT_NONE && pos_space == 1)
+    if(Keys[SDLK_ESCAPE] && snamesel == INPUT_NONE && ptk->pos_space == 1)
     {
         if(Get_LShift())
         {
@@ -4231,7 +4226,7 @@ void Keyboard_Handler(ptk_data *ptk)
         }
     }
 
-    if(pos_space == 0 && !Keys[SDLK_SPACE]) pos_space = 1;
+    if(ptk->pos_space == 0 && !Keys[SDLK_SPACE]) ptk->pos_space = 1;
 
     if(!is_recording)
     {
@@ -5685,7 +5680,7 @@ void Mouse_Handler(ptk_data *ptk)
         if(zcheckMouse(ptk, 20 + (TAB_LARG * 1), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_INSTRUMENT_EDIT || Patterns_Lines_Offset))
         {
             gui_action = GUI_CMD_SELECT_INSTRUMENT_EDIT;
-            seditor = 0;
+            ptk->seditor = 0;
         }
         if(zcheckMouse(ptk, 20 + (TAB_LARG * 2), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SYNTH_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_SYNTH_EDIT;
         if(zcheckMouse(ptk, 20 + (TAB_LARG * 3), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SAMPLE_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_SAMPLE_EDIT;
@@ -6837,4 +6832,7 @@ void ptk_init(ptk_data *ptk)
     ptk->gui_lxs = -1;
     ptk->gui_lys = -1;
     ptk->trkchan = TRUE;
+    ptk->pos_space = 0;
+    ptk->multifactor = 4;
+    ptk->seditor = 0;
 }
