@@ -85,10 +85,8 @@ ptk_data ptk;
 /*TODO: remove need for global pointer */
 ptk_data *g_ptk = &ptk;
 
-//int ptk->fluzy = -1;
-int rev_counter2 = 0;
 char Visible_Columns = 0;
-int rs_coef = 32768;
+//int rs_coef = 32768;
 
 int gui_lx = -1;
 int gui_ly = -1;
@@ -6836,4 +6834,5 @@ void ptk_init(ptk_data *ptk)
     ptk->Scopish_LeftRight = FALSE;
 
     ptk->fluzy = -1;
+    ptk->rs_coef = 32768;
 }

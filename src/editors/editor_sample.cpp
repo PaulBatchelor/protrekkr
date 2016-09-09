@@ -170,8 +170,8 @@ void Draw_Wave_Data(ptk_data *ptk)
                     s_size = SAMPLE_LINES_HEIGHT / strober;
                     s_coef = 32768 / s_size;
 
-                    if(rs_coef > s_coef) rs_coef = s_coef;
-                    if(rs_coef < 1) rs_coef = 1;
+                    if(ptk->rs_coef > s_coef) ptk->rs_coef = s_coef;
+                    if(ptk->rs_coef < 1) ptk->rs_coef = 1;
                 }
 
                 // Draw a selection rect if there's any
@@ -217,7 +217,7 @@ void Draw_Wave_Data(ptk_data *ptk)
                         {
                             pos_in_wav = ((int64) s_ex * (int64) sed_display_length);
                             s_offset = (int) (pos_in_wav / LARGE_SMP_VIEW) + sed_display_start;
-                            int h = *(RawSamples[Current_Instrument][0][Current_Instrument_Split] + s_offset) / rs_coef;
+                            int h = *(RawSamples[Current_Instrument][0][Current_Instrument_Split] + s_offset) / ptk->rs_coef;
                             if(h > s_size) h = s_size;
                             if(h < -s_size) h = -s_size;
 
@@ -248,8 +248,8 @@ void Draw_Wave_Data(ptk_data *ptk)
                         {
                             pos_in_wav = ((int64) s_ex * (int64) sed_display_length);
                             s_offset = (int) (pos_in_wav / LARGE_SMP_VIEW) + sed_display_start;
-                            int h = *(RawSamples[Current_Instrument][0][Current_Instrument_Split] + s_offset) / rs_coef;
-                            int h2 = *(RawSamples[Current_Instrument][1][Current_Instrument_Split] + s_offset) / rs_coef;
+                            int h = *(RawSamples[Current_Instrument][0][Current_Instrument_Split] + s_offset) / ptk->rs_coef;
+                            int h2 = *(RawSamples[Current_Instrument][1][Current_Instrument_Split] + s_offset) / ptk->rs_coef;
                             if(h > s_size) h = s_size;
                             if(h < -s_size) h = -s_size;
                             if(h2 > s_size) h2 = s_size;
@@ -1067,7 +1067,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
             // View All
             if(zcheckMouse(ptk, 582, (Cur_Height - 96), 60, 16))
             {
-                rs_coef = 32768;
+                ptk->rs_coef = 32768;
                 sed_display_start = 0;
                 sed_display_length = SampleLength[Current_Instrument][Current_Instrument_Split];
                 draw_sampled_wave = TRUE;
@@ -1078,14 +1078,14 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
             // VZoom In
             if(zcheckMouse(ptk, 582, (Cur_Height - 78), 60, 16))
             {
-                rs_coef /= 2;
+                ptk->rs_coef /= 2;
                 draw_sampled_wave = TRUE;
             }
 
             // VZoom Out
             if(zcheckMouse(ptk, 582, (Cur_Height - 60), 60, 16))
             {
-                rs_coef *= 2;
+                ptk->rs_coef *= 2;
                 draw_sampled_wave = TRUE;
             }
 
