@@ -93,8 +93,6 @@ int liveparam = 0;
 int livevalue = 0;
 
 int Done_Tip = FALSE;
-char tipoftheday[256];
-int ctipoftheday = 0;
 char Current_Instrument_Split = 0;
 
 int player_pos = -1;
@@ -470,24 +468,24 @@ int Init_Context(ptk_data *ptk)
     srand(rand());
 #endif
 
-    ctipoftheday = rand() % 12;
+    ptk->ctipoftheday = rand() % 12;
 
-    switch(ctipoftheday)
+    switch(ptk->ctipoftheday)
     {
-        case 0: sprintf(tipoftheday, "Tip Of The Hour: Pressing CTRL+I will interpolate effect value on a marked block."); break;
-        case 1: sprintf(tipoftheday, "Tip Of The Hour: The right mouse button will have a secondary action on most buttons."); break;
-        case 2: sprintf(tipoftheday, "Tip Of The Hour: Don't set excessive track reverb send values, to get better quality."); break;
-        case 3: sprintf(tipoftheday, "Tip Of The Hour: When recording, number of positions will grow automatically when necessary."); break;
-        case 4: sprintf(tipoftheday, "Remember: MIDI is not audio, realtime fx will not affect midi sound."); break;
-        case 5: sprintf(tipoftheday, "Tip Of The Hour: On lower CPUs, you can renderize patterns to wav, and use them as samples without any loss of quality."); break;
-        case 6: sprintf(tipoftheday, "Tip Of The Hour: Volume note-cut command 'Fx' is very useful to avoid sample-clicking."); break;
-        case 7: sprintf(tipoftheday, "Tip Of The Hour: Left-Clicking on pattern editor channels numbers will mute/unmute any track (right clicking will solo it)."); break;
-        case 8: sprintf(tipoftheday, "Tip Of The Hour: Pattern command '16xx' will reset the Filter LFO of the track. No parameter required."); break;
-        case 9: sprintf(tipoftheday, "Tip Of The Hour: Use '90' command in the panning column to change midi controllers values."); break;
-        case 10: sprintf(tipoftheday, "Tip Of The Hour: Increase latency time if sound is distorted."); break;
-        case 11: sprintf(tipoftheday, "Tip Of The Hour: Pressing right mouse button on most arrows buttons (\03\04) will speed operation up.");
+        case 0: sprintf(ptk->tipoftheday, "Tip Of The Hour: Pressing CTRL+I will interpolate effect value on a marked block."); break;
+        case 1: sprintf(ptk->tipoftheday, "Tip Of The Hour: The right mouse button will have a secondary action on most buttons."); break;
+        case 2: sprintf(ptk->tipoftheday, "Tip Of The Hour: Don't set excessive track reverb send values, to get better quality."); break;
+        case 3: sprintf(ptk->tipoftheday, "Tip Of The Hour: When recording, number of positions will grow automatically when necessary."); break;
+        case 4: sprintf(ptk->tipoftheday, "Remember: MIDI is not audio, realtime fx will not affect midi sound."); break;
+        case 5: sprintf(ptk->tipoftheday, "Tip Of The Hour: On lower CPUs, you can renderize patterns to wav, and use them as samples without any loss of quality."); break;
+        case 6: sprintf(ptk->tipoftheday, "Tip Of The Hour: Volume note-cut command 'Fx' is very useful to avoid sample-clicking."); break;
+        case 7: sprintf(ptk->tipoftheday, "Tip Of The Hour: Left-Clicking on pattern editor channels numbers will mute/unmute any track (right clicking will solo it)."); break;
+        case 8: sprintf(ptk->tipoftheday, "Tip Of The Hour: Pattern command '16xx' will reset the Filter LFO of the track. No parameter required."); break;
+        case 9: sprintf(ptk->tipoftheday, "Tip Of The Hour: Use '90' command in the panning column to change midi controllers values."); break;
+        case 10: sprintf(ptk->tipoftheday, "Tip Of The Hour: Increase latency time if sound is distorted."); break;
+        case 11: sprintf(ptk->tipoftheday, "Tip Of The Hour: Pressing right mouse button on most arrows buttons (\03\04) will speed operation up.");
 
-        default: sprintf(tipoftheday, "Tip Of The Hour: See readme.txt for more infos about help and pattern commands."); break;
+        default: sprintf(ptk->tipoftheday, "Tip Of The Hour: See readme.txt for more infos about help and pattern commands."); break;
     }
 
     L_MaxLevel = 0;
@@ -1630,7 +1628,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(!Done_Tip)
         {
-            Status_Box(ptk, tipoftheday);
+            Status_Box(ptk, ptk->tipoftheday);
             Done_Tip = TRUE;
         }
         else
@@ -6835,4 +6833,5 @@ void ptk_init(ptk_data *ptk)
     ptk->pos_space = 0;
     ptk->multifactor = 4;
     ptk->seditor = 0;
+    ptk->ctipoftheday = 0;
 }

@@ -27,5 +27,7 @@ typedef struct {
     int pos_space;
     int multifactor;
     char seditor;
+    char tipoftheday[256];
+    int ctipoftheday;
 } ptk_data;
 #endif
