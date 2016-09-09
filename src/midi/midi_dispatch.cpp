@@ -429,7 +429,7 @@ void Midi_Edit_Next_Row(int Data)
 void Midi_Edit_Set_Track(int Data)
 {
     //float factor = ((float) Songtracks / 16.0f);
-    //Column_Under_Caret = 0;
+    //ptk->Column_Under_Caret = 0;
     //Track_Under_Caret = (int) (((float) Data * factor) / 127.0f * 15.0f);
     //ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK_EXTERNAL;
 }

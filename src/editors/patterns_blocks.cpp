@@ -773,7 +773,7 @@ void Paste_Selection_From_Buffer(ptk_data *ptk, int Position, int Go_Across)
     int axbc;
     int expanded = 0;
     // Dest start
-    int start_x = Get_Track_Nibble_Start(ptk, Channels_MultiNotes, Channels_Effects, Track_Under_Caret) + Column_Under_Caret + Track_Under_Caret;
+    int start_x = Get_Track_Nibble_Start(ptk, Channels_MultiNotes, Channels_Effects, Track_Under_Caret) + ptk->Column_Under_Caret + Track_Under_Caret;
     int byte;
     COLUMN_TYPE type_src;
     COLUMN_TYPE type_dst;
@@ -1656,7 +1656,7 @@ void Select_Note_Block(ptk_data *ptk)
     {
         for(i = 0; i < Channels_MultiNotes[Track_Under_Caret] * 3; i++)
         {
-            if(Column_Under_Caret == i)
+            if(ptk->Column_Under_Caret == i)
             {
                 column_to_select = Table_Select_Notes[i];
                 Mark_Block_Start(ptk, column_to_select, Track_Under_Caret, 0);
@@ -1716,8 +1716,8 @@ void Select_Block_Keyboard(ptk_data *ptk, int Type)
     {
         if(Get_LShift())
         {
-            if(block_in_selection[Curr_Buff_Block] == FALSE) Mark_Block_Start(ptk, Column_Under_Caret, Track_Under_Caret, Pattern_Line);
-            Mark_Block_End(ptk, Column_Under_Caret, Track_Under_Caret, Pattern_Line, Type);
+            if(block_in_selection[Curr_Buff_Block] == FALSE) Mark_Block_Start(ptk, ptk->Column_Under_Caret, Track_Under_Caret, Pattern_Line);
+            Mark_Block_End(ptk, ptk->Column_Under_Caret, Track_Under_Caret, Pattern_Line, Type);
         }
         else
         {
@@ -2270,7 +2270,7 @@ void Delete_Track(ptk_data *ptk)
         Copy_Track(ptk, Song_Position, i + 1, i);
     }
     Reset_Track(ptk, Song_Position, Songtracks);
-    Column_Under_Caret = 0;
+    ptk->Column_Under_Caret = 0;
 }
 
 // ------------------------------------------------------
@@ -2286,7 +2286,7 @@ void Insert_Track(ptk_data *ptk)
             Copy_Track(ptk, Song_Position, i - 1, i);
         }
         Reset_Track(ptk, Song_Position, Track_Under_Caret);
-        Column_Under_Caret = 0;
+        ptk->Column_Under_Caret = 0;
     }
 }
 #endif

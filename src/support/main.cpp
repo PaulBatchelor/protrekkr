@@ -707,7 +707,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
                                 in_note = FALSE;
                                 for(j = 0; j < Channels_MultiNotes[Track_Under_Caret]; j++)
                                 {
-                                    if(Column_Under_Caret == (j * 3))
+                                    if(ptk->Column_Under_Caret == (j * 3))
                                     {
                                         in_note = TRUE;
                                         break;
@@ -761,7 +761,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
                             in_note = FALSE;
                             for(j = 0; j < Channels_MultiNotes[Track_Under_Caret]; j++)
                             {
-                                if(Column_Under_Caret == (j * 3))
+                                if(ptk->Column_Under_Caret == (j * 3))
                                 {
                                     in_note = TRUE;
                                     break;

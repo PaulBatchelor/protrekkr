@@ -93,7 +93,6 @@ int livevalue = 0;
 char Current_Instrument_Split = 0;
 
 int posletter = 0;
-int Column_Under_Caret = 0;
 int Track_Under_Caret = 0;
 int gui_track = 0;
 int xoffseted;
@@ -2404,7 +2403,7 @@ void Newmod(ptk_data *ptk)
 
         Song_Length = 1;
         Track_Under_Caret = 0;
-        Column_Under_Caret = 0;
+        ptk->Column_Under_Caret = 0;
         Pattern_Line = 0;
         Pattern_Line_Visual = 0;
         player_line = 0;
@@ -3347,7 +3346,7 @@ void Keyboard_Handler(ptk_data *ptk)
     {
         Unselect_Selection(ptk);
         Track_Under_Caret--;
-        Column_Under_Caret = 0;
+        ptk->Column_Under_Caret = 0;
         Actupated(ptk, 0);
         ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
@@ -3361,7 +3360,7 @@ void Keyboard_Handler(ptk_data *ptk)
         {
             Track_Under_Caret = 0;
         }
-        Column_Under_Caret = 0;
+        ptk->Column_Under_Caret = 0;
         Actupated(ptk, 0);
         ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
@@ -3377,8 +3376,8 @@ void Keyboard_Handler(ptk_data *ptk)
 #endif
     {
         Unselect_Selection(ptk);
-        Column_Under_Caret += Table_Right_Tab_Notes[Column_Under_Caret];
-        if(Column_Under_Caret >= (Channels_MultiNotes[Track_Under_Caret] * 3)) Column_Under_Caret = 0;
+        ptk->Column_Under_Caret += Table_Right_Tab_Notes[ptk->Column_Under_Caret];
+        if(ptk->Column_Under_Caret >= (Channels_MultiNotes[Track_Under_Caret] * 3)) ptk->Column_Under_Caret = 0;
         Actupated(ptk, 0);
     }
 
@@ -3386,8 +3385,8 @@ void Keyboard_Handler(ptk_data *ptk)
     if(Get_LShift() && Get_LCtrl() && Keys[SDLK_TAB])
     {
         Unselect_Selection(ptk);
-        Column_Under_Caret -= Table_Left_Tab_Notes[Column_Under_Caret];
-        if(Column_Under_Caret < 0) Column_Under_Caret = (Channels_MultiNotes[Track_Under_Caret] * 3) - 3;
+        ptk->Column_Under_Caret -= Table_Left_Tab_Notes[ptk->Column_Under_Caret];
+        if(ptk->Column_Under_Caret < 0) ptk->Column_Under_Caret = (Channels_MultiNotes[Track_Under_Caret] * 3) - 3;
         Actupated(ptk, 0);
     }
 
@@ -4491,7 +4490,7 @@ void Keyboard_Handler(ptk_data *ptk)
                 // Instrument
                 for(i = 0; i < Channels_MultiNotes[Track_Under_Caret]; i++)
                 {
-                    if(Column_Under_Caret == 1 + (i * 3))
+                    if(ptk->Column_Under_Caret == 1 + (i * 3))
                     {
                         i++;
                         break;
@@ -4500,29 +4499,29 @@ void Keyboard_Handler(ptk_data *ptk)
                 i--;
 
                 // Odd
-                if(Column_Under_Caret == (1 + (i * 3)) ||
-                   Column_Under_Caret == (3 + j) ||
-                   Column_Under_Caret == (5 + j) ||
-                   Column_Under_Caret == (7 + j) ||
-                   Column_Under_Caret == (9 + j) ||
-                   Column_Under_Caret == (11 + j) ||
-                   Column_Under_Caret == (13 + j) ||
-                   Column_Under_Caret == (15 + j) ||
-                   Column_Under_Caret == (17 + j) ||
-                   Column_Under_Caret == (19 + j) ||
-                   Column_Under_Caret == (21 + j))
+                if(ptk->Column_Under_Caret == (1 + (i * 3)) ||
+                   ptk->Column_Under_Caret == (3 + j) ||
+                   ptk->Column_Under_Caret == (5 + j) ||
+                   ptk->Column_Under_Caret == (7 + j) ||
+                   ptk->Column_Under_Caret == (9 + j) ||
+                   ptk->Column_Under_Caret == (11 + j) ||
+                   ptk->Column_Under_Caret == (13 + j) ||
+                   ptk->Column_Under_Caret == (15 + j) ||
+                   ptk->Column_Under_Caret == (17 + j) ||
+                   ptk->Column_Under_Caret == (19 + j) ||
+                   ptk->Column_Under_Caret == (21 + j))
                 {
                     ped_cell = PATTERN_INSTR1 + (i * 2);                    // instrument
-                    if(Column_Under_Caret == (3 + j)) ped_cell = PATTERN_VOLUME;       // volume
-                    if(Column_Under_Caret == (5 + j)) ped_cell = PATTERN_PANNING;      // panning
-                    if(Column_Under_Caret == (7 + j)) ped_cell = PATTERN_FX;           // fx
-                    if(Column_Under_Caret == (9 + j)) ped_cell = PATTERN_FXDATA;       // fx data
-                    if(Column_Under_Caret == (11 + j)) ped_cell = PATTERN_FX2;         // fx 2
-                    if(Column_Under_Caret == (13 + j)) ped_cell = PATTERN_FXDATA2;     // fx 2 data
-                    if(Column_Under_Caret == (15 + j)) ped_cell = PATTERN_FX3;          // fx 3
-                    if(Column_Under_Caret == (17 + j)) ped_cell = PATTERN_FXDATA3;     // fx 3 data
-                    if(Column_Under_Caret == (19 + j)) ped_cell = PATTERN_FX4;         // fx 4
-                    if(Column_Under_Caret == (21 + j)) ped_cell = PATTERN_FXDATA4;     // fx 4 data
+                    if(ptk->Column_Under_Caret == (3 + j)) ped_cell = PATTERN_VOLUME;       // volume
+                    if(ptk->Column_Under_Caret == (5 + j)) ped_cell = PATTERN_PANNING;      // panning
+                    if(ptk->Column_Under_Caret == (7 + j)) ped_cell = PATTERN_FX;           // fx
+                    if(ptk->Column_Under_Caret == (9 + j)) ped_cell = PATTERN_FXDATA;       // fx data
+                    if(ptk->Column_Under_Caret == (11 + j)) ped_cell = PATTERN_FX2;         // fx 2
+                    if(ptk->Column_Under_Caret == (13 + j)) ped_cell = PATTERN_FXDATA2;     // fx 2 data
+                    if(ptk->Column_Under_Caret == (15 + j)) ped_cell = PATTERN_FX3;          // fx 3
+                    if(ptk->Column_Under_Caret == (17 + j)) ped_cell = PATTERN_FXDATA3;     // fx 3 data
+                    if(ptk->Column_Under_Caret == (19 + j)) ped_cell = PATTERN_FX4;         // fx 4
+                    if(ptk->Column_Under_Caret == (21 + j)) ped_cell = PATTERN_FXDATA4;     // fx 4 data
                     
                     ptk->ltretvalue = retvalue;
                     xoffseted = (Track_Under_Caret * PATTERN_BYTES) + (Pattern_Line * PATTERN_ROW_LEN) + ped_cell;
@@ -4531,17 +4530,17 @@ void Keyboard_Handler(ptk_data *ptk)
 
                     if(retvalue < 16)
                     {
-                        if(oldval == 255 && Column_Under_Caret == (1 + (i * 3))) oldval = 0;
-                        if(oldval == 255 && Column_Under_Caret == (3 + j)) oldval = 0;
-                        if(oldval == 255 && Column_Under_Caret == (5 + j)) oldval = 0;
+                        if(oldval == 255 && ptk->Column_Under_Caret == (1 + (i * 3))) oldval = 0;
+                        if(oldval == 255 && ptk->Column_Under_Caret == (3 + j)) oldval = 0;
+                        if(oldval == 255 && ptk->Column_Under_Caret == (5 + j)) oldval = 0;
                         oldval = (oldval & 0xf) + (retvalue << 4);
                         *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = oldval;
 
                         // Max panning
-                        if(oldval != 255 && Column_Under_Caret == (5 + j) &&
+                        if(oldval != 255 && ptk->Column_Under_Caret == (5 + j) &&
                            *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) != 0x90)
                         {
-                            if(oldval != 255 && Column_Under_Caret == (5 + j) &&
+                            if(oldval != 255 && ptk->Column_Under_Caret == (5 + j) &&
                             *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x80)
                             {
                                 *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x80;
@@ -4549,7 +4548,7 @@ void Keyboard_Handler(ptk_data *ptk)
                         }
 
                         // Max instrument
-                        if(oldval != 255 && Column_Under_Caret == (1 + (i * 3)) &&
+                        if(oldval != 255 && ptk->Column_Under_Caret == (1 + (i * 3)) &&
                            *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x7f)
                         {
                             *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x7f;
@@ -4570,16 +4569,16 @@ void Keyboard_Handler(ptk_data *ptk)
                         if(!Delete_Selection(ptk, Cur_Position))
                         {
                             oldval = 0;
-                            if(Column_Under_Caret == (1 + (i * 3))) oldval = 255;
-                            if(Column_Under_Caret == (3 + j)) oldval = 255;
-                            if(Column_Under_Caret == (5 + j)) oldval = 255;
+                            if(ptk->Column_Under_Caret == (1 + (i * 3))) oldval = 255;
+                            if(ptk->Column_Under_Caret == (3 + j)) oldval = 255;
+                            if(ptk->Column_Under_Caret == (5 + j)) oldval = 255;
                             *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = oldval;
 
                             // Max panning
-                            if(oldval != 255 && Column_Under_Caret == (5 + j) &&
+                            if(oldval != 255 && ptk->Column_Under_Caret == (5 + j) &&
                                *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) != 0x90)
                             {
-                                if(oldval != 255 && Column_Under_Caret == (5 + j) &&
+                                if(oldval != 255 && ptk->Column_Under_Caret == (5 + j) &&
                                    *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x80)
                                 {
                                     *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x80;
@@ -4587,7 +4586,7 @@ void Keyboard_Handler(ptk_data *ptk)
                             }
 
                             // Max instrument
-                            if(oldval != 255 && Column_Under_Caret == (1 + (i * 3)) &&
+                            if(oldval != 255 && ptk->Column_Under_Caret == (1 + (i * 3)) &&
                                *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x7f)
                             {
                                 *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x7f;
@@ -4611,7 +4610,7 @@ void Keyboard_Handler(ptk_data *ptk)
                 {
                     for(i = 0; i < Channels_MultiNotes[Track_Under_Caret]; i++)
                     {
-                        if(Column_Under_Caret == 2 +(i * 3))
+                        if(ptk->Column_Under_Caret == 2 +(i * 3))
                         {
                             i++;
                             break;
@@ -4619,29 +4618,29 @@ void Keyboard_Handler(ptk_data *ptk)
                     }
                     i--;
                     // Even
-                    if(Column_Under_Caret == (2 + (i * 3)) ||
-                       Column_Under_Caret == (4 + j) ||
-                       Column_Under_Caret == (6 + j) ||
-                       Column_Under_Caret == (8 + j) ||
-                       Column_Under_Caret == (10 + j) ||
-                       Column_Under_Caret == (12 + j) ||
-                       Column_Under_Caret == (14 + j) ||
-                       Column_Under_Caret == (16 + j) ||
-                       Column_Under_Caret == (18 + j) ||
-                       Column_Under_Caret == (20 + j) ||
-                       Column_Under_Caret == (22 + j))
+                    if(ptk->Column_Under_Caret == (2 + (i * 3)) ||
+                       ptk->Column_Under_Caret == (4 + j) ||
+                       ptk->Column_Under_Caret == (6 + j) ||
+                       ptk->Column_Under_Caret == (8 + j) ||
+                       ptk->Column_Under_Caret == (10 + j) ||
+                       ptk->Column_Under_Caret == (12 + j) ||
+                       ptk->Column_Under_Caret == (14 + j) ||
+                       ptk->Column_Under_Caret == (16 + j) ||
+                       ptk->Column_Under_Caret == (18 + j) ||
+                       ptk->Column_Under_Caret == (20 + j) ||
+                       ptk->Column_Under_Caret == (22 + j))
                     {
                         ped_cell = PATTERN_INSTR1 + (i * 2);
-                        if(Column_Under_Caret == (4 + j)) ped_cell = PATTERN_VOLUME;
-                        if(Column_Under_Caret == (6 + j)) ped_cell = PATTERN_PANNING;
-                        if(Column_Under_Caret == (8 + j)) ped_cell = PATTERN_FX;
-                        if(Column_Under_Caret == (10 + j)) ped_cell = PATTERN_FXDATA;
-                        if(Column_Under_Caret == (12 + j)) ped_cell = PATTERN_FX2;
-                        if(Column_Under_Caret == (14 + j)) ped_cell = PATTERN_FXDATA2;
-                        if(Column_Under_Caret == (16 + j)) ped_cell = PATTERN_FX3;
-                        if(Column_Under_Caret == (18 + j)) ped_cell = PATTERN_FXDATA3;
-                        if(Column_Under_Caret == (20 + j)) ped_cell = PATTERN_FX4;
-                        if(Column_Under_Caret == (22 + j)) ped_cell = PATTERN_FXDATA4;
+                        if(ptk->Column_Under_Caret == (4 + j)) ped_cell = PATTERN_VOLUME;
+                        if(ptk->Column_Under_Caret == (6 + j)) ped_cell = PATTERN_PANNING;
+                        if(ptk->Column_Under_Caret == (8 + j)) ped_cell = PATTERN_FX;
+                        if(ptk->Column_Under_Caret == (10 + j)) ped_cell = PATTERN_FXDATA;
+                        if(ptk->Column_Under_Caret == (12 + j)) ped_cell = PATTERN_FX2;
+                        if(ptk->Column_Under_Caret == (14 + j)) ped_cell = PATTERN_FXDATA2;
+                        if(ptk->Column_Under_Caret == (16 + j)) ped_cell = PATTERN_FX3;
+                        if(ptk->Column_Under_Caret == (18 + j)) ped_cell = PATTERN_FXDATA3;
+                        if(ptk->Column_Under_Caret == (20 + j)) ped_cell = PATTERN_FX4;
+                        if(ptk->Column_Under_Caret == (22 + j)) ped_cell = PATTERN_FXDATA4;
 
                         ptk->ltretvalue = retvalue;
                         xoffseted = (Track_Under_Caret * PATTERN_BYTES) + (Pattern_Line * PATTERN_ROW_LEN) + ped_cell;
@@ -4649,17 +4648,17 @@ void Keyboard_Handler(ptk_data *ptk)
 
                         if(retvalue < 16)
                         {
-                            if(oldval == 255 && Column_Under_Caret == (2 + (i * 3))) oldval = 0;
-                            if(oldval == 255 && Column_Under_Caret == (4 + j)) oldval = 0;
-                            if(oldval == 255 && Column_Under_Caret == (6 + j)) oldval = 0;
+                            if(oldval == 255 && ptk->Column_Under_Caret == (2 + (i * 3))) oldval = 0;
+                            if(oldval == 255 && ptk->Column_Under_Caret == (4 + j)) oldval = 0;
+                            if(oldval == 255 && ptk->Column_Under_Caret == (6 + j)) oldval = 0;
                             oldval = (oldval & 0xf0) + retvalue;
                             *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = oldval;
 
                             // Max panning
-                            if(oldval != 255 && Column_Under_Caret == (6 + j) &&
+                            if(oldval != 255 && ptk->Column_Under_Caret == (6 + j) &&
                                *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) != 0x90)
                             {
-                                if(oldval != 255 && Column_Under_Caret == (6 + j) &&
+                                if(oldval != 255 && ptk->Column_Under_Caret == (6 + j) &&
                                    *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x80)
                                 {
                                     *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x80;
@@ -4667,7 +4666,7 @@ void Keyboard_Handler(ptk_data *ptk)
                             }
 
                             // Max instrument
-                            if(oldval != 255 && Column_Under_Caret == (2 + (i * 3)) &&
+                            if(oldval != 255 && ptk->Column_Under_Caret == (2 + (i * 3)) &&
                                *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 127)
                             {
                                 *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 127;
@@ -4687,16 +4686,16 @@ void Keyboard_Handler(ptk_data *ptk)
                             if(!Delete_Selection(ptk, Cur_Position))
                             {
                                 oldval = 0;
-                                if(Column_Under_Caret == (2 + (i * 3))) oldval = 255;
-                                if(Column_Under_Caret == (4 + j)) oldval = 255;
-                                if(Column_Under_Caret == (6 + j)) oldval = 255;
+                                if(ptk->Column_Under_Caret == (2 + (i * 3))) oldval = 255;
+                                if(ptk->Column_Under_Caret == (4 + j)) oldval = 255;
+                                if(ptk->Column_Under_Caret == (6 + j)) oldval = 255;
                                 *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = oldval;
 
                                 // Max panning
-                                if(oldval != 255 && Column_Under_Caret == (6 + j) &&
+                                if(oldval != 255 && ptk->Column_Under_Caret == (6 + j) &&
                                    *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) != 0x90)
                                 {
-                                    if(oldval != 255 && Column_Under_Caret == (6 + j) &&
+                                    if(oldval != 255 && ptk->Column_Under_Caret == (6 + j) &&
                                        *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x80)
                                     {
                                         *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x80;
@@ -4704,7 +4703,7 @@ void Keyboard_Handler(ptk_data *ptk)
                                 }
 
                                 // Max instrument
-                                if(oldval != 255 && Column_Under_Caret == (2 + (i * 3)) &&
+                                if(oldval != 255 && ptk->Column_Under_Caret == (2 + (i * 3)) &&
                                    *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x7f)
                                 {
                                     *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x7f;
@@ -4798,7 +4797,7 @@ void Keyboard_Handler(ptk_data *ptk)
             // Check if this is a legal note column
             for(i = 0; i < Channels_MultiNotes[Track_Under_Caret]; i++)
             {
-                if(Column_Under_Caret == (i * 3))
+                if(ptk->Column_Under_Caret == (i * 3))
                 {
                     in_note = TRUE;
                     break;
@@ -4890,11 +4889,11 @@ void Keyboard_Handler(ptk_data *ptk)
                                 Sub_Channels_NoteOff[Track_Under_Caret][Nbr_Sub_NoteOff].Channel = Track_Under_Caret;
                                 if(Keyboard_Notes_Bound[i])
                                 {
-                                    pos = (Column_Under_Caret / 3);
+                                    pos = (ptk->Column_Under_Caret / 3);
                                 }
                                 else
                                 {
-                                    pos = (Column_Under_Caret / 3) + Nbr_Sub_NoteOff;
+                                    pos = (ptk->Column_Under_Caret / 3) + Nbr_Sub_NoteOff;
                                 }
                                 Sub_Channels_NoteOff[Track_Under_Caret][Nbr_Sub_NoteOff].Sub_Channel = pos;
 
@@ -4982,7 +4981,7 @@ No_Key:;
             // Check if this is a legal note column
             for(i = 0; i < Channels_MultiNotes[Track_Under_Caret]; i++)
             {
-                if(Column_Under_Caret == (i * 3))
+                if(ptk->Column_Under_Caret == (i * 3))
                 {
                     in_note = TRUE;
                     break;
@@ -5019,7 +5018,7 @@ No_Key:;
             // Check if this is a legal note column
             for(i = 0; i < Channels_MultiNotes[Track_Under_Caret]; i++)
             {
-                if(Column_Under_Caret == (i * 3))
+                if(ptk->Column_Under_Caret == (i * 3))
                 {
                     in_note = TRUE;
                     break;
@@ -6829,4 +6828,5 @@ void ptk_init(ptk_data *ptk)
     ptk->Done_Tip = FALSE;
     ptk->player_pos = -1;
     ptk->teac = 0;
+    ptk->Column_Under_Caret = 0;
 }

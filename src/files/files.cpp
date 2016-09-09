@@ -89,7 +89,7 @@ void Init_Tracker_Context_After_ModLoad(ptk_data *ptk)
 {
     Track_Under_Caret = 0;
     Current_Instrument = 0;
-    Column_Under_Caret = 0;
+    ptk->Column_Under_Caret = 0;
 
     Pattern_Line = 0;
     Pattern_Line_Visual = 0;

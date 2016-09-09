@@ -610,7 +610,7 @@ Go_Display:
             }
             else
             {
-                draw_pated_highlight(ptk, gui_track, line, Track_Under_Caret, Column_Under_Caret, y);
+                draw_pated_highlight(ptk, gui_track, line, Track_Under_Caret, ptk->Column_Under_Caret, y);
                 y += 8;
             }
         }
@@ -1613,21 +1613,21 @@ void Actupated(ptk_data *ptk, int modac)
     }
 
     int max_channel_dat = Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, Track_Under_Caret) - 1;
-    if(Column_Under_Caret > max_channel_dat)
+    if(ptk->Column_Under_Caret > max_channel_dat)
     {
         if(Track_Under_Caret < Songtracks - 1)
         {
-            Column_Under_Caret = 0;
+            ptk->Column_Under_Caret = 0;
             Track_Under_Caret++;
         }
         else
         {
-            Column_Under_Caret = 0;
+            ptk->Column_Under_Caret = 0;
             Track_Under_Caret = 0;
         }
         ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
-    if(Column_Under_Caret < 0)
+    if(ptk->Column_Under_Caret < 0)
     {
         Track_Under_Caret--;
         if(Track_Under_Caret < 0)
@@ -1639,7 +1639,7 @@ void Actupated(ptk_data *ptk, int modac)
             max_channel_dat = Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, Track_Under_Caret) - 1;
         }
         ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
-        Column_Under_Caret = max_channel_dat;
+        ptk->Column_Under_Caret = max_channel_dat;
     }
     if(Track_Under_Caret > Songtracks - 1)
     {
@@ -1707,7 +1707,7 @@ void Actupated(ptk_data *ptk, int modac)
 
     Cur_Line = Get_Pattern_Line(ptk);
 
-    draw_pated(ptk, gui_track, Cur_Line, Track_Under_Caret, Column_Under_Caret);
+    draw_pated(ptk, gui_track, Cur_Line, Track_Under_Caret, ptk->Column_Under_Caret);
 
     if(Continuous_Scroll)
     {
@@ -2084,7 +2084,7 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
                 Pattern_Delay_Horiz_Right = 0;
                 Pattern_First_Delay_Horiz_Right = 200.0f;
                 if(under_mouse > (Songtracks - 1)) under_mouse = Songtracks - 1;
-                if(!Left) Column_Under_Caret = Get_Last_Track_Column(ptk, under_mouse);
+                if(!Left) ptk->Column_Under_Caret = Get_Last_Track_Column(ptk, under_mouse);
                 if(Was_Scrolling) *Was_Scrolling = TRUE;
             }
         }
@@ -2117,7 +2117,7 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
                     Pattern_Delay_Horiz_Right_Slow = 0;
                     Pattern_First_Delay_Horiz_Right_Slow = 200.0f;
                     if(under_mouse > (Songtracks - 1)) under_mouse = Songtracks - 1;
-                    if(!Left) Column_Under_Caret = Get_Last_Track_Column(ptk, under_mouse);
+                    if(!Left) ptk->Column_Under_Caret = Get_Last_Track_Column(ptk, under_mouse);
                     if(Was_Scrolling) *Was_Scrolling = TRUE;
                 }
             }
@@ -2201,7 +2201,7 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
             under_mouse = gui_track;
         }
         if(Was_Scrolling) *Was_Scrolling = TRUE;
-        Column_Under_Caret = 0;
+        ptk->Column_Under_Caret = 0;
     }
 
     if(under_mouse > Songtracks - 1) under_mouse = Songtracks - 1;
@@ -2687,7 +2687,7 @@ void Mouse_Sliders_Right_Pattern_Ed(ptk_data *ptk)
     {
         int In_Scrolling = FALSE;
         Get_Column_Over_Mouse(ptk, &Track_Under_Caret,
-                              &Column_Under_Caret,
+                              &ptk->Column_Under_Caret,
                               FALSE,
                               &In_Scrolling,
                               FALSE);
@@ -3165,7 +3165,7 @@ void Goto_Next_Page(ptk_data *ptk)
 void Goto_Previous_Column(ptk_data *ptk)
 {
     Select_Block_Keyboard(ptk, BLOCK_MARK_TRACKS);
-    Column_Under_Caret--;
+    ptk->Column_Under_Caret--;
     Actupated(ptk, 0);
     Select_Block_Keyboard(ptk, BLOCK_MARK_TRACKS);
     ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
@@ -3176,7 +3176,7 @@ void Goto_Previous_Column(ptk_data *ptk)
 void Goto_Next_Column(ptk_data *ptk)
 {
     Select_Block_Keyboard(ptk, BLOCK_MARK_TRACKS);
-    Column_Under_Caret++;
+    ptk->Column_Under_Caret++;
     Actupated(ptk, 0);
     Select_Block_Keyboard(ptk, BLOCK_MARK_TRACKS);
     ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
@@ -3190,7 +3190,7 @@ void Goto_Top_Left(ptk_data *ptk)
     if(!Get_LCtrl()) Pattern_Line = 0;
     else
     {
-        Column_Under_Caret = 0;
+        ptk->Column_Under_Caret = 0;
         Track_Under_Caret = 0;
     }
     Actupated(ptk, 0);
@@ -3206,7 +3206,7 @@ void Goto_Bottom_Right(ptk_data *ptk)
     if(!Get_LCtrl()) Pattern_Line = patternLines[pSequence[Get_Song_Position(ptk)]] - 1;
     else
     {
-        Column_Under_Caret = 0;
+        ptk->Column_Under_Caret = 0;
         Track_Under_Caret = Songtracks - 1;
     }
     Actupated(ptk, 0);

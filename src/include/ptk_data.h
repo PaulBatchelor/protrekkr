@@ -44,5 +44,7 @@ typedef struct {
     int player_pos;
 
     char teac;
+    
+    int Column_Under_Caret;
 } ptk_data;
 #endif
