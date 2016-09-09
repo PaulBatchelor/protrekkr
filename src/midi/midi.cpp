@@ -83,6 +83,7 @@ void _Midi_Send(ptk_data *ptk, int nbr_track, int eff_dat, int row_dat);
 // Return the instrument associated with the midi program
 int Midi_GetProgram(int midi_program)
 {
+/*
     int i;
 
     for(i = 0; i < 128; i++)
@@ -90,6 +91,7 @@ int Midi_GetProgram(int midi_program)
         if(midi_program == Midiprg[i]) return(i);
     }
     return(-1);
+*/
 }
 
 // ------------------------------------------------------
@@ -98,6 +100,7 @@ void Midi_CallBackIn(double deltatime,
                      std::vector< unsigned char > *message,
                      void *userData)
 {
+/*
     ptk_data *ptk = g_ptk;
     int Midi_Channel_Number;
     int Midi_Command;
@@ -224,12 +227,14 @@ void Midi_CallBackIn(double deltatime,
             Unknown_Message = Param1;
             break;
     }
+*/
 }
 
 // ------------------------------------------------------
 // Turn all midi notes off
 void Midi_AllNotesOff(ptk_data *ptk)
 {
+/*
     if(c_midiout != -1)
     {
         for(int no_track = 0; no_track < MAX_TRACKS; no_track++)
@@ -237,24 +242,28 @@ void Midi_AllNotesOff(ptk_data *ptk)
             Midi_NoteOff(ptk, no_track, -1);
         }
     }
+*/
 }
 
 // ------------------------------------------------------
 // Reset midi out device
 void Midi_Reset(ptk_data *ptk)
 {
+/*
     Midi_AllNotesOff(ptk);
 
     for(int mreset = 0; mreset < 16; mreset++)
     {
         LastProgram[mreset] = -1;
     }
+*/
 }
 
 // ------------------------------------------------------
 // Send a command to the midi out device
 void Midi_Send(ptk_data *ptk, int nbr_track, int eff_dat, int row_dat)
 {
+/*
     int i;
 
     if(c_midiout != -1)
@@ -273,12 +282,14 @@ void Midi_Send(ptk_data *ptk, int nbr_track, int eff_dat, int row_dat)
         }
         _Midi_Send(ptk, nbr_track, eff_dat, row_dat);
     }
+*/
 }
 
 // ------------------------------------------------------
 // Turn a midi channel off
 void Midi_NoteOff(ptk_data *ptk, int channel, int note)
 {
+/*
     int i;
 
     if(c_midiout != -1)
@@ -307,12 +318,14 @@ void Midi_NoteOff(ptk_data *ptk, int channel, int note)
             Midi_Notes_History_Amount = 0;
         }
     }
+*/
 }
 
 // ------------------------------------------------------
 // Open the midi in device
 void Midi_InitIn(ptk_data *ptk)
 {
+/*
     if(midiin_changed != 0)
     {
         if(c_midiin < -1) c_midiin = n_midiindevices - 1;
@@ -341,23 +354,27 @@ void Midi_InitIn(ptk_data *ptk)
         }
         midiin_changed = 0;
     }
+*/
 }
 
 // ------------------------------------------------------
 // Close the midi in device
 void Midi_CloseIn(ptk_data *ptk)
 {
+/*
     if(midiin)
     {
         if(midiin_port_opened) midiin->cancelCallback();
         midiin->closePort();
     }
+*/
 }
 
 // ------------------------------------------------------
 // Open the midi out device
 void Midi_InitOut(ptk_data *ptk)
 {
+/*
     if(midiout_changed != 0)
     {
         Midi_Reset(ptk);
@@ -384,19 +401,23 @@ void Midi_InitOut(ptk_data *ptk)
         }
         midiout_changed = 0;
     }
+*/
 }
 
 // ------------------------------------------------------
 // Close the midi out device
 void Midi_CloseOut(ptk_data *ptk)
 {
+/*
     if(midiout) midiout->closePort();
+*/
 }
 
 // ------------------------------------------------------
 // Enumerate all midi in/out interfaces available
 void Midi_GetAll(ptk_data *ptk)
 {
+/*
     n_midiindevices = 0;
     n_midioutdevices = 0;
 
@@ -410,6 +431,7 @@ void Midi_GetAll(ptk_data *ptk)
             n_midioutdevices = midiout->getPortCount();
         }
     }
+*/
 }
 
 // ------------------------------------------------------

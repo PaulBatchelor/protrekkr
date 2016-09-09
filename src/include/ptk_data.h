@@ -39,5 +39,6 @@ typedef struct {
     int gui_action;
 
     int gui_pushed;
+    int Done_Tip;
 } ptk_data;
 #endif

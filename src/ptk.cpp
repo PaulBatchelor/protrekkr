@@ -91,7 +91,6 @@ char teac = 0;
 int liveparam = 0;
 int livevalue = 0;
 
-int Done_Tip = FALSE;
 char Current_Instrument_Split = 0;
 
 int player_pos = -1;
@@ -1615,10 +1614,10 @@ int Screen_Update(ptk_data *ptk)
 
         Draw_Scope_Files_Button(ptk);
 
-        if(!Done_Tip)
+        if(!ptk->Done_Tip)
         {
             Status_Box(ptk, ptk->tipoftheday);
-            Done_Tip = TRUE;
+            ptk->Done_Tip = TRUE;
         }
         else
         {
@@ -6830,4 +6829,5 @@ void ptk_init(ptk_data *ptk)
     ptk->gui_action_metronome = GUI_CMD_NOP;
     ptk->gui_action = GUI_CMD_NOP;
     ptk->gui_pushed = 0;
+    ptk->Done_Tip = FALSE;
 }
