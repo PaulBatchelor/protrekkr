@@ -2863,7 +2863,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
         Curr_Buff_Block = 0;
         Draw_Pattern_Right_Stuff(ptk);
         Actupated(ptk, 0);
-        teac = 0;
+        ptk->teac = 0;
         ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
     // Set buffer 2
@@ -2872,7 +2872,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
         Curr_Buff_Block = 1;
         Draw_Pattern_Right_Stuff(ptk);
         Actupated(ptk, 0);
-        teac = 0;
+        ptk->teac = 0;
         ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
     // Set buffer 3
@@ -2881,7 +2881,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
         Curr_Buff_Block = 2;
         Draw_Pattern_Right_Stuff(ptk);
         Actupated(ptk, 0);
-        teac = 0;
+        ptk->teac = 0;
         ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
     // Set buffer 4
@@ -2890,7 +2890,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
         Curr_Buff_Block = 3;
         Draw_Pattern_Right_Stuff(ptk);
         Actupated(ptk, 0);
-        teac = 0;
+        ptk->teac = 0;
         ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
 

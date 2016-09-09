@@ -87,7 +87,6 @@ ptk_data *g_ptk = &ptk;
 
 char Visible_Columns = 0;
 
-char teac = 0;
 int liveparam = 0;
 int livevalue = 0;
 
@@ -1041,7 +1040,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_CHANGE_BPM_TICKS_NBR)
         {
-            Actualize_Master(ptk, teac);
+            Actualize_Master(ptk, ptk->teac);
             Display_Beat_Time();
         }
 
@@ -1049,7 +1048,7 @@ int Screen_Update(ptk_data *ptk)
            ptk->gui_action == GUI_CMD_INSERT_TRACK ||
            ptk->gui_action == GUI_CMD_DELETE_TRACK)
         {
-            Actualize_Master(ptk, teac);
+            Actualize_Master(ptk, ptk->teac);
             Actupated(ptk, 0);
             Draw_Scope(ptk);
             Display_Tracks_To_Render();
@@ -1081,7 +1080,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_UPDATE_TRACK_ED)
         {
-            Actualize_Track_Ed(ptk, teac);
+            Actualize_Track_Ed(ptk, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_SET_TRACK_THRESHOLD)
@@ -1186,7 +1185,7 @@ int Screen_Update(ptk_data *ptk)
             ptk->retletter[71] = FALSE;
             userscreen = USER_SCREEN_FX_SETUP_EDIT;
             Draw_Fx_Ed(ptk);
-            Actualize_Fx_Ed(ptk, teac);
+            Actualize_Fx_Ed(ptk, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_SELECT_SEQUENCER)
@@ -1236,7 +1235,7 @@ int Screen_Update(ptk_data *ptk)
             ptk->retletter[71] = FALSE;
             userscreen = USER_SCREEN_TRACK_FX_EDIT;
             Draw_Track_Fx_Ed(ptk);
-            Actualize_Track_Fx_Ed(ptk, teac);
+            Actualize_Track_Fx_Ed(ptk, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_SELECT_SAMPLE_EDIT)
@@ -1344,12 +1343,12 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_REFRESH_TB303_PARAMS)
         {
-            Actualize_303_Ed(ptk, teac);
+            Actualize_303_Ed(ptk, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL)
         {
-            Refresh_303_Unit(ptk, Refresh_Unit, teac);
+            Refresh_303_Unit(ptk, Refresh_Unit, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_SAVE_303_PATTERN)
@@ -1385,7 +1384,7 @@ int Screen_Update(ptk_data *ptk)
         if(ptk->gui_action == GUI_CMD_UPDATE_LOOP_EDITOR_ED)
         {
             // 1 = loop end
-            Actualize_Instrument_Ed(ptk, 1, teac);
+            Actualize_Instrument_Ed(ptk, 1, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_SAVE_MODULE)
@@ -1430,22 +1429,22 @@ int Screen_Update(ptk_data *ptk)
         if(ptk->gui_action == GUI_CMD_UPDATE_INSTRUMENT_ED)
         {
             // 0 loop start
-            Actualize_Instrument_Ed(ptk, 0, teac);
+            Actualize_Instrument_Ed(ptk, 0, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_UPDATE_DISKIO_ED)
         {
-            Actualize_DiskIO_Ed(ptk, teac);
+            Actualize_DiskIO_Ed(ptk, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_UPDATE_REVERB_ED)
         {
-            Actualize_Reverb_Ed(ptk, teac);
+            Actualize_Reverb_Ed(ptk, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_UPDATE_MIDI_ED)
         {
-            //Actualize_Midi_Ed(ptk, teac);
+            //Actualize_Midi_Ed(ptk, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_NEW_MODULE)
@@ -1460,17 +1459,17 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_UPDATE_FX_ED)
         {
-            Actualize_Fx_Ed(ptk, teac);
+            Actualize_Fx_Ed(ptk, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_UPDATE_SETUP_ED)
         {
-            Actualize_Master_Ed(ptk, teac);
+            Actualize_Master_Ed(ptk, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_UPDATE_SYNTH_ED)
         {
-            Actualize_Synth_Ed(ptk, teac);
+            Actualize_Synth_Ed(ptk, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_MIDI_NOTE_OFF_1_TRACK)
@@ -1485,12 +1484,12 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_UPDATE_TRACK_FX_ED)
         {
-            Actualize_Track_Fx_Ed(ptk, teac);
+            Actualize_Track_Fx_Ed(ptk, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_UPDATE_MIDI_303_ED)
         {
-            Actualize_303_Ed(ptk, teac);
+            Actualize_303_Ed(ptk, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_PREVIOUS_16_INSTR)
@@ -1581,7 +1580,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_REFRESH_SAMPLE_ED)
         {
-            Actualize_Sample_Ed(ptk, teac);
+            Actualize_Sample_Ed(ptk, ptk->teac);
         }
 
         if(ptk->gui_action == GUI_CMD_REFRESH_PALETTE)
@@ -3141,7 +3140,7 @@ void Actualize_Input(ptk_data *ptk)
         // Synth name
         case INPUT_SYNTH_NAME:
             Actualize_Name(ptk->retletter, PARASynth[Current_Instrument].presetname);
-            teac = UPDATE_SYNTH_CHANGE_NAME;
+            ptk->teac = UPDATE_SYNTH_CHANGE_NAME;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             break;
 
@@ -3160,28 +3159,28 @@ void Actualize_Input(ptk_data *ptk)
         // 303 pattern
         case INPUT_303_PATTERN:
             Actualize_Name(ptk->retletter, tb303[sl3].pattern_name[tb303[sl3].selectedpattern]);
-            teac = 18;
+            ptk->teac = 18;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_303_ED;
             break;
 
         // Reverb
         case INPUT_REVERB_NAME:
             Actualize_Name(ptk->retletter, Reverb_Name);
-            teac = UPDATE_REVERB_ED_CHANGE_NAME;
+            ptk->teac = UPDATE_REVERB_ED_CHANGE_NAME;
             ptk->gui_action = GUI_CMD_UPDATE_REVERB_ED;
             break;
 
         // Selection
         case INPUT_SELECTION_NAME:
             Actualize_Name(ptk->retletter, Selection_Name);
-            teac = 3;
+            ptk->teac = 3;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
             break;
 
         // Reverb
         case INPUT_MIDI_NAME:
             Actualize_Name(ptk->retletter, Midi_Name);
-            teac = UPDATE_MIDI_ED_CHANGE_NAME;
+            ptk->teac = UPDATE_MIDI_ED_CHANGE_NAME;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_ED;
             break;
 
@@ -5092,7 +5091,7 @@ void Mouse_Handler(ptk_data *ptk)
 
     if(ptk->gui_action == GUI_CMD_NOP) ptk->gui_action = GUI_CMD_NONE;
 
-    teac = 0;
+    ptk->teac = 0;
 
     // mouse wheel up
     if(Mouse.wheel == 1)
@@ -5456,7 +5455,7 @@ void Mouse_Handler(ptk_data *ptk)
             Songtracks--;
             if(Songtracks < 1) Songtracks = 1;
             ptk->gui_action = GUI_CMD_CHANGE_TRACKS_NBR;
-            teac = 4;
+            ptk->teac = 4;
         }
         // Increase the number of tracks
         if(zcheckMouse(ptk, 368, 28, 16, 16) && Songtracks < 16)
@@ -5464,7 +5463,7 @@ void Mouse_Handler(ptk_data *ptk)
             Songtracks++;
             if(Songtracks > 16) Songtracks = 16;
             ptk->gui_action = GUI_CMD_CHANGE_TRACKS_NBR;
-            teac = 4;
+            ptk->teac = 4;
         }
 
         // Delete the current track
@@ -5482,7 +5481,7 @@ void Mouse_Handler(ptk_data *ptk)
                 Delete_Track(ptk);
             }
             ptk->gui_action = GUI_CMD_DELETE_TRACK;
-            teac = 4;
+            ptk->teac = 4;
         }
         // Insert a track at current position
         if(zcheckMouse(ptk, 302, 28, 9, 16) && Songtracks < 16 && !Songplaying)
@@ -5496,7 +5495,7 @@ void Mouse_Handler(ptk_data *ptk)
             {
                 Insert_Track(ptk);
                 ptk->gui_action = GUI_CMD_INSERT_TRACK;
-                teac = 4;
+                ptk->teac = 4;
             }
         }
         
@@ -5505,7 +5504,7 @@ void Mouse_Handler(ptk_data *ptk)
         {
             BeatsPerMin--;
             ptk->gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
-            teac = 1;
+            ptk->teac = 1;
         }
 
         // Increase the number of BPM
@@ -5513,7 +5512,7 @@ void Mouse_Handler(ptk_data *ptk)
         {
             BeatsPerMin++;
             ptk->gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
-            teac = 1;
+            ptk->teac = 1;
         }
 
         // Decrease the number of TPB
@@ -5521,7 +5520,7 @@ void Mouse_Handler(ptk_data *ptk)
         {
             TicksPerBeat--;
             ptk->gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
-            teac = 2;
+            ptk->teac = 2;
         }
 
         // Increase the number of TPB
@@ -5529,7 +5528,7 @@ void Mouse_Handler(ptk_data *ptk)
         {
             TicksPerBeat++;
             ptk->gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
-            teac = 2;
+            ptk->teac = 2;
         }
 
         // Delete instrument
@@ -5674,7 +5673,7 @@ void Mouse_Handler(ptk_data *ptk)
         if(zcheckMouse(ptk, 20 + (TAB_LARG * 7), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_FX_SETUP_EDIT || Patterns_Lines_Offset))
         {
             ptk->gui_action = GUI_CMD_SELECT_FX_EDIT;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 20 + (TAB_LARG * 8), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_REVERB_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_REVERB_EDIT;
         if(zcheckMouse(ptk, 20 + (TAB_LARG * 9), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_DISKIO_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_DISKIO_EDIT;
@@ -5772,7 +5771,7 @@ void Mouse_Handler(ptk_data *ptk)
             Songtracks -= 5;
             if(Songtracks < 1) Songtracks = 1;
             ptk->gui_action = GUI_CMD_CHANGE_TRACKS_NBR;
-            teac = 4;
+            ptk->teac = 4;
         }
         // Increase the number of tracks
         if(zcheckMouse(ptk, 368, 28, 16, 16) && Songtracks < 16)
@@ -5780,7 +5779,7 @@ void Mouse_Handler(ptk_data *ptk)
             Songtracks += 5;
             if(Songtracks > 16) Songtracks = 16;
             ptk->gui_action = GUI_CMD_CHANGE_TRACKS_NBR;
-            teac = 4;
+            ptk->teac = 4;
         }
 
         // Reduce the number of BPM by 16
@@ -5788,14 +5787,14 @@ void Mouse_Handler(ptk_data *ptk)
         {
             BeatsPerMin -= 16;
             ptk->gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
-            teac = 1;
+            ptk->teac = 1;
         }
         // Increase the number of BPM by 16
         if(zcheckMouse(ptk, 368, 46, 16, 16) && !Songplaying)
         {
             BeatsPerMin += 16;
             ptk->gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
-            teac = 1;
+            ptk->teac = 1;
         }
 
         // Decrease the number of TPB
@@ -5803,7 +5802,7 @@ void Mouse_Handler(ptk_data *ptk)
         {
             TicksPerBeat -= 10;
             ptk->gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
-            teac = 2;
+            ptk->teac = 2;
         }
 
         // Increase the number of TPB
@@ -5811,7 +5810,7 @@ void Mouse_Handler(ptk_data *ptk)
         {
             TicksPerBeat += 10;
             ptk->gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
-            teac = 2;
+            ptk->teac = 2;
         }
 
         // Song_Length - 10
@@ -6829,4 +6828,5 @@ void ptk_init(ptk_data *ptk)
     ptk->gui_pushed = 0;
     ptk->Done_Tip = FALSE;
     ptk->player_pos = -1;
+    ptk->teac = 0;
 }

@@ -295,7 +295,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
             strcpy(cur_input_name, Midi_Name);
             namesize = 0;
             sprintf(Midi_Name, "");
-            teac = UPDATE_MIDI_ED_CHANGE_NAME;
+            ptk->teac = UPDATE_MIDI_ED_CHANGE_NAME;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_ED;
         }
 
@@ -306,7 +306,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
             c_midiin--;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_ED;
             midiin_changed = 1;
-            teac = UPDATE_MIDI_ED_SEL_IN;
+            ptk->teac = UPDATE_MIDI_ED_SEL_IN;
         }
         // Next midi in device
         if(zcheckMouse(ptk, 114, (Cur_Height - 134), 16, 16))
@@ -314,7 +314,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
             c_midiin++;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_ED;
             midiin_changed = 1;
-            teac = UPDATE_MIDI_ED_SEL_IN;
+            ptk->teac = UPDATE_MIDI_ED_SEL_IN;
         }
 
         // Previous midi out device
@@ -323,7 +323,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
             c_midiout--;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_ED;
             midiout_changed = TRUE;
-            teac = UPDATE_MIDI_ED_SEL_OUT;
+            ptk->teac = UPDATE_MIDI_ED_SEL_OUT;
         }
         // Next midi out device
         if(zcheckMouse(ptk, 114, (Cur_Height - 117), 16, 16))
@@ -331,7 +331,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
             c_midiout++;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_ED;
             midiout_changed = TRUE;
-            teac = UPDATE_MIDI_ED_SEL_OUT;
+            ptk->teac = UPDATE_MIDI_ED_SEL_OUT;
         }
 #endif
 
@@ -404,7 +404,7 @@ void Mod_Midi_Automation_Value(ptk_data *ptk, int Amount)
         {
             Midi_Dispatch_Table[i].CC -= Amount;
             if(Midi_Dispatch_Table[i].CC < 0) Midi_Dispatch_Table[i].CC = 0;
-            teac = UPDATE_MIDI_ED_CC0 + i;
+            ptk->teac = UPDATE_MIDI_ED_CC0 + i;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_ED;
             break;
         }
@@ -415,7 +415,7 @@ void Mod_Midi_Automation_Value(ptk_data *ptk, int Amount)
         {
             Midi_Dispatch_Table[i].CC += Amount;
             if(Midi_Dispatch_Table[i].CC > 255) Midi_Dispatch_Table[i].CC = 255;
-            teac = UPDATE_MIDI_ED_CC0 + i;
+            ptk->teac = UPDATE_MIDI_ED_CC0 + i;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_ED;
             break;
         }
@@ -426,7 +426,7 @@ void Mod_Midi_Automation_Value(ptk_data *ptk, int Amount)
         {
             Midi_Dispatch_Table[i].Automation = (MIDI_AUTOMATION) (Midi_Dispatch_Table[i].Automation - Amount);
             if(Midi_Dispatch_Table[i].Automation < (MIDI_AUTOMATION) 0) Midi_Dispatch_Table[i].Automation = (MIDI_AUTOMATION) 0;
-            teac = UPDATE_MIDI_ED_CC0 + i;
+            ptk->teac = UPDATE_MIDI_ED_CC0 + i;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_ED;
             break;
         }
@@ -437,7 +437,7 @@ void Mod_Midi_Automation_Value(ptk_data *ptk, int Amount)
         {
             Midi_Dispatch_Table[i].Automation = (MIDI_AUTOMATION) (Midi_Dispatch_Table[i].Automation + Amount);
             if(Midi_Dispatch_Table[i].Automation > (MIDI_AUTOMATION) (NBR_MIDI_AUTOMATION - 1)) Midi_Dispatch_Table[i].Automation = (MIDI_AUTOMATION) (NBR_MIDI_AUTOMATION - 1);
-            teac = UPDATE_MIDI_ED_CC0 + i;
+            ptk->teac = UPDATE_MIDI_ED_CC0 + i;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_ED;
             break;
         }

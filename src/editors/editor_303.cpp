@@ -340,7 +340,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
         {
             tb303engine[sl3].tbVolume = 0.5f;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 15;
+            ptk->teac = 15;
             liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
             livevalue = (int) (tb303engine[sl3].tbVolume * 255.0f);
         }
@@ -351,7 +351,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             int tempz = 64;
             tb303[sl3].tune = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 3;
+            ptk->teac = 3;
             liveparam = LIVE_PARAM_303_1_TUNE + sl3;
             livevalue = tempz << 1;
         }
@@ -362,7 +362,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             int tempz = 64;
             tb303[sl3].cutoff = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 4;
+            ptk->teac = 4;
             liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
             livevalue = tempz << 1;
         }
@@ -373,7 +373,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             int tempz = 64;
             tb303[sl3].resonance = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 5;
+            ptk->teac = 5;
             liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
             livevalue = tempz << 1;
         }
@@ -384,7 +384,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             int tempz = 64;
             tb303[sl3].envmod = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 6;
+            ptk->teac = 6;
             liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
             livevalue = tempz << 1;
         }
@@ -395,7 +395,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             int tempz = 64;
             tb303[sl3].decay = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 7;
+            ptk->teac = 7;
             liveparam = LIVE_PARAM_303_1_DECAY + sl3;
             livevalue = tempz << 1;
         }
@@ -406,7 +406,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             int tempz = 64;
             tb303[sl3].accent = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 8;
+            ptk->teac = 8;
             liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
             livevalue = tempz << 1;
         }
@@ -420,7 +420,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             tb303[sl3].scale = value;
             tb303engine[sl3].tbCurMultiple = tb303[sl3].scale;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 19;
+            ptk->teac = 19;
         }
 
         // Scale
@@ -430,7 +430,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             if(tb303[sl3].scale > 16) tb303[sl3].scale = 16;
             tb303engine[sl3].tbCurMultiple = tb303[sl3].scale;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 19;
+            ptk->teac = 19;
         }
     }
 }
@@ -450,7 +450,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
             livevalue = (int) (breakvol * 255.0f);
-            teac = 15;
+            ptk->teac = 15;
         }
 
         // Tune Knob
@@ -461,7 +461,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             if(tempz > 127) tempz = 127;
             tb303[sl3].tune = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 3;
+            ptk->teac = 3;
             liveparam = LIVE_PARAM_303_1_TUNE + sl3;
             livevalue = tempz << 1;
         }
@@ -474,7 +474,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             if(tempz > 127) tempz = 127;
             tb303[sl3].cutoff = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 4;
+            ptk->teac = 4;
             liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
             livevalue = tempz << 1;
         }
@@ -487,7 +487,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             if(tempz > 127) tempz = 127;
             tb303[sl3].resonance = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 5;
+            ptk->teac = 5;
             liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
             livevalue = tempz << 1;
         }
@@ -500,7 +500,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             if(tempz > 127) tempz = 127;
             tb303[sl3].envmod = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 6;
+            ptk->teac = 6;
             liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
             livevalue = tempz << 1;
         }
@@ -513,7 +513,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             if(tempz > 127) tempz = 127;
             tb303[sl3].decay = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 7;
+            ptk->teac = 7;
             liveparam = LIVE_PARAM_303_1_DECAY + sl3;
             livevalue = tempz << 1;
         }
@@ -526,7 +526,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             if(tempz > 127) tempz = 127;
             tb303[sl3].accent = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 8;
+            ptk->teac = 8;
             liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
             livevalue = tempz << 1;
         }
@@ -546,7 +546,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
                 editsteps[sl3][tb303[sl3].selectedpattern] = 0;
             }
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
 
         // Step Back
@@ -554,7 +554,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         {
             if(editsteps[sl3][tb303[sl3].selectedpattern] == 0) editsteps[sl3][tb303[sl3].selectedpattern] = tb303[sl3].patternlength[tb303[sl3].selectedpattern] - 1;
             else editsteps[sl3][tb303[sl3].selectedpattern]--;
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -564,7 +564,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         {
             tb303[sl3].patternlength[tb303[sl3].selectedpattern]++;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
 
         // Pattern Steps -1
@@ -577,7 +577,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
                 editsteps[sl3][tb303[sl3].selectedpattern] = tb303[sl3].patternlength[tb303[sl3].selectedpattern] - 1;
             }
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
 
         // Pause/Note button
@@ -591,7 +591,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
             {
                 tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].pause = 1;
             }
-            teac = 10;
+            ptk->teac = 10;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -606,7 +606,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
             {
                 tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].slide_flag = 1;
             }
-            teac = 11;
+            ptk->teac = 11;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -621,7 +621,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
             {
                 tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].accent_flag = 1;
             }
-            teac = 12;
+            ptk->teac = 12;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -636,7 +636,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
             {
                 tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].transposeup_flag = 1;
             }
-            teac = 13;
+            ptk->teac = 13;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -651,7 +651,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
             {
                 tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].transposedown_flag = 1;
             }
-            teac = 14;
+            ptk->teac = 14;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -660,7 +660,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         {
             tb303[sl3].waveform ^= 1;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 2;
+            ptk->teac = 2;
         }
 
         // NoteOn/Off buttons
@@ -668,80 +668,80 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         {
             tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 9;
+            ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 100 + 80, (Cur_Height - 76), 17, 15))
         {
             tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 1;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 9;
+            ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 113 + 80, (Cur_Height - 50), 17, 15))
         {
             tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 2;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 9;
+            ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 126 + 80, (Cur_Height - 76), 17, 15))
         {
             tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 3;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 9;
+            ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 139 + 80, (Cur_Height - 50), 17, 15))
         {
             tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 4;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 9;
+            ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 165 + 80, (Cur_Height - 50), 17, 15))
         {
             tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 5;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 9;
+            ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 178 + 80, (Cur_Height - 76), 17, 15))
         {
             tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 6;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 9;
+            ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 190 + 80, (Cur_Height - 50), 17, 15))
         {
             tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 7;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 9;
+            ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 203 + 80, (Cur_Height - 76), 17, 15))
         {
             tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 8;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 9;
+            ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 216 + 80, (Cur_Height - 50), 17, 15))
         {
             tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 9;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 9;
+            ptk->teac = 9;
         }
 
         if(zcheckMouse(ptk, 229 + 80, (Cur_Height - 76), 87, 15))
         {
             tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 10;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 9;
+            ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 242 + 80, (Cur_Height - 50), 17, 15))
         {
             tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 11;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 9;
+            ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 268 + 80, (Cur_Height - 50), 17, 15))
         {
             tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 12;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 9;
+            ptk->teac = 9;
         }
 
         // Pattern selection buttons
@@ -750,56 +750,56 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
             char gcp = (tb303[sl3].selectedpattern / 8) * 8;
             tb303[sl3].selectedpattern = gcp;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 100, (Cur_Height - 117), 16, 16))
         {
             char gcp = (tb303[sl3].selectedpattern / 8) * 8;
             tb303[sl3].selectedpattern = gcp + 1;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 114, (Cur_Height - 117), 16, 16))
         {
             char gcp = (tb303[sl3].selectedpattern / 8) * 8;
             tb303[sl3].selectedpattern = gcp + 2;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 130, (Cur_Height - 117), 16, 16))
         {
             char gcp = (tb303[sl3].selectedpattern / 8) * 8;
             tb303[sl3].selectedpattern = gcp + 3;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 86, (Cur_Height - 102), 16, 16))
         {
             char gcp = (tb303[sl3].selectedpattern / 8) * 8;
             tb303[sl3].selectedpattern = gcp + 4;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 100, (Cur_Height - 102), 16, 16))
         {
             char gcp = (tb303[sl3].selectedpattern / 8) * 8;
             tb303[sl3].selectedpattern = gcp + 5;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 114, (Cur_Height - 102), 16, 16))
         {
             char gcp = (tb303[sl3].selectedpattern / 8) * 8;
             tb303[sl3].selectedpattern = gcp + 6;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 130, (Cur_Height - 102), 16, 16))
         {
             char gcp = (tb303[sl3].selectedpattern / 8) * 8;
             tb303[sl3].selectedpattern = gcp + 7;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
 
         // Bank selection buttons
@@ -807,25 +807,25 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         {
             tb303[sl3].selectedpattern = (tb303[sl3].selectedpattern - (tb303[sl3].selectedpattern / 8) * 8);
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 100, (Cur_Height - 75), 16, 16))
         {
             tb303[sl3].selectedpattern = ((tb303[sl3].selectedpattern - (tb303[sl3].selectedpattern / 8) * 8)) + 8;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 114, (Cur_Height - 75), 16, 16))
         {
             tb303[sl3].selectedpattern = ((tb303[sl3].selectedpattern - (tb303[sl3].selectedpattern / 8) * 8)) + 16;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 130, (Cur_Height - 75), 16, 16))
         {
             tb303[sl3].selectedpattern = ((tb303[sl3].selectedpattern - (tb303[sl3].selectedpattern / 8) * 8)) + 24;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
 
         // 303 #1
@@ -833,14 +833,14 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         {
             sl3 = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
         // 303 #2
         if(zcheckMouse(ptk, 573, (Cur_Height - 71), 15, 12))
         {
             sl3 = 1;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 0;
+            ptk->teac = 0;
         }
 
         // Rand tones
@@ -850,7 +850,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
             {
                 tb303[sl3].tone[tb303[sl3].selectedpattern][alter] = (rand() % 13);
             }
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -864,7 +864,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
                 tb303[sl3].flag[tb303[sl3].selectedpattern][alter].transposedown_flag = rand() % 2;
                 tb303[sl3].flag[tb303[sl3].selectedpattern][alter].accent_flag = rand() % 2;
             }
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -875,7 +875,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
             {
                 tb303[sl3].flag[tb303[sl3].selectedpattern][alter].pause = rand() % 2;
             }
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -891,7 +891,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
                 tb303[sl3].flag[tb303[sl3].selectedpattern][alter].transposedown_flag = 0;
                 tb303[sl3].flag[tb303[sl3].selectedpattern][alter].accent_flag = 0;
             }
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -907,7 +907,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
                 tb303[sl3].flag[tb303[sl3].selectedpattern][alter].transposedown_flag = 0;
                 tb303[sl3].flag[tb303[sl3].selectedpattern][alter].accent_flag = 0;
             }
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -915,7 +915,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 600, (Cur_Height - 98), 64, 16))
         {
             tb303_notes_up();
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -923,7 +923,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 668, (Cur_Height - 98), 64, 16))
         {
             tb303_notes_down();
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -931,7 +931,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 600, (Cur_Height - 78), 64, 16))
         {
             tb303_copy_pattern();
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -939,7 +939,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 600, (Cur_Height - 60), 64, 16))
         {
             tb303_paste_pattern();
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -947,25 +947,25 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 600, (Cur_Height - 42), 15, 16))
         {
             Current_copy_buffer = 0;
-            teac = 17;
+            ptk->teac = 17;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
         if(zcheckMouse(ptk, 616, (Cur_Height - 42), 15, 16))
         {
             Current_copy_buffer = 1;
-            teac = 17;
+            ptk->teac = 17;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
         if(zcheckMouse(ptk, 633, (Cur_Height - 42), 15, 16))
         {
             Current_copy_buffer = 2;
-            teac = 17;
+            ptk->teac = 17;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
         if(zcheckMouse(ptk, 649, (Cur_Height - 42), 15, 16))
         {
             Current_copy_buffer = 3;
-            teac = 17;
+            ptk->teac = 17;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
@@ -976,7 +976,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
             strcpy(cur_input_name, tb303[sl3].pattern_name[tb303[sl3].selectedpattern]);
             namesize = 0;
             sprintf(tb303[sl3].pattern_name[tb303[sl3].selectedpattern], "");
-            teac = 18;
+            ptk->teac = 18;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_303_ED;
         }
 
@@ -1005,7 +1005,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
                 tb303[0].tune = tb303[1].tune;
             }
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 3;
+            ptk->teac = 3;
         }
 
         // Scale
@@ -1015,7 +1015,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
             if(tb303[sl3].scale < 1) tb303[sl3].scale = 1;
             tb303engine[sl3].tbCurMultiple = tb303[sl3].scale;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 19;
+            ptk->teac = 19;
         }
 
         // Scale
@@ -1025,7 +1025,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
             if(tb303[sl3].scale > 16) tb303[sl3].scale = 16;
             tb303engine[sl3].tbCurMultiple = tb303[sl3].scale;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 19;
+            ptk->teac = 19;
         }
 
     }
@@ -1044,7 +1044,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             if(breakvol > 1.0f) breakvol = 1.0f;
             tb303engine[sl3].tbVolume = breakvol;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 15;
+            ptk->teac = 15;
             liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
             livevalue = (int) (breakvol * 255.0f);
         }
@@ -1059,7 +1059,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             if(tempz > 127) tempz = 127;
             tb303[sl3].tune = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 3;
+            ptk->teac = 3;
             liveparam = LIVE_PARAM_303_1_TUNE + sl3;
             livevalue = tempz << 1;
         }
@@ -1074,7 +1074,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             if(tempz > 127) tempz = 127;
             tb303[sl3].cutoff = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 4;
+            ptk->teac = 4;
             liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
             livevalue = tempz << 1;
         }
@@ -1089,7 +1089,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             if(tempz > 127) tempz = 127;
             tb303[sl3].resonance = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 5;
+            ptk->teac = 5;
             liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
             livevalue = tempz << 1;
         }
@@ -1104,7 +1104,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             if(tempz > 127) tempz = 127;
             tb303[sl3].envmod = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 6;
+            ptk->teac = 6;
             liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
             livevalue = tempz << 1;
         }
@@ -1119,7 +1119,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             if(tempz > 127) tempz = 127;
             tb303[sl3].decay = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 7;
+            ptk->teac = 7;
             liveparam = LIVE_PARAM_303_1_DECAY + sl3;
             livevalue = tempz << 1;
         }
@@ -1134,7 +1134,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             if(tempz > 127) tempz = 127;
             tb303[sl3].accent = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            teac = 8;
+            ptk->teac = 8;
             liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
             livevalue = tempz << 1;
         }

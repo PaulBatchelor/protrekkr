@@ -245,26 +245,26 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 74, (Cur_Height - 110), 148, 16) && LFO_ON[Track_Under_Caret])
         {
             LFO_RATE[Track_Under_Caret] = (Mouse.x - 84) / 16384.0f;
-            teac = 2;
+            ptk->teac = 2;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
         }
         if(zcheckMouse(ptk, 74, (Cur_Height - 92), 148, 16) && LFO_ON[Track_Under_Caret])
         {
             LFO_AMPL[Track_Under_Caret] = float(Mouse.x - 84);
-            teac = 3;
+            ptk->teac = 3;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
         }
         if(zcheckMouse(ptk, 74, (Cur_Height - 49), 148, 16) && FLANGER_ON[Track_Under_Caret])
         {
             FLANGER_DEPHASE[Track_Under_Caret] = (Mouse.x - 84) * 0.0490873f;
-            teac = 4;
+            ptk->teac = 4;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 4;
+            ptk->teac = 4;
         }
 
         if(zcheckMouse(ptk, 308, (Cur_Height - 121), 148, 16) && FLANGER_ON[Track_Under_Caret])
         {
-            teac = 1;
+            ptk->teac = 1;
             FLANGER_AMOUNT[Track_Under_Caret] = ((Mouse.x - 318.0f) / 64.0f) - 1.0f;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
         }
@@ -272,26 +272,26 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
         {
             FLANGER_RATE[Track_Under_Caret] = (Mouse.x - 318.0f) / 939104.92f;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 5;
+            ptk->teac = 5;
         }
         if(zcheckMouse(ptk, 308, (Cur_Height - 85), 148, 16) && FLANGER_ON[Track_Under_Caret])
         {
             FLANGER_AMPL[Track_Under_Caret] = (Mouse.x - 318.0f) / 12800.0f;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 6;
+            ptk->teac = 6;
         }
         if(zcheckMouse(ptk, 308, (Cur_Height - 67), 148, 16) && FLANGER_ON[Track_Under_Caret])
         {
             FLANGER_FEEDBACK[Track_Under_Caret] = ((Mouse.x - 318) / 64.0f) - 1.0f;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 7;
+            ptk->teac = 7;
         }
         if(zcheckMouse(ptk, 308, (Cur_Height - 49), 148, 16) && FLANGER_ON[Track_Under_Caret])
         {
             FLANGER_DELAY[Track_Under_Caret] = (Mouse.x - 318) * 32;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
             fld_chan = TRUE;
-            teac = 8;
+            ptk->teac = 8;
         }
 
         // Compressor threshold
@@ -302,7 +302,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
                                                (Mouse.x - 612.0f) * 2.0f,
                                                 mas_comp_ratio_Track[Track_Under_Caret]);
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 12;
+            ptk->teac = 12;
         }
 
         // Compressor ratio
@@ -313,7 +313,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
                                                mas_comp_threshold_Track[Track_Under_Caret],
                                                (Mouse.x - 612.0f) * 2.0f);
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 12;
+            ptk->teac = 12;
         }
 
         // Volume
@@ -323,7 +323,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
             if(Track_Volume[Track_Under_Caret] > 1.0f) Track_Volume[Track_Under_Caret] = 1.0f;
             if(Track_Volume[Track_Under_Caret] < 0.0f) Track_Volume[Track_Under_Caret] = 0.0f;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 13;
+            ptk->teac = 13;
         }
 
         // Lo Eq
@@ -339,7 +339,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
             if(EqDat[Track_Under_Caret].lg < 0.0f) EqDat[Track_Under_Caret].lg = 0.0f;
             if(EqDat[Track_Under_Caret].lg > 2.0f) EqDat[Track_Under_Caret].lg = 2.0f;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 14;
+            ptk->teac = 14;
         }
 
         // Med Eq
@@ -355,7 +355,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
             if(EqDat[Track_Under_Caret].mg < 0.0f) EqDat[Track_Under_Caret].mg = 0.0f;
             if(EqDat[Track_Under_Caret].mg > 2.0f) EqDat[Track_Under_Caret].mg = 2.0f;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 14;
+            ptk->teac = 14;
         }
 
         // Hi Eq
@@ -371,7 +371,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
             if(EqDat[Track_Under_Caret].hg < 0.0f) EqDat[Track_Under_Caret].hg = 0.0f;
             if(EqDat[Track_Under_Caret].hg > 2.0f) EqDat[Track_Under_Caret].hg = 2.0f;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 14;
+            ptk->teac = 14;
         }
 
         // Clear lo band
@@ -379,7 +379,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
         {
             EqDat[Track_Under_Caret].lg = 1.0f;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 14;
+            ptk->teac = 14;
         }
 
         // Clear med band
@@ -387,7 +387,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
         {
             EqDat[Track_Under_Caret].mg = 1.0f;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 14;
+            ptk->teac = 14;
         }
 
         // Clear hi band
@@ -395,7 +395,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
         {
             EqDat[Track_Under_Caret].hg = 1.0f;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 14;
+            ptk->teac = 14;
         }
 
     }
@@ -409,38 +409,38 @@ void Mouse_Left_Track_Fx_Ed(ptk_data *ptk)
         {
             LFO_ON[Track_Under_Caret] = TRUE;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 96, (Cur_Height - 128), 20, 16) && LFO_ON[Track_Under_Caret] == TRUE)
         {
             LFO_ON[Track_Under_Caret] = FALSE;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 184, (Cur_Height - 128), 20, 16) && FLANGER_ON[Track_Under_Caret] == FALSE)
         {
             FLANGER_ON[Track_Under_Caret] = TRUE;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 206, (Cur_Height - 128), 20, 16) && FLANGER_ON[Track_Under_Caret])
         {
             FLANGER_ON[Track_Under_Caret] = FALSE;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 0;
+            ptk->teac = 0;
         }
 
         if(zcheckMouse(ptk, 602, (Cur_Height - 121), 20, 16) && Compress_Track[Track_Under_Caret] == FALSE)
         {
             Compress_Track[Track_Under_Caret] = TRUE;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 0;
+            ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 624, (Cur_Height - 121), 20, 16) && Compress_Track[Track_Under_Caret])
         {
             Compress_Track[Track_Under_Caret] = FALSE;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
-            teac = 0;
+            ptk->teac = 0;
         }
 
     }

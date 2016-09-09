@@ -83,7 +83,7 @@ void Midi_303_Set_Tune(int Unit, int Data)
     //}
     //if(Unit == sl3)
     //{
-    //    teac = 3;
+    //    ptk->teac = 3;
     //    Refresh_Unit = Unit;
     //    ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
     //}
@@ -105,7 +105,7 @@ void Midi_303_Set_Cutoff(int Unit, int Data)
     //}
     //if(Unit == sl3)
     //{
-    //    teac = 4;
+    //    ptk->teac = 4;
     //    Refresh_Unit = Unit;
     //    ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
     //}
@@ -127,7 +127,7 @@ void Midi_303_Set_Resonance(int Unit, int Data)
     //}
     //if(Unit == sl3)
     //{
-    //    teac = 5;
+    //    ptk->teac = 5;
     //    Refresh_Unit = Unit;
     //    ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
     //}
@@ -149,7 +149,7 @@ void Midi_303_Set_Envmod(int Unit, int Data)
     //}
     //if(Unit == sl3)
     //{
-    //    teac = 6;
+    //    ptk->teac = 6;
     //    Refresh_Unit = Unit;
     //    ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
     //}
@@ -171,7 +171,7 @@ void Midi_303_Set_Decay(int Unit, int Data)
     //}
     //if(Unit == sl3)
     //{
-    //    teac = 7;
+    //    ptk->teac = 7;
     //    Refresh_Unit = Unit;
     //    ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
     //}
@@ -193,7 +193,7 @@ void Midi_303_Set_Accent(int Unit, int Data)
     //}
     //if(Unit == sl3)
     //{
-    //    teac = 8;
+    //    ptk->teac = 8;
     //    Refresh_Unit = Unit;
     //    ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
     //}
@@ -215,7 +215,7 @@ void Midi_303_Set_Volume(int Unit, int Data)
     //}
     //if(Unit == sl3)
     //{
-    //    teac = 15;
+    //    ptk->teac = 15;
     //    Refresh_Unit = Unit;
     //    ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
     //}
@@ -230,7 +230,7 @@ void Midi_303_Set_Cur_Volume(int Data) { Midi_303_Set_Volume(sl3, Data); }
 void Midi_303_Switch(int Data)
 {
     //sl3 ^= 1;
-    //teac = 0;
+    //ptk->teac = 0;
     //ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
 }
 

@@ -758,7 +758,7 @@ void Mouse_Right_Sample_Ed(ptk_data *ptk)
                 sed_range_mode = FALSE;
                 draw_sampled_wave = TRUE;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
-                teac = 4;
+                ptk->teac = 4;
             }
             else
             {
@@ -767,7 +767,7 @@ void Mouse_Right_Sample_Ed(ptk_data *ptk)
                 sed_range_start = sed_display_start;
                 sed_range_end = sed_display_start + sed_display_length;
                 draw_sampled_wave = TRUE;
-                teac = 0;
+                ptk->teac = 0;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
         }
@@ -775,14 +775,14 @@ void Mouse_Right_Sample_Ed(ptk_data *ptk)
         // Rotate left x
         if(zcheckMouse(ptk, 650, (Cur_Height - 132), 16, 16) && sed_range_mode && Allow)
         {
-            teac = SMPED_ROTATE_LEFT_X;
+            ptk->teac = SMPED_ROTATE_LEFT_X;
             ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
         }
 
         // Rotate right x
         if(zcheckMouse(ptk, 704, (Cur_Height - 132), 16, 16) && sed_range_mode && Allow)
         {
-            teac = SMPED_ROTATE_RIGHT_X;
+            ptk->teac = SMPED_ROTATE_RIGHT_X;
             ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
         }
 
@@ -868,11 +868,11 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                 {
                     case USER_SCREEN_INSTRUMENT_EDIT:
                         ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
-                        teac = 5;
+                        ptk->teac = 5;
                         break;
 
                     case USER_SCREEN_SAMPLE_EDIT:
-                        teac = 5;
+                        ptk->teac = 5;
                         ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
                         break;
                 }
@@ -914,11 +914,11 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                 {
                     case USER_SCREEN_INSTRUMENT_EDIT:
                         ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
-                        teac = 5;
+                        ptk->teac = 5;
                         break;
 
                     case USER_SCREEN_SAMPLE_EDIT:
-                        teac = 5;
+                        ptk->teac = 5;
                         ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
                         break;
                 }
@@ -927,140 +927,140 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
             // Rotate left 1
             if(zcheckMouse(ptk, 668, (Cur_Height - 132), 16, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_ROTATE_LEFT_1;
+                ptk->teac = SMPED_ROTATE_LEFT_1;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Rotate right 1
             if(zcheckMouse(ptk, 686, (Cur_Height - 132), 16, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_ROTATE_RIGHT_1;
+                ptk->teac = SMPED_ROTATE_RIGHT_1;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Cut
             if(zcheckMouse(ptk, 520, (Cur_Height - 150), 29, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_CUT;
+                ptk->teac = SMPED_CUT;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Copy
             if(zcheckMouse(ptk, 551, (Cur_Height - 150), 29, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_COPY;
+                ptk->teac = SMPED_COPY;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Paste
             if(zcheckMouse(ptk, 582, (Cur_Height - 150), 29, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_PASTE;
+                ptk->teac = SMPED_PASTE;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Crop
             if(zcheckMouse(ptk, 613, (Cur_Height - 150), 29, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_CROP;
+                ptk->teac = SMPED_CROP;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Reverse
             if(zcheckMouse(ptk, 722, (Cur_Height - 132), 50, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_REVERSE;
+                ptk->teac = SMPED_REVERSE;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Select buffer 1
             if(zcheckMouse(ptk, 650, (Cur_Height - 150), 16, 16) && Allow)
             {
-                teac = SMPED_BUF1;
+                ptk->teac = SMPED_BUF1;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Select buffer 2
             if(zcheckMouse(ptk, 668, (Cur_Height - 150), 16, 16) && Allow)
             {
-                teac = SMPED_BUF2;
+                ptk->teac = SMPED_BUF2;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Select buffer 3
             if(zcheckMouse(ptk, 686, (Cur_Height - 150), 16, 16) && Allow)
             {
-                teac = SMPED_BUF3;
+                ptk->teac = SMPED_BUF3;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Select buffer 4
             if(zcheckMouse(ptk, 704, (Cur_Height - 150), 16, 16) && Allow)
             {
-                teac = SMPED_BUF4;
+                ptk->teac = SMPED_BUF4;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Select buffer 4
             if(zcheckMouse(ptk, 520, (Cur_Height - 132), 16, 16) && Allow)
             {
-                teac = SMPED_ZAP;
+                ptk->teac = SMPED_ZAP;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Half
             if(zcheckMouse(ptk, 551, (Cur_Height - 132), 29, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_HALF;
+                ptk->teac = SMPED_HALF;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Maximize
             if(zcheckMouse(ptk, 520, (Cur_Height - 114), 29, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_MAXIMIZE;
+                ptk->teac = SMPED_MAXIMIZE;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Zeroize
             if(zcheckMouse(ptk, 551, (Cur_Height - 114), 29, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_ZEROIZE;
+                ptk->teac = SMPED_ZEROIZE;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Duplicate
             if(zcheckMouse(ptk, 520, (Cur_Height - 96), 29, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_DUPLICATE;
+                ptk->teac = SMPED_DUPLICATE;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Insert zeroes
             if(zcheckMouse(ptk, 551, (Cur_Height - 96), 29, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_INSERTZERO;
+                ptk->teac = SMPED_INSERTZERO;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // DC Adjust
             if(zcheckMouse(ptk, 520, (Cur_Height - 78), 60, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_DC_ADJUST;
+                ptk->teac = SMPED_DC_ADJUST;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Fade in
             if(zcheckMouse(ptk, 520, (Cur_Height - 60), 29, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_FADEIN;
+                ptk->teac = SMPED_FADEIN;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
             // Fade out
             if(zcheckMouse(ptk, 551, (Cur_Height - 60), 29, 16) && sed_range_mode && Allow)
             {
-                teac = SMPED_FADEOUT;
+                ptk->teac = SMPED_FADEOUT;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
@@ -1071,7 +1071,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                 sed_display_start = 0;
                 sed_display_length = SampleLength[Current_Instrument][Current_Instrument_Split];
                 draw_sampled_wave = TRUE;
-                teac = 3;
+                ptk->teac = 3;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
@@ -1096,7 +1096,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                 sed_range_start = 0;
                 sed_range_end = 0;
                 draw_sampled_wave = TRUE;
-                teac = 0;
+                ptk->teac = 0;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
@@ -1107,7 +1107,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                 sed_range_start = 0;
                 sed_range_end = SampleLength[Current_Instrument][Current_Instrument_Split];
                 draw_sampled_wave = TRUE;
-                teac = 0;
+                ptk->teac = 0;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
@@ -1118,7 +1118,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                 sed_range_start = sed_display_start;
                 sed_range_end = sed_display_start + sed_display_length;
                 draw_sampled_wave = TRUE;
-                teac = 0;
+                ptk->teac = 0;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
 
@@ -1209,24 +1209,24 @@ void Mouse_Sliders_Sample_Ed(ptk_data *ptk)
                 sed_range_mode = TRUE;
                 test = (double) (((int64) Mouse_Pos * (int64) sed_display_length)) / LARGE_SMP_VIEW;
                 sed_range_end = sed_display_start + (int32) test;
-                teac = 4;
+                ptk->teac = 4;
 
                 if(!ptk->sas)
                 {
                     // Selection start
                     sed_range_start = sed_range_end;
-                    teac = 5;
+                    ptk->teac = 5;
                 }
 
                 if(sed_range_start < sed_display_start)
                 {
                     sed_range_start = sed_display_start;
-                    teac = 5;
+                    ptk->teac = 5;
                 }
                 if(sed_range_end < sed_display_start)
                 {
                     sed_range_end = sed_display_start;
-                    teac = 5;
+                    ptk->teac = 5;
                 }
 
                 if(sed_range_end > axswave)
@@ -1265,14 +1265,14 @@ void Mouse_Sliders_Sample_Ed(ptk_data *ptk)
         // Rotate left 1
         if(zcheckMouse(ptk, 650, (Cur_Height - 132), 16, 16) && sed_range_mode && Allow)
         {
-            teac = SMPED_ROTATE_LEFT_1;
+            ptk->teac = SMPED_ROTATE_LEFT_1;
             ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
         }
 
         // Rotate right 1
         if(zcheckMouse(ptk, 704, (Cur_Height - 132), 16, 16) && sed_range_mode && Allow)
         {
-            teac = SMPED_ROTATE_RIGHT_1;
+            ptk->teac = SMPED_ROTATE_RIGHT_1;
             ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
         }
 
@@ -1397,7 +1397,7 @@ void Zoom_In_Sel(ptk_data *ptk)
         if((int) sed_display_start > max_length) sed_display_start = max_length;
 
         draw_sampled_wave = TRUE;
-        teac = 3;
+        ptk->teac = 3;
         ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
     }
 }
@@ -1423,6 +1423,6 @@ void Zoom_Out_Sel(ptk_data *ptk)
     sed_range_start = sed_display_start;
     sed_range_end = sed_display_start + sed_display_length;
     draw_sampled_wave = TRUE;
-    teac = 3;
+    ptk->teac = 3;
     ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
 }

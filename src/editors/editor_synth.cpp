@@ -623,7 +623,7 @@ void Check_Slider(ptk_data *ptk, int *Value, int x, int y)
         *Value = Mouse.x - ((x - 2) + 10);
         if(*Value < 0) *Value = 0;
         if(*Value > 128) *Value = 128;
-        teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
     }
 }
@@ -696,7 +696,7 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
             csynth_slv_OSC1 -= value_step;
             if(csynth_slv_OSC1 < 0) csynth_slv_OSC1 = 0;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-            teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+            ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
     if(zcheckMouse(ptk, 190, (Cur_Height - 113) - 1, 16, 16) == 1)
@@ -706,7 +706,7 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
             csynth_slv_OSC1 += value_step;
             if(csynth_slv_OSC1 > 128) csynth_slv_OSC1 = 128;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-            teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+            ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
 
@@ -718,7 +718,7 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
             csynth_slv_OSC2 -= value_step;
             if(csynth_slv_OSC2 < 0) csynth_slv_OSC2 = 0;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-            teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+            ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
     if(zcheckMouse(ptk, 190, (Cur_Height - 59) - 1, 16, 16) == 1)
@@ -728,7 +728,7 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
             csynth_slv_OSC2 += value_step;
             if(csynth_slv_OSC2 > 128) csynth_slv_OSC2 = 128;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-            teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+            ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
 
@@ -738,14 +738,14 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
         csynth_slv_VCF -= value_step;
         if(csynth_slv_VCF < 0) csynth_slv_VCF = 0;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
     }
     if(zcheckMouse(ptk, 460, (Cur_Height - 113) - 1, 16, 16) == 1)
     {
         csynth_slv_VCF += value_step;
         if(csynth_slv_VCF > 128) csynth_slv_VCF = 128;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
     }
 
     // LFO1 Sliders Arrows
@@ -760,7 +760,7 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
             csynth_slv_LFO1 -= value_step;
             if(csynth_slv_LFO1 < 0) csynth_slv_LFO1 = 0;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-            teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+            ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
     if(zcheckMouse(ptk, 460, (Cur_Height - 77) - 1, 16, 16) == 1)
@@ -774,7 +774,7 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
             csynth_slv_LFO1 += value_step;
             if(csynth_slv_LFO1 > 128) csynth_slv_LFO1 = 128;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-            teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+            ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
 
@@ -790,7 +790,7 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
             csynth_slv_LFO2 -= value_step;
             if(csynth_slv_LFO2 < 0) csynth_slv_LFO2 = 0;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-            teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+            ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
     
@@ -805,7 +805,7 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
             csynth_slv_LFO2 += value_step;
             if(csynth_slv_LFO2 > 128) csynth_slv_LFO2 = 128;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-            teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+            ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
 
@@ -821,7 +821,7 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
             csynth_slv_ENV1 -= value_step;
             if(csynth_slv_ENV1 < 0) csynth_slv_ENV1 = 0;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-            teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+            ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
 
@@ -836,7 +836,7 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
             csynth_slv_ENV1 += value_step;
             if(csynth_slv_ENV1 > 128) csynth_slv_ENV1 = 128;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-            teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+            ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
 
@@ -852,7 +852,7 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
             csynth_slv_ENV2 -= value_step;
             if(csynth_slv_ENV2 < 0) csynth_slv_ENV2 = 0;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-            teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+            ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
     
@@ -867,7 +867,7 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
             csynth_slv_ENV2 += value_step;
             if(csynth_slv_ENV2 > 128) csynth_slv_ENV2 = 128;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-            teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+            ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
 
@@ -880,7 +880,7 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
             csynth_slv_Misc -= value_step;
             if(csynth_slv_Misc < 0) csynth_slv_Misc = 0;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-            teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+            ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
     
@@ -892,7 +892,7 @@ void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
             csynth_slv_Misc += value_step;
             if(csynth_slv_Misc > 128) csynth_slv_Misc = 128;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-            teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
+            ptk->teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
 }
@@ -904,13 +904,13 @@ void Check_Parameters_Arrows(ptk_data *ptk, int Value_Step)
     {
         Pos_Tbl_Synth_OSC1 -= Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_OSC1_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_OSC1_PARAMS;
     }
     if(zcheckMouse(ptk, 62 + 44, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_OSC1 < Size_Tbl_Synth_OSC1)
     {
         Pos_Tbl_Synth_OSC1 += Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_OSC1_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_OSC1_PARAMS;
     }  
 
     // Select OSC2 parameter
@@ -918,13 +918,13 @@ void Check_Parameters_Arrows(ptk_data *ptk, int Value_Step)
     {
         Pos_Tbl_Synth_OSC2 -= Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_OSC2_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_OSC2_PARAMS;
     }
     if(zcheckMouse(ptk, 62 + 44, (Cur_Height - 77) - 1, 16, 16) && Pos_Tbl_Synth_OSC2 < Size_Tbl_Synth_OSC2)
     {
         Pos_Tbl_Synth_OSC2 += Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_OSC2_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_OSC2_PARAMS;
     }  
 
     // Select VCF parameter
@@ -932,13 +932,13 @@ void Check_Parameters_Arrows(ptk_data *ptk, int Value_Step)
     {
         Pos_Tbl_Synth_VCF -= Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_VCF_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_VCF_PARAMS;
     }
     if(zcheckMouse(ptk, 331 + 44, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_VCF < Size_Tbl_Synth_VCF)
     {
         Pos_Tbl_Synth_VCF += Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_VCF_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_VCF_PARAMS;
     }  
 
     // Select LFO1 parameter
@@ -946,13 +946,13 @@ void Check_Parameters_Arrows(ptk_data *ptk, int Value_Step)
     {
         Pos_Tbl_Synth_LFO1 -= Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_LFO1_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_LFO1_PARAMS;
     }
     if(zcheckMouse(ptk, 331 + 44, (Cur_Height - 95) - 1, 16, 16) && Pos_Tbl_Synth_LFO1 < Size_Tbl_Synth_LFO1)
     {
         Pos_Tbl_Synth_LFO1 += Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_LFO1_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_LFO1_PARAMS;
     }  
 
     // Select LFO2 parameter
@@ -960,13 +960,13 @@ void Check_Parameters_Arrows(ptk_data *ptk, int Value_Step)
     {
         Pos_Tbl_Synth_LFO2 -= Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_LFO2_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_LFO2_PARAMS;
     }
     if(zcheckMouse(ptk, 331 + 44, (Cur_Height - 59) - 1, 16, 16) && Pos_Tbl_Synth_LFO2 < Size_Tbl_Synth_LFO2)
     {
         Pos_Tbl_Synth_LFO2 += Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_LFO2_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_LFO2_PARAMS;
     }
 
     // Select ENV1 parameter
@@ -974,13 +974,13 @@ void Check_Parameters_Arrows(ptk_data *ptk, int Value_Step)
     {
         Pos_Tbl_Synth_ENV1 -= Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_ENV1_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_ENV1_PARAMS;
     }
     if(zcheckMouse(ptk, 583 + 44, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_ENV1 < Size_Tbl_Synth_ENV1)
     {
         Pos_Tbl_Synth_ENV1 += Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_ENV1_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_ENV1_PARAMS;
     }  
 
     // Select ENV2 parameter
@@ -988,13 +988,13 @@ void Check_Parameters_Arrows(ptk_data *ptk, int Value_Step)
     {
         Pos_Tbl_Synth_ENV2 -= Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_ENV2_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_ENV2_PARAMS;
     }
     if(zcheckMouse(ptk, 583 + 44, (Cur_Height - 95) - 1, 16, 16) && Pos_Tbl_Synth_ENV2 < Size_Tbl_Synth_ENV2)
     {
         Pos_Tbl_Synth_ENV2 += Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_ENV2_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_ENV2_PARAMS;
     }  
 
     // Select Misc parameter
@@ -1002,13 +1002,13 @@ void Check_Parameters_Arrows(ptk_data *ptk, int Value_Step)
     {
         Pos_Tbl_Synth_Misc -= Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_Misc_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_Misc_PARAMS;
     }
     if(zcheckMouse(ptk, 583 + 44, (Cur_Height - 59) - 1, 16, 16) && Pos_Tbl_Synth_Misc < Size_Tbl_Synth_Misc)
     {
         Pos_Tbl_Synth_Misc += Value_Step;
         ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-        teac = UPDATE_SYNTH_ED_Misc_PARAMS;
+        ptk->teac = UPDATE_SYNTH_ED_Misc_PARAMS;
     }  
 }
 
@@ -1027,7 +1027,7 @@ void Mouse_Right_Synth_Ed(ptk_data *ptk)
             {
                 Synthprg[Current_Instrument] = 0;
             }
-            teac = UPDATE_SYNTH_ED_ALL;
+            ptk->teac = UPDATE_SYNTH_ED_ALL;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         }
         if(zcheckMouse(ptk, 228 + 44, (Cur_Height - 150), 17, 16))
@@ -1040,7 +1040,7 @@ void Mouse_Right_Synth_Ed(ptk_data *ptk)
             {
                 Synthprg[Current_Instrument] = 129;
             }
-            teac = UPDATE_SYNTH_ED_ALL;
+            ptk->teac = UPDATE_SYNTH_ED_ALL;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         }
     }
@@ -1062,7 +1062,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             {
                 Synthprg[Current_Instrument]--;
             }
-            teac = UPDATE_SYNTH_ED_ALL;
+            ptk->teac = UPDATE_SYNTH_ED_ALL;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         }
         if(zcheckMouse(ptk, 228 + 44, (Cur_Height - 150), 17, 16))
@@ -1071,7 +1071,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             {
                 Synthprg[Current_Instrument]++;
             }
-            teac = UPDATE_SYNTH_ED_ALL;
+            ptk->teac = UPDATE_SYNTH_ED_ALL;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         }
         }
@@ -1098,7 +1098,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
                 strcpy(cur_input_name, PARASynth[Current_Instrument].presetname);
                 namesize = 0;
                 sprintf(PARASynth[Current_Instrument].presetname, "");
-                teac = UPDATE_SYNTH_CHANGE_NAME;
+                ptk->teac = UPDATE_SYNTH_CHANGE_NAME;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
 
@@ -1122,7 +1122,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
                 {
                     Center_SynthParam_OSC1(ptk);
                     ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-                    teac = UPDATE_SYNTH_ED_OSC1_PARAMS;
+                    ptk->teac = UPDATE_SYNTH_ED_OSC1_PARAMS;
                 }
             }  
 
@@ -1133,7 +1133,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
                 {
                     Center_SynthParam_OSC2(ptk);
                     ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-                    teac = UPDATE_SYNTH_ED_OSC2_PARAMS;
+                    ptk->teac = UPDATE_SYNTH_ED_OSC2_PARAMS;
                 }
             }  
 
@@ -1142,7 +1142,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             {
                 Center_SynthParam_VCF(ptk);
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-                teac = UPDATE_SYNTH_ED_VCF_PARAMS;
+                ptk->teac = UPDATE_SYNTH_ED_VCF_PARAMS;
             }  
 
             // Center LFO1
@@ -1156,7 +1156,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
                 {
                     Center_SynthParam_LFO1(ptk);
                     ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-                    teac = UPDATE_SYNTH_ED_LFO1_PARAMS;
+                    ptk->teac = UPDATE_SYNTH_ED_LFO1_PARAMS;
                 }
             }  
 
@@ -1171,7 +1171,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
                 {
                     Center_SynthParam_LFO2(ptk);
                     ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-                    teac = UPDATE_SYNTH_ED_LFO2_PARAMS;
+                    ptk->teac = UPDATE_SYNTH_ED_LFO2_PARAMS;
                 }
             }  
 
@@ -1186,7 +1186,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
                 {
                     Center_SynthParam_ENV1(ptk);
                     ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-                    teac = UPDATE_SYNTH_ED_ENV1_PARAMS;
+                    ptk->teac = UPDATE_SYNTH_ED_ENV1_PARAMS;
                 }
             }  
 
@@ -1201,7 +1201,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
                 {
                     Center_SynthParam_ENV2(ptk);
                     ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-                    teac = UPDATE_SYNTH_ED_ENV2_PARAMS;
+                    ptk->teac = UPDATE_SYNTH_ED_ENV2_PARAMS;
                 }
             }  
 
@@ -1213,7 +1213,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
                 {
                     Center_SynthParam_Misc(ptk);
                     ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
-                    teac = UPDATE_SYNTH_ED_Misc_PARAMS;
+                    ptk->teac = UPDATE_SYNTH_ED_Misc_PARAMS;
                 }
             }  
 
@@ -1221,43 +1221,43 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 24, (Cur_Height - 95) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc1_waveform = 0;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 49, (Cur_Height - 95) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc1_waveform = 1;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 74, (Cur_Height - 95) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc1_waveform = 2;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 99, (Cur_Height - 95) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc1_waveform = 3;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 124, (Cur_Height - 95) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc1_waveform = 6;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 149, (Cur_Height - 95) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc1_waveform = 5;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 174, (Cur_Height - 95) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc1_waveform = 4;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
 
@@ -1265,43 +1265,43 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 24, (Cur_Height - 41) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc2_waveform = 0;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 49, (Cur_Height - 41) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc2_waveform = 1;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 74, (Cur_Height - 41) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc2_waveform = 2;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 99, (Cur_Height - 41) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc2_waveform = 3;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 124, (Cur_Height - 41) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc2_waveform = 6;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 149, (Cur_Height - 41) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc2_waveform = 5;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 174, (Cur_Height - 41) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc2_waveform = 4;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
 
@@ -1310,25 +1310,25 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 4, (Cur_Height - 100) - 1 + (16 * 0), 17, 16))
             {
                 PARASynth[Current_Instrument].osc_combine = COMBINE_ADD;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 4, (Cur_Height - 100) - 1 + (16 * 1), 17, 16))
             {
                 PARASynth[Current_Instrument].osc_combine = COMBINE_SUB;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 4, (Cur_Height - 100) - 1 + (16 * 2), 17, 16))
             {
                 PARASynth[Current_Instrument].osc_combine = COMBINE_MUL;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 4, (Cur_Height - 100) - 1 + (16 * 3), 17, 16))
             {
                 PARASynth[Current_Instrument].osc_combine = COMBINE_DIV;
-                teac = UPDATE_SYNTH_ED_ALL;
+                ptk->teac = UPDATE_SYNTH_ED_ALL;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
 
@@ -1336,13 +1336,13 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 237, (Cur_Height - 95) - 1, 24, 16))
             {
                 PARASynth[Current_Instrument].osc3_switch = TRUE;
-                teac = UPDATE_SYNTH_ED_OSC3_SWITCH;
+                ptk->teac = UPDATE_SYNTH_ED_OSC3_SWITCH;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 264, (Cur_Height - 95) - 1, 24, 16))
             {
                 PARASynth[Current_Instrument].osc3_switch = FALSE;
-                teac = UPDATE_SYNTH_ED_OSC3_SWITCH;
+                ptk->teac = UPDATE_SYNTH_ED_OSC3_SWITCH;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
 
@@ -1350,13 +1350,13 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 349, (Cur_Height - 150), 17, 16) && PARASynth[Current_Instrument].vcf_type > 0)
             {
                 PARASynth[Current_Instrument].vcf_type = filter_vcf_type_minus[PARASynth[Current_Instrument].vcf_type];
-                teac = 7;
+                ptk->teac = 7;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
             if(zcheckMouse(ptk, 349 + 84, (Cur_Height - 150), 17, 16) && PARASynth[Current_Instrument].vcf_type <= 4)
             {
                 PARASynth[Current_Instrument].vcf_type = filter_vcf_type_plus[PARASynth[Current_Instrument].vcf_type];
-                teac = 7;
+                ptk->teac = 7;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
     }

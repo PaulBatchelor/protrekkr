@@ -356,7 +356,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         {
             Remap_From--;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
-            teac = 1;
+            ptk->teac = 1;
         }
 
         // From Instrument
@@ -364,7 +364,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         {
             Remap_From++;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
-            teac = 1;
+            ptk->teac = 1;
         }
 
         // To Instrument
@@ -372,7 +372,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         {
             Remap_To--;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
-            teac = 1;
+            ptk->teac = 1;
         }
 
         // To Instrument
@@ -380,7 +380,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         {
             Remap_To++;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
-            teac = 1;
+            ptk->teac = 1;
         }
 
         // Transpose
@@ -388,7 +388,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         {
             transpose_semitones--;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
-            teac = 4;
+            ptk->teac = 4;
         }
 
         // Transpose
@@ -396,7 +396,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         {
             transpose_semitones++;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
-            teac = 4;
+            ptk->teac = 4;
         }
 
         // Clear all
@@ -645,7 +645,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
             strcpy(cur_input_name, Selection_Name);
             namesize = 0;
             sprintf(Selection_Name, "");
-            teac = 3;
+            ptk->teac = 3;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
         
@@ -676,7 +676,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         {
             Remap_From -= 10;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
-            teac = 1;
+            ptk->teac = 1;
         }
 
         // From Instrument
@@ -684,7 +684,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         {
             Remap_From += 10;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
-            teac = 1;
+            ptk->teac = 1;
         }
 
         // To Instrument
@@ -692,7 +692,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         {
             Remap_To -= 10;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
-            teac = 1;
+            ptk->teac = 1;
         }
 
         // To Instrument
@@ -700,7 +700,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         {
             Remap_To += 10;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
-            teac = 1;
+            ptk->teac = 1;
         }
 
         // Sub 100 to the selected pattern
@@ -789,7 +789,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         {
             transpose_semitones -= 12;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
-            teac = 4;
+            ptk->teac = 4;
         }
 
         // Transpose
@@ -797,7 +797,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         {
             transpose_semitones += 12;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
-            teac = 4;
+            ptk->teac = 4;
         }
     }
 }

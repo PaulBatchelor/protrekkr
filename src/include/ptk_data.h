@@ -42,5 +42,7 @@ typedef struct {
     int Done_Tip;
 
     int player_pos;
+
+    char teac;
 } ptk_data;
 #endif

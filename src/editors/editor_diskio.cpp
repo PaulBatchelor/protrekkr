@@ -309,7 +309,7 @@ void Mouse_Right_DiskIO_Ed(ptk_data *ptk)
             {
                 rawrender_from -= 10;
                 ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
-                teac = 3;
+                ptk->teac = 3;
             }
 
             // From position
@@ -317,7 +317,7 @@ void Mouse_Right_DiskIO_Ed(ptk_data *ptk)
             {
                 rawrender_from += 10;
                 ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
-                teac = 3;
+                ptk->teac = 3;
             }
 
             // To position
@@ -325,7 +325,7 @@ void Mouse_Right_DiskIO_Ed(ptk_data *ptk)
             {
                 rawrender_to -= 10;
                 ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
-                teac = 4;
+                ptk->teac = 4;
             }
 
             // To position
@@ -333,7 +333,7 @@ void Mouse_Right_DiskIO_Ed(ptk_data *ptk)
             {
                 rawrender_to += 10;
                 ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
-                teac = 4;
+                ptk->teac = 4;
             }
         }
     }
@@ -473,7 +473,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 458, (Cur_Height - 68), 29, 16) && !Allow_32bit)
         {
             rawrender_32float = TRUE;
-            teac = 1;
+            ptk->teac = 1;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
@@ -481,7 +481,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 458 + 31, (Cur_Height - 68), 29, 16) && !Allow_32bit)
         {
             rawrender_32float = FALSE;
-            teac = 1;
+            ptk->teac = 1;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
@@ -489,7 +489,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 534, (Cur_Height - 112), 40, 16))
         {
             rawrender_range = FALSE;
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
@@ -497,7 +497,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 534 + 42, (Cur_Height - 112), 40, 16))
         {
             rawrender_range = TRUE;
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
@@ -508,7 +508,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             {
                 rawrender_from--;
                 ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
-                teac = 3;
+                ptk->teac = 3;
             }
 
             // From position
@@ -516,7 +516,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             {
                 rawrender_from++;
                 ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
-                teac = 3;
+                ptk->teac = 3;
             }
 
             // To position
@@ -524,7 +524,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             {
                 rawrender_to--;
                 ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
-                teac = 4;
+                ptk->teac = 4;
             }
 
             // To position
@@ -532,7 +532,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             {
                 rawrender_to++;
                 ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
-                teac = 4;
+                ptk->teac = 4;
             }
         }
 
@@ -540,7 +540,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 654, (Cur_Height - 106), 80, 16))
         {
             rawrender_target = RENDER_TO_FILE;
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
@@ -548,7 +548,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 654, (Cur_Height - 88), 80, 16))
         {
             rawrender_target = RENDER_TO_MONO;
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
@@ -556,7 +556,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 654, (Cur_Height - 70), 80, 16))
         {
             rawrender_target = RENDER_TO_STEREO;
-            teac = 0;
+            ptk->teac = 0;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
@@ -564,7 +564,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 458, (Cur_Height - 49), 29, 16) && !Allow_Single_Render)
         {
             rawrender_multi = TRUE;
-            teac = 5;
+            ptk->teac = 5;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
@@ -572,7 +572,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 458 + 31, (Cur_Height - 49), 29, 16) && !Allow_Single_Render)
         {
             rawrender_multi = FALSE;
-            teac = 5;
+            ptk->teac = 5;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
