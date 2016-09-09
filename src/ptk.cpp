@@ -1234,12 +1234,12 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_SELECT_MIDI_SETUP)
         {
-            retletter[71] = TRUE;
-            Actualize_Input();
-            retletter[71] = FALSE;
-            userscreen = USER_SCREEN_SETUP_MIDI;
-            Draw_Midi_Ed(ptk);
-            Actualize_Midi_Ed(ptk, 0);
+            //retletter[71] = TRUE;
+            //Actualize_Input();
+            //retletter[71] = FALSE;
+            //userscreen = USER_SCREEN_SETUP_MIDI;
+            //Draw_Midi_Ed(ptk);
+            //Actualize_Midi_Ed(ptk, 0);
         }
 
         if(gui_action == GUI_CMD_SELECT_SYNTH_EDIT)

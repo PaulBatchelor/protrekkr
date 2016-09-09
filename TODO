@@ -1,6 +1,6 @@
 - Remove MIDI support (sorry not sorry)
-- Remove unnecessary defines 
+- Fix main.h issues
 - Figure out how to remove global data struct pointer
 - Remove WINAMP support
 - De-Classify CSynth
-- Remove Windows Support
+- Remove Windows Support (mostly about Linux/OSX now)
