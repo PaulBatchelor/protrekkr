@@ -96,10 +96,7 @@ int Done_Tip = FALSE;
 char Current_Instrument_Split = 0;
 
 int player_pos = -1;
-int flagger = 0;
-int ltretnote = 0;
-int ltretnote_raw = 0;
-int ltretvalue = 0;
+
 int retletter[256];
 int tretletter = 0;
 int posletter = 0;
@@ -4537,7 +4534,7 @@ void Keyboard_Handler(ptk_data *ptk)
                     if(Column_Under_Caret == (19 + j)) ped_cell = PATTERN_FX4;         // fx 4
                     if(Column_Under_Caret == (21 + j)) ped_cell = PATTERN_FXDATA4;     // fx 4 data
                     
-                    ltretvalue = retvalue;
+                    ptk->ltretvalue = retvalue;
                     xoffseted = (Track_Under_Caret * PATTERN_BYTES) + (Pattern_Line * PATTERN_ROW_LEN) + ped_cell;
 
                     int oldval = *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted);
@@ -4656,7 +4653,7 @@ void Keyboard_Handler(ptk_data *ptk)
                         if(Column_Under_Caret == (20 + j)) ped_cell = PATTERN_FX4;
                         if(Column_Under_Caret == (22 + j)) ped_cell = PATTERN_FXDATA4;
 
-                        ltretvalue = retvalue;
+                        ptk->ltretvalue = retvalue;
                         xoffseted = (Track_Under_Caret * PATTERN_BYTES) + (Pattern_Line * PATTERN_ROW_LEN) + ped_cell;
                         int oldval = *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted);
 
@@ -6833,4 +6830,5 @@ void ptk_init(ptk_data *ptk)
     ptk->seditor = 0;
     ptk->ctipoftheday = 0;
     ptk->sas = FALSE;
+    ptk->ltretvalue = 0;
 }
