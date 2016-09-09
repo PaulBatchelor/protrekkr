@@ -455,7 +455,7 @@ void StartRec(void);
 void Notify_Edit(void);
 void Notify_Play(ptk_data *ptk);
 char zcheckMouse_nobutton(int x, int y, int xs, int ys);
-char zcheckMouse(int x, int y, int xs, int ys);
+char zcheckMouse(ptk_data *ptk, int x, int y, int xs, int ys);
 void Keyboard_Handler(ptk_data *ptk);
 void Mouse_Handler(ptk_data *ptk);
 int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left);

@@ -242,19 +242,19 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_TRACK_FX_EDIT)
     {
-        if(zcheckMouse(74, (Cur_Height - 110), 148, 16) && LFO_ON[Track_Under_Caret])
+        if(zcheckMouse(ptk, 74, (Cur_Height - 110), 148, 16) && LFO_ON[Track_Under_Caret])
         {
             LFO_RATE[Track_Under_Caret] = (Mouse.x - 84) / 16384.0f;
             teac = 2;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
         }
-        if(zcheckMouse(74, (Cur_Height - 92), 148, 16) && LFO_ON[Track_Under_Caret])
+        if(zcheckMouse(ptk, 74, (Cur_Height - 92), 148, 16) && LFO_ON[Track_Under_Caret])
         {
             LFO_AMPL[Track_Under_Caret] = float(Mouse.x - 84);
             teac = 3;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
         }
-        if(zcheckMouse(74, (Cur_Height - 49), 148, 16) && FLANGER_ON[Track_Under_Caret])
+        if(zcheckMouse(ptk, 74, (Cur_Height - 49), 148, 16) && FLANGER_ON[Track_Under_Caret])
         {
             FLANGER_DEPHASE[Track_Under_Caret] = (Mouse.x - 84) * 0.0490873f;
             teac = 4;
@@ -262,31 +262,31 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
             teac = 4;
         }
 
-        if(zcheckMouse(308, (Cur_Height - 121), 148, 16) && FLANGER_ON[Track_Under_Caret])
+        if(zcheckMouse(ptk, 308, (Cur_Height - 121), 148, 16) && FLANGER_ON[Track_Under_Caret])
         {
             teac = 1;
             FLANGER_AMOUNT[Track_Under_Caret] = ((Mouse.x - 318.0f) / 64.0f) - 1.0f;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
         }
-        if(zcheckMouse(308, (Cur_Height - 103), 148, 16) && FLANGER_ON[Track_Under_Caret])
+        if(zcheckMouse(ptk, 308, (Cur_Height - 103), 148, 16) && FLANGER_ON[Track_Under_Caret])
         {
             FLANGER_RATE[Track_Under_Caret] = (Mouse.x - 318.0f) / 939104.92f;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
             teac = 5;
         }
-        if(zcheckMouse(308, (Cur_Height - 85), 148, 16) && FLANGER_ON[Track_Under_Caret])
+        if(zcheckMouse(ptk, 308, (Cur_Height - 85), 148, 16) && FLANGER_ON[Track_Under_Caret])
         {
             FLANGER_AMPL[Track_Under_Caret] = (Mouse.x - 318.0f) / 12800.0f;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
             teac = 6;
         }
-        if(zcheckMouse(308, (Cur_Height - 67), 148, 16) && FLANGER_ON[Track_Under_Caret])
+        if(zcheckMouse(ptk, 308, (Cur_Height - 67), 148, 16) && FLANGER_ON[Track_Under_Caret])
         {
             FLANGER_FEEDBACK[Track_Under_Caret] = ((Mouse.x - 318) / 64.0f) - 1.0f;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
             teac = 7;
         }
-        if(zcheckMouse(308, (Cur_Height - 49), 148, 16) && FLANGER_ON[Track_Under_Caret])
+        if(zcheckMouse(ptk, 308, (Cur_Height - 49), 148, 16) && FLANGER_ON[Track_Under_Caret])
         {
             FLANGER_DELAY[Track_Under_Caret] = (Mouse.x - 318) * 32;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
@@ -295,7 +295,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
         }
 
         // Compressor threshold
-        if(zcheckMouse(602, (Cur_Height - 103), 67, 18) &&
+        if(zcheckMouse(ptk, 602, (Cur_Height - 103), 67, 18) &&
            Compress_Track[Track_Under_Caret])
         {
             Mas_Compressor_Set_Variables_Track(ptk, Track_Under_Caret,
@@ -306,7 +306,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
         }
 
         // Compressor ratio
-        if(zcheckMouse(602, (Cur_Height - 85), 67, 18) &&
+        if(zcheckMouse(ptk, 602, (Cur_Height - 85), 67, 18) &&
            Compress_Track[Track_Under_Caret])
         {
             Mas_Compressor_Set_Variables_Track(ptk, Track_Under_Caret,
@@ -317,7 +317,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
         }
 
         // Volume
-        if(zcheckMouse(602, (Cur_Height - 53), 67, 18))
+        if(zcheckMouse(ptk, 602, (Cur_Height - 53), 67, 18))
         {
             Track_Volume[Track_Under_Caret] = (Mouse.x - 612.0f) / 50.0f;
             if(Track_Volume[Track_Under_Caret] > 1.0f) Track_Volume[Track_Under_Caret] = 1.0f;
@@ -327,7 +327,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
         }
 
         // Lo Eq
-        if(zcheckMouse(710, (Cur_Height - 120), 16, 64))
+        if(zcheckMouse(ptk, 710, (Cur_Height - 120), 16, 64))
         {
             float Pos_Mouse;
             int Center = Slider_Get_Center(16, 100, 65);
@@ -343,7 +343,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
         }
 
         // Med Eq
-        if(zcheckMouse(710 + (22 * 1), (Cur_Height - 120), 16, 64))
+        if(zcheckMouse(ptk, 710 + (22 * 1), (Cur_Height - 120), 16, 64))
         {
             float Pos_Mouse;
             int Center = Slider_Get_Center(16, 100, 65);
@@ -359,7 +359,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
         }
 
         // Hi Eq
-        if(zcheckMouse(710 + (22 * 2), (Cur_Height - 120), 16, 64))
+        if(zcheckMouse(ptk, 710 + (22 * 2), (Cur_Height - 120), 16, 64))
         {
             float Pos_Mouse;
             int Center = Slider_Get_Center(16, 100, 65);
@@ -375,7 +375,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
         }
 
         // Clear lo band
-        if(zcheckMouse(710, (Cur_Height - 55), 16, 16))
+        if(zcheckMouse(ptk, 710, (Cur_Height - 55), 16, 16))
         {
             EqDat[Track_Under_Caret].lg = 1.0f;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
@@ -383,7 +383,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
         }
 
         // Clear med band
-        if(zcheckMouse(710 + (22 * 1), (Cur_Height - 55), 16, 16))
+        if(zcheckMouse(ptk, 710 + (22 * 1), (Cur_Height - 55), 16, 16))
         {
             EqDat[Track_Under_Caret].mg = 1.0f;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
@@ -391,7 +391,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
         }
 
         // Clear hi band
-        if(zcheckMouse(710 + (22 * 2), (Cur_Height - 55), 16, 16))
+        if(zcheckMouse(ptk, 710 + (22 * 2), (Cur_Height - 55), 16, 16))
         {
             EqDat[Track_Under_Caret].hg = 1.0f;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
@@ -405,38 +405,38 @@ void Mouse_Left_Track_Fx_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_TRACK_FX_EDIT)
     {
-        if(zcheckMouse(74, (Cur_Height - 128), 20, 16) && LFO_ON[Track_Under_Caret] == FALSE)
+        if(zcheckMouse(ptk, 74, (Cur_Height - 128), 20, 16) && LFO_ON[Track_Under_Caret] == FALSE)
         {
             LFO_ON[Track_Under_Caret] = TRUE;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
             teac = 0;
         }
-        if(zcheckMouse(96, (Cur_Height - 128), 20, 16) && LFO_ON[Track_Under_Caret] == TRUE)
+        if(zcheckMouse(ptk, 96, (Cur_Height - 128), 20, 16) && LFO_ON[Track_Under_Caret] == TRUE)
         {
             LFO_ON[Track_Under_Caret] = FALSE;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
             teac = 0;
         }
-        if(zcheckMouse(184, (Cur_Height - 128), 20, 16) && FLANGER_ON[Track_Under_Caret] == FALSE)
+        if(zcheckMouse(ptk, 184, (Cur_Height - 128), 20, 16) && FLANGER_ON[Track_Under_Caret] == FALSE)
         {
             FLANGER_ON[Track_Under_Caret] = TRUE;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
             teac = 0;
         }
-        if(zcheckMouse(206, (Cur_Height - 128), 20, 16) && FLANGER_ON[Track_Under_Caret])
+        if(zcheckMouse(ptk, 206, (Cur_Height - 128), 20, 16) && FLANGER_ON[Track_Under_Caret])
         {
             FLANGER_ON[Track_Under_Caret] = FALSE;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
             teac = 0;
         }
 
-        if(zcheckMouse(602, (Cur_Height - 121), 20, 16) && Compress_Track[Track_Under_Caret] == FALSE)
+        if(zcheckMouse(ptk, 602, (Cur_Height - 121), 20, 16) && Compress_Track[Track_Under_Caret] == FALSE)
         {
             Compress_Track[Track_Under_Caret] = TRUE;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
             teac = 0;
         }
-        if(zcheckMouse(624, (Cur_Height - 121), 20, 16) && Compress_Track[Track_Under_Caret])
+        if(zcheckMouse(ptk, 624, (Cur_Height - 121), 20, 16) && Compress_Track[Track_Under_Caret])
         {
             Compress_Track[Track_Under_Caret] = FALSE;
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;

@@ -231,7 +231,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
     if(userscreen == USER_SCREEN_SEQUENCER)
     {
         // Remap Selection
-        if(zcheckMouse(590, (Cur_Height - 76), 60, 16))
+        if(zcheckMouse(ptk, 590, (Cur_Height - 76), 60, 16))
         {
             if(transpose_semitones)
             {
@@ -253,7 +253,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
             Instrument_Remap_Sel(ptk, Cur_Position, Get_Real_Selection(ptk, FALSE), Remap_From, Remap_To);
         }
         // Remap Track
-        if(zcheckMouse(590, (Cur_Height - 56), 60, 16))
+        if(zcheckMouse(ptk, 590, (Cur_Height - 56), 60, 16))
         {
             if(transpose_semitones)
             {
@@ -275,7 +275,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
             Instrument_Remap_Sel(ptk, Cur_Position, Select_Track(ptk, Track_Under_Caret), Remap_From, Remap_To);
         }
         // Remap Pattern
-        if(zcheckMouse(652, (Cur_Height - 76), 60, 16))
+        if(zcheckMouse(ptk, 652, (Cur_Height - 76), 60, 16))
         {
             for(i = 0; i < Songtracks; i++)
             {
@@ -300,7 +300,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
             }
         }
         // Remap Song
-        if(zcheckMouse(652, (Cur_Height - 56), 60, 16))
+        if(zcheckMouse(ptk, 652, (Cur_Height - 56), 60, 16))
         {
             char *Done_Pattern;
             int nbr_patterns;
@@ -352,7 +352,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // From Instrument
-        if(zcheckMouse(520, (Cur_Height - 76), 16, 16) == 1)
+        if(zcheckMouse(ptk, 520, (Cur_Height - 76), 16, 16) == 1)
         {
             Remap_From--;
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -360,7 +360,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // From Instrument
-        if(zcheckMouse(520 + 44, (Cur_Height - 76), 16, 16) == 1)
+        if(zcheckMouse(ptk, 520 + 44, (Cur_Height - 76), 16, 16) == 1)
         {
             Remap_From++;
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -368,7 +368,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // To Instrument
-        if(zcheckMouse(520, (Cur_Height - 56), 16, 16) == 1)
+        if(zcheckMouse(ptk, 520, (Cur_Height - 56), 16, 16) == 1)
         {
             Remap_To--;
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -376,7 +376,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // To Instrument
-        if(zcheckMouse(520 + 44, (Cur_Height - 56), 16, 16) == 1)
+        if(zcheckMouse(ptk, 520 + 44, (Cur_Height - 56), 16, 16) == 1)
         {
             Remap_To++;
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -384,7 +384,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Transpose
-        if(zcheckMouse(720, (Cur_Height - 76), 16, 16) == 1)
+        if(zcheckMouse(ptk, 720, (Cur_Height - 76), 16, 16) == 1)
         {
             transpose_semitones--;
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -392,7 +392,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Transpose
-        if(zcheckMouse(720 + 44, (Cur_Height - 76), 16, 16) == 1)
+        if(zcheckMouse(ptk, 720 + 44, (Cur_Height - 76), 16, 16) == 1)
         {
             transpose_semitones++;
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -400,49 +400,49 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Clear all
-        if(zcheckMouse(4, (Cur_Height - 134), 80, 16))
+        if(zcheckMouse(ptk, 4, (Cur_Height - 134), 80, 16))
         {
             SeqFill(0, 256, FALSE);
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
 
         // Clear position
-        if(zcheckMouse(4, (Cur_Height - 116), 80, 16))
+        if(zcheckMouse(ptk, 4, (Cur_Height - 116), 80, 16))
         {
             SeqFill(Cur_Position, Cur_Position + 1, FALSE);
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
 
         // Reset all
-        if(zcheckMouse(4, (Cur_Height - 78), 80, 16))
+        if(zcheckMouse(ptk, 4, (Cur_Height - 78), 80, 16))
         {
             SeqFill(0, 256, TRUE);
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
 
         // Reset position
-        if(zcheckMouse(4, (Cur_Height - 60), 80, 16))
+        if(zcheckMouse(ptk, 4, (Cur_Height - 60), 80, 16))
         {
             SeqFill(Cur_Position, Cur_Position + 1, TRUE);
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
 
         // Insert position
-        if(zcheckMouse(308, (Cur_Height - 78), 80, 16))
+        if(zcheckMouse(ptk, 308, (Cur_Height - 78), 80, 16))
         {
             SeqInsert(Cur_Position);
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
 
         // Delete position
-        if(zcheckMouse(308, (Cur_Height - 60), 80, 16))
+        if(zcheckMouse(ptk, 308, (Cur_Height - 60), 80, 16))
         {
             SeqDelete(Cur_Position);
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
 
         // Select the copy buffers
-        if(zcheckMouse(396, (Cur_Height - 78), 15, 16))
+        if(zcheckMouse(ptk, 396, (Cur_Height - 78), 15, 16))
         {
             cur_seq_buffer[0] = BUTTON_PUSHED;
             cur_seq_buffer[1] = BUTTON_NORMAL;
@@ -451,7 +451,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
             Display_Seq_Buffer();
             Cur_Seq_Buffer = 0;
         }
-        if(zcheckMouse(396 + 17, (Cur_Height - 78), 15, 16))
+        if(zcheckMouse(ptk, 396 + 17, (Cur_Height - 78), 15, 16))
         {
             cur_seq_buffer[0] = BUTTON_NORMAL;
             cur_seq_buffer[1] = BUTTON_PUSHED;
@@ -460,7 +460,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
             Display_Seq_Buffer();
             Cur_Seq_Buffer = 1;
         }
-        if(zcheckMouse(396 + (17 * 2), (Cur_Height - 78), 15, 16))
+        if(zcheckMouse(ptk, 396 + (17 * 2), (Cur_Height - 78), 15, 16))
         {
             cur_seq_buffer[0] = BUTTON_NORMAL;
             cur_seq_buffer[1] = BUTTON_NORMAL;
@@ -469,7 +469,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
             Display_Seq_Buffer();
             Cur_Seq_Buffer = 2;
         }
-        if(zcheckMouse(396 + (17 * 3), (Cur_Height - 78), 15, 16))
+        if(zcheckMouse(ptk, 396 + (17 * 3), (Cur_Height - 78), 15, 16))
         {
             cur_seq_buffer[0] = BUTTON_NORMAL;
             cur_seq_buffer[1] = BUTTON_NORMAL;
@@ -480,7 +480,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Cut
-        if(zcheckMouse(396, (Cur_Height - 134), 32, 16))
+        if(zcheckMouse(ptk, 396, (Cur_Height - 134), 32, 16))
         {
             SeqCopy(Cur_Position);
             SeqDelete(Cur_Position);
@@ -488,20 +488,20 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Copy
-        if(zcheckMouse(396 + 34, (Cur_Height - 134), 32, 16))
+        if(zcheckMouse(ptk, 396 + 34, (Cur_Height - 134), 32, 16))
         {
             SeqCopy(Cur_Position);
         }
 
         // Paste
-        if(zcheckMouse(396, (Cur_Height - 116), 66, 16))
+        if(zcheckMouse(ptk, 396, (Cur_Height - 116), 66, 16))
         {
             SeqPaste(Cur_Position);
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
 
         // Insert/Paste
-        if(zcheckMouse(396, (Cur_Height - 98), 66, 16))
+        if(zcheckMouse(ptk, 396, (Cur_Height - 98), 66, 16))
         {
             SeqInsert(Cur_Position);
             SeqPaste(Cur_Position);
@@ -509,7 +509,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Ptn->Pos[Cur]
-        if(zcheckMouse(308, (Cur_Height - 134), 80, 16))
+        if(zcheckMouse(ptk, 308, (Cur_Height - 134), 80, 16))
         {
             if(Cur_Position < 128)
             {
@@ -520,7 +520,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Ptn->Pos[Sng]
-        if(zcheckMouse(308, (Cur_Height - 116), 80, 16))
+        if(zcheckMouse(ptk, 308, (Cur_Height - 116), 80, 16))
         {
             for(int xpos = 0; xpos < 128; xpos++)
             {
@@ -530,27 +530,27 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Up 10 pos
-        if(zcheckMouse(288, (Cur_Height - 134), 16, 16))
+        if(zcheckMouse(ptk, 288, (Cur_Height - 134), 16, 16))
         {
             gui_action = GUI_CMD_REDUCE_POSITIONS_10;
         }
         // Up 1 pos
-        if(zcheckMouse(288, (Cur_Height - 116), 16, 16))
+        if(zcheckMouse(ptk, 288, (Cur_Height - 116), 16, 16))
         {
             gui_action = GUI_CMD_PREVIOUS_POSITION;
         }
         // Down 1 pos
-        if(zcheckMouse(288, (Cur_Height - 78), 16, 16)){
+        if(zcheckMouse(ptk, 288, (Cur_Height - 78), 16, 16)){
             gui_action = GUI_CMD_NEXT_POSITION;
         }
         // Down 10 pos
-        if(zcheckMouse(288, (Cur_Height - 60), 16, 16))
+        if(zcheckMouse(ptk, 288, (Cur_Height - 60), 16, 16))
         {
             gui_action = GUI_CMD_INCREASE_POSITIONS_10;
         }
 
         // Add 100 to the selected pattern
-        if(zcheckMouse(260, (Cur_Height - 132), 7, 84))
+        if(zcheckMouse(ptk, 260, (Cur_Height - 132), 7, 84))
         {
             int posindex = ((Mouse.y - ((Cur_Height - 132) + 1)) / 12) - 3;
             posindex += Cur_Position;
@@ -574,7 +574,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Add 10 to the selected pattern
-        if(zcheckMouse(266, (Cur_Height - 132), 7, 84))
+        if(zcheckMouse(ptk, 266, (Cur_Height - 132), 7, 84))
         {
             int posindex = ((Mouse.y - ((Cur_Height - 132) + 1)) / 12) - 3;
             posindex += Cur_Position;
@@ -598,7 +598,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Add 1 to the selected pattern
-        if(zcheckMouse(272, (Cur_Height - 132), 7, 84))
+        if(zcheckMouse(ptk, 272, (Cur_Height - 132), 7, 84))
         {
             int posindex = ((Mouse.y - ((Cur_Height - 132) + 1)) / 12) - 3;
             posindex += Cur_Position;
@@ -619,7 +619,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Enable/Disable channels
-        if(zcheckMouse(123, (Cur_Height - 131), 129, 84) == 1)
+        if(zcheckMouse(ptk, 123, (Cur_Height - 131), 129, 84) == 1)
         {
             int posindex = ((Mouse.y - ((Cur_Height - 131) + 1)) / 12) - 3;
             posindex += Cur_Position;
@@ -627,7 +627,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Scroll the positions
-        if(zcheckMouse(89, (Cur_Height - 131), 24, 84))
+        if(zcheckMouse(ptk, 89, (Cur_Height - 131), 24, 84))
         {
             int posindex = ((Mouse.y - (Cur_Height - 131)) / 12) - 3;
             posindex += Cur_Position;
@@ -639,7 +639,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Start selection name input
-        if(zcheckMouse(579, (Cur_Height - 128), 164, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 579, (Cur_Height - 128), 164, 16) && snamesel == INPUT_NONE)
         {
             snamesel = INPUT_SELECTION_NAME;
             strcpy(cur_input_name, Selection_Name);
@@ -650,7 +650,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
         
         // Save the data
-        if(zcheckMouse(745, (Cur_Height - 128), 34, 16))
+        if(zcheckMouse(ptk, 745, (Cur_Height - 128), 34, 16))
         {
             if(File_Exist_Req(ptk, "%s"SLASH"%s.ppb", Dir_Patterns, Selection_Name))
             {
@@ -672,7 +672,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
     if(userscreen == USER_SCREEN_SEQUENCER)
     {
         // From Instrument
-        if(zcheckMouse(520, (Cur_Height - 76), 16, 16) == 1)
+        if(zcheckMouse(ptk, 520, (Cur_Height - 76), 16, 16) == 1)
         {
             Remap_From -= 10;
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -680,7 +680,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         }
 
         // From Instrument
-        if(zcheckMouse(520 + 44, (Cur_Height - 76), 16, 16) == 1)
+        if(zcheckMouse(ptk, 520 + 44, (Cur_Height - 76), 16, 16) == 1)
         {
             Remap_From += 10;
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -688,7 +688,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         }
 
         // To Instrument
-        if(zcheckMouse(520, (Cur_Height - 56), 16, 16) == 1)
+        if(zcheckMouse(ptk, 520, (Cur_Height - 56), 16, 16) == 1)
         {
             Remap_To -= 10;
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -696,7 +696,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         }
 
         // To Instrument
-        if(zcheckMouse(520 + 44, (Cur_Height - 56), 16, 16) == 1)
+        if(zcheckMouse(ptk, 520 + 44, (Cur_Height - 56), 16, 16) == 1)
         {
             Remap_To += 10;
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -704,7 +704,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Sub 100 to the selected pattern
-        if(zcheckMouse(260, (Cur_Height - 132), 7, 84))
+        if(zcheckMouse(ptk, 260, (Cur_Height - 132), 7, 84))
         {
             int posindex = ((Mouse.y - ((Cur_Height - 132) + 1)) / 12) - 3;
             posindex += Cur_Position;
@@ -721,7 +721,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Sub 10 to the selected pattern
-        if(zcheckMouse(266, (Cur_Height - 132), 7, 84))
+        if(zcheckMouse(ptk, 266, (Cur_Height - 132), 7, 84))
         {
             int posindex = ((Mouse.y - ((Cur_Height - 132) + 1)) / 12) - 3;
             posindex += Cur_Position;
@@ -739,7 +739,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Sub 1 to the selected pattern
-        if(zcheckMouse(272, (Cur_Height - 132), 7, 84))
+        if(zcheckMouse(ptk, 272, (Cur_Height - 132), 7, 84))
         {
             int posindex = ((Mouse.y - ((Cur_Height - 132) + 1)) / 12) - 3;
             posindex += Cur_Position;
@@ -757,7 +757,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Solo a track
-        if(zcheckMouse(123, (Cur_Height - 131), 129, 84) == 1)
+        if(zcheckMouse(ptk, 123, (Cur_Height - 131), 129, 84) == 1)
         {
             int posindex = ((Mouse.y - ((Cur_Height - 131) + 1)) / 12) - 3;
             posindex += Cur_Position;
@@ -765,7 +765,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Insert 10 positions
-        if(zcheckMouse(308, (Cur_Height - 78), 80, 16))
+        if(zcheckMouse(ptk, 308, (Cur_Height - 78), 80, 16))
         {
             for(i = 0; i < 10; i++)
             {
@@ -775,7 +775,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Delete 10 positions
-        if(zcheckMouse(308, (Cur_Height - 60), 80, 16))
+        if(zcheckMouse(ptk, 308, (Cur_Height - 60), 80, 16))
         {
             for(i = 0; i < 10; i++)
             {
@@ -785,7 +785,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Transpose
-        if(zcheckMouse(720, (Cur_Height - 76), 16, 16) == 1)
+        if(zcheckMouse(ptk, 720, (Cur_Height - 76), 16, 16) == 1)
         {
             transpose_semitones -= 12;
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -793,7 +793,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Transpose
-        if(zcheckMouse(720 + 44, (Cur_Height - 76), 16, 16) == 1)
+        if(zcheckMouse(ptk, 720 + 44, (Cur_Height - 76), 16, 16) == 1)
         {
             transpose_semitones += 12;
             gui_action = GUI_CMD_UPDATE_SEQUENCER;

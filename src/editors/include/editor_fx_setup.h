@@ -46,9 +46,9 @@
 // Functions
 void Draw_Fx_Ed(ptk_data *ptk);
 void Actualize_Fx_Ed(ptk_data *ptk, char gode);
-void Mouse_Sliders_Fx_Ed(void);
-void Mouse_Right_Fx_Ed(void);
-void Mouse_Left_Fx_Ed(void);
+void Mouse_Sliders_Fx_Ed(ptk_data *ptk);
+void Mouse_Right_Fx_Ed(ptk_data *ptk);
+void Mouse_Left_Fx_Ed(ptk_data *ptk);
 void Display_Reverb_Cutoff(void);
 void Display_Reverb_Resonance(void);
 

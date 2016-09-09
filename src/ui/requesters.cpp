@@ -292,7 +292,7 @@ int Check_Requester(LPREQUESTER Requester)
 
 // ------------------------------------------------------
 // Handle the mouse buttons
-void Mouse_Handler_Requester(void)
+void Mouse_Handler_Requester(ptk_data *ptk)
 {
     int i;
 
@@ -312,7 +312,7 @@ void Mouse_Handler_Requester(void)
         {
             for(i = 0; i < Nbr_Buttons; i++)
             {
-                if(zcheckMouse(Pos_X + Buttons_Pos[i],
+                if(zcheckMouse(ptk, Pos_X + Buttons_Pos[i],
                                Pos_Y + (Size_Y - Font_Height) - 16, Buttons_Size[i], 16))
                 {
                     Req_Pressed_Button = i + 1;
@@ -324,7 +324,7 @@ void Mouse_Handler_Requester(void)
 
 // ------------------------------------------------------
 // Handle the keyboard shortcuts
-void Keyboard_Handler_Requester(void)
+void Keyboard_Handler_Requester(ptk_data *ptk)
 {
     int i;
 

@@ -291,7 +291,7 @@ void Mouse_Right_Reverb_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_REVERB_EDIT)
     {
-        if(zcheckMouse(72, (Cur_Height - 135), 16, 16))
+        if(zcheckMouse(ptk, 72, (Cur_Height - 135), 16, 16))
         {
             num_echoes -= 2;
             if(num_echoes < 1) num_echoes = 1;
@@ -301,7 +301,7 @@ void Mouse_Right_Reverb_Ed(ptk_data *ptk)
         }
 
         // Number of echoes
-        if(zcheckMouse(72 + 44, (Cur_Height - 135), 16, 16))
+        if(zcheckMouse(ptk, 72 + 44, (Cur_Height - 135), 16, 16))
         {
             num_echoes += 2;
             if(num_echoes > 10) num_echoes = 10;
@@ -315,7 +315,7 @@ void Mouse_Right_Reverb_Ed(ptk_data *ptk)
         for(i = 0; i < num_echoes; i++)
         {
             // Arrows left
-            if(zcheckMouse(Table_Arrows[i].x + 18, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
+            if(zcheckMouse(ptk, Table_Arrows[i].x + 18, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
             {
                 delays[i] -= 50;
                 if(delays[i] < 83) delays[i] = 83;
@@ -326,7 +326,7 @@ void Mouse_Right_Reverb_Ed(ptk_data *ptk)
             }
 
             // Arrows right
-            if(zcheckMouse(Table_Arrows[i].x + 82, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
+            if(zcheckMouse(ptk, Table_Arrows[i].x + 82, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
             {
                 delays[i] += 50;
                 if(delays[i] > 15000) delays[i] = 15000;
@@ -348,7 +348,7 @@ void Mouse_Left_Reverb_Ed(ptk_data *ptk)
     {
 
         // Number of echoes
-        if(zcheckMouse(72, (Cur_Height - 135), 16, 16))
+        if(zcheckMouse(ptk, 72, (Cur_Height - 135), 16, 16))
         {
             num_echoes--;
             if(num_echoes < 1) num_echoes = 1;
@@ -358,7 +358,7 @@ void Mouse_Left_Reverb_Ed(ptk_data *ptk)
         }
 
         // Number of echoes
-        if(zcheckMouse(72 + 44, (Cur_Height - 135), 16, 16))
+        if(zcheckMouse(ptk, 72 + 44, (Cur_Height - 135), 16, 16))
         {
             num_echoes++;
             if(num_echoes > 10) num_echoes = 10;
@@ -368,7 +368,7 @@ void Mouse_Left_Reverb_Ed(ptk_data *ptk)
         }
 
         // Save the data
-        if(zcheckMouse(749, (Cur_Height - 142), 34, 16))
+        if(zcheckMouse(ptk, 749, (Cur_Height - 142), 34, 16))
         {
             if(File_Exist_Req(ptk, "%s"SLASH"%s.prv", Dir_Reverbs, Reverb_Name))
             {
@@ -381,7 +381,7 @@ void Mouse_Left_Reverb_Ed(ptk_data *ptk)
         }
 
         // Start reverb name input
-        if(zcheckMouse(583, (Cur_Height - 142), 164, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 583, (Cur_Height - 142), 164, 16) && snamesel == INPUT_NONE)
         {
             snamesel = INPUT_REVERB_NAME;
             strcpy(cur_input_name, Reverb_Name);
@@ -396,7 +396,7 @@ void Mouse_Left_Reverb_Ed(ptk_data *ptk)
         for(i = 0; i < num_echoes; i++)
         {
             // Center buttons
-            if(zcheckMouse(Table_Sliders[i].x + 120, (Cur_Height - 115) + Table_Sliders[i].y, 16, 16))
+            if(zcheckMouse(ptk, Table_Sliders[i].x + 120, (Cur_Height - 115) + Table_Sliders[i].y, 16, 16))
             {
                 decays[i] = 0.0f;
                 teac = 0;
@@ -409,7 +409,7 @@ void Mouse_Left_Reverb_Ed(ptk_data *ptk)
         for(i = 0; i < num_echoes; i++)
         {
             // Arrows left
-            if(zcheckMouse(Table_Arrows[i].x + 18, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
+            if(zcheckMouse(ptk, Table_Arrows[i].x + 18, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
             {
                 delays[i]--;
                 if(delays[i] < 83) delays[i] = 83;
@@ -420,7 +420,7 @@ void Mouse_Left_Reverb_Ed(ptk_data *ptk)
             }
 
             // Arrows right
-            if(zcheckMouse(Table_Arrows[i].x + 82, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
+            if(zcheckMouse(ptk, Table_Arrows[i].x + 82, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
             {
                 delays[i]++;
                 if(delays[i] > 15000) delays[i] = 15000;
@@ -444,7 +444,7 @@ void Mouse_Sliders_Reverb_Ed(ptk_data *ptk)
         for(i = 0; i < num_echoes; i++)
         {
             // Rows slider
-            if(zcheckMouse(Table_Sliders[i].x, (Cur_Height - 115) + Table_Sliders[i].y, 119, 16))
+            if(zcheckMouse(ptk, Table_Sliders[i].x, (Cur_Height - 115) + Table_Sliders[i].y, 119, 16))
             {
                 int max_length = 128 + 16;
                 int Center = Slider_Get_Center(16, max_length, 119);
@@ -465,7 +465,7 @@ void Mouse_Sliders_Reverb_Ed(ptk_data *ptk)
         for(i = 0; i < num_echoes; i++)
         {
             // Arrows left
-            if(zcheckMouse(Table_Arrows[i].x, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
+            if(zcheckMouse(ptk, Table_Arrows[i].x, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
             {
                 delays[i]--;
                 if(delays[i] < 83) delays[i] = 83;
@@ -476,7 +476,7 @@ void Mouse_Sliders_Reverb_Ed(ptk_data *ptk)
             }
 
             // Arrows right
-            if(zcheckMouse(Table_Arrows[i].x + 82 + 18, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
+            if(zcheckMouse(ptk, Table_Arrows[i].x + 82 + 18, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
             {
                 delays[i]++;
                 if(delays[i] > 15000) delays[i] = 15000;
@@ -500,7 +500,7 @@ void Mouse_Sliders_Right_Reverb_Ed(ptk_data *ptk)
         for(i = 0; i < num_echoes; i++)
         {
             // Arrows left
-            if(zcheckMouse(Table_Arrows[i].x, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
+            if(zcheckMouse(ptk, Table_Arrows[i].x, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
             {
                 delays[i] -= 50;
                 if(delays[i] < 83) delays[i] = 83;
@@ -511,7 +511,7 @@ void Mouse_Sliders_Right_Reverb_Ed(ptk_data *ptk)
             }
 
             // Arrows right
-            if(zcheckMouse(Table_Arrows[i].x + 82 + 18, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
+            if(zcheckMouse(ptk, Table_Arrows[i].x + 82 + 18, (Cur_Height - 115) + Table_Arrows[i].y, 16, 16))
             {
                 delays[i] += 50;
                 if(delays[i] > 15000) delays[i] = 15000;

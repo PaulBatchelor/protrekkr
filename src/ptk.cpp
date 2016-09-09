@@ -85,7 +85,7 @@ ptk_data ptk;
 /*TODO: remove need for global pointer */
 ptk_data *g_ptk = &ptk;
 
-int fluzy = -1;
+//int ptk->fluzy = -1;
 int rev_counter2 = 0;
 char Visible_Columns = 0;
 int rs_coef = 32768;
@@ -1750,8 +1750,8 @@ int Screen_Update(ptk_data *ptk)
     }
     else
     {
-        Mouse_Handler_Requester();
-        Keyboard_Handler_Requester();
+        Mouse_Handler_Requester(ptk);
+        Keyboard_Handler_Requester(ptk);
     }
 
     // Refresh the sequencer each time the song position is different
@@ -5090,7 +5090,7 @@ char zcheckMouse_nobutton(int x, int y, int xs, int ys)
     return(0);
 }
 
-char zcheckMouse(int x, int y, int xs, int ys)
+char zcheckMouse(ptk_data *ptk, int x, int y, int xs, int ys)
 {
     if(!gui_pushed && Mouse.x > x && Mouse.x < x + xs && Mouse.y > y && Mouse.y < y + ys + 1)
     {
@@ -5099,7 +5099,7 @@ char zcheckMouse(int x, int y, int xs, int ys)
         gui_lxs = xs;
         gui_lys = ys;
         gui_pushed = Mouse.button_oneshot;
-        fluzy = -1;
+        ptk->fluzy = -1;
         return(1);
     }
     if(gui_pushed && x == gui_lx && y == gui_ly && xs == gui_lxs && ys == gui_lys)
@@ -5133,7 +5133,7 @@ void Mouse_Handler(ptk_data *ptk)
             case SCOPE_ZONE_SYNTH_LIST:
 
                 // Scroll the instruments/synths lists
-                if(zcheckMouse(393, 41, (Cur_Width - 394), 136) == 1)
+                if(zcheckMouse(ptk, 393, 41, (Cur_Width - 394), 136) == 1)
                 {
                     Instrs_index--;
                     gui_action = GUI_CMD_INSTR_SYNTH_SCROLL;
@@ -5149,7 +5149,7 @@ void Mouse_Handler(ptk_data *ptk)
             case SCOPE_ZONE_SAMPLE_DIR:
 
                 // Scroll the files lists
-                if(zcheckMouse(393, 41, (Cur_Width - 394), 136) == 1)
+                if(zcheckMouse(ptk, 393, 41, (Cur_Width - 394), 136) == 1)
                 {
                     lt_index[ptk->Scopish]--;
                     gui_action = GUI_CMD_FILELIST_SCROLL;
@@ -5160,9 +5160,9 @@ void Mouse_Handler(ptk_data *ptk)
         // Scroll the sequences
         if(userscreen == USER_SCREEN_SEQUENCER)
         {
-            if(zcheckMouse(257, (Cur_Height - 134), 26, 90) ||
-               zcheckMouse(89, (Cur_Height - 134), 26, 90) ||
-               zcheckMouse(120, (Cur_Height - 134), 132, 90))
+            if(zcheckMouse(ptk, 257, (Cur_Height - 134), 26, 90) ||
+               zcheckMouse(ptk, 89, (Cur_Height - 134), 26, 90) ||
+               zcheckMouse(ptk, 120, (Cur_Height - 134), 132, 90))
             {
                 gui_action = GUI_CMD_PREVIOUS_POSITION;
             }
@@ -5186,7 +5186,7 @@ void Mouse_Handler(ptk_data *ptk)
             case SCOPE_ZONE_SYNTH_LIST:
 
                 // Scroll the instruments/synths lists
-                if(zcheckMouse(393, 41, (Cur_Width - 394), 136) == 1)
+                if(zcheckMouse(ptk, 393, 41, (Cur_Width - 394), 136) == 1)
                 {
                     Instrs_index++;
                     gui_action = GUI_CMD_INSTR_SYNTH_SCROLL;
@@ -5202,7 +5202,7 @@ void Mouse_Handler(ptk_data *ptk)
             case SCOPE_ZONE_SAMPLE_DIR:
 
                 // Scroll the files lists
-                if(zcheckMouse(393, 41, (Cur_Width - 394), 136) == 1)
+                if(zcheckMouse(ptk, 393, 41, (Cur_Width - 394), 136) == 1)
                 {
                     lt_index[ptk->Scopish]++;
                     gui_action = GUI_CMD_FILELIST_SCROLL;
@@ -5213,9 +5213,9 @@ void Mouse_Handler(ptk_data *ptk)
         // Scroll the sequences
         if(userscreen == USER_SCREEN_SEQUENCER)
         {
-            if(zcheckMouse(257, (Cur_Height - 134), 26, 90) ||
-               zcheckMouse(89, (Cur_Height - 134), 26, 90) ||
-               zcheckMouse(120, (Cur_Height - 134), 132, 90))
+            if(zcheckMouse(ptk, 257, (Cur_Height - 134), 26, 90) ||
+               zcheckMouse(ptk, 89, (Cur_Height - 134), 26, 90) ||
+               zcheckMouse(ptk, 120, (Cur_Height - 134), 132, 90))
             {
                 gui_action = GUI_CMD_NEXT_POSITION;
             }
@@ -5232,7 +5232,7 @@ void Mouse_Handler(ptk_data *ptk)
         {
             case SCOPE_ZONE_INSTR_LIST:
             case SCOPE_ZONE_SYNTH_LIST:
-                if(zcheckMouse(Cur_Width - 17, 59, 16, 103 + 1)) gui_action = GUI_CMD_SET_INSTR_SYNTH_LIST_SLIDER;
+                if(zcheckMouse(ptk, Cur_Width - 17, 59, 16, 103 + 1)) gui_action = GUI_CMD_SET_INSTR_SYNTH_LIST_SLIDER;
                 break;
 
             case SCOPE_ZONE_MOD_DIR:
@@ -5242,7 +5242,7 @@ void Mouse_Handler(ptk_data *ptk)
             case SCOPE_ZONE_MIDICFG_DIR:
             case SCOPE_ZONE_PATTERN_DIR:
             case SCOPE_ZONE_SAMPLE_DIR:
-                if(zcheckMouse(Cur_Width - 17, 59, 16, 103 + 1)) gui_action = GUI_CMD_SET_FILES_LIST_SLIDER;
+                if(zcheckMouse(ptk, Cur_Width - 17, 59, 16, 103 + 1)) gui_action = GUI_CMD_SET_FILES_LIST_SLIDER;
                 break;
         }
 
@@ -5253,8 +5253,8 @@ void Mouse_Handler(ptk_data *ptk)
         Mouse_Sliders_Master_Ed(ptk);
         Mouse_Sliders_Synth_Ed(ptk);
         Mouse_Sliders_Track_Fx_Ed(ptk);
-        Mouse_Sliders_Fx_Ed();
-        Mouse_Sliders_Track_Ed();
+        Mouse_Sliders_Fx_Ed(ptk);
+        Mouse_Sliders_Track_Ed(ptk);
         Mouse_Sliders_Master_Shuffle(ptk);
         Mouse_Sliders_Pattern_Ed(ptk);
         Mouse_Sliders_Reverb_Ed(ptk);
@@ -5272,56 +5272,56 @@ void Mouse_Handler(ptk_data *ptk)
     if(Mouse.button_oneshot & MOUSE_LEFT_BUTTON)
     {
         // Modules dir.
-        if(zcheckMouse(Cur_Width - 126, 24, 18, 16))
+        if(zcheckMouse(ptk, Cur_Width - 126, 24, 18, 16))
         {
             ptk->Scopish = SCOPE_ZONE_MOD_DIR;
             Draw_Scope_Files_Button(ptk);
         }
 
         // Instruments dir.
-        if(zcheckMouse(Cur_Width - 108, 24, 18, 16))
+        if(zcheckMouse(ptk, Cur_Width - 108, 24, 18, 16))
         {
             ptk->Scopish = SCOPE_ZONE_INSTR_DIR;
             Draw_Scope_Files_Button(ptk);
         }
 
         // Samples dir.
-        if(zcheckMouse(Cur_Width - 90, 24, 18, 16))
+        if(zcheckMouse(ptk, Cur_Width - 90, 24, 18, 16))
         {
             ptk->Scopish = SCOPE_ZONE_SAMPLE_DIR;
             Draw_Scope_Files_Button(ptk);
         }
 
         // Presets dir.
-        if(zcheckMouse(Cur_Width - 72, 24, 18, 16))
+        if(zcheckMouse(ptk, Cur_Width - 72, 24, 18, 16))
         {
             ptk->Scopish = SCOPE_ZONE_PRESET_DIR;
             Draw_Scope_Files_Button(ptk);
         }
 
         // Reverbs dir.
-        if(zcheckMouse(Cur_Width - 54, 24, 18, 16))
+        if(zcheckMouse(ptk, Cur_Width - 54, 24, 18, 16))
         {
             ptk->Scopish = SCOPE_ZONE_REVERB_DIR;
             Draw_Scope_Files_Button(ptk);
         }
 
         // Patterns dir.
-        if(zcheckMouse(Cur_Width - 36, 24, 18, 16))
+        if(zcheckMouse(ptk, Cur_Width - 36, 24, 18, 16))
         {
             ptk->Scopish = SCOPE_ZONE_PATTERN_DIR;
             Draw_Scope_Files_Button(ptk);
         }
 
         // Patterns dir.
-        if(zcheckMouse(Cur_Width - 18, 24, 18, 16))
+        if(zcheckMouse(ptk, Cur_Width - 18, 24, 18, 16))
         {
             ptk->Scopish = SCOPE_ZONE_MIDICFG_DIR;
             Draw_Scope_Files_Button(ptk);
         }
 
         // Tracks scopes.
-        if(zcheckMouse(Cur_Width - 54, 6, 18, 16))
+        if(zcheckMouse(ptk, Cur_Width - 54, 6, 18, 16))
         {
             if(ptk->Scopish != SCOPE_ZONE_SCOPE)
             {
@@ -5338,14 +5338,14 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Instruments list
-        if(zcheckMouse(Cur_Width - 36, 6, 18, 16))
+        if(zcheckMouse(ptk, Cur_Width - 36, 6, 18, 16))
         {
             ptk->Scopish = SCOPE_ZONE_INSTR_LIST;
             Draw_Scope_Files_Button(ptk);
         }
 
         // Synths list
-        if(zcheckMouse(MAX_PATT_SCREEN_X + 1, 6, 18, 16))
+        if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, 6, 18, 16))
         {
             ptk->Scopish = SCOPE_ZONE_SYNTH_LIST;
             Draw_Scope_Files_Button(ptk);
@@ -5355,7 +5355,7 @@ void Mouse_Handler(ptk_data *ptk)
         Mouse_Left_Sample_Ed(ptk);
 
         // Change current instrument name
-        if(zcheckMouse(90, 108, 166, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 90, 108, 166, 16) && snamesel == INPUT_NONE)
         {
             snamesel = INPUT_INSTRUMENT_NAME;
             strcpy(cur_input_name, nameins[Current_Instrument]);
@@ -5371,7 +5371,7 @@ void Mouse_Handler(ptk_data *ptk)
                 Files_List_Move(ptk, 1);
 
                 // Select
-                if(zcheckMouse(393, 43, Cur_Width - 412, 133))
+                if(zcheckMouse(ptk, 393, 43, Cur_Width - 412, 133))
                 {
                     gui_action = GUI_CMD_SET_INSTR_SYNTH_LIST_SELECT;
                 }
@@ -5387,88 +5387,88 @@ void Mouse_Handler(ptk_data *ptk)
                 Files_List_Move(ptk, 1);
 
                 // Select a file
-                if(zcheckMouse(393, 43, Cur_Width - 412, 133))
+                if(zcheckMouse(ptk, 393, 43, Cur_Width - 412, 133))
                 {
                     gui_action = GUI_CMD_SET_FILES_LIST_SELECT_FILE;
                 }
                 break;
         }
 
-        if(zcheckMouse(258, 126, 16, 16)) gui_action = GUI_CMD_LOWER_OCTAVE;
-        if(zcheckMouse(302, 126, 16, 16)) gui_action = GUI_CMD_HIGHER_OCTAVE;
-        if(zcheckMouse(90, 126, 16, 16)) gui_action = GUI_CMD_DECREASE_STEP_ADD;
-        if(zcheckMouse(134, 126, 16, 16)) gui_action = GUI_CMD_INCREASE_STEP_ADD;
-        if(zcheckMouse(258, 108, 16, 16)) gui_action = GUI_CMD_PREV_INSTR;
-        if(zcheckMouse(302, 108, 16, 16)) gui_action = GUI_CMD_NEXT_INSTR;
+        if(zcheckMouse(ptk, 258, 126, 16, 16)) gui_action = GUI_CMD_LOWER_OCTAVE;
+        if(zcheckMouse(ptk, 302, 126, 16, 16)) gui_action = GUI_CMD_HIGHER_OCTAVE;
+        if(zcheckMouse(ptk, 90, 126, 16, 16)) gui_action = GUI_CMD_DECREASE_STEP_ADD;
+        if(zcheckMouse(ptk, 134, 126, 16, 16)) gui_action = GUI_CMD_INCREASE_STEP_ADD;
+        if(zcheckMouse(ptk, 258, 108, 16, 16)) gui_action = GUI_CMD_PREV_INSTR;
+        if(zcheckMouse(ptk, 302, 108, 16, 16)) gui_action = GUI_CMD_NEXT_INSTR;
 
         // --- Player --------------------------------------------
 
         // Play song from top
-        if(zcheckMouse(8, 28, 39, 16))
+        if(zcheckMouse(ptk, 8, 28, 39, 16))
         {
             plx = 0;
             Pattern_Line = 0;
             gui_action = GUI_CMD_PLAY_SONG;
         }
         // Play pattern from top
-        if(zcheckMouse(49, 28, 39, 16))
+        if(zcheckMouse(ptk, 49, 28, 39, 16))
         {
             plx = 1;
             Pattern_Line = 0;
             gui_action = GUI_CMD_PLAY_SONG;
         }
-        if(zcheckMouse(8, 46, 80, 16))
+        if(zcheckMouse(ptk, 8, 46, 80, 16))
         {
             gui_action = GUI_CMD_STOP_SONG;
         }
 
-        if(zcheckMouse(8, 64, 80, 16))
+        if(zcheckMouse(ptk, 8, 64, 80, 16))
         {
             sr_isrecording ^= 1;
             gui_action = GUI_CMD_RECORD_303;
         }
 
-        if(zcheckMouse(8, 82, 80, 16))
+        if(zcheckMouse(ptk, 8, 82, 80, 16))
         {
             gui_action = GUI_CMD_EDIT_MODE;
         }
 
         // --- Sequence -----------------------------------------
 
-        if(zcheckMouse(188, 28, 16, 16))
+        if(zcheckMouse(ptk, 188, 28, 16, 16))
         {
             gui_action = GUI_CMD_PREVIOUS_POSITION;
         }
-        if(zcheckMouse(232, 28, 16, 16))
+        if(zcheckMouse(ptk, 232, 28, 16, 16))
         {
             gui_action = GUI_CMD_NEXT_POSITION;
         }
-        if(zcheckMouse(188, 46, 16, 16) && pSequence[Cur_Position] > 0)
+        if(zcheckMouse(ptk, 188, 46, 16, 16) && pSequence[Cur_Position] > 0)
         {
             gui_action = GUI_CMD_PREV_PATT;
         }
-        if(zcheckMouse(232, 46, 16, 16) && pSequence[Cur_Position] < 254)
+        if(zcheckMouse(ptk, 232, 46, 16, 16) && pSequence[Cur_Position] < 254)
         {
             gui_action = GUI_CMD_NEXT_PATT;
         }
-        if(zcheckMouse(188, 64, 16, 16) && Song_Length > 1)
+        if(zcheckMouse(ptk, 188, 64, 16, 16) && Song_Length > 1)
         {
             gui_action = GUI_CMD_REDUCE_SONG_LENGTH;
         }
-        if(zcheckMouse(232, 64, 16, 16) && Song_Length < 255)
+        if(zcheckMouse(ptk, 232, 64, 16, 16) && Song_Length < 255)
         {
             gui_action = GUI_CMD_INCREASE_SONG_LENGTH;
         }
 
         // Decrease the number of lines for this pattern
-        if(zcheckMouse(188, 82, 16, 16) && patternLines[pSequence[Cur_Position]] > 1)
+        if(zcheckMouse(ptk, 188, 82, 16, 16) && patternLines[pSequence[Cur_Position]] > 1)
         {
             patternLines[pSequence[Cur_Position]]--;
             if(Pattern_Line >= patternLines[pSequence[Cur_Position]]) Pattern_Line = patternLines[pSequence[Cur_Position]] - 1;
             gui_action = GUI_CMD_SET_PATTERN_LENGTH;
         }
         // Increase the number of lines for this pattern
-        if(zcheckMouse(232, 82, 16, 16) && patternLines[pSequence[Cur_Position]] < 128)
+        if(zcheckMouse(ptk, 232, 82, 16, 16) && patternLines[pSequence[Cur_Position]] < 128)
         {
             patternLines[pSequence[Cur_Position]]++;
             gui_action = GUI_CMD_SET_PATTERN_LENGTH;
@@ -5477,7 +5477,7 @@ void Mouse_Handler(ptk_data *ptk)
         // --- Song Settings --------------------------------------
 
         // Reduce the number of tracks
-        if(zcheckMouse(324, 28, 16, 16) && Songtracks > 1)
+        if(zcheckMouse(ptk, 324, 28, 16, 16) && Songtracks > 1)
         {
             Songtracks--;
             if(Songtracks < 1) Songtracks = 1;
@@ -5485,7 +5485,7 @@ void Mouse_Handler(ptk_data *ptk)
             teac = 4;
         }
         // Increase the number of tracks
-        if(zcheckMouse(368, 28, 16, 16) && Songtracks < 16)
+        if(zcheckMouse(ptk, 368, 28, 16, 16) && Songtracks < 16)
         {
             Songtracks++;
             if(Songtracks > 16) Songtracks = 16;
@@ -5494,7 +5494,7 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Delete the current track
-        if(zcheckMouse(313, 28, 9, 16) && Songtracks >= 1 && !Songplaying)
+        if(zcheckMouse(ptk, 313, 28, 9, 16) && Songtracks >= 1 && !Songplaying)
         {
             Songtracks--;
             if(Songtracks < 1)
@@ -5511,7 +5511,7 @@ void Mouse_Handler(ptk_data *ptk)
             teac = 4;
         }
         // Insert a track at current position
-        if(zcheckMouse(302, 28, 9, 16) && Songtracks < 16 && !Songplaying)
+        if(zcheckMouse(ptk, 302, 28, 9, 16) && Songtracks < 16 && !Songplaying)
         {
             Songtracks++;
             if(Songtracks > 16)
@@ -5527,7 +5527,7 @@ void Mouse_Handler(ptk_data *ptk)
         }
         
         // Reduce the number of BPM
-        if(zcheckMouse(324, 46, 16, 16) && !Songplaying)
+        if(zcheckMouse(ptk, 324, 46, 16, 16) && !Songplaying)
         {
             BeatsPerMin--;
             gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
@@ -5535,7 +5535,7 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Increase the number of BPM
-        if(zcheckMouse(368, 46, 16, 16) && !Songplaying)
+        if(zcheckMouse(ptk, 368, 46, 16, 16) && !Songplaying)
         {
             BeatsPerMin++;
             gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
@@ -5543,7 +5543,7 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Decrease the number of TPB
-        if(zcheckMouse(324, 64, 16, 16) && !Songplaying)
+        if(zcheckMouse(ptk, 324, 64, 16, 16) && !Songplaying)
         {
             TicksPerBeat--;
             gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
@@ -5551,7 +5551,7 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Increase the number of TPB
-        if(zcheckMouse(368, 64, 16, 16) && !Songplaying)
+        if(zcheckMouse(ptk, 368, 64, 16, 16) && !Songplaying)
         {
             TicksPerBeat++;
             gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
@@ -5559,13 +5559,13 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Delete instrument
-        if(zcheckMouse(320, 108, 64, 16))
+        if(zcheckMouse(ptk, 320, 108, 64, 16))
         {
             Display_Requester(ptk, &Delete_Requester, GUI_CMD_DELETE_INSTRUMENT);
         }
 
         // Zoom'em small
-        if(zcheckMouse(332, 126, 16, 16))
+        if(zcheckMouse(ptk, 332, 126, 16, 16))
         {
             for(i = 0; i < Songtracks; i++)
             {
@@ -5575,7 +5575,7 @@ void Mouse_Handler(ptk_data *ptk)
             Set_Track_Slider(ptk, gui_track);
         }
         // Zoom'em normal
-        if(zcheckMouse(332 + (18 * 1), 126, 16, 16))
+        if(zcheckMouse(ptk, 332 + (18 * 1), 126, 16, 16))
         {
             for(i = 0; i < Songtracks; i++)
             {
@@ -5585,7 +5585,7 @@ void Mouse_Handler(ptk_data *ptk)
             Set_Track_Slider(ptk, gui_track);
         }
         // Zoom'em large
-        if(zcheckMouse(332 + (18 * 2), 126, 16, 16))
+        if(zcheckMouse(ptk, 332 + (18 * 2), 126, 16, 16))
         {
             for(i = 0; i < Songtracks; i++)
             {
@@ -5596,17 +5596,17 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Select track
-        if(zcheckMouse(8, 152, 61, 10))
+        if(zcheckMouse(ptk, 8, 152, 61, 10))
         {
             Select_Track_Block(ptk);
         }
         // Select note
-        if(zcheckMouse(8, 164, 61, 10))
+        if(zcheckMouse(ptk, 8, 164, 61, 10))
         {
             Select_Note_Block(ptk);
         }
         // Cut
-        if(zcheckMouse(8 + 63, 152, 61, 10))
+        if(zcheckMouse(ptk, 8 + 63, 152, 61, 10))
         {
             if(block_start_track[Curr_Buff_Block] != -1 &&
                block_end_track[Curr_Buff_Block] != -1)
@@ -5615,7 +5615,7 @@ void Mouse_Handler(ptk_data *ptk)
             }
         }
         // Copy
-        if(zcheckMouse(8 + 63, 164, 61, 10))
+        if(zcheckMouse(ptk, 8 + 63, 164, 61, 10))
         {
             if(block_start_track[Curr_Buff_Block] != -1 &&
                block_end_track[Curr_Buff_Block] != -1)
@@ -5624,7 +5624,7 @@ void Mouse_Handler(ptk_data *ptk)
             }
         }
         // Paste
-        if(zcheckMouse(8 + (63 * 2), 152, 61, 10))
+        if(zcheckMouse(ptk, 8 + (63 * 2), 152, 61, 10))
         {
             if(block_start_track_nibble[Curr_Buff_Block] != -1 &&
                block_end_track_nibble[Curr_Buff_Block] != -1 &&
@@ -5634,7 +5634,7 @@ void Mouse_Handler(ptk_data *ptk)
             }
         }
         // Delete
-        if(zcheckMouse(8 + (63 * 2), 164, 61, 10))
+        if(zcheckMouse(ptk, 8 + (63 * 2), 164, 61, 10))
         {
             if(is_editing)
             {
@@ -5643,69 +5643,69 @@ void Mouse_Handler(ptk_data *ptk)
             }
         }
         // Interpolate
-        if(zcheckMouse(8 + (63 * 3), 152, 61, 10))
+        if(zcheckMouse(ptk, 8 + (63 * 3), 152, 61, 10))
         {
             if(is_editing) Interpolate_Block(ptk, Cur_Position);
         }
         // Randomize
-        if(zcheckMouse(8 + (63 * 3), 164, 61, 10))
+        if(zcheckMouse(ptk, 8 + (63 * 3), 164, 61, 10))
         {
             if(is_editing) Randomize_Block(ptk, Cur_Position);
         }
         // Semitone up
-        if(zcheckMouse(8 + (63 * 4), 152, 61, 10))
+        if(zcheckMouse(ptk, 8 + (63 * 4), 152, 61, 10))
         {
             if(is_editing) Semitone_Up_Block(ptk, Cur_Position);
         }
         // Semitone down
-        if(zcheckMouse(8 + (63 * 4), 164, 61, 10))
+        if(zcheckMouse(ptk, 8 + (63 * 4), 164, 61, 10))
         {
             if(is_editing) Semitone_Down_Block(ptk, Cur_Position);
         }
         // Octave up
-        if(zcheckMouse(8 + (63 * 5), 152, 61, 10))
+        if(zcheckMouse(ptk, 8 + (63 * 5), 152, 61, 10))
         {
             if(is_editing) Octave_Up_Block(ptk, Cur_Position);
         }
         // Octave down
-        if(zcheckMouse(8 + (63 * 5), 164, 61, 10))
+        if(zcheckMouse(ptk, 8 + (63 * 5), 164, 61, 10))
         {
             if(is_editing) Octave_Down_Block(ptk, Cur_Position);
         }
 
         // Switch small / large patterns
         int Add_Offset = Patterns_Lines_Offset;
-        if(zcheckMouse(0, (Cur_Height - 171) + Add_Offset, 18, 16))
+        if(zcheckMouse(ptk, 0, (Cur_Height - 171) + Add_Offset, 18, 16))
         {
             gui_action = GUI_CMD_SELECT_LARGE_PATTERNS;
         }
 
         // Exit
-        if(zcheckMouse(0, 6, 16, 16))
+        if(zcheckMouse(ptk, 0, 6, 16, 16))
         {
             gui_action = GUI_CMD_EXIT;
         }
 
-        if(zcheckMouse(20, (Cur_Height - 171) + Add_Offset, 62, 16) && (userscreen != USER_SCREEN_SEQUENCER || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_SEQUENCER;
-        if(zcheckMouse(20 + (TAB_LARG * 1), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_INSTRUMENT_EDIT || Patterns_Lines_Offset))
+        if(zcheckMouse(ptk, 20, (Cur_Height - 171) + Add_Offset, 62, 16) && (userscreen != USER_SCREEN_SEQUENCER || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_SEQUENCER;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 1), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_INSTRUMENT_EDIT || Patterns_Lines_Offset))
         {
             gui_action = GUI_CMD_SELECT_INSTRUMENT_EDIT;
             seditor = 0;
         }
-        if(zcheckMouse(20 + (TAB_LARG * 2), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SYNTH_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_SYNTH_EDIT;
-        if(zcheckMouse(20 + (TAB_LARG * 3), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SAMPLE_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_SAMPLE_EDIT;
-        if(zcheckMouse(20 + (TAB_LARG * 4), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_TB303_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_TB303_EDIT;
-        if(zcheckMouse(20 + (TAB_LARG * 5), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_TRACK_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_TRACK_EDIT;
-        if(zcheckMouse(20 + (TAB_LARG * 6), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_TRACK_FX_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_TRACK_FX_EDIT;
-        if(zcheckMouse(20 + (TAB_LARG * 7), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_FX_SETUP_EDIT || Patterns_Lines_Offset))
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 2), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SYNTH_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_SYNTH_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 3), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SAMPLE_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_SAMPLE_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 4), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_TB303_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_TB303_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 5), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_TRACK_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_TRACK_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 6), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_TRACK_FX_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_TRACK_FX_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 7), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_FX_SETUP_EDIT || Patterns_Lines_Offset))
         {
             gui_action = GUI_CMD_SELECT_FX_EDIT;
             teac = 0;
         }
-        if(zcheckMouse(20 + (TAB_LARG * 8), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_REVERB_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_REVERB_EDIT;
-        if(zcheckMouse(20 + (TAB_LARG * 9), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_DISKIO_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_DISKIO_EDIT;
-        if(zcheckMouse(20 + (TAB_LARG * 10), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SETUP_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_SCREEN_SETUP_EDIT;
-        //if(zcheckMouse(20 + (TAB_LARG * 11), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SETUP_MIDI || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_MIDI_SETUP;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 8), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_REVERB_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_REVERB_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 9), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_DISKIO_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_DISKIO_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 10), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SETUP_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_SCREEN_SETUP_EDIT;
+        //if(zcheckMouse(ptk, 20 + (TAB_LARG * 11), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SETUP_MIDI || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_MIDI_SETUP;
 
         Mouse_Left_Track_Fx_Ed(ptk);
         Mouse_Left_Sequencer_Ed(ptk);
@@ -5714,7 +5714,7 @@ void Mouse_Handler(ptk_data *ptk)
         Mouse_Left_DiskIO_Ed(ptk);
         Mouse_Left_Track_Ed(ptk);
         Mouse_Left_Instrument_Ed(ptk);
-        Mouse_Left_Fx_Ed();
+        Mouse_Left_Fx_Ed(ptk);
         Mouse_Left_Synth_Ed(ptk);
         Mouse_Left_Master_Ed(ptk);
         Mouse_Left_Pattern_Ed(ptk);
@@ -5732,7 +5732,7 @@ void Mouse_Handler(ptk_data *ptk)
         Reset_Pattern_Scrolling_Horiz(ptk);
         Mouse_Right_Pattern_Ed(ptk);
 
-        if(zcheckMouse(188, 82, 16, 16))
+        if(zcheckMouse(ptk, 188, 82, 16, 16))
         {
             int ltp = patternLines[pSequence[Cur_Position]];
             ltp -= 8;
@@ -5742,7 +5742,7 @@ void Mouse_Handler(ptk_data *ptk)
             gui_action = GUI_CMD_SET_PATTERN_LENGTH;
         }
 
-        if(zcheckMouse(232, 82, 16, 16))
+        if(zcheckMouse(ptk, 232, 82, 16, 16))
         {
             int ltp = patternLines[pSequence[Cur_Position]];
             ltp += 8;
@@ -5751,23 +5751,23 @@ void Mouse_Handler(ptk_data *ptk)
             gui_action = GUI_CMD_SET_PATTERN_LENGTH;
         }
 
-        if(zcheckMouse(258, 108, 16, 16) == 1)
+        if(zcheckMouse(ptk, 258, 108, 16, 16) == 1)
         {
             gui_action = GUI_CMD_PREVIOUS_16_INSTR;
         }
-        if(zcheckMouse(302, 108, 16, 16) == 1)
+        if(zcheckMouse(ptk, 302, 108, 16, 16) == 1)
         {
             gui_action = GUI_CMD_NEXT_16_INSTR;
         }
 
         // Play song from current position
-        if(zcheckMouse(8, 28, 39, 16))
+        if(zcheckMouse(ptk, 8, 28, 39, 16))
         {
             plx = 0;
             gui_action = GUI_CMD_PLAY_SONG;
         }
         // Play pattern from current position
-        if(zcheckMouse(49, 28, 39, 16))
+        if(zcheckMouse(ptk, 49, 28, 39, 16))
         {
             plx = 1;
             gui_action = GUI_CMD_PLAY_SONG;
@@ -5793,7 +5793,7 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Reduce the number of tracks
-        if(zcheckMouse(324, 28, 16, 16) && Songtracks > 1)
+        if(zcheckMouse(ptk, 324, 28, 16, 16) && Songtracks > 1)
         {
             Songtracks -= 5;
             if(Songtracks < 1) Songtracks = 1;
@@ -5801,7 +5801,7 @@ void Mouse_Handler(ptk_data *ptk)
             teac = 4;
         }
         // Increase the number of tracks
-        if(zcheckMouse(368, 28, 16, 16) && Songtracks < 16)
+        if(zcheckMouse(ptk, 368, 28, 16, 16) && Songtracks < 16)
         {
             Songtracks += 5;
             if(Songtracks > 16) Songtracks = 16;
@@ -5810,14 +5810,14 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Reduce the number of BPM by 16
-        if(zcheckMouse(324, 46, 16, 16) && !Songplaying)
+        if(zcheckMouse(ptk, 324, 46, 16, 16) && !Songplaying)
         {
             BeatsPerMin -= 16;
             gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
             teac = 1;
         }
         // Increase the number of BPM by 16
-        if(zcheckMouse(368, 46, 16, 16) && !Songplaying)
+        if(zcheckMouse(ptk, 368, 46, 16, 16) && !Songplaying)
         {
             BeatsPerMin += 16;
             gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
@@ -5825,7 +5825,7 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Decrease the number of TPB
-        if(zcheckMouse(324, 64, 16, 16) && !Songplaying)
+        if(zcheckMouse(ptk, 324, 64, 16, 16) && !Songplaying)
         {
             TicksPerBeat -= 10;
             gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
@@ -5833,7 +5833,7 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Increase the number of TPB
-        if(zcheckMouse(368, 64, 16, 16) && !Songplaying)
+        if(zcheckMouse(ptk, 368, 64, 16, 16) && !Songplaying)
         {
             TicksPerBeat += 10;
             gui_action = GUI_CMD_CHANGE_BPM_TICKS_NBR;
@@ -5841,7 +5841,7 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Song_Length - 10
-        if(zcheckMouse(188, 64, 16, 16) == 1 && Song_Length != 1)
+        if(zcheckMouse(ptk, 188, 64, 16, 16) == 1 && Song_Length != 1)
         {
             int tLength = Song_Length;
             tLength -= 10;
@@ -5851,7 +5851,7 @@ void Mouse_Handler(ptk_data *ptk)
             gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
         // Song_Length + 10
-        if(zcheckMouse(232, 64, 16, 16) == 1 && Song_Length != 255)
+        if(zcheckMouse(ptk, 232, 64, 16, 16) == 1 && Song_Length != 255)
         {
             int tLength = Song_Length;
             tLength += 10;
@@ -5862,66 +5862,66 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // -10 positions
-        if(zcheckMouse(188, 28, 16, 16) == 1)
+        if(zcheckMouse(ptk, 188, 28, 16, 16) == 1)
         {
             gui_action = GUI_CMD_REDUCE_POSITIONS_10;
         }
         // +10 positions
-        if(zcheckMouse(232, 28, 16, 16) == 1)
+        if(zcheckMouse(ptk, 232, 28, 16, 16) == 1)
         {
             gui_action = GUI_CMD_INCREASE_POSITIONS_10;
         }
 
         // -10 patterns
-        if(zcheckMouse(188, 46, 16, 16) == 1)
+        if(zcheckMouse(ptk, 188, 46, 16, 16) == 1)
         {
             gui_action = GUI_CMD_REDUCE_PATTERNS_10;
         }
         // +10 patterns
-        if(zcheckMouse(232, 46, 16, 16) == 1)
+        if(zcheckMouse(ptk, 232, 46, 16, 16) == 1)
         {
             gui_action = GUI_CMD_INCREASE_PATTERNS_10;
         }
 
         // Record mode
-        if(zcheckMouse(8, 82, 80, 16))
+        if(zcheckMouse(ptk, 8, 82, 80, 16))
         {
             gui_action = GUI_CMD_RECORD_MODE;
         }
 
         // Select pattern
-        if(zcheckMouse(8, 152, 61, 10))
+        if(zcheckMouse(ptk, 8, 152, 61, 10))
         {
             Select_Pattern_Block(ptk);
         }
         // Select notes
-        if(zcheckMouse(8, 164, 61, 10))
+        if(zcheckMouse(ptk, 8, 164, 61, 10))
         {
             Select_All_Notes_Block(ptk);
         }
         // Semitone up
-        if(zcheckMouse(8 + (63 * 4), 152, 61, 10))
+        if(zcheckMouse(ptk, 8 + (63 * 4), 152, 61, 10))
         {
             if(is_editing) Instrument_Semitone_Up_Block(ptk, Cur_Position);
         }
         // Semitone down
-        if(zcheckMouse(8 + (63 * 4), 164, 61, 10))
+        if(zcheckMouse(ptk, 8 + (63 * 4), 164, 61, 10))
         {
             if(is_editing) Instrument_Semitone_Down_Block(ptk, Cur_Position);
         }
         // Instrument octave up
-        if(zcheckMouse(8 + (63 * 5), 152, 61, 10))
+        if(zcheckMouse(ptk, 8 + (63 * 5), 152, 61, 10))
         {
             if(is_editing) Instrument_Octave_Up_Block(ptk, Cur_Position);
         }
         // Instrument octave down
-        if(zcheckMouse(8 + (63 * 5), 164, 61, 10))
+        if(zcheckMouse(ptk, 8 + (63 * 5), 164, 61, 10))
         {
             if(is_editing) Instrument_Octave_Down_Block(ptk, Cur_Position);
         }
 
         // Stereo scopes.
-        if(zcheckMouse(Cur_Width - 54, 6, 18, 16))
+        if(zcheckMouse(ptk, Cur_Width - 54, 6, 18, 16))
         {
             if(ptk->Scopish != SCOPE_ZONE_SCOPE)
             {
@@ -5937,7 +5937,7 @@ void Mouse_Handler(ptk_data *ptk)
             }
         }
 
-        Mouse_Right_Fx_Ed();
+        Mouse_Right_Fx_Ed(ptk);
         Mouse_Right_303_Ed(ptk);
         Mouse_Right_Reverb_Ed(ptk);
         Mouse_Right_Midi_Ed(ptk);
@@ -5965,7 +5965,7 @@ void Mouse_Handler(ptk_data *ptk)
             case SCOPE_ZONE_SAMPLE_DIR:
 
                 // Play the file
-                if(zcheckMouse(393, 43, Cur_Width - 412, 133))
+                if(zcheckMouse(ptk, 393, 43, Cur_Width - 412, 133))
                 {
                     gui_action = GUI_CMD_SET_FILES_LIST_PLAY_WAV;
                 }
@@ -6157,21 +6157,21 @@ void Display_Shuffle(void)
 void Mouse_Sliders_Master_Shuffle(ptk_data *ptk)
 {
     // Compressor threshold
-    if(zcheckMouse(213, 6, 67, 18))
+    if(zcheckMouse(ptk, 213, 6, 67, 18))
     {
         Mas_Compressor_Set_Variables_Master(ptk, (Mouse.x - 223.0f) * 2.0f, mas_comp_ratio_Master);
         Display_Master_Comp();
     }
 
     // Compressor ratio
-    if(zcheckMouse(324, 6, 67, 18))
+    if(zcheckMouse(ptk, 324, 6, 67, 18))
     {
         Mas_Compressor_Set_Variables_Master(ptk, mas_comp_threshold_Master, (Mouse.x - 334.0f) * 2.0f);
         Display_Master_Comp();
     }
     
     // Master volume
-    if(zcheckMouse(438, 6, 148, 18))
+    if(zcheckMouse(ptk, 438, 6, 148, 18))
     {
         // Normalized
         mas_vol = (Mouse.x - 448.0f) / 128.0f;
@@ -6179,7 +6179,7 @@ void Mouse_Sliders_Master_Shuffle(ptk_data *ptk)
     }
 
     // Shuffle
-    if(zcheckMouse(586 + 40, 6, 120, 18))
+    if(zcheckMouse(ptk, 586 + 40, 6, 120, 18))
     {
         shuffle = (int) ((Mouse.x - (586 + 40 + 10)));
         Display_Shuffle();
@@ -6834,4 +6834,6 @@ void ptk_init(ptk_data *ptk)
     
     ptk->Scopish = SCOPE_ZONE_MOD_DIR;
     ptk->Scopish_LeftRight = FALSE;
+
+    ptk->fluzy = -1;
 }

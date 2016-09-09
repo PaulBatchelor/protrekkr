@@ -766,13 +766,13 @@ void Files_List_Move(ptk_data *ptk, int Amount)
         case SCOPE_ZONE_INSTR_LIST:
         case SCOPE_ZONE_SYNTH_LIST:
 
-            if(zcheckMouse(MAX_PATT_SCREEN_X + 1, 42, 16, 14))
+            if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, 42, 16, 14))
             {
                 Instrs_index -= Amount;
                 gui_action = GUI_CMD_INSTR_SYNTH_SCROLL;
             }
 
-            if(zcheckMouse(MAX_PATT_SCREEN_X + 1, 164, 16, 14))
+            if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, 164, 16, 14))
             {
                 Instrs_index += Amount;
                 gui_action = GUI_CMD_INSTR_SYNTH_SCROLL;
@@ -782,7 +782,7 @@ void Files_List_Move(ptk_data *ptk, int Amount)
         default:
 
             // Files list up
-            if(zcheckMouse(MAX_PATT_SCREEN_X + 1, 42, 16, 14))
+            if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, 42, 16, 14))
             {
                 if(abs(Amount) > 1)
                 {
@@ -796,7 +796,7 @@ void Files_List_Move(ptk_data *ptk, int Amount)
             }
 
             // Files list down
-            if(zcheckMouse(MAX_PATT_SCREEN_X + 1, 164, 16, 14))
+            if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, 164, 16, 14))
             {
                 if(abs(Amount) > 1)
                 {

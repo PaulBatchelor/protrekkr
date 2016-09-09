@@ -2658,7 +2658,7 @@ void Mouse_Wheel_Pattern_Ed(ptk_data *ptk, int roll_amount, int allow)
     }
 
     // Current track slider (horizontal)
-    if(zcheckMouse(POS_HORIZ_SLIDER - 1, (Cur_Height - 171) + Patterns_Lines_Offset,
+    if(zcheckMouse(ptk, POS_HORIZ_SLIDER - 1, (Cur_Height - 171) + Patterns_Lines_Offset,
                    (Cur_Width - (POS_HORIZ_SLIDER + 1)), 16))
     {
         Visible_Columns = Get_Visible_Complete_Tracks(ptk);
@@ -2683,7 +2683,7 @@ void Mouse_Sliders_Right_Pattern_Ed(ptk_data *ptk)
     int sched_line;
 
     // Position the caret on the specified track/column with the mouse
-    if(zcheckMouse(1, 183 + 15, ptk->CHANNELS_WIDTH, (Cur_Height - 371) + Patterns_Lines_Offset))
+    if(zcheckMouse(ptk, 1, 183 + 15, ptk->CHANNELS_WIDTH, (Cur_Height - 371) + Patterns_Lines_Offset))
     {
         int In_Scrolling = FALSE;
         Get_Column_Over_Mouse(ptk, &Track_Under_Caret,
@@ -2698,7 +2698,7 @@ void Mouse_Sliders_Right_Pattern_Ed(ptk_data *ptk)
     // Go to the row selected with the mouse
     if(!Songplaying)
     {
-        if(zcheckMouse(1, 183 + 15, ptk->CHANNELS_WIDTH, (Cur_Height - 371) + Patterns_Lines_Offset))
+        if(zcheckMouse(ptk, 1, 183 + 15, ptk->CHANNELS_WIDTH, (Cur_Height - 371) + Patterns_Lines_Offset))
         {
             if(!is_recording)
             {
@@ -2734,7 +2734,7 @@ void Mouse_Sliders_Right_Pattern_Ed(ptk_data *ptk)
 void Mouse_Sliders_Pattern_Ed(ptk_data *ptk)
 {
     // Current track slider (horizontal)
-    if(zcheckMouse(POS_HORIZ_SLIDER - 1, (Cur_Height - 171) + Patterns_Lines_Offset,
+    if(zcheckMouse(ptk, POS_HORIZ_SLIDER - 1, (Cur_Height - 171) + Patterns_Lines_Offset,
                    (Cur_Width - (POS_HORIZ_SLIDER + 1)), 16))
     {
         float Pos_Mouse = (float) (Mouse.x - (POS_HORIZ_SLIDER - 1));
@@ -2752,7 +2752,7 @@ void Mouse_Sliders_Pattern_Ed(ptk_data *ptk)
     if(Continuous_Scroll)
     {
         // Rows slider (vertical) (whole song)
-        if(zcheckMouse(MAX_PATT_SCREEN_X + 1, 200, 16 + 1, (Cur_Height - 452) + Patterns_Lines_Offset) & !Songplaying)
+        if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, 200, 16 + 1, (Cur_Height - 452) + Patterns_Lines_Offset) & !Songplaying)
         {
             int max_length;
             int Max_Lines_Song;
@@ -2795,7 +2795,7 @@ void Mouse_Sliders_Pattern_Ed(ptk_data *ptk)
     else
     {
         // Rows slider (vertical) (pattern only)
-        if(zcheckMouse(MAX_PATT_SCREEN_X + 1, 200 + (Continuous_Scroll * 80), 16 + 1, (Cur_Height - 452) - (Continuous_Scroll * 80) + Patterns_Lines_Offset) & !Songplaying)
+        if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, 200 + (Continuous_Scroll * 80), 16 + 1, (Cur_Height - 452) - (Continuous_Scroll * 80) + Patterns_Lines_Offset) & !Songplaying)
         {
             int final_row;
             int Cur_Position = Get_Song_Position(ptk);
@@ -2818,7 +2818,7 @@ void Mouse_Sliders_Pattern_Ed(ptk_data *ptk)
     }
 
     // End of the marking stuff
-    if(zcheckMouse(1, 183 + 15, MAX_PATT_SCREEN_X, (Cur_Height - 371) + Patterns_Lines_Offset) && !Songplaying)
+    if(zcheckMouse(ptk, 1, 183 + 15, MAX_PATT_SCREEN_X, (Cur_Height - 371) + Patterns_Lines_Offset) && !Songplaying)
     {
         int track;
         int column;
@@ -2836,7 +2836,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     int tracks;
 
     // Start of the marking block
-    if(zcheckMouse(1, 183 + 15, MAX_PATT_SCREEN_X, (Cur_Height - 371) + Patterns_Lines_Offset) && !Songplaying)
+    if(zcheckMouse(ptk, 1, 183 + 15, MAX_PATT_SCREEN_X, (Cur_Height - 371) + Patterns_Lines_Offset) && !Songplaying)
     {
         int track;
         int column;
@@ -2846,19 +2846,19 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     }
 
     // Prev row
-    if(zcheckMouse(MAX_PATT_SCREEN_X + 1, 184, 16 + 1, 14) & !Songplaying)
+    if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, 184, 16 + 1, 14) & !Songplaying)
     {
         Goto_Previous_Row(ptk);
     }
 
     // Next row
-    if(zcheckMouse(MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + Patterns_Lines_Offset, 16 + 1, 14) & !Songplaying)
+    if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + Patterns_Lines_Offset, 16 + 1, 14) & !Songplaying)
     {
         Goto_Next_Row(ptk);
     }
 
     // Set buffer 1
-    if(zcheckMouse(MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 1) + Patterns_Lines_Offset, 16 + 1, 14))
+    if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 1) + Patterns_Lines_Offset, 16 + 1, 14))
     {
         Curr_Buff_Block = 0;
         Draw_Pattern_Right_Stuff(ptk);
@@ -2867,7 +2867,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
         gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
     // Set buffer 2
-    if(zcheckMouse(MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 2) + Patterns_Lines_Offset, 16 + 1, 14))
+    if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 2) + Patterns_Lines_Offset, 16 + 1, 14))
     {
         Curr_Buff_Block = 1;
         Draw_Pattern_Right_Stuff(ptk);
@@ -2876,7 +2876,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
         gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
     // Set buffer 3
-    if(zcheckMouse(MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 3) + Patterns_Lines_Offset, 16 + 1, 14))
+    if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 3) + Patterns_Lines_Offset, 16 + 1, 14))
     {
         Curr_Buff_Block = 2;
         Draw_Pattern_Right_Stuff(ptk);
@@ -2885,7 +2885,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
         gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
     // Set buffer 4
-    if(zcheckMouse(MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 4) + Patterns_Lines_Offset, 16 + 1, 14))
+    if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 4) + Patterns_Lines_Offset, 16 + 1, 14))
     {
         Curr_Buff_Block = 3;
         Draw_Pattern_Right_Stuff(ptk);
@@ -2899,7 +2899,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = gui_track; i < gui_track + tracks; i++)
     {
-        if(zcheckMouse(start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
+        if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
         {
             gui_action = GUI_CMD_SWITCH_TRACK_MUTE_STATE;
             break;
@@ -2912,7 +2912,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = gui_track; i < gui_track + tracks; i++)
     {
-        if(zcheckMouse(start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
+        if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
         {
             int Cur_Position = Get_Song_Position(ptk);
             int tmp_track = Get_Track_Over_Mouse(ptk, Mouse.x, NULL, FALSE);
@@ -2927,7 +2927,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = gui_track; i < gui_track + tracks; i++)
     {
-        if(zcheckMouse(start_mute_check_x + Cur_Char_size[i], 183, 16, 7))
+        if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 16, 7))
         {
             gui_action = GUI_CMD_SWITCH_TRACK_LARGE_STATE;
             break;
@@ -2940,7 +2940,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = gui_track; i < gui_track + tracks; i++)
     {
-        if(zcheckMouse(start_mute_check_x , 183 + 8, 8, 7))
+        if(zcheckMouse(ptk, start_mute_check_x , 183 + 8, 8, 7))
         {
             gui_action = GUI_CMD_REDUCE_TRACK_NOTES;
             break;
@@ -2953,7 +2953,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     tracks = Get_Visible_Partial_Tracks(ptk);
     for(i = gui_track; i < gui_track + tracks; i++)
     {
-        if(zcheckMouse(start_mute_check_x, 183 + 8, 8, 7))
+        if(zcheckMouse(ptk, start_mute_check_x, 183 + 8, 8, 7))
         {
             gui_action = GUI_CMD_EXPAND_TRACK_NOTES;
             break;
@@ -2966,7 +2966,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     for(i = 0; i < tracks; i++)
     {
         start_mute_check_x = pos_effects_icons[i] - 1;
-        if(zcheckMouse(start_mute_check_x, 183 + 8, 8, 7))
+        if(zcheckMouse(ptk, start_mute_check_x, 183 + 8, 8, 7))
         {
             gui_action = GUI_CMD_REDUCE_TRACK_EFFECTS;
             break;
@@ -2978,7 +2978,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     for(i = 0; i < tracks; i++)
     {
         start_mute_check_x = pos_effects_icons[i] + 9 - 1;
-        if(zcheckMouse(start_mute_check_x, 183 + 8, 8, 7))
+        if(zcheckMouse(ptk, start_mute_check_x, 183 + 8, 8, 7))
         {
             gui_action = GUI_CMD_EXPAND_TRACK_EFFECTS;
             break;
@@ -2995,12 +2995,12 @@ void Mouse_Right_Pattern_Ed(ptk_data *ptk)
     int i;
 
     // Decrease/Increase steps
-    if(zcheckMouse(90, 126, 16, 16))
+    if(zcheckMouse(ptk, 90, 126, 16, 16))
     {
         Current_Edit_Steps = 0;
         gui_action = GUI_CMD_UPDATE_PATTERN_ED;
     }
-    if(zcheckMouse(134, 126, 16, 16))
+    if(zcheckMouse(ptk, 134, 126, 16, 16))
     {
         Current_Edit_Steps = 16;
         gui_action = GUI_CMD_UPDATE_PATTERN_ED;
@@ -3012,7 +3012,7 @@ void Mouse_Right_Pattern_Ed(ptk_data *ptk)
     for(i = gui_track; i < gui_track + tracks; i++)
     {
         if(start_mute_check_x + Cur_Char_size[i] >= MAX_PATT_SCREEN_X) break;
-        if(zcheckMouse(start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
+        if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
         {
             int tmp_track = Get_Track_Over_Mouse(ptk, Mouse.x, NULL, FALSE);
             Solo_Track(tmp_track);
@@ -3028,7 +3028,7 @@ void Mouse_Right_Pattern_Ed(ptk_data *ptk)
     for(i = gui_track; i < gui_track + tracks; i++)
     {
         if(start_mute_check_x + Cur_Char_size[i] >= MAX_PATT_SCREEN_X) break;
-        if(zcheckMouse(start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
+        if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
         {
             int Cur_Position = Get_Song_Position(ptk);
             int tmp_track = Get_Track_Over_Mouse(ptk, Mouse.x, NULL, FALSE);
@@ -3044,18 +3044,18 @@ void Mouse_Right_Pattern_Ed(ptk_data *ptk)
     for(i = gui_track; i < gui_track + tracks; i++)
     {
         if(start_mute_check_x + Cur_Char_size[i] >= MAX_PATT_SCREEN_X) break;
-        if(zcheckMouse(start_mute_check_x + Cur_Char_size[i], 183, 16, 7)) gui_action = GUI_CMD_SWITCH_TRACK_SMALL_STATE;
+        if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 16, 7)) gui_action = GUI_CMD_SWITCH_TRACK_SMALL_STATE;
         start_mute_check_x += Get_Track_Size(ptk, i, NULL);
     }
 
     // Prev page
-    if(zcheckMouse(MAX_PATT_SCREEN_X + 1, 184, 16 + 1, 14) & !Songplaying)
+    if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, 184, 16 + 1, 14) & !Songplaying)
     {
         Goto_Previous_Page(ptk);
     }
 
     // Next page
-    if(zcheckMouse(MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + Patterns_Lines_Offset, 16 + 1, 14) & !Songplaying)
+    if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + Patterns_Lines_Offset, 16 + 1, 14) & !Songplaying)
     {
         Goto_Next_Page(ptk);
     }

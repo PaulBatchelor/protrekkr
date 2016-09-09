@@ -77,7 +77,7 @@ SCREEN_COORD Pos_Midi_Automation[] =
 // ------------------------------------------------------
 // Functions
 void Display_Midi_Automation(int Idx);
-void Mod_Midi_Automation_Value(int Amount);
+void Mod_Midi_Automation_Value(ptk_data *ptk, int Amount);
 
 void Draw_Midi_Ed(ptk_data *ptk)
 {
@@ -267,7 +267,7 @@ void Mouse_Right_Midi_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_SETUP_MIDI)
     {
-        Mod_Midi_Automation_Value(10);
+        Mod_Midi_Automation_Value(ptk, 10);
     }
 }
 
@@ -276,7 +276,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
     if(userscreen == USER_SCREEN_SETUP_MIDI)
     {
         // Save the data
-        if(zcheckMouse(749, (Cur_Height - 142), 34, 16))
+        if(zcheckMouse(ptk, 749, (Cur_Height - 142), 34, 16))
         {
             if(File_Exist_Req(ptk, "%s"SLASH"%s.pmi", Dir_MidiCfg, Midi_Name))
             {
@@ -289,7 +289,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
         }
 
         // Start midi name input
-        if(zcheckMouse(583, (Cur_Height - 142), 164, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 583, (Cur_Height - 142), 164, 16) && snamesel == INPUT_NONE)
         {
             snamesel = INPUT_MIDI_NAME;
             strcpy(cur_input_name, Midi_Name);
@@ -301,7 +301,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
 
 #if !defined(__NO_MIDI__)
         // Previous midi in device
-        if(zcheckMouse(70, (Cur_Height - 134), 16, 16))
+        if(zcheckMouse(ptk, 70, (Cur_Height - 134), 16, 16))
         {
             c_midiin--;
             gui_action = GUI_CMD_UPDATE_MIDI_ED;
@@ -309,7 +309,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
             teac = UPDATE_MIDI_ED_SEL_IN;
         }
         // Next midi in device
-        if(zcheckMouse(114, (Cur_Height - 134), 16, 16))
+        if(zcheckMouse(ptk, 114, (Cur_Height - 134), 16, 16))
         {
             c_midiin++;
             gui_action = GUI_CMD_UPDATE_MIDI_ED;
@@ -318,7 +318,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
         }
 
         // Previous midi out device
-        if(zcheckMouse(70, (Cur_Height - 117), 16, 16))
+        if(zcheckMouse(ptk, 70, (Cur_Height - 117), 16, 16))
         {
             c_midiout--;
             gui_action = GUI_CMD_UPDATE_MIDI_ED;
@@ -326,7 +326,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
             teac = UPDATE_MIDI_ED_SEL_OUT;
         }
         // Next midi out device
-        if(zcheckMouse(114, (Cur_Height - 117), 16, 16))
+        if(zcheckMouse(ptk, 114, (Cur_Height - 117), 16, 16))
         {
             c_midiout++;
             gui_action = GUI_CMD_UPDATE_MIDI_ED;
@@ -337,7 +337,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
 
         // Midi track notes off
 #if !defined(__NO_MIDI__)
-        if(zcheckMouse(12, (Cur_Height - 99), 82, 16) == 1 && c_midiout != -1)
+        if(zcheckMouse(ptk, 12, (Cur_Height - 99), 82, 16) == 1 && c_midiout != -1)
         {
             Midi_NoteOff(ptk, Track_Under_Caret, -1);
             int i;
@@ -351,14 +351,14 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
 
         // All Midi notes off
 #if !defined(__NO_MIDI__)
-        if(zcheckMouse(12, (Cur_Height - 81), 82, 16) == 1 && c_midiout != -1)
+        if(zcheckMouse(ptk, 12, (Cur_Height - 81), 82, 16) == 1 && c_midiout != -1)
         {
             Midi_AllNotesOff(ptk);
             gui_action = GUI_CMD_MIDI_NOTE_OFF_ALL_TRACKS;
         }
 #endif
 
-        Mod_Midi_Automation_Value(1);
+        Mod_Midi_Automation_Value(ptk, 1);
     }
 }
 
@@ -392,13 +392,13 @@ void Display_Midi_Automation(int Idx)
 
 // ------------------------------------------------------
 // Modify a cc value or relative automation one
-void Mod_Midi_Automation_Value(int Amount)
+void Mod_Midi_Automation_Value(ptk_data *ptk, int Amount)
 {
     int i;
 
     for(i = 0; i < NBR_MIDI_DISPATCH_MSG; i++)
     {
-        if(zcheckMouse(Pos_Midi_Automation[i].x,
+        if(zcheckMouse(ptk, Pos_Midi_Automation[i].x,
                        (Cur_Height - Pos_Midi_Automation[i].y),
                        16, 16) && snamesel == INPUT_NONE)
         {
@@ -409,7 +409,7 @@ void Mod_Midi_Automation_Value(int Amount)
             break;
         }
 
-        if(zcheckMouse(Pos_Midi_Automation[i].x + 44,
+        if(zcheckMouse(ptk, Pos_Midi_Automation[i].x + 44,
                        (Cur_Height - Pos_Midi_Automation[i].y),
                        16, 16) && snamesel == INPUT_NONE)
         {
@@ -420,7 +420,7 @@ void Mod_Midi_Automation_Value(int Amount)
             break;
         }
 
-        if(zcheckMouse(Pos_Midi_Automation[i].x + GAP_X_MIDI,
+        if(zcheckMouse(ptk, Pos_Midi_Automation[i].x + GAP_X_MIDI,
                        (Cur_Height - Pos_Midi_Automation[i].y),
                        16, 16) && snamesel == INPUT_NONE)
         {
@@ -431,7 +431,7 @@ void Mod_Midi_Automation_Value(int Amount)
             break;
         }
 
-        if(zcheckMouse(Pos_Midi_Automation[i].x + GAP_X_MIDI + (18 + 110),
+        if(zcheckMouse(ptk, Pos_Midi_Automation[i].x + GAP_X_MIDI + (18 + 110),
                        (Cur_Height - Pos_Midi_Automation[i].y),
                        16, 16) && snamesel == INPUT_NONE)
         {

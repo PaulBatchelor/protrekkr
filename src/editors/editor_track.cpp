@@ -337,14 +337,14 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
     if(userscreen == USER_SCREEN_TRACK_EDIT)
     {
         // Filter type
-        if(zcheckMouse(79, (Cur_Height - 80), 16, 16) && FType[Track_Under_Caret] > 0)
+        if(zcheckMouse(ptk, 79, (Cur_Height - 80), 16, 16) && FType[Track_Under_Caret] > 0)
         {
             ResetFilters(ptk, Track_Under_Caret);
             FType[Track_Under_Caret]--;
             teac = 0;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
         }
-        if(zcheckMouse(123, (Cur_Height - 80), 16, 16) && FType[Track_Under_Caret] < MAX_FILTER)
+        if(zcheckMouse(ptk, 123, (Cur_Height - 80), 16, 16) && FType[Track_Under_Caret] < MAX_FILTER)
         {
             ResetFilters(ptk, Track_Under_Caret);
             FType[Track_Under_Caret]++;
@@ -353,7 +353,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
         }
 
         // Previous track
-        if(zcheckMouse(508, (Cur_Height - 114), 16, 16))
+        if(zcheckMouse(ptk, 508, (Cur_Height - 114), 16, 16))
         {
             Track_Under_Caret--;
             teac = 0;
@@ -362,7 +362,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
         }
 
         // Next track
-        if(zcheckMouse(552, (Cur_Height - 114), 16, 16))
+        if(zcheckMouse(ptk, 552, (Cur_Height - 114), 16, 16))
         {
             Track_Under_Caret++;
             teac = 0;
@@ -371,27 +371,27 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
         }
 
         // Delay send
-        if(zcheckMouse(570, (Cur_Height - 114), 16, 16))
+        if(zcheckMouse(ptk, 570, (Cur_Height - 114), 16, 16))
         {
             CSend[Track_Under_Caret]--;
             teac = 6;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
         }
-        if(zcheckMouse(614, (Cur_Height - 114), 16, 16))
+        if(zcheckMouse(ptk, 614, (Cur_Height - 114), 16, 16))
         {
             CSend[Track_Under_Caret]++;
             teac = 6;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
         }
 
-        if(zcheckMouse(456, (Cur_Height - 116), 40, 16) &&
+        if(zcheckMouse(ptk, 456, (Cur_Height - 116), 40, 16) &&
            Disclap[Track_Under_Caret])
         {
             DThreshold[Track_Under_Caret] = DClamp[Track_Under_Caret];
             teac = 7;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
         }
-        if(zcheckMouse(456, (Cur_Height - 98), 40, 16) &&
+        if(zcheckMouse(ptk, 456, (Cur_Height - 98), 40, 16) &&
            Disclap[Track_Under_Caret])
         {
             DClamp[Track_Under_Caret] = DThreshold[Track_Under_Caret];
@@ -400,7 +400,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
         }
 
         // Channel panning
-        if(zcheckMouse(456, (Cur_Height - 62), 40, 16))
+        if(zcheckMouse(ptk, 456, (Cur_Height - 62), 40, 16))
         {
             TPan[Track_Under_Caret] = 0.5f;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
@@ -408,13 +408,13 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
         }
 
         // Midi channel
-        if(zcheckMouse(570, (Cur_Height - 70), 16, 16))
+        if(zcheckMouse(ptk, 570, (Cur_Height - 70), 16, 16))
         {
             CHAN_MIDI_PRG[Track_Under_Caret]--;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
             teac = 11;
         }
-        if(zcheckMouse(614, (Cur_Height - 70), 16, 16))
+        if(zcheckMouse(ptk, 614, (Cur_Height - 70), 16, 16))
         {
             CHAN_MIDI_PRG[Track_Under_Caret]++;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
@@ -422,7 +422,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
         }
 
         // Distortion
-        if(zcheckMouse(570, (Cur_Height - 52), 60, 16))
+        if(zcheckMouse(ptk, 570, (Cur_Height - 52), 60, 16))
         {
             Disclap[Track_Under_Caret] = !Disclap[Track_Under_Caret];
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
@@ -430,7 +430,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
         }
 
         // Mute track
-        if(zcheckMouse(508, (Cur_Height - 88), 64, 16))
+        if(zcheckMouse(ptk, 508, (Cur_Height - 88), 64, 16))
         {
             if(CHAN_MUTE_STATE[Track_Under_Caret] == 0)
             {
@@ -446,7 +446,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
         }
 
         // Solo track
-        if(zcheckMouse(508, (Cur_Height - 70), 64, 16))
+        if(zcheckMouse(ptk, 508, (Cur_Height - 70), 64, 16))
         {
             for(int solify = 0; solify < MAX_TRACKS; solify++)
             {
@@ -459,7 +459,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
         }
 
         // Unmute all tracks
-        if(zcheckMouse(508, (Cur_Height - 52), 88, 16))
+        if(zcheckMouse(ptk, 508, (Cur_Height - 52), 88, 16))
         {
             for(int solify = 0; solify < MAX_TRACKS; solify++)
             {
@@ -471,7 +471,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
         }
 
         // Channels polyphony
-        if(zcheckMouse(647, (Cur_Height - 110), 16, 16) == 1)
+        if(zcheckMouse(ptk, 647, (Cur_Height - 110), 16, 16) == 1)
         {
             Channels_Polyphony[Track_Under_Caret]--;
             if(Channels_Polyphony[Track_Under_Caret] < 1)
@@ -485,7 +485,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
             teac = 13;
         }
-        if(zcheckMouse(647 + 44, (Cur_Height - 110), 16, 16) == 1)
+        if(zcheckMouse(ptk, 647 + 44, (Cur_Height - 110), 16, 16) == 1)
         {
             Channels_Polyphony[Track_Under_Caret]++;
             if(Channels_Polyphony[Track_Under_Caret] > MAX_POLYPHONY)
@@ -497,13 +497,13 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
         }
 
         // Multi notes
-        if(zcheckMouse(647, (Cur_Height - 85), 16, 16) == 1)
+        if(zcheckMouse(ptk, 647, (Cur_Height - 85), 16, 16) == 1)
         {
             Track_Sub_Notes(ptk, Track_Under_Caret, 1);
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
             teac = 14;
         }
-        if(zcheckMouse(647 + 44, (Cur_Height - 85), 16, 16) == 1)
+        if(zcheckMouse(ptk, 647 + 44, (Cur_Height - 85), 16, 16) == 1)
         {
             Track_Add_Notes(ptk, Track_Under_Caret, 1);
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
@@ -511,13 +511,13 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
         }
 
         // Number of effects
-        if(zcheckMouse(647, (Cur_Height - 60), 16, 16) == 1)
+        if(zcheckMouse(ptk, 647, (Cur_Height - 60), 16, 16) == 1)
         {
             Track_Sub_Effects(ptk, Track_Under_Caret, 1);
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
             teac = 16;
         }
-        if(zcheckMouse(647 + 44, (Cur_Height - 60), 16, 16) == 1)
+        if(zcheckMouse(ptk, 647 + 44, (Cur_Height - 60), 16, 16) == 1)
         {
             Track_Add_Effects(ptk, Track_Under_Caret, 1);
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
@@ -531,13 +531,13 @@ void Mouse_Right_Track_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_TRACK_EDIT)
     {
-        if(zcheckMouse(570, (Cur_Height - 114), 16, 16) == 1)
+        if(zcheckMouse(ptk, 570, (Cur_Height - 114), 16, 16) == 1)
         {
             CSend[Track_Under_Caret] -= 16;
             teac = 6;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
         }
-        if(zcheckMouse(614, (Cur_Height - 114), 16, 16) == 1)
+        if(zcheckMouse(ptk, 614, (Cur_Height - 114), 16, 16) == 1)
         {
             CSend[Track_Under_Caret] += 16;
             teac = 6;
@@ -545,14 +545,14 @@ void Mouse_Right_Track_Ed(ptk_data *ptk)
         }
 
         // Filter type
-        if(zcheckMouse(79, (Cur_Height - 80), 16, 16) && FType[Track_Under_Caret] > 0)
+        if(zcheckMouse(ptk, 79, (Cur_Height - 80), 16, 16) && FType[Track_Under_Caret] > 0)
         {
             ResetFilters(ptk, Track_Under_Caret);
             FType[Track_Under_Caret] -= 16;
             teac = 0;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
         }
-        if(zcheckMouse(123, (Cur_Height - 80), 16, 16) && FType[Track_Under_Caret] < MAX_FILTER)
+        if(zcheckMouse(ptk, 123, (Cur_Height - 80), 16, 16) && FType[Track_Under_Caret] < MAX_FILTER)
         {
             ResetFilters(ptk, Track_Under_Caret);
             FType[Track_Under_Caret] += 16;
@@ -561,7 +561,7 @@ void Mouse_Right_Track_Ed(ptk_data *ptk)
         }
 
         // Channels polyphony
-        if(zcheckMouse(647, (Cur_Height - 110), 16, 16) == 1)
+        if(zcheckMouse(ptk, 647, (Cur_Height - 110), 16, 16) == 1)
         {
             Channels_Polyphony[Track_Under_Caret] -= 10;
             if(Channels_Polyphony[Track_Under_Caret] < 1) Channels_Polyphony[Track_Under_Caret] = 1;
@@ -569,7 +569,7 @@ void Mouse_Right_Track_Ed(ptk_data *ptk)
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
             teac = 13;
         }
-        if(zcheckMouse(647 + 44, (Cur_Height - 110), 16, 16) == 1)
+        if(zcheckMouse(ptk, 647 + 44, (Cur_Height - 110), 16, 16) == 1)
         {
             Channels_Polyphony[Track_Under_Caret] += 10;
             if(Channels_Polyphony[Track_Under_Caret] > MAX_POLYPHONY) Channels_Polyphony[Track_Under_Caret] = MAX_POLYPHONY;
@@ -578,13 +578,13 @@ void Mouse_Right_Track_Ed(ptk_data *ptk)
         }
 
         // Multi notes
-        if(zcheckMouse(647, (Cur_Height - 85), 16, 16) == 1)
+        if(zcheckMouse(ptk, 647, (Cur_Height - 85), 16, 16) == 1)
         {
             Track_Sub_Notes(ptk, Track_Under_Caret, 10);
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
             teac = 14;
         }
-        if(zcheckMouse(647 + 44, (Cur_Height - 85), 16, 16) == 1)
+        if(zcheckMouse(ptk, 647 + 44, (Cur_Height - 85), 16, 16) == 1)
         {
             Track_Add_Notes(ptk, Track_Under_Caret, 10);
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
@@ -593,17 +593,17 @@ void Mouse_Right_Track_Ed(ptk_data *ptk)
     }
 }
 
-void Mouse_Sliders_Track_Ed(void)
+void Mouse_Sliders_Track_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_TRACK_EDIT)
     {
-        if(zcheckMouse(77, (Cur_Height - 116), 148, 16) && FType[Track_Under_Caret] != 4) gui_action = GUI_CMD_SET_TRACK_CUTOFF_FREQ;
-        if(zcheckMouse(77, (Cur_Height - 98), 148, 16) && FType[Track_Under_Caret] != 4) gui_action = GUI_CMD_SET_TRACK_RESONANCE;
-        if(zcheckMouse(77, (Cur_Height - 62), 148, 16) && FType[Track_Under_Caret] != 4) gui_action = GUI_CMD_SET_TRACK_INERTIA;
-        if(zcheckMouse(308, (Cur_Height - 116), 148, 16) && Disclap[Track_Under_Caret]) gui_action = GUI_CMD_SET_TRACK_THRESHOLD;
-        if(zcheckMouse(308, (Cur_Height - 98), 148, 16) && Disclap[Track_Under_Caret]) gui_action = GUI_CMD_SET_TRACK_CLAMP;
-        if(compressor != 0) if(zcheckMouse(308, (Cur_Height - 80), 148, 16)) gui_action = GUI_CMD_SET_TRACK_REVERB_SEND;
-        if(zcheckMouse(308, (Cur_Height - 62), 148, 16)) gui_action = GUI_CMD_SET_TRACK_PANNING;
+        if(zcheckMouse(ptk, 77, (Cur_Height - 116), 148, 16) && FType[Track_Under_Caret] != 4) gui_action = GUI_CMD_SET_TRACK_CUTOFF_FREQ;
+        if(zcheckMouse(ptk, 77, (Cur_Height - 98), 148, 16) && FType[Track_Under_Caret] != 4) gui_action = GUI_CMD_SET_TRACK_RESONANCE;
+        if(zcheckMouse(ptk, 77, (Cur_Height - 62), 148, 16) && FType[Track_Under_Caret] != 4) gui_action = GUI_CMD_SET_TRACK_INERTIA;
+        if(zcheckMouse(ptk, 308, (Cur_Height - 116), 148, 16) && Disclap[Track_Under_Caret]) gui_action = GUI_CMD_SET_TRACK_THRESHOLD;
+        if(zcheckMouse(ptk, 308, (Cur_Height - 98), 148, 16) && Disclap[Track_Under_Caret]) gui_action = GUI_CMD_SET_TRACK_CLAMP;
+        if(compressor != 0) if(zcheckMouse(ptk, 308, (Cur_Height - 80), 148, 16)) gui_action = GUI_CMD_SET_TRACK_REVERB_SEND;
+        if(zcheckMouse(ptk, 308, (Cur_Height - 62), 148, 16)) gui_action = GUI_CMD_SET_TRACK_PANNING;
     }
 }
 

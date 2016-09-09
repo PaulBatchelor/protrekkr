@@ -616,9 +616,9 @@ void Actualize_Synth_Ed(ptk_data *ptk, char gode)
     }
 }
 
-void Check_Slider(int *Value, int x, int y)
+void Check_Slider(ptk_data *ptk, int *Value, int x, int y)
 {
-    if(zcheckMouse(x - 2, y, 148, 16))
+    if(zcheckMouse(ptk, x - 2, y, 148, 16))
     {
         *Value = Mouse.x - ((x - 2) + 10);
         if(*Value < 0) *Value = 0;
@@ -634,14 +634,14 @@ void Mouse_Sliders_Synth_Ed(ptk_data *ptk)
     {
         if(Allow_Phase_Distortion_OSC1 || Pos_Tbl_Synth_OSC1 != 0)
         {
-            Check_Slider(&csynth_slv_OSC1, 43, (Cur_Height - 113) - 1);
+            Check_Slider(ptk, &csynth_slv_OSC1, 43, (Cur_Height - 113) - 1);
         }
         if(Allow_Phase_Distortion_OSC2 || Pos_Tbl_Synth_OSC2 != 0)
         {
-            Check_Slider(&csynth_slv_OSC2, 43, (Cur_Height - 59) - 1);
+            Check_Slider(ptk, &csynth_slv_OSC2, 43, (Cur_Height - 59) - 1);
         }
 
-        Check_Slider(&csynth_slv_VCF, 313, (Cur_Height - 113) - 1);
+        Check_Slider(ptk, &csynth_slv_VCF, 313, (Cur_Height - 113) - 1);
 
         if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_LFO1 == 1) ||
            !Allow_Phase_Distortion_OSC2 && (Pos_Tbl_Synth_LFO1 == 2))
@@ -649,7 +649,7 @@ void Mouse_Sliders_Synth_Ed(ptk_data *ptk)
         }
         else
         {
-            Check_Slider(&csynth_slv_LFO1, 313, (Cur_Height - 77) - 1);
+            Check_Slider(ptk, &csynth_slv_LFO1, 313, (Cur_Height - 77) - 1);
         }
 
         if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_LFO2 == 1) ||
@@ -658,7 +658,7 @@ void Mouse_Sliders_Synth_Ed(ptk_data *ptk)
         }
         else
         {
-            Check_Slider(&csynth_slv_LFO2, 313, (Cur_Height - 41) - 1);
+            Check_Slider(ptk, &csynth_slv_LFO2, 313, (Cur_Height - 41) - 1);
         }
 
         if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_ENV1 == 0) ||
@@ -666,7 +666,7 @@ void Mouse_Sliders_Synth_Ed(ptk_data *ptk)
         }
         else
         {
-            Check_Slider(&csynth_slv_ENV1, 565, (Cur_Height - 113) - 1);
+            Check_Slider(ptk, &csynth_slv_ENV1, 565, (Cur_Height - 113) - 1);
         }
 
         if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_ENV2 == 0) ||
@@ -675,21 +675,21 @@ void Mouse_Sliders_Synth_Ed(ptk_data *ptk)
         }
         else
         {
-            Check_Slider(&csynth_slv_ENV2, 565, (Cur_Height - 77) - 1);
+            Check_Slider(ptk, &csynth_slv_ENV2, 565, (Cur_Height - 77) - 1);
         }
 
         if((Allow_Phase_Distortion_OSC1 || Allow_Phase_Distortion_OSC2) ||
             Pos_Tbl_Synth_Misc > 0)
         {
-            Check_Slider(&csynth_slv_Misc, 565, (Cur_Height - 41) - 1);
+            Check_Slider(ptk, &csynth_slv_Misc, 565, (Cur_Height - 41) - 1);
         }
     }
 }
 
-void Check_Sliders_Arrows(int value_step)
+void Check_Sliders_Arrows(ptk_data *ptk, int value_step)
 {
     // OSC1 Sliders Arrows
-    if(zcheckMouse(24, (Cur_Height - 113) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 24, (Cur_Height - 113) - 1, 16, 16) == 1)
     {
         if(Allow_Phase_Distortion_OSC1 || Pos_Tbl_Synth_OSC1 != 0)
         {
@@ -699,7 +699,7 @@ void Check_Sliders_Arrows(int value_step)
             teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
-    if(zcheckMouse(190, (Cur_Height - 113) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 190, (Cur_Height - 113) - 1, 16, 16) == 1)
     {
         if(Allow_Phase_Distortion_OSC1 || Pos_Tbl_Synth_OSC1 != 0)
         {
@@ -711,7 +711,7 @@ void Check_Sliders_Arrows(int value_step)
     }
 
     // OSC2 Sliders Arrows
-    if(zcheckMouse(24, (Cur_Height - 59) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 24, (Cur_Height - 59) - 1, 16, 16) == 1)
     {
         if(Allow_Phase_Distortion_OSC2 || Pos_Tbl_Synth_OSC2 != 0)
         {
@@ -721,7 +721,7 @@ void Check_Sliders_Arrows(int value_step)
             teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
-    if(zcheckMouse(190, (Cur_Height - 59) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 190, (Cur_Height - 59) - 1, 16, 16) == 1)
     {
         if(Allow_Phase_Distortion_OSC2 || Pos_Tbl_Synth_OSC2 != 0)
         {
@@ -733,14 +733,14 @@ void Check_Sliders_Arrows(int value_step)
     }
 
     // VCF Sliders Arrows
-    if(zcheckMouse(294, (Cur_Height - 113) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 294, (Cur_Height - 113) - 1, 16, 16) == 1)
     {
         csynth_slv_VCF -= value_step;
         if(csynth_slv_VCF < 0) csynth_slv_VCF = 0;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
     }
-    if(zcheckMouse(460, (Cur_Height - 113) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 460, (Cur_Height - 113) - 1, 16, 16) == 1)
     {
         csynth_slv_VCF += value_step;
         if(csynth_slv_VCF > 128) csynth_slv_VCF = 128;
@@ -749,7 +749,7 @@ void Check_Sliders_Arrows(int value_step)
     }
 
     // LFO1 Sliders Arrows
-    if(zcheckMouse(294, (Cur_Height - 77) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 294, (Cur_Height - 77) - 1, 16, 16) == 1)
     {
         if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_LFO1 == 1) ||
            !Allow_Phase_Distortion_OSC2 && (Pos_Tbl_Synth_LFO1 == 2))
@@ -763,7 +763,7 @@ void Check_Sliders_Arrows(int value_step)
             teac = UPDATE_SYNTH_ED_VALIDATE_PARAMS;
         }
     }
-    if(zcheckMouse(460, (Cur_Height - 77) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 460, (Cur_Height - 77) - 1, 16, 16) == 1)
     {
         if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_LFO1 == 1) ||
            !Allow_Phase_Distortion_OSC2 && (Pos_Tbl_Synth_LFO1 == 2))
@@ -779,7 +779,7 @@ void Check_Sliders_Arrows(int value_step)
     }
 
     // LFO2 Sliders Arrows
-    if(zcheckMouse(294, (Cur_Height - 41) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 294, (Cur_Height - 41) - 1, 16, 16) == 1)
     {
         if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_LFO2 == 1) ||
            !Allow_Phase_Distortion_OSC2 && (Pos_Tbl_Synth_LFO2 == 2))
@@ -794,7 +794,7 @@ void Check_Sliders_Arrows(int value_step)
         }
     }
     
-    if(zcheckMouse(460, (Cur_Height - 41) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 460, (Cur_Height - 41) - 1, 16, 16) == 1)
     {
         if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_LFO2 == 1) ||
            !Allow_Phase_Distortion_OSC2 && (Pos_Tbl_Synth_LFO2 == 2))
@@ -810,7 +810,7 @@ void Check_Sliders_Arrows(int value_step)
     }
 
     // ENV1 Sliders Arrows
-    if(zcheckMouse(546, (Cur_Height - 113) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 546, (Cur_Height - 113) - 1, 16, 16) == 1)
     {
         if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_ENV1 == 0) ||
            !Allow_Phase_Distortion_OSC2 && (Pos_Tbl_Synth_ENV1 == 1))
@@ -825,7 +825,7 @@ void Check_Sliders_Arrows(int value_step)
         }
     }
 
-    if(zcheckMouse(712, (Cur_Height - 113) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 712, (Cur_Height - 113) - 1, 16, 16) == 1)
     {
         if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_ENV1 == 0) ||
            !Allow_Phase_Distortion_OSC2 && (Pos_Tbl_Synth_ENV1 == 1))
@@ -841,7 +841,7 @@ void Check_Sliders_Arrows(int value_step)
     }
 
     // ENV2 Sliders Arrows
-    if(zcheckMouse(546, (Cur_Height - 77) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 546, (Cur_Height - 77) - 1, 16, 16) == 1)
     {
         if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_ENV2 == 0) ||
            !Allow_Phase_Distortion_OSC2 && (Pos_Tbl_Synth_ENV2 == 1))
@@ -856,7 +856,7 @@ void Check_Sliders_Arrows(int value_step)
         }
     }
     
-    if(zcheckMouse(712, (Cur_Height - 77) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 712, (Cur_Height - 77) - 1, 16, 16) == 1)
     {
         if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_ENV2 == 0) ||
            !Allow_Phase_Distortion_OSC2 && (Pos_Tbl_Synth_ENV2 == 1))
@@ -872,7 +872,7 @@ void Check_Sliders_Arrows(int value_step)
     }
 
     // Misc. Sliders Arrows
-    if(zcheckMouse(546, (Cur_Height - 41) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 546, (Cur_Height - 41) - 1, 16, 16) == 1)
     {
         if((Allow_Phase_Distortion_OSC1 || Allow_Phase_Distortion_OSC2) ||
             Pos_Tbl_Synth_Misc > 0)
@@ -884,7 +884,7 @@ void Check_Sliders_Arrows(int value_step)
         }
     }
     
-    if(zcheckMouse(712, (Cur_Height - 41) - 1, 16, 16) == 1)
+    if(zcheckMouse(ptk, 712, (Cur_Height - 41) - 1, 16, 16) == 1)
     {
         if((Allow_Phase_Distortion_OSC1 || Allow_Phase_Distortion_OSC2) ||
             Pos_Tbl_Synth_Misc > 0)
@@ -897,16 +897,16 @@ void Check_Sliders_Arrows(int value_step)
     }
 }
 
-void Check_Parameters_Arrows(int Value_Step)
+void Check_Parameters_Arrows(ptk_data *ptk, int Value_Step)
 {
     // Select OSC1 parameter
-    if(zcheckMouse(62, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_OSC1 > 0)
+    if(zcheckMouse(ptk, 62, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_OSC1 > 0)
     {
         Pos_Tbl_Synth_OSC1 -= Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         teac = UPDATE_SYNTH_ED_OSC1_PARAMS;
     }
-    if(zcheckMouse(62 + 44, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_OSC1 < Size_Tbl_Synth_OSC1)
+    if(zcheckMouse(ptk, 62 + 44, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_OSC1 < Size_Tbl_Synth_OSC1)
     {
         Pos_Tbl_Synth_OSC1 += Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
@@ -914,13 +914,13 @@ void Check_Parameters_Arrows(int Value_Step)
     }  
 
     // Select OSC2 parameter
-    if(zcheckMouse(62, (Cur_Height - 77) - 1, 16, 16) && Pos_Tbl_Synth_OSC2 > 0)
+    if(zcheckMouse(ptk, 62, (Cur_Height - 77) - 1, 16, 16) && Pos_Tbl_Synth_OSC2 > 0)
     {
         Pos_Tbl_Synth_OSC2 -= Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         teac = UPDATE_SYNTH_ED_OSC2_PARAMS;
     }
-    if(zcheckMouse(62 + 44, (Cur_Height - 77) - 1, 16, 16) && Pos_Tbl_Synth_OSC2 < Size_Tbl_Synth_OSC2)
+    if(zcheckMouse(ptk, 62 + 44, (Cur_Height - 77) - 1, 16, 16) && Pos_Tbl_Synth_OSC2 < Size_Tbl_Synth_OSC2)
     {
         Pos_Tbl_Synth_OSC2 += Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
@@ -928,13 +928,13 @@ void Check_Parameters_Arrows(int Value_Step)
     }  
 
     // Select VCF parameter
-    if(zcheckMouse(331, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_VCF > 0)
+    if(zcheckMouse(ptk, 331, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_VCF > 0)
     {
         Pos_Tbl_Synth_VCF -= Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         teac = UPDATE_SYNTH_ED_VCF_PARAMS;
     }
-    if(zcheckMouse(331 + 44, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_VCF < Size_Tbl_Synth_VCF)
+    if(zcheckMouse(ptk, 331 + 44, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_VCF < Size_Tbl_Synth_VCF)
     {
         Pos_Tbl_Synth_VCF += Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
@@ -942,13 +942,13 @@ void Check_Parameters_Arrows(int Value_Step)
     }  
 
     // Select LFO1 parameter
-    if(zcheckMouse(331, (Cur_Height - 95) - 1, 16, 16) && Pos_Tbl_Synth_LFO1 > 0)
+    if(zcheckMouse(ptk, 331, (Cur_Height - 95) - 1, 16, 16) && Pos_Tbl_Synth_LFO1 > 0)
     {
         Pos_Tbl_Synth_LFO1 -= Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         teac = UPDATE_SYNTH_ED_LFO1_PARAMS;
     }
-    if(zcheckMouse(331 + 44, (Cur_Height - 95) - 1, 16, 16) && Pos_Tbl_Synth_LFO1 < Size_Tbl_Synth_LFO1)
+    if(zcheckMouse(ptk, 331 + 44, (Cur_Height - 95) - 1, 16, 16) && Pos_Tbl_Synth_LFO1 < Size_Tbl_Synth_LFO1)
     {
         Pos_Tbl_Synth_LFO1 += Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
@@ -956,13 +956,13 @@ void Check_Parameters_Arrows(int Value_Step)
     }  
 
     // Select LFO2 parameter
-    if(zcheckMouse(331, (Cur_Height - 59) - 1, 16, 16) && Pos_Tbl_Synth_LFO2 > 0)
+    if(zcheckMouse(ptk, 331, (Cur_Height - 59) - 1, 16, 16) && Pos_Tbl_Synth_LFO2 > 0)
     {
         Pos_Tbl_Synth_LFO2 -= Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         teac = UPDATE_SYNTH_ED_LFO2_PARAMS;
     }
-    if(zcheckMouse(331 + 44, (Cur_Height - 59) - 1, 16, 16) && Pos_Tbl_Synth_LFO2 < Size_Tbl_Synth_LFO2)
+    if(zcheckMouse(ptk, 331 + 44, (Cur_Height - 59) - 1, 16, 16) && Pos_Tbl_Synth_LFO2 < Size_Tbl_Synth_LFO2)
     {
         Pos_Tbl_Synth_LFO2 += Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
@@ -970,13 +970,13 @@ void Check_Parameters_Arrows(int Value_Step)
     }
 
     // Select ENV1 parameter
-    if(zcheckMouse(583, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_ENV1 > 0)
+    if(zcheckMouse(ptk, 583, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_ENV1 > 0)
     {
         Pos_Tbl_Synth_ENV1 -= Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         teac = UPDATE_SYNTH_ED_ENV1_PARAMS;
     }
-    if(zcheckMouse(583 + 44, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_ENV1 < Size_Tbl_Synth_ENV1)
+    if(zcheckMouse(ptk, 583 + 44, (Cur_Height - 131) - 1, 16, 16) && Pos_Tbl_Synth_ENV1 < Size_Tbl_Synth_ENV1)
     {
         Pos_Tbl_Synth_ENV1 += Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
@@ -984,13 +984,13 @@ void Check_Parameters_Arrows(int Value_Step)
     }  
 
     // Select ENV2 parameter
-    if(zcheckMouse(583, (Cur_Height - 95) - 1, 16, 16) && Pos_Tbl_Synth_ENV2 > 0)
+    if(zcheckMouse(ptk, 583, (Cur_Height - 95) - 1, 16, 16) && Pos_Tbl_Synth_ENV2 > 0)
     {
         Pos_Tbl_Synth_ENV2 -= Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         teac = UPDATE_SYNTH_ED_ENV2_PARAMS;
     }
-    if(zcheckMouse(583 + 44, (Cur_Height - 95) - 1, 16, 16) && Pos_Tbl_Synth_ENV2 < Size_Tbl_Synth_ENV2)
+    if(zcheckMouse(ptk, 583 + 44, (Cur_Height - 95) - 1, 16, 16) && Pos_Tbl_Synth_ENV2 < Size_Tbl_Synth_ENV2)
     {
         Pos_Tbl_Synth_ENV2 += Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
@@ -998,13 +998,13 @@ void Check_Parameters_Arrows(int Value_Step)
     }  
 
     // Select Misc parameter
-    if(zcheckMouse(583, (Cur_Height - 59) - 1, 16, 16) && Pos_Tbl_Synth_Misc > 0)
+    if(zcheckMouse(ptk, 583, (Cur_Height - 59) - 1, 16, 16) && Pos_Tbl_Synth_Misc > 0)
     {
         Pos_Tbl_Synth_Misc -= Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         teac = UPDATE_SYNTH_ED_Misc_PARAMS;
     }
-    if(zcheckMouse(583 + 44, (Cur_Height - 59) - 1, 16, 16) && Pos_Tbl_Synth_Misc < Size_Tbl_Synth_Misc)
+    if(zcheckMouse(ptk, 583 + 44, (Cur_Height - 59) - 1, 16, 16) && Pos_Tbl_Synth_Misc < Size_Tbl_Synth_Misc)
     {
         Pos_Tbl_Synth_Misc += Value_Step;
         gui_action = GUI_CMD_UPDATE_SYNTH_ED;
@@ -1017,7 +1017,7 @@ void Mouse_Right_Synth_Ed(ptk_data *ptk)
     if(userscreen == USER_SCREEN_SYNTH_EDIT)
     {
 
-        if(zcheckMouse(228, (Cur_Height - 150), 17, 16))
+        if(zcheckMouse(ptk, 228, (Cur_Height - 150), 17, 16))
         {
             if(Synthprg[Current_Instrument] >= 10)
             {
@@ -1030,7 +1030,7 @@ void Mouse_Right_Synth_Ed(ptk_data *ptk)
             teac = UPDATE_SYNTH_ED_ALL;
             gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         }
-        if(zcheckMouse(228 + 44, (Cur_Height - 150), 17, 16))
+        if(zcheckMouse(ptk, 228 + 44, (Cur_Height - 150), 17, 16))
         {
             if(Synthprg[Current_Instrument] <= (129 - 10))
             {
@@ -1047,8 +1047,8 @@ void Mouse_Right_Synth_Ed(ptk_data *ptk)
 
     if(userscreen == USER_SCREEN_SYNTH_EDIT && Allow_All)
     {
-        Check_Sliders_Arrows(10);
-        Check_Parameters_Arrows(10);
+        Check_Sliders_Arrows(ptk, 10);
+        Check_Parameters_Arrows(ptk, 10);
     }
 }
 
@@ -1056,7 +1056,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_SYNTH_EDIT)
     {
-        if(zcheckMouse(228, (Cur_Height - 150), 17, 16))
+        if(zcheckMouse(ptk, 228, (Cur_Height - 150), 17, 16))
         {
             if(Synthprg[Current_Instrument])
             {
@@ -1065,7 +1065,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             teac = UPDATE_SYNTH_ED_ALL;
             gui_action = GUI_CMD_UPDATE_SYNTH_ED;
         }
-        if(zcheckMouse(228 + 44, (Cur_Height - 150), 17, 16))
+        if(zcheckMouse(ptk, 228 + 44, (Cur_Height - 150), 17, 16))
         {
             if(Synthprg[Current_Instrument] < 129)
             {
@@ -1079,7 +1079,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
         if(userscreen == USER_SCREEN_SYNTH_EDIT && Allow_All)
         {
             // Save the data
-            if(zcheckMouse(758, (Cur_Height - 150), 34, 16))
+            if(zcheckMouse(ptk, 758, (Cur_Height - 150), 34, 16))
             {
                 if(File_Exist_Req(ptk, "%s"SLASH"%s.pts", Dir_Presets, PARASynth[Current_Instrument].presetname))
                 {
@@ -1092,7 +1092,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             }
 
             // Start synth name input
-            if(zcheckMouse(592, (Cur_Height - 150), 164, 16) && snamesel == INPUT_NONE)
+            if(zcheckMouse(ptk, 592, (Cur_Height - 150), 164, 16) && snamesel == INPUT_NONE)
             {
                 snamesel = INPUT_SYNTH_NAME;
                 strcpy(cur_input_name, PARASynth[Current_Instrument].presetname);
@@ -1102,21 +1102,21 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
 
-            if(zcheckMouse(254, (Cur_Height - 131) - 1, 34, 16)) Rand_OSC1(ptk);
-            if(zcheckMouse(254, (Cur_Height - 77) - 1, 34, 16)) Rand_OSC2(ptk);
-            if(zcheckMouse(506, (Cur_Height - 131) - 1, 34, 16)) Rand_VCF(ptk);
-            if(zcheckMouse(506, (Cur_Height - 95) - 1, 34, 16)) Rand_LFO1(ptk);
-            if(zcheckMouse(506, (Cur_Height - 59) - 1, 34, 16)) Rand_LFO2(ptk);
-            if(zcheckMouse(755, (Cur_Height - 131) - 1, 34, 16)) Rand_ENV1(ptk);
-            if(zcheckMouse(755, (Cur_Height - 95) - 1, 34, 16)) Rand_ENV2(ptk);
-            if(zcheckMouse(755, (Cur_Height - 59) - 1, 34, 16)) Rand_Misc(ptk);
+            if(zcheckMouse(ptk, 254, (Cur_Height - 131) - 1, 34, 16)) Rand_OSC1(ptk);
+            if(zcheckMouse(ptk, 254, (Cur_Height - 77) - 1, 34, 16)) Rand_OSC2(ptk);
+            if(zcheckMouse(ptk, 506, (Cur_Height - 131) - 1, 34, 16)) Rand_VCF(ptk);
+            if(zcheckMouse(ptk, 506, (Cur_Height - 95) - 1, 34, 16)) Rand_LFO1(ptk);
+            if(zcheckMouse(ptk, 506, (Cur_Height - 59) - 1, 34, 16)) Rand_LFO2(ptk);
+            if(zcheckMouse(ptk, 755, (Cur_Height - 131) - 1, 34, 16)) Rand_ENV1(ptk);
+            if(zcheckMouse(ptk, 755, (Cur_Height - 95) - 1, 34, 16)) Rand_ENV2(ptk);
+            if(zcheckMouse(ptk, 755, (Cur_Height - 59) - 1, 34, 16)) Rand_Misc(ptk);
 
-            Check_Sliders_Arrows(1);
+            Check_Sliders_Arrows(ptk, 1);
 
-            Check_Parameters_Arrows(1);
+            Check_Parameters_Arrows(ptk, 1);
 
             // Center OSC1
-            if(zcheckMouse(272, (Cur_Height - 113) - 1, 16, 16))
+            if(zcheckMouse(ptk, 272, (Cur_Height - 113) - 1, 16, 16))
             {
                 if(Allow_Phase_Distortion_OSC1 || Pos_Tbl_Synth_OSC1 != 0)
                 {
@@ -1127,7 +1127,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             }  
 
             // Center OSC2
-            if(zcheckMouse(272, (Cur_Height - 59) - 1, 16, 16))
+            if(zcheckMouse(ptk, 272, (Cur_Height - 59) - 1, 16, 16))
             {
                 if(Allow_Phase_Distortion_OSC2 || Pos_Tbl_Synth_OSC2 != 0)
                 {
@@ -1138,7 +1138,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             }  
 
             // Center VCF
-            if(zcheckMouse(524, (Cur_Height - 113) - 1, 16, 16))
+            if(zcheckMouse(ptk, 524, (Cur_Height - 113) - 1, 16, 16))
             {
                 Center_SynthParam_VCF(ptk);
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
@@ -1146,7 +1146,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             }  
 
             // Center LFO1
-            if(zcheckMouse(524, (Cur_Height - 77) - 1, 16, 16))
+            if(zcheckMouse(ptk, 524, (Cur_Height - 77) - 1, 16, 16))
             {
                 if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_LFO1 == 1) ||
                    !Allow_Phase_Distortion_OSC2 && (Pos_Tbl_Synth_LFO1 == 2))
@@ -1161,7 +1161,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             }  
 
             // Center LFO2
-            if(zcheckMouse(524, (Cur_Height - 41) - 1, 16, 16))
+            if(zcheckMouse(ptk, 524, (Cur_Height - 41) - 1, 16, 16))
             {
                 if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_LFO2 == 1) ||
                    !Allow_Phase_Distortion_OSC2 && (Pos_Tbl_Synth_LFO2 == 2))
@@ -1176,7 +1176,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             }  
 
             // Center ENV1
-            if(zcheckMouse(776, (Cur_Height - 113) - 1, 16, 16))
+            if(zcheckMouse(ptk, 776, (Cur_Height - 113) - 1, 16, 16))
             {
                 if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_ENV1 == 0) ||
                    !Allow_Phase_Distortion_OSC2 && (Pos_Tbl_Synth_ENV1 == 1))
@@ -1191,7 +1191,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             }  
 
             // Center ENV2
-            if(zcheckMouse(776, (Cur_Height - 77) - 1, 16, 16))
+            if(zcheckMouse(ptk, 776, (Cur_Height - 77) - 1, 16, 16))
             {
                 if(!Allow_Phase_Distortion_OSC1 && (Pos_Tbl_Synth_ENV2 == 0) ||
                    !Allow_Phase_Distortion_OSC2 && (Pos_Tbl_Synth_ENV2 == 1))
@@ -1206,7 +1206,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             }  
 
             // Center Misc
-            if(zcheckMouse(776, (Cur_Height - 41) - 1, 16, 16))
+            if(zcheckMouse(ptk, 776, (Cur_Height - 41) - 1, 16, 16))
             {
                 if((Allow_Phase_Distortion_OSC1 || Allow_Phase_Distortion_OSC2) ||
                    Pos_Tbl_Synth_Misc > 0)
@@ -1218,43 +1218,43 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             }  
 
             // OSC1 Waveform
-            if(zcheckMouse(24, (Cur_Height - 95) - 1, 23, 16))
+            if(zcheckMouse(ptk, 24, (Cur_Height - 95) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc1_waveform = 0;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(49, (Cur_Height - 95) - 1, 23, 16))
+            if(zcheckMouse(ptk, 49, (Cur_Height - 95) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc1_waveform = 1;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(74, (Cur_Height - 95) - 1, 23, 16))
+            if(zcheckMouse(ptk, 74, (Cur_Height - 95) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc1_waveform = 2;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(99, (Cur_Height - 95) - 1, 23, 16))
+            if(zcheckMouse(ptk, 99, (Cur_Height - 95) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc1_waveform = 3;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(124, (Cur_Height - 95) - 1, 23, 16))
+            if(zcheckMouse(ptk, 124, (Cur_Height - 95) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc1_waveform = 6;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(149, (Cur_Height - 95) - 1, 23, 16))
+            if(zcheckMouse(ptk, 149, (Cur_Height - 95) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc1_waveform = 5;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(174, (Cur_Height - 95) - 1, 23, 16))
+            if(zcheckMouse(ptk, 174, (Cur_Height - 95) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc1_waveform = 4;
                 teac = UPDATE_SYNTH_ED_ALL;
@@ -1262,43 +1262,43 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             }
 
             // OSC2 Waveform
-            if(zcheckMouse(24, (Cur_Height - 41) - 1, 23, 16))
+            if(zcheckMouse(ptk, 24, (Cur_Height - 41) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc2_waveform = 0;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(49, (Cur_Height - 41) - 1, 23, 16))
+            if(zcheckMouse(ptk, 49, (Cur_Height - 41) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc2_waveform = 1;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(74, (Cur_Height - 41) - 1, 23, 16))
+            if(zcheckMouse(ptk, 74, (Cur_Height - 41) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc2_waveform = 2;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(99, (Cur_Height - 41) - 1, 23, 16))
+            if(zcheckMouse(ptk, 99, (Cur_Height - 41) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc2_waveform = 3;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(124, (Cur_Height - 41) - 1, 23, 16))
+            if(zcheckMouse(ptk, 124, (Cur_Height - 41) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc2_waveform = 6;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(149, (Cur_Height - 41) - 1, 23, 16))
+            if(zcheckMouse(ptk, 149, (Cur_Height - 41) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc2_waveform = 5;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(174, (Cur_Height - 41) - 1, 23, 16))
+            if(zcheckMouse(ptk, 174, (Cur_Height - 41) - 1, 23, 16))
             {
                 PARASynth[Current_Instrument].osc2_waveform = 4;
                 teac = UPDATE_SYNTH_ED_ALL;
@@ -1307,25 +1307,25 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
 
 
             // Oscillators combiner
-            if(zcheckMouse(4, (Cur_Height - 100) - 1 + (16 * 0), 17, 16))
+            if(zcheckMouse(ptk, 4, (Cur_Height - 100) - 1 + (16 * 0), 17, 16))
             {
                 PARASynth[Current_Instrument].osc_combine = COMBINE_ADD;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(4, (Cur_Height - 100) - 1 + (16 * 1), 17, 16))
+            if(zcheckMouse(ptk, 4, (Cur_Height - 100) - 1 + (16 * 1), 17, 16))
             {
                 PARASynth[Current_Instrument].osc_combine = COMBINE_SUB;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(4, (Cur_Height - 100) - 1 + (16 * 2), 17, 16))
+            if(zcheckMouse(ptk, 4, (Cur_Height - 100) - 1 + (16 * 2), 17, 16))
             {
                 PARASynth[Current_Instrument].osc_combine = COMBINE_MUL;
                 teac = UPDATE_SYNTH_ED_ALL;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(4, (Cur_Height - 100) - 1 + (16 * 3), 17, 16))
+            if(zcheckMouse(ptk, 4, (Cur_Height - 100) - 1 + (16 * 3), 17, 16))
             {
                 PARASynth[Current_Instrument].osc_combine = COMBINE_DIV;
                 teac = UPDATE_SYNTH_ED_ALL;
@@ -1333,13 +1333,13 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             }
 
             // Sub oscillator switch
-            if(zcheckMouse(237, (Cur_Height - 95) - 1, 24, 16))
+            if(zcheckMouse(ptk, 237, (Cur_Height - 95) - 1, 24, 16))
             {
                 PARASynth[Current_Instrument].osc3_switch = TRUE;
                 teac = UPDATE_SYNTH_ED_OSC3_SWITCH;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(264, (Cur_Height - 95) - 1, 24, 16))
+            if(zcheckMouse(ptk, 264, (Cur_Height - 95) - 1, 24, 16))
             {
                 PARASynth[Current_Instrument].osc3_switch = FALSE;
                 teac = UPDATE_SYNTH_ED_OSC3_SWITCH;
@@ -1347,13 +1347,13 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             }
 
             // VCF Type
-            if(zcheckMouse(349, (Cur_Height - 150), 17, 16) && PARASynth[Current_Instrument].vcf_type > 0)
+            if(zcheckMouse(ptk, 349, (Cur_Height - 150), 17, 16) && PARASynth[Current_Instrument].vcf_type > 0)
             {
                 PARASynth[Current_Instrument].vcf_type = filter_vcf_type_minus[PARASynth[Current_Instrument].vcf_type];
                 teac = 7;
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
-            if(zcheckMouse(349 + 84, (Cur_Height - 150), 17, 16) && PARASynth[Current_Instrument].vcf_type <= 4)
+            if(zcheckMouse(ptk, 349 + 84, (Cur_Height - 150), 17, 16) && PARASynth[Current_Instrument].vcf_type <= 4)
             {
                 PARASynth[Current_Instrument].vcf_type = filter_vcf_type_plus[PARASynth[Current_Instrument].vcf_type];
                 teac = 7;

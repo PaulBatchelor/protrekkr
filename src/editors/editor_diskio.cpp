@@ -105,9 +105,9 @@ int Calc_Length(ptk_data *ptk);
 void Reset_Song_Length(void);
 void Display_Song_Length(ptk_data *ptk);
 void Display_Tracks_To_Render(void);
-void Check_Tracks_To_Render(void);
+void Check_Tracks_To_Render(ptk_data *ptk);
 int Is_Track_To_Render_Solo(int nbr);
-void Check_Tracks_To_Render_To_Solo(void);
+void Check_Tracks_To_Render_To_Solo(ptk_data *ptk);
 
 void Draw_DiskIO_Ed(ptk_data *ptk)
 {
@@ -300,12 +300,12 @@ void Mouse_Right_DiskIO_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_DISKIO_EDIT)
     {
-        Check_Tracks_To_Render_To_Solo();
+        Check_Tracks_To_Render_To_Solo(ptk);
 
         if(rawrender_range)
         {
             // From position
-            if(zcheckMouse(572, (Cur_Height - 86), 16, 16) == 1)
+            if(zcheckMouse(ptk, 572, (Cur_Height - 86), 16, 16) == 1)
             {
                 rawrender_from -= 10;
                 gui_action = GUI_CMD_UPDATE_DISKIO_ED;
@@ -313,7 +313,7 @@ void Mouse_Right_DiskIO_Ed(ptk_data *ptk)
             }
 
             // From position
-            if(zcheckMouse(572 + 44, (Cur_Height - 86), 16, 16) == 1)
+            if(zcheckMouse(ptk, 572 + 44, (Cur_Height - 86), 16, 16) == 1)
             {
                 rawrender_from += 10;
                 gui_action = GUI_CMD_UPDATE_DISKIO_ED;
@@ -321,7 +321,7 @@ void Mouse_Right_DiskIO_Ed(ptk_data *ptk)
             }
 
             // To position
-            if(zcheckMouse(572, (Cur_Height - 66), 16, 16) == 1)
+            if(zcheckMouse(ptk, 572, (Cur_Height - 66), 16, 16) == 1)
             {
                 rawrender_to -= 10;
                 gui_action = GUI_CMD_UPDATE_DISKIO_ED;
@@ -329,7 +329,7 @@ void Mouse_Right_DiskIO_Ed(ptk_data *ptk)
             }
 
             // To position
-            if(zcheckMouse(572 + 44, (Cur_Height - 66), 16, 16) == 1)
+            if(zcheckMouse(ptk, 572 + 44, (Cur_Height - 66), 16, 16) == 1)
             {
                 rawrender_to += 10;
                 gui_action = GUI_CMD_UPDATE_DISKIO_ED;
@@ -349,7 +349,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
     if(userscreen == USER_SCREEN_DISKIO_EDIT)
     {
         // Save song
-        if(zcheckMouse(8, (Cur_Height - 112), 80, 16))
+        if(zcheckMouse(ptk, 8, (Cur_Height - 112), 80, 16))
         {
             if(File_Exist_Req(ptk, "%s"SLASH"%s.ptk", Dir_Mods, name))
             {
@@ -361,7 +361,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             }
         }
         // Save final
-        if(zcheckMouse(254, (Cur_Height - 130), 80, 16))
+        if(zcheckMouse(ptk, 254, (Cur_Height - 130), 80, 16))
         {
             if(File_Exist_Req(ptk, "%s"SLASH"%s.ptp", Dir_Mods, name))
             {
@@ -373,23 +373,23 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             }
         }
         // Calc final
-        if(zcheckMouse(254, (Cur_Height - 112), 80, 16))
+        if(zcheckMouse(ptk, 254, (Cur_Height - 112), 80, 16))
         {
             gui_action = GUI_CMD_CALC_FINAL;
         }
         // Calc length
-        if(zcheckMouse(254, (Cur_Height - 76), 80, 16))
+        if(zcheckMouse(ptk, 254, (Cur_Height - 76), 80, 16))
         {
             Calc_Length(ptk);
         }
 
-        if(zcheckMouse(90, (Cur_Height - 130), 80, 16))
+        if(zcheckMouse(ptk, 90, (Cur_Height - 130), 80, 16))
         {
             gui_action = GUI_CMD_MODULE_INFOS;
         }
 
         // Start module name input
-        if(zcheckMouse(90, (Cur_Height - 94), 162, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 90, (Cur_Height - 94), 162, 16) && snamesel == INPUT_NONE)
         {
             strcpy(cur_input_name, name);
             sprintf(name, "");
@@ -399,7 +399,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         }
 
         // Start artist name input
-        if(zcheckMouse(90, (Cur_Height - 76), 162, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 90, (Cur_Height - 76), 162, 16) && snamesel == INPUT_NONE)
         {
             strcpy(cur_input_name, artist);
             sprintf(artist, "");
@@ -409,7 +409,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         }
 
         // Start module style input
-        if(zcheckMouse(90, (Cur_Height - 58), 162, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 90, (Cur_Height - 58), 162, 16) && snamesel == INPUT_NONE)
         {
             strcpy(cur_input_name, style);
             sprintf(style, "");
@@ -419,12 +419,12 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         }
 
         // Zzaapp
-        if(zcheckMouse(8, (Cur_Height - 130), 80, 16))
+        if(zcheckMouse(ptk, 8, (Cur_Height - 130), 80, 16))
         {
             Display_Requester(ptk, &Zzaapp_Requester, GUI_CMD_NEW_MODULE);
         }
 
-        if(zcheckMouse(90, (Cur_Height - 112), 80, 16))
+        if(zcheckMouse(ptk, 90, (Cur_Height - 112), 80, 16))
         {
             if(rawrender_target == RENDER_TO_FILE)
             {
@@ -470,7 +470,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         }
 
         // Render as 32 bit on
-        if(zcheckMouse(458, (Cur_Height - 68), 29, 16) && !Allow_32bit)
+        if(zcheckMouse(ptk, 458, (Cur_Height - 68), 29, 16) && !Allow_32bit)
         {
             rawrender_32float = TRUE;
             teac = 1;
@@ -478,7 +478,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         }
 
         // Render as 32 bit off
-        if(zcheckMouse(458 + 31, (Cur_Height - 68), 29, 16) && !Allow_32bit)
+        if(zcheckMouse(ptk, 458 + 31, (Cur_Height - 68), 29, 16) && !Allow_32bit)
         {
             rawrender_32float = FALSE;
             teac = 1;
@@ -486,7 +486,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         }
 
         // Render entire song
-        if(zcheckMouse(534, (Cur_Height - 112), 40, 16))
+        if(zcheckMouse(ptk, 534, (Cur_Height - 112), 40, 16))
         {
             rawrender_range = FALSE;
             teac = 0;
@@ -494,7 +494,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         }
 
         // Render a range
-        if(zcheckMouse(534 + 42, (Cur_Height - 112), 40, 16))
+        if(zcheckMouse(ptk, 534 + 42, (Cur_Height - 112), 40, 16))
         {
             rawrender_range = TRUE;
             teac = 0;
@@ -504,7 +504,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         if(rawrender_range)
         {
             // From position
-            if(zcheckMouse(572, (Cur_Height - 86), 16, 16) == 1)
+            if(zcheckMouse(ptk, 572, (Cur_Height - 86), 16, 16) == 1)
             {
                 rawrender_from--;
                 gui_action = GUI_CMD_UPDATE_DISKIO_ED;
@@ -512,7 +512,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             }
 
             // From position
-            if(zcheckMouse(572 + 44, (Cur_Height - 86), 16, 16) == 1)
+            if(zcheckMouse(ptk, 572 + 44, (Cur_Height - 86), 16, 16) == 1)
             {
                 rawrender_from++;
                 gui_action = GUI_CMD_UPDATE_DISKIO_ED;
@@ -520,7 +520,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             }
 
             // To position
-            if(zcheckMouse(572, (Cur_Height - 66), 16, 16) == 1)
+            if(zcheckMouse(ptk, 572, (Cur_Height - 66), 16, 16) == 1)
             {
                 rawrender_to--;
                 gui_action = GUI_CMD_UPDATE_DISKIO_ED;
@@ -528,7 +528,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             }
 
             // To position
-            if(zcheckMouse(572 + 44, (Cur_Height - 66), 16, 16) == 1)
+            if(zcheckMouse(ptk, 572 + 44, (Cur_Height - 66), 16, 16) == 1)
             {
                 rawrender_to++;
                 gui_action = GUI_CMD_UPDATE_DISKIO_ED;
@@ -537,7 +537,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         }
 
         // Render to wav file
-        if(zcheckMouse(654, (Cur_Height - 106), 80, 16))
+        if(zcheckMouse(ptk, 654, (Cur_Height - 106), 80, 16))
         {
             rawrender_target = RENDER_TO_FILE;
             teac = 0;
@@ -545,7 +545,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         }
 
         // Render to mono sample
-        if(zcheckMouse(654, (Cur_Height - 88), 80, 16))
+        if(zcheckMouse(ptk, 654, (Cur_Height - 88), 80, 16))
         {
             rawrender_target = RENDER_TO_MONO;
             teac = 0;
@@ -553,7 +553,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         }
 
         // Render to stereo sample
-        if(zcheckMouse(654, (Cur_Height - 70), 80, 16))
+        if(zcheckMouse(ptk, 654, (Cur_Height - 70), 80, 16))
         {
             rawrender_target = RENDER_TO_STEREO;
             teac = 0;
@@ -561,7 +561,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         }
 
         // Render as multiple file
-        if(zcheckMouse(458, (Cur_Height - 49), 29, 16) && !Allow_Single_Render)
+        if(zcheckMouse(ptk, 458, (Cur_Height - 49), 29, 16) && !Allow_Single_Render)
         {
             rawrender_multi = TRUE;
             teac = 5;
@@ -569,7 +569,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         }
 
         // Render as single files
-        if(zcheckMouse(458 + 31, (Cur_Height - 49), 29, 16) && !Allow_Single_Render)
+        if(zcheckMouse(ptk, 458 + 31, (Cur_Height - 49), 29, 16) && !Allow_Single_Render)
         {
             rawrender_multi = FALSE;
             teac = 5;
@@ -577,7 +577,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         }
 
 
-        Check_Tracks_To_Render();
+        Check_Tracks_To_Render(ptk);
     }
 }
 
@@ -670,14 +670,14 @@ void Reset_Tracks_To_Render(ptk_data *ptk)
 
 // ------------------------------------------------------
 // Check if a track can be solo'ed
-void Check_Tracks_To_Render_To_Solo(void)
+void Check_Tracks_To_Render_To_Solo(ptk_data *ptk)
 {
     int i;
     int j;
 
     for(i = 0; i < Songtracks; i++)
     {
-        if(zcheckMouse(Tracks_Position[i].x, (Cur_Height - 112) + Tracks_Position[i].y, 17, 16))
+        if(zcheckMouse(ptk, Tracks_Position[i].x, (Cur_Height - 112) + Tracks_Position[i].y, 17, 16))
         {
             if(Is_Track_To_Render_Solo(i))
             {
@@ -701,7 +701,7 @@ void Check_Tracks_To_Render_To_Solo(void)
 
 // ------------------------------------------------------
 // Handle clicks on the tracks gadgets
-void Check_Tracks_To_Render(void)
+void Check_Tracks_To_Render(ptk_data *ptk)
 {
     int i;
 
@@ -709,7 +709,7 @@ void Check_Tracks_To_Render(void)
     {
         if(i < Songtracks)
         {
-            if(zcheckMouse(Tracks_Position[i].x, (Cur_Height - 112) + Tracks_Position[i].y, 17, 16))
+            if(zcheckMouse(ptk, Tracks_Position[i].x, (Cur_Height - 112) + Tracks_Position[i].y, 17, 16))
             {
                 Tracks_To_Render[i] ^= TRUE;
                 Display_1_Track_To_Render(i);
