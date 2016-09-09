@@ -4224,7 +4224,7 @@ void Keyboard_Handler(ptk_data *ptk)
     }
 
     // Turn edit mode on/off
-    if(Keys[SDLK_SPACE] && snamesel == INPUT_NONE && pos_space == 1)
+    if(Keys[SDLK_ESCAPE] && snamesel == INPUT_NONE && pos_space == 1)
     {
         if(Get_LShift())
         {
@@ -4241,13 +4241,19 @@ void Keyboard_Handler(ptk_data *ptk)
     if(!is_recording)
     {
         // Play song
-        if(Keys[SDLK_RCTRL] && snamesel == INPUT_NONE && po_ctrl2)
+        //if(Keys[SDLK_RCTRL] && snamesel == INPUT_NONE && po_ctrl2)
+        if(Keys[SDLK_SPACE] && snamesel == INPUT_NONE && po_ctrl2)
         {
             plx = 0;
             po_ctrl2 = FALSE;
             if(!Get_LShift()) Pattern_Line = 0;
-            gui_action = GUI_CMD_PLAY_SONG;
+            if(Songplaying == TRUE) {
+                gui_action = GUI_CMD_STOP_SONG;
+            } else {
+                gui_action = GUI_CMD_PLAY_SONG;
+            }
         }
+
         if(!Keys[SDLK_RCTRL] && !po_ctrl2) po_ctrl2 = TRUE;
 
         if(Keys[SDLK_RALT] && snamesel == INPUT_NONE && po_alt2)
