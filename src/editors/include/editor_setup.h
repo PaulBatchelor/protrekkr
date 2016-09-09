@@ -49,7 +49,5 @@ void Actualize_Master_Ed(ptk_data *ptk, char gode);
 void Mouse_Left_Master_Ed(ptk_data *ptk);
 void Mouse_Right_Master_Ed(ptk_data *ptk);
 void Mouse_Sliders_Master_Ed(ptk_data *ptk);
-/*TODO: why isn't this in editor_fx_setup? */
-void Actualize_Fx_Ed(ptk_data *ptk, char gode);
 
 #endif
