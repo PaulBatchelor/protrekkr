@@ -819,17 +819,17 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
                                 case SDL_MOUSE_LEFT_BUTTON:
                                     Mouse.button &= ~MOUSE_LEFT_BUTTON;
                                     Mouse.button_oneshot &= ~MOUSE_LEFT_BUTTON;
-                                    gui_pushed &= ~MOUSE_LEFT_BUTTON;
+                                    ptk->gui_pushed &= ~MOUSE_LEFT_BUTTON;
                                     break;
                                 case SDL_MOUSE_MIDDLE_BUTTON:
                                     Mouse.button &= ~MOUSE_MIDDLE_BUTTON;
                                     Mouse.button_oneshot &= ~MOUSE_MIDDLE_BUTTON;
-                                    gui_pushed &= ~MOUSE_MIDDLE_BUTTON;
+                                    ptk->gui_pushed &= ~MOUSE_MIDDLE_BUTTON;
                                     break;
                                 case SDL_MOUSE_RIGHT_BUTTON:
                                     Mouse.button &= ~MOUSE_RIGHT_BUTTON;
                                     Mouse.button_oneshot &= ~MOUSE_RIGHT_BUTTON;
-                                    gui_pushed &= ~MOUSE_RIGHT_BUTTON;
+                                    ptk->gui_pushed &= ~MOUSE_RIGHT_BUTTON;
                                     break;
                             }
                             break;

@@ -87,7 +87,6 @@ ptk_data *g_ptk = &ptk;
 
 char Visible_Columns = 0;
 
-int gui_pushed = 0;
 char teac = 0;
 int liveparam = 0;
 int livevalue = 0;
@@ -5070,17 +5069,17 @@ char zcheckMouse_nobutton(int x, int y, int xs, int ys)
 
 char zcheckMouse(ptk_data *ptk, int x, int y, int xs, int ys)
 {
-    if(!gui_pushed && Mouse.x > x && Mouse.x < x + xs && Mouse.y > y && Mouse.y < y + ys + 1)
+    if(!ptk->gui_pushed && Mouse.x > x && Mouse.x < x + xs && Mouse.y > y && Mouse.y < y + ys + 1)
     {
         ptk->gui_lx = x;
         ptk->gui_ly = y;
         ptk->gui_lxs = xs;
         ptk->gui_lys = ys;
-        gui_pushed = Mouse.button_oneshot;
+        ptk->gui_pushed = Mouse.button_oneshot;
         ptk->fluzy = -1;
         return(1);
     }
-    if(gui_pushed && x == ptk->gui_lx && y == ptk->gui_ly && xs == ptk->gui_lxs && ys == ptk->gui_lys)
+    if(ptk->gui_pushed && x == ptk->gui_lx && y == ptk->gui_ly && xs == ptk->gui_lxs && ys == ptk->gui_lys)
     {
         return(1);
     }
@@ -6830,4 +6829,5 @@ void ptk_init(ptk_data *ptk)
 
     ptk->gui_action_metronome = GUI_CMD_NOP;
     ptk->gui_action = GUI_CMD_NOP;
+    ptk->gui_pushed = 0;
 }

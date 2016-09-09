@@ -37,5 +37,7 @@ typedef struct {
 
     int gui_action_metronome;
     int gui_action;
+
+    int gui_pushed;
 } ptk_data;
 #endif
