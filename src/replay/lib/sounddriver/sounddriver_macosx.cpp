@@ -71,7 +71,7 @@ static OSStatus AUDIO_Callback(AudioDeviceID device,
 {
     if(AUDIO_Play_Flag)
     {
-        AUDIO_Mixer((Uint8 *) data_out->mBuffers[0].mData, data_out->mBuffers[0].mDataByteSize);
+        AUDIO_Mixer(ptk, (Uint8 *) data_out->mBuffers[0].mData, data_out->mBuffers[0].mDataByteSize);
     }
     else
     {

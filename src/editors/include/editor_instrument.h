@@ -51,17 +51,17 @@ extern int Instrs_ykar;
 
 // ------------------------------------------------------
 // Functions
-void Draw_Instrument_Ed(void);
-void Actualize_Instrument_Ed(int typex, char gode);
-void Mouse_Sliders_Instrument_Ed(void);
-void Mouse_Left_Instrument_Ed(void);
-void Mouse_Right_Instrument_Ed(void);
-void Mouse_Left_Repeat_Instrument_Ed(void);
-void Mouse_Sliders_Right_Instrument_Ed(void);
-void Afloop(void);
-void Dump_Instruments_Synths_List(int xr, int yr);
-void Actualize_Instruments_Synths_List(int modeac);
-void Save_WaveForm(int Instr_Nbr, int Channel, int Split);
-void Restore_WaveForm(int Instr_Nbr, int Channel, int Split);
+void Draw_Instrument_Ed(ptk_data *ptk);
+void Actualize_Instrument_Ed(ptk_data *ptk, int typex, char gode);
+void Mouse_Sliders_Instrument_Ed(ptk_data *ptk);
+void Mouse_Left_Instrument_Ed(ptk_data *ptk);
+void Mouse_Right_Instrument_Ed(ptk_data *ptk);
+void Mouse_Left_Repeat_Instrument_Ed(ptk_data *ptk);
+void Mouse_Sliders_Right_Instrument_Ed(ptk_data *ptk);
+void Afloop(ptk_data *ptk);
+void Dump_Instruments_Synths_List(ptk_data *ptk, int xr, int yr);
+void Actualize_Instruments_Synths_List(ptk_data *ptk, int modeac);
+void Save_WaveForm(ptk_data *ptk, int Instr_Nbr, int Channel, int Split);
+void Restore_WaveForm(ptk_data *ptk, int Instr_Nbr, int Channel, int Split);
 
 #endif

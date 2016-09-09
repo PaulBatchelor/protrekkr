@@ -35,8 +35,8 @@
 
 // ------------------------------------------------------
 // Load the data from a pattern file
-void Load_Pattern_Data(int (*Read_Function)(void *, int ,int, FILE *),
-                      int (*Read_Function_Swap)(void *, int ,int, FILE *),
+void Load_Pattern_Data(ptk_data *ptk, int (*Read_Function)(ptk_data *, void *, int ,int, FILE *),
+                      int (*Read_Function_Swap)(ptk_data *, void *, int ,int, FILE *),
                       FILE *in,
                       int version)
 {
@@ -45,24 +45,24 @@ void Load_Pattern_Data(int (*Read_Function)(void *, int ,int, FILE *),
     int Old_Curr_Buff_Block = Curr_Buff_Block;
     Curr_Buff_Block = NBR_COPY_BLOCKS - 1;
 
-    Read_Function(Buff_MultiNotes[Curr_Buff_Block], sizeof(char), MAX_TRACKS, in);
+    Read_Function(ptk, Buff_MultiNotes[Curr_Buff_Block], sizeof(char), MAX_TRACKS, in);
     if(version == 2)
     {
-        Read_Function(Buff_Effects[Curr_Buff_Block], sizeof(char), MAX_TRACKS, in);
+        Read_Function(ptk, Buff_Effects[Curr_Buff_Block], sizeof(char), MAX_TRACKS, in);
     }
-    Read_Function_Swap(&b_buff_xsize[Curr_Buff_Block], sizeof(int), 1, in);
-    Read_Function_Swap(&b_buff_ysize[Curr_Buff_Block], sizeof(int), 1, in);
-    Read_Function_Swap(&start_buff_nibble[Curr_Buff_Block], sizeof(int), 1, in);
+    Read_Function_Swap(ptk, &b_buff_xsize[Curr_Buff_Block], sizeof(int), 1, in);
+    Read_Function_Swap(ptk, &b_buff_ysize[Curr_Buff_Block], sizeof(int), 1, in);
+    Read_Function_Swap(ptk, &start_buff_nibble[Curr_Buff_Block], sizeof(int), 1, in);
 
     int Size_In;
     int Size_Out = PATTERN_LEN;
-    Read_Function_Swap(&Size_In, sizeof(int), 1, in);
+    Read_Function_Swap(ptk, &Size_In, sizeof(int), 1, in);
 
     unsigned char *Pack_Mem = (unsigned char *) malloc(Size_In);
     if(Pack_Mem)
     {
-        Read_Function(Pack_Mem, sizeof(char), Size_In, in);
-        unsigned char *Final_Mem_Out = Depack_Data(Pack_Mem, Size_In, Size_Out);
+        Read_Function(ptk, Pack_Mem, sizeof(char), Size_In, in);
+        unsigned char *Final_Mem_Out = Depack_Data(ptk, Pack_Mem, Size_In, Size_Out);
         if(Final_Mem_Out)
         {
             Buff_Full[Curr_Buff_Block] = TRUE;
@@ -78,8 +78,8 @@ void Load_Pattern_Data(int (*Read_Function)(void *, int ,int, FILE *),
 
 // ------------------------------------------------------
 // Save the data to a pattern file
-void Save_Pattern_Data(int (*Write_Function)(void *, int ,int, FILE *),
-                      int (*Write_Function_Swap)(void *, int ,int, FILE *),
+void Save_Pattern_Data(ptk_data *ptk, int (*Write_Function)(ptk_data *, void *, int ,int, FILE *),
+                      int (*Write_Function_Swap)(ptk_data *, void *, int ,int, FILE *),
                       FILE *in)
 {
     int Cur_Position = Get_Song_Position(ptk);
@@ -90,20 +90,20 @@ void Save_Pattern_Data(int (*Write_Function)(void *, int ,int, FILE *),
     Curr_Buff_Block = NBR_COPY_BLOCKS - 1;
     Copy_Selection_To_Buffer(ptk, Cur_Position);
 
-    Calc_selection();
+    Calc_selection(ptk);
 
-    Write_Function(Buff_MultiNotes[Curr_Buff_Block], sizeof(char), MAX_TRACKS, in);
-    Write_Function(Buff_Effects[Curr_Buff_Block], sizeof(char), MAX_TRACKS, in);
-    Write_Function_Swap(&b_buff_xsize[Curr_Buff_Block], sizeof(int), 1, in);
-    Write_Function_Swap(&b_buff_ysize[Curr_Buff_Block], sizeof(int), 1, in);
-    Write_Function_Swap(&start_buff_nibble[Curr_Buff_Block], sizeof(int), 1, in);
+    Write_Function(ptk, Buff_MultiNotes[Curr_Buff_Block], sizeof(char), MAX_TRACKS, in);
+    Write_Function(ptk, Buff_Effects[Curr_Buff_Block], sizeof(char), MAX_TRACKS, in);
+    Write_Function_Swap(ptk, &b_buff_xsize[Curr_Buff_Block], sizeof(int), 1, in);
+    Write_Function_Swap(ptk, &b_buff_ysize[Curr_Buff_Block], sizeof(int), 1, in);
+    Write_Function_Swap(ptk, &start_buff_nibble[Curr_Buff_Block], sizeof(int), 1, in);
     int Block_Len = PATTERN_LEN;
 
-    unsigned char *Final_Mem_Out = Pack_Data(BuffBlock[Curr_Buff_Block], &Block_Len);
+    unsigned char *Final_Mem_Out = Pack_Data(ptk, BuffBlock[Curr_Buff_Block], &Block_Len);
     if(Final_Mem_Out)
     {
-        Write_Function_Swap(&Block_Len, sizeof(int), 1, in);
-        Write_Function(Final_Mem_Out, sizeof(char), Block_Len, in);
+        Write_Function_Swap(ptk, &Block_Len, sizeof(int), 1, in);
+        Write_Function(ptk, Final_Mem_Out, sizeof(char), Block_Len, in);
         free(Final_Mem_Out);
     }
     Curr_Buff_Block = Old_Curr_Buff_Block;
@@ -112,14 +112,14 @@ void Save_Pattern_Data(int (*Write_Function)(void *, int ,int, FILE *),
 
 // ------------------------------------------------------
 // Load a pattern file
-void LoadPattern(char *FileName)
+void LoadPattern(ptk_data *ptk, char *FileName)
 {
     FILE *in;
     int version = 0;
 
     if(!is_editing)
     {
-        Status_Box("Edit mode isn't turned on.");
+        Status_Box(ptk, "Edit mode isn't turned on.");
         return;
     }
 
@@ -136,29 +136,29 @@ void LoadPattern(char *FileName)
         if(version)
         {
             // Ok, extension matched!
-            Status_Box("Loading Pattern data...");
+            Status_Box(ptk, "Loading Pattern data...");
 
-            Read_Data(Selection_Name, sizeof(char), 20, in);
-            Load_Pattern_Data(Read_Data, Read_Data_Swap, in, version);
+            Read_Data(ptk, Selection_Name, sizeof(char), 20, in);
+            Load_Pattern_Data(ptk, Read_Data, Read_Data_Swap, in, version);
             Actupated(ptk, 0);
 
-            Status_Box("Pattern data loaded ok.");
+            Status_Box(ptk, "Pattern data loaded ok.");
         }
         else
         {
-            Status_Box("That file is not a "TITLE" Pattern file...");
+            Status_Box(ptk, "That file is not a "TITLE" Pattern file...");
         }
         fclose(in);
     }
     else
     {
-        Status_Box("Pattern data loading failed. (Possible cause: file not found)");
+        Status_Box(ptk, "Pattern data loading failed. (Possible cause: file not found)");
     }
 }
 
 // ------------------------------------------------------
 // Save a pattern block file
-void SavePattern(void)
+void SavePattern(ptk_data *ptk)
 {
     FILE *in;
     char Temph[96];
@@ -166,27 +166,27 @@ void SavePattern(void)
 
     sprintf(extension, "PROTBLK2");
     sprintf(Temph, "Saving '%s.ppb' data in patterns directory...", Selection_Name);
-    Status_Box(Temph);
+    Status_Box(ptk, Temph);
     sprintf(Temph, "%s"SLASH"%s.ppb", Dir_Patterns, Selection_Name);
 
     in = fopen(Temph, "wb");
     if(in != NULL)
     {
-        Write_Data(extension, sizeof(char), 9, in);
-        Write_Data(Selection_Name, sizeof(char), 20, in);
+        Write_Data(ptk, extension, sizeof(char), 9, in);
+        Write_Data(ptk, Selection_Name, sizeof(char), 20, in);
 
-        Save_Pattern_Data(Write_Data, Write_Data_Swap, in);
+        Save_Pattern_Data(ptk, Write_Data, Write_Data_Swap, in);
 
         fclose(in);
-        Read_SMPT();
+        Read_SMPT(ptk);
         last_index = -1;
-        Actualize_Files_List(0);
-        Status_Box("Pattern data saved succesfully.");   
+        Actualize_Files_List(ptk, 0);
+        Status_Box(ptk, "Pattern data saved succesfully.");   
     }
     else
     {
-        Status_Box("Pattern data save failed.");
+        Status_Box(ptk, "Pattern data save failed.");
     }
 
-    Clear_Input();
+    Clear_Input(ptk);
 }

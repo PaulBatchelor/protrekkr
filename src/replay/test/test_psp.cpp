@@ -34,13 +34,13 @@ extern "C"
 
 void ptk_start(void)
 {
-    if(Ptk_InitDriver(LATENCY))
+    if(Ptk_InitDriver(ptk, LATENCY))
     {
         // Load it
         if(Ptk_InitModule((unsigned char *) &_PTK_MODULE, 0))
         {
             // Start playing it
-            Ptk_Play();
+            Ptk_Play(ptk);
 
             // Quit with the home button
 	        while(1)
@@ -51,9 +51,9 @@ void ptk_start(void)
   
                 sceKernelPowerTick(6);
             }
-            Ptk_Stop();
+            Ptk_Stop(ptk);
         }
-        Ptk_ReleaseDriver();
+        Ptk_ReleaseDriver(ptk);
     }
     sceKernelExitGame();
 }

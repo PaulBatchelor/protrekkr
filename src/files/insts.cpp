@@ -35,7 +35,7 @@
 
 // ------------------------------------------------------
 // Load an instrument
-void LoadInst(char *FileName)
+void LoadInst(ptk_data *ptk, char *FileName)
 {
     int old_bug = FALSE;
     int Pack_Scheme = FALSE;
@@ -47,7 +47,7 @@ void LoadInst(char *FileName)
     int Glob_Vol = FALSE;
     int Combine = FALSE;
 
-    Status_Box("Attempting to load an instrument file...");
+    Status_Box(ptk, "Attempting to load an instrument file...");
     FILE *in;
     in = fopen(FileName, "rb");
 
@@ -55,7 +55,7 @@ void LoadInst(char *FileName)
     {
         // Reading and checking extension...
         char extension[10];
-        Read_Data(extension, sizeof(char), 9, in);
+        Read_Data(ptk, extension, sizeof(char), 9, in);
 
         switch(extension[7])
         {
@@ -82,17 +82,17 @@ void LoadInst(char *FileName)
                 break;
         }
 
-        KillInst(Current_Instrument, TRUE);
-        Status_Box("Loading Instrument -> Header..."); 
-        Read_Data(&nameins[Current_Instrument], sizeof(char), 20, in);
+        KillInst(ptk, Current_Instrument, TRUE);
+        Status_Box(ptk, "Loading Instrument -> Header..."); 
+        Read_Data(ptk, &nameins[Current_Instrument], sizeof(char), 20, in);
 
         // Reading sample data
-        Status_Box("Loading Instrument -> Sample data...");
+        Status_Box(ptk, "Loading Instrument -> Sample data...");
 
         int swrite = Current_Instrument;
 
-        Read_Data(&Midiprg[swrite], sizeof(char), 1, in);
-        Read_Data(&Synthprg[swrite], sizeof(char), 1, in);
+        Read_Data(ptk, &Midiprg[swrite], sizeof(char), 1, in);
+        Read_Data(ptk, &Synthprg[swrite], sizeof(char), 1, in);
 
         PARASynth[swrite].disto = 0;
 
@@ -108,14 +108,14 @@ void LoadInst(char *FileName)
 
         PARASynth[swrite].lfo2_release = 0x10000;
 
-        Read_Synth_Params(Read_Data, Read_Data_Swap, in, swrite,
+        Read_Synth_Params(ptk, Read_Data, Read_Data_Swap, in, swrite,
                           !old_bug, new_adsr, tight,
                           Env_Modulation, New_Env, FALSE, Combine);
 
         // Gsm by default
         if(Pack_Scheme)
         {
-            Read_Data(&SampleCompression[swrite], sizeof(char), 1, in);
+            Read_Data(ptk, &SampleCompression[swrite], sizeof(char), 1, in);
         }
         else
         {
@@ -127,76 +127,76 @@ void LoadInst(char *FileName)
             switch(SampleCompression[swrite])
             {
                 case SMP_PACK_MP3:
-                    Read_Data(&Mp3_BitRate[swrite], sizeof(char), 1, in);
+                    Read_Data(ptk, &Mp3_BitRate[swrite], sizeof(char), 1, in);
                     break;
 
                 case SMP_PACK_AT3:
-                    Read_Data(&At3_BitRate[swrite], sizeof(char), 1, in);
+                    Read_Data(ptk, &At3_BitRate[swrite], sizeof(char), 1, in);
                     break;
             }
         }
-        SampleCompression[swrite] = Fix_Codec(SampleCompression[swrite]);
+        SampleCompression[swrite] = Fix_Codec(ptk, SampleCompression[swrite]);
 
         Sample_Vol[swrite] = 1.0f;
         if(Glob_Vol)
         {
-            Read_Data_Swap(&Sample_Vol[swrite], sizeof(float), 1, in);
+            Read_Data_Swap(ptk, &Sample_Vol[swrite], sizeof(float), 1, in);
         }
 
         for(int slwrite = 0; slwrite < MAX_INSTRS_SPLITS; slwrite++)
         {
-            Read_Data(&SampleType[swrite][slwrite], sizeof(char), 1, in);
+            Read_Data(ptk, &SampleType[swrite][slwrite], sizeof(char), 1, in);
             if(SampleType[swrite][slwrite])
             {
-                if(old_bug) Read_Data(&SampleName[swrite][slwrite], sizeof(char), 256, in);
-                else Read_Data(&SampleName[swrite][slwrite], sizeof(char), 64, in);
-                Read_Data(&Basenote[swrite][slwrite], sizeof(char), 1, in);
+                if(old_bug) Read_Data(ptk, &SampleName[swrite][slwrite], sizeof(char), 256, in);
+                else Read_Data(ptk, &SampleName[swrite][slwrite], sizeof(char), 64, in);
+                Read_Data(ptk, &Basenote[swrite][slwrite], sizeof(char), 1, in);
                 
-                Read_Data_Swap(&LoopStart[swrite][slwrite], sizeof(int), 1, in);
-                Read_Data_Swap(&LoopEnd[swrite][slwrite], sizeof(int), 1, in);
-                Read_Data(&LoopType[swrite][slwrite], sizeof(char), 1, in);
+                Read_Data_Swap(ptk, &LoopStart[swrite][slwrite], sizeof(int), 1, in);
+                Read_Data_Swap(ptk, &LoopEnd[swrite][slwrite], sizeof(int), 1, in);
+                Read_Data(ptk, &LoopType[swrite][slwrite], sizeof(char), 1, in);
                 
-                Read_Data_Swap(&SampleLength[swrite][slwrite], sizeof(int), 1, in);
-                Read_Data(&Finetune[swrite][slwrite], sizeof(char), 1, in);
-                Read_Data_Swap(&Sample_Amplify[swrite][slwrite], sizeof(float), 1, in);
-                Read_Data_Swap(&FDecay[swrite][slwrite], sizeof(float), 1, in);
+                Read_Data_Swap(ptk, &SampleLength[swrite][slwrite], sizeof(int), 1, in);
+                Read_Data(ptk, &Finetune[swrite][slwrite], sizeof(char), 1, in);
+                Read_Data_Swap(ptk, &Sample_Amplify[swrite][slwrite], sizeof(float), 1, in);
+                Read_Data_Swap(ptk, &FDecay[swrite][slwrite], sizeof(float), 1, in);
 
                 AllocateWave(swrite, slwrite, SampleLength[swrite][slwrite], 1, FALSE, NULL, NULL);
 
                 // Samples data
-                Read_Data(RawSamples[swrite][0][slwrite], sizeof(short), SampleLength[swrite][slwrite], in);
-                Swap_Sample(RawSamples[swrite][0][slwrite], swrite, slwrite);
+                Read_Data(ptk, RawSamples[swrite][0][slwrite], sizeof(short), SampleLength[swrite][slwrite], in);
+                Swap_Sample(ptk, RawSamples[swrite][0][slwrite], swrite, slwrite);
                 *RawSamples[swrite][0][slwrite] = 0;
 
                 // Number of channel(s)
-                Read_Data(&SampleChannels[swrite][slwrite], sizeof(char), 1, in);
+                Read_Data(ptk, &SampleChannels[swrite][slwrite], sizeof(char), 1, in);
                 if(SampleChannels[swrite][slwrite] == 2)
                 {
                     RawSamples[swrite][1][slwrite] = (short *) malloc(SampleLength[swrite][slwrite] * sizeof(short) + 8);
                     memset(RawSamples[swrite][1][slwrite], 0, SampleLength[swrite][slwrite] * sizeof(short) + 8);
-                    Read_Data(RawSamples[swrite][1][slwrite], sizeof(short), SampleLength[swrite][slwrite], in);
-                    Swap_Sample(RawSamples[swrite][1][slwrite], swrite, slwrite);
+                    Read_Data(ptk, RawSamples[swrite][1][slwrite], sizeof(short), SampleLength[swrite][slwrite], in);
+                    Swap_Sample(ptk, RawSamples[swrite][1][slwrite], swrite, slwrite);
                     *RawSamples[swrite][1][slwrite] = 0;
                 }
             } // Exist Sample
         }
         fclose(in);
         Actualize_Patterned(ptk);
-        Actualize_Instrument_Ed(2, 0);
-        Actualize_Synth_Ed(UPDATE_SYNTH_ED_ALL);
-        Status_Box("Instrument loaded ok.");
+        Actualize_Instrument_Ed(ptk, 2, 0);
+        Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_ALL);
+        Status_Box(ptk, "Instrument loaded ok.");
     }
     else
     {
-        Status_Box("Instrument loading failed. (Possible cause: file not found)");
+        Status_Box(ptk, "Instrument loading failed. (Possible cause: file not found)");
     }
     
-    Clear_Input();
+    Clear_Input(ptk);
 }
 
 // ------------------------------------------------------
 // Save the current instrument
-void SaveInst(void)
+void SaveInst(ptk_data *ptk)
 {
     FILE *in;
     char Temph[MAX_PATH];
@@ -207,21 +207,21 @@ void SaveInst(void)
     sprintf(extension, "TWNNINS9");
     if(!strlen(nameins[Current_Instrument])) sprintf(nameins[Current_Instrument], "Untitled");
     sprintf (Temph, "Saving '%s.pti' instrument in instruments directory...", nameins[Current_Instrument]);
-    Status_Box(Temph);
+    Status_Box(ptk, Temph);
     sprintf(Temph, "%s"SLASH"%s.pti", Dir_Instrs, nameins[Current_Instrument]);
 
     in = fopen(Temph, "wb");
     if(in != NULL)
     {
         // Writing header & name...
-        Write_Data(extension, sizeof(char), 9, in);
-        rtrim_string(nameins[Current_Instrument], 20);
-        Write_Data(nameins[Current_Instrument], sizeof(char), 20, in);
+        Write_Data(ptk, extension, sizeof(char), 9, in);
+        rtrim_string(ptk, nameins[Current_Instrument], 20);
+        Write_Data(ptk, nameins[Current_Instrument], sizeof(char), 20, in);
 
         // Writing sample data
         int swrite = Current_Instrument;
 
-        Write_Data(&Midiprg[swrite], sizeof(char), 1, in);
+        Write_Data(ptk, &Midiprg[swrite], sizeof(char), 1, in);
         switch(Synthprg[swrite])
         {
             case SYNTH_WAVE_OFF:
@@ -235,59 +235,59 @@ void SaveInst(void)
                 break;
         }
 
-        Write_Data(&synth_prg, sizeof(char), 1, in);
+        Write_Data(ptk, &synth_prg, sizeof(char), 1, in);
 
-        Write_Synth_Params(Write_Data, Write_Data_Swap, in, swrite);
+        Write_Synth_Params(ptk, Write_Data, Write_Data_Swap, in, swrite);
 
-        Write_Data(&SampleCompression[swrite], sizeof(char), 1, in);
+        Write_Data(ptk, &SampleCompression[swrite], sizeof(char), 1, in);
         switch(SampleCompression[swrite])
         {
             case SMP_PACK_MP3:
-                Write_Data(&Mp3_BitRate[swrite], sizeof(char), 1, in);
+                Write_Data(ptk, &Mp3_BitRate[swrite], sizeof(char), 1, in);
                 break;
 
             case SMP_PACK_AT3:
-                Write_Data(&At3_BitRate[swrite], sizeof(char), 1, in);
+                Write_Data(ptk, &At3_BitRate[swrite], sizeof(char), 1, in);
                 break;
         }
 
-        Write_Data_Swap(&Sample_Vol[swrite], sizeof(float), 1, in);
+        Write_Data_Swap(ptk, &Sample_Vol[swrite], sizeof(float), 1, in);
 
         swrite = synth_save;
         for(int slwrite = 0; slwrite < MAX_INSTRS_SPLITS; slwrite++)
         {
-            Write_Data(&SampleType[swrite][slwrite], sizeof(char), 1, in);
+            Write_Data(ptk, &SampleType[swrite][slwrite], sizeof(char), 1, in);
             if(SampleType[swrite][slwrite])
             {
-                rtrim_string(SampleName[swrite][slwrite], 64);
-                Write_Data(SampleName[swrite][slwrite], sizeof(char), 64, in);
-                Write_Data(&Basenote[swrite][slwrite], sizeof(char), 1, in);
+                rtrim_string(ptk, SampleName[swrite][slwrite], 64);
+                Write_Data(ptk, SampleName[swrite][slwrite], sizeof(char), 64, in);
+                Write_Data(ptk, &Basenote[swrite][slwrite], sizeof(char), 1, in);
                 
-                Write_Data_Swap(&LoopStart[swrite][slwrite], sizeof(int), 1, in);
-                Write_Data_Swap(&LoopEnd[swrite][slwrite], sizeof(int), 1, in);
-                Write_Data(&LoopType[swrite][slwrite], sizeof(char), 1, in);
+                Write_Data_Swap(ptk, &LoopStart[swrite][slwrite], sizeof(int), 1, in);
+                Write_Data_Swap(ptk, &LoopEnd[swrite][slwrite], sizeof(int), 1, in);
+                Write_Data(ptk, &LoopType[swrite][slwrite], sizeof(char), 1, in);
                 
-                Write_Data_Swap(&SampleLength[swrite][slwrite], sizeof(int), 1, in);
-                Write_Data(&Finetune[swrite][slwrite], sizeof(char), 1, in);
-                Write_Data_Swap(&Sample_Amplify[swrite][slwrite], sizeof(float), 1, in);
-                Write_Data_Swap(&FDecay[swrite][slwrite], sizeof(float), 1, in);
+                Write_Data_Swap(ptk, &SampleLength[swrite][slwrite], sizeof(int), 1, in);
+                Write_Data(ptk, &Finetune[swrite][slwrite], sizeof(char), 1, in);
+                Write_Data_Swap(ptk, &Sample_Amplify[swrite][slwrite], sizeof(float), 1, in);
+                Write_Data_Swap(ptk, &FDecay[swrite][slwrite], sizeof(float), 1, in);
 
-                Write_Unpacked_Sample(Write_Data, in, swrite, slwrite);
+                Write_Unpacked_Sample(ptk, Write_Data, in, swrite, slwrite);
 
             } // Exist Sample
         }
         fclose(in);
 
-        Read_SMPT();
+        Read_SMPT(ptk);
         last_index = -1;
-        Actualize_Files_List(0);
+        Actualize_Files_List(ptk, 0);
         Actualize_Patterned(ptk);
-        Status_Box("Instrument saved succesfully."); 
+        Status_Box(ptk, "Instrument saved succesfully."); 
     }
     else
     {
-        Status_Box("Instrument save failed.");
+        Status_Box(ptk, "Instrument save failed.");
     }
 
-    Clear_Input();
+    Clear_Input(ptk);
 }

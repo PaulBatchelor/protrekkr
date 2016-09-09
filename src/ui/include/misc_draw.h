@@ -229,7 +229,7 @@ void Gui_Clear_Array(int x, int y, int sx, int sy);
 void bjbox(int x, int y, int sx, int sy);
 
 void Draw_Editors_Bar(int Highlight);
-void Status_Box(char const *str);
+void Status_Box(ptk_data *ptk, char const *str);
 
 void Realslider(int x, int y, int val, int Enabled);
 void Realslider_Size(int x, int y, int size, int val, int Enabled);
@@ -239,7 +239,7 @@ void Realslider_Horiz(int x, int y, int value, int displayed, int maximum, int s
 void Realslider_Vert(int x, int y, int value, int displayed, int maximum, int size, int enable);
 
 void Coolwrite(int x, int y, int colour, char *txt);
-void Refresh_UI_Context(void);
+void Refresh_UI_Context(ptk_data *ptk);
 
 void blitnote(int x, int y, int note, int y1, int y2);
 void blitlargenote(int x, int y, int note, int y1, int y2);

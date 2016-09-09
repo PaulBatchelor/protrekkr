@@ -56,16 +56,16 @@ extern int Refresh_Unit;
 
 // ------------------------------------------------------
 // Functions
-void Draw_303_Ed(void);
-void Actualize_303_Ed(char gode);
-void Refresh_303_Unit(int Unit, int gode);
-void number303(unsigned char number,int x,int y);
-void Skincopy(int xd, int yd, int xs, int ys, int w, int h);
-void knob(int x, int y, unsigned char number);
-void Mouse_Right_303_Ed(void);
+void Draw_303_Ed(ptk_data *ptk);
+void Actualize_303_Ed(ptk_data *ptk, char gode);
+void Refresh_303_Unit(ptk_data *ptk, int Unit, int gode);
+void number303(ptk_data *ptk, unsigned char number,int x,int y);
+void Skincopy(ptk_data *ptk, int xd, int yd, int xs, int ys, int w, int h);
+void knob(ptk_data *ptk, int x, int y, unsigned char number);
+void Mouse_Right_303_Ed(ptk_data *ptk);
 
-void Mouse_Left_303_Ed(void);
-void Mouse_Sliders_303_Ed(void);
-void Mouse_Wheel_303_Ed(int roll_amount);
+void Mouse_Left_303_Ed(ptk_data *ptk);
+void Mouse_Sliders_303_Ed(ptk_data *ptk);
+void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount);
 
 #endif

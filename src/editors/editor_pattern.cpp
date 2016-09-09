@@ -1800,7 +1800,7 @@ void Actualize_Patterned(ptk_data *ptk)
     Gui_Draw_Arrows_Number_Box2(90, 126, Current_Edit_Steps, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     value_box(258, 126, Current_Octave, BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
     value_box(258, 108, Current_Instrument, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
-    Actualize_Instruments_Synths_List(2);
+    Actualize_Instruments_Synths_List(ptk, 2);
 }
 
 // ------------------------------------------------------

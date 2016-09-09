@@ -98,8 +98,8 @@ DWORD WINAPI AUDIO_Thread(LPVOID lpParameter)
 
             if(AUDIO_Play_Flag)
             {
-                AUDIO_Mixer((Uint8 *) AUDIO_Audio_Ptr1, AUDIO_Audio_Bytes1);
-                AUDIO_Mixer((Uint8 *) AUDIO_Audio_Ptr2, AUDIO_Audio_Bytes2);
+                AUDIO_Mixer(ptk, (Uint8 *) AUDIO_Audio_Ptr1, AUDIO_Audio_Bytes1);
+                AUDIO_Mixer(ptk, (Uint8 *) AUDIO_Audio_Ptr2, AUDIO_Audio_Bytes2);
             }
             else
             {

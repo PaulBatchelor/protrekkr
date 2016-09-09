@@ -458,9 +458,9 @@ extern EQSTATE EqDat[MAX_TRACKS];
 
 // ------------------------------------------------------
 // Functions
-void Pre_Song_Init(void);
-void Sp_Player(void);
-void Schedule_Instrument(int channel, int sub_channel,
+void Pre_Song_Init(ptk_data *ptk);
+void Sp_Player(ptk_data *ptk);
+void Schedule_Instrument(ptk_data *ptk, int channel, int sub_channel,
                          int note, int sample,
                          unsigned int offset,
                          int glide,
@@ -469,48 +469,49 @@ void Schedule_Instrument(int channel, int sub_channel,
                          float volume,
                          int Pos,
                          int Row);
-void Play_Instrument(int channel, int sub_channel);
-void ResetFilters(int tr);
-void ComputeStereo(int channel);
-void FixStereo(int channel);
-void GetPlayerValues(void);
-void noteoff303(char strack);
-void init_sample_bank(void);
-void KillInst(int inst_nbr, int all_splits);
-void Post_Song_Init(void);
+void Play_Instrument(ptk_data *ptk, int channel, int sub_channel);
+void ResetFilters(ptk_data *ptk, int tr);
+void ComputeStereo(ptk_data *ptk, int channel);
+void FixStereo(ptk_data *ptk, int channel);
+void GetPlayerValues(ptk_data *ptk);
+void noteoff303(ptk_data *ptk, char strack);
+void init_sample_bank(ptk_data *ptk);
+void KillInst(ptk_data *ptk, int inst_nbr, int all_splits);
+void Post_Song_Init(ptk_data *ptk);
 
 #if !defined(__STAND_ALONE__) || defined(__WINAMP__)
-void ResetSynthParameters(SynthParameters *TSP);
+void ResetSynthParameters(ptk_data *ptk, SynthParameters *TSP);
 #endif
 
-void Free_Samples(void);
+/*TODO: this is a duplicate declaration ?*/
+void Free_Samples(ptk_data *ptk);
 #if defined(PTK_LIMITER_MASTER)
-void Mas_Compressor_Set_Variables_Master(float treshold, float ratio);
-float Mas_Compressor_Master(float input, float *rms_sum, float *Buffer, float *Env);
+void Mas_Compressor_Set_Variables_Master(ptk_data *ptk, float treshold, float ratio);
+float Mas_Compressor_Master(ptk_data *ptk, float input, float *rms_sum, float *Buffer, float *Env);
 #endif
 #if defined(PTK_LIMITER_TRACKS)
-void Mas_Compressor_Set_Variables_Track(int Track, float treshold, float ratio);
-float Mas_Compressor_Track(int Track, float input, float *rms_sum, float *Buffer, float *Env);
+void Mas_Compressor_Set_Variables_Track(ptk_data *ptk, int Track, float treshold, float ratio);
+float Mas_Compressor_Track(ptk_data *ptk, int Track, float input, float *rms_sum, float *Buffer, float *Env);
 #endif
 #if defined(PTK_LIMITER_TRACKS) || defined(PTK_LIMITER_MASTER)
-float Do_RMS(float input, float *rms_sum, float *buffer);
+float Do_RMS(ptk_data *ptk, float input, float *rms_sum, float *buffer);
 #endif
-int Get_Free_Sub_Channel(int channel, int polyphony);
+int Get_Free_Sub_Channel(ptk_data *ptk, int channel, int polyphony);
 /*TODO: why is this defined twice? see editor_pattern.h */
 int Get_Pattern_Offset(ptk_data *ptk, int pattern, int track, int row);
-void InitRevervbFilter(void);
-void Set_Spline_Boundaries(unsigned int Position,
+void InitRevervbFilter(ptk_data *ptk);
+void Set_Spline_Boundaries(ptk_data *ptk, unsigned int Position,
                            unsigned int *Boundaries,
                            int LoopType,
                            unsigned int LoopWay,
                            unsigned int Length,
                            unsigned int LoopEnd,
                            unsigned int LoopStart);
-float Process_Sample(short *Data, int c, int i, unsigned int res_dec);
-void init_eq(LPEQSTATE es);
-float do_eq(LPEQSTATE es, float sample, int Left);
+float Process_Sample(ptk_data *ptk, short *Data, int c, int i, unsigned int res_dec);
+void init_eq(ptk_data *pt, LPEQSTATE es);
+float do_eq(ptk_data *ptk, LPEQSTATE es, float sample, int Left);
 #if defined(PTK_SHUFFLE)
-void Update_Shuffle(void);
+void Update_Shuffle(ptk_data *ptk);
 #endif
 
 #endif

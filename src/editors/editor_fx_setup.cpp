@@ -77,7 +77,7 @@ void Draw_Fx_Ed(void)
 //    Gui_Draw_Button_Box(640, 484, 144, 66, "Compressor", BUTTON_NORMAL | BUTTON_DISABLED | BUTTON_TEXT_VTOP);
 }
 
-void Actualize_Fx_Ed(char gode)
+void Actualize_Fx_Ed(ptk_data *ptk, char gode)
 {
     if(userscreen == USER_SCREEN_FX_SETUP_EDIT)
     {
@@ -135,7 +135,7 @@ void Actualize_Fx_Ed(char gode)
             Realslider(77, (Cur_Height - 84), c_threshold, compressor);
             
             // Re-generate
-            if(gode == 7) InitRevervbFilter();
+            if(gode == 7) InitRevervbFilter(ptk);
         }
 
         if(gode == 0 || gode == 8)
@@ -199,7 +199,7 @@ void Actualize_Fx_Ed(char gode)
             if(Reverb_Stereo_Amount < 0) Reverb_Stereo_Amount = 0;
             if(Reverb_Stereo_Amount > 127) Reverb_Stereo_Amount = 127;
             Realslider(77, (Cur_Height - 48), Reverb_Stereo_Amount, compressor);
-            if(gode == 13) Initreverb();
+            if(gode == 13) Initreverb(ptk);
         }
 
         if(gode == 0 || gode == 14)

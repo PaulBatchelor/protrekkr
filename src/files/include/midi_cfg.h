@@ -41,13 +41,13 @@
 
 // ------------------------------------------------------
 // Functions
-void Load_MidiCfg_Data(int (*Read_Function)(void *, int ,int, FILE *),
-                       int (*Read_Function_Swap)(void *, int ,int, FILE *),
+void Load_MidiCfg_Data(ptk_data *ptk, int (*Read_Function)(ptk_data *, void *, int ,int, FILE *),
+                       int (*Read_Function_Swap)(ptk_data *, void *, int ,int, FILE *),
                        FILE *in);
-void Save_MidiCfg_Data(int (*Write_Function)(void *, int ,int, FILE *),
-                       int (*Write_Function_Swap)(void *, int ,int, FILE *),
+void Save_MidiCfg_Data(ptk_data *ptk, int (*Write_Function)(ptk_data *, void *, int ,int, FILE *),
+                       int (*Write_Function_Swap)(ptk_data *, void *, int ,int, FILE *),
                        FILE *in);
-void LoadMidiCfg(char *FileName);
-void SaveMidiCfg(void);
+void LoadMidiCfg(ptk_data *ptk, char *FileName);
+void SaveMidiCfg(ptk_data *ptk);
 
 #endif

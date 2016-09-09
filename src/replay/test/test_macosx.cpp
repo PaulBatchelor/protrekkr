@@ -25,23 +25,23 @@ extern "C"
 
 int main(void)
 {
-    if(!Ptk_InitDriver(LATENCY)) return(0);
+    if(!Ptk_InitDriver(ptk, LATENCY)) return(0);
 
     // Load it
     if(!Ptk_InitModule((unsigned char *) &_PTK_MODULE, 0))
     {
-        Ptk_ReleaseDriver();
+        Ptk_ReleaseDriver(ptk);
         return(0);
     }
 
     // Start playing it
-    Ptk_Play();
+    Ptk_Play(ptk);
 
     while(1)
     {
         usleep(10);
     }
 
-    Ptk_Stop();
-    Ptk_ReleaseDriver();
+    Ptk_Stop(ptk);
+    Ptk_ReleaseDriver(ptk);
 }

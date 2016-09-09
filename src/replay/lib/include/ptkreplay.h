@@ -47,17 +47,18 @@
 #if defined(__WIN32__)
 int PTKEXPORT Ptk_InitDriver(HWND hWnd, int Latency);
 #else
-int PTKEXPORT Ptk_InitDriver(int Latency);
+int PTKEXPORT Ptk_InitDriver(ptk_data *ptk, int Latency);
 #endif // __WIN32__
 #else
 int PTKEXPORT Ptk_InitDriver(void);
 #endif // __WINAMP__
-int PTKEXPORT Ptk_InitModule(unsigned char *Module, int start_position);
-int PTKEXPORT Ptk_GetRow(void);
-int PTKEXPORT Ptk_GetPosition(void);
+/* TODO: is this function needed ?*/
+int PTKEXPORT Ptk_InitModule(ptk_data *ptk, unsigned char *Module, int start_position);
+int PTKEXPORT Ptk_GetRow(ptk_data *ptk);
+int PTKEXPORT Ptk_GetPosition(ptk_data *ptk);
 void PTKEXPORT Ptk_SetPosition(int position);
-void PTKEXPORT Ptk_Play(void);
-void PTKEXPORT Ptk_Stop(void);
-void PTKEXPORT Ptk_ReleaseDriver(void);
+void PTKEXPORT Ptk_Play(ptk_data *ptk);
+void PTKEXPORT Ptk_Stop(ptk_data *ptk);
+void PTKEXPORT Ptk_ReleaseDriver(ptk_data *ptk);
 
 #endif

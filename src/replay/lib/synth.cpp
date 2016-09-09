@@ -36,6 +36,8 @@
 // ------------------------------------------------------
 // Variables
 float SIN[360]; // Sine float-precalculated table, in absolute degrees.
+/*TODO: remove global variable nonsense */
+extern ptk_data *g_ptk;
 
 #if defined(PTK_SYNTH)
 
@@ -898,7 +900,7 @@ float CSynth::GetSample(short *Left_Samples,
                 {
                     res_dec = pos_osc1->half.last;
                     
-                    Set_Spline_Boundaries(pos_osc1->half.first,
+                    Set_Spline_Boundaries(g_ptk, pos_osc1->half.first,
                                           i_POSITION,
                                           Loop_Type1,
                                           ENV1_LOOP_BACKWARD,
@@ -1166,7 +1168,7 @@ float CSynth::GetSample(short *Left_Samples,
                 {
                     res_dec = pos_osc3->half.last;
 
-                    Set_Spline_Boundaries(pos_osc3->half.first,
+                    Set_Spline_Boundaries(g_ptk, pos_osc3->half.first,
                                           i_POSITION,
                                           Loop_Type,
                                           ENV2_LOOP_BACKWARD,
@@ -1506,7 +1508,7 @@ float CSynth::GetSample(short *Left_Samples,
 
                     res_dec = pos_osc2->half.last;
 
-                    Set_Spline_Boundaries(pos_osc2->half.first,
+                    Set_Spline_Boundaries(g_ptk, pos_osc2->half.first,
                                           i_POSITION,
                                           Loop_Type2,
                                           ENV2_LOOP_BACKWARD,

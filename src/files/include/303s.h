@@ -41,13 +41,13 @@
 
 // ------------------------------------------------------
 // Functions
-void Load303(char *FileName);
-void Save303(void);
-void Load_303_Data(int (*Read_Function)(void *, int ,int, FILE *),
-                   int (*Read_Function_Swap)(void *, int ,int, FILE *),
+void Load303(ptk_data *ptk, char *FileName);
+void Save303(ptk_data *ptk);
+void Load_303_Data(ptk_data *ptk, int (*Read_Function)(ptk_data *,void *, int ,int, FILE *),
+                   int (*Read_Function_Swap)(ptk_data *,void *, int ,int, FILE *),
                    FILE *in, int unit, int pattern);
-void Save_303_Data(int (*Write_Function)(void *, int ,int, FILE *),
-                   int (*Write_Function_Swap)(void *, int ,int, FILE *),
+void Save_303_Data(ptk_data *ptk, int (*Write_Function)(ptk_data *, void *, int ,int, FILE *),
+                   int (*Write_Function_Swap)(ptk_data *, void *, int ,int, FILE *),
                    FILE *in, int unit, int pattern);
 
 #endif

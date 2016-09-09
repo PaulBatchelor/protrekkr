@@ -95,12 +95,12 @@ int cur_smp_buffer[] =
 // Functions
 void Draw_Wave_PlayBack_Pos(void);
 void Draw_Wave_Data3(void);
-void Refresh_Sample(int clear_sel);
-void Display_Sample_Buffers(int Allow);
-void Zoom_In_Sel();
-void Zoom_Out_Sel();
+void Refresh_Sample(ptk_data *ptk, int clear_sel);
+void Display_Sample_Buffers(ptk_data *ptk, int Allow);
+void Zoom_In_Sel(ptk_data *ptk);
+void Zoom_Out_Sel(ptk_data *ptk);
 
-void Draw_Sample_Ed(void)
+void Draw_Sample_Ed(ptk_data *ptk)
 {
     Draw_Editors_Bar(USER_SCREEN_SAMPLE_EDIT);
 
@@ -111,10 +111,10 @@ void Draw_Sample_Ed(void)
     Gui_Draw_Button_Box(712, (Cur_Height - 78), 60, 16, "View", BUTTON_NORMAL | BUTTON_DISABLED);
         
     draw_sampled_wave = TRUE;
-    Actualize_Sample_Ed(0);
+    Actualize_Sample_Ed(ptk, 0);
 }
 
-void Draw_Wave_Data(void)
+void Draw_Wave_Data(ptk_data *ptk)
 {
     int32 sed_real_range_start;
     int32 sed_real_range_end;
@@ -318,13 +318,13 @@ void Draw_Wave_Data(void)
         {
             draw_sampled_wave = TRUE;
             draw_sampled_wave3 = FALSE;
-            Draw_Wave_Data();
+            Draw_Wave_Data(ptk);
         }
     }
 }
 
 // ------------------------------------------------------
-void Renew_Sample_Ed(void)
+void Renew_Sample_Ed(ptk_data *ptk)
 {
     draw_sampled_wave = TRUE;
     sed_display_start = 0;
@@ -332,7 +332,7 @@ void Renew_Sample_Ed(void)
     sed_range_start = 0;
     sed_range_end = 0;
     sed_range_mode = FALSE;
-    Actualize_Sample_Ed(0);
+    Actualize_Sample_Ed(ptk, 0);
 }
 
 // ------------------------------------------------------
@@ -450,7 +450,7 @@ void Draw_Wave_PlayBack_Pos(void)
 // ------------------------------------------------------
 // Display the various element of the editor
 // and responds to the various commands
-void Actualize_Sample_Ed(char gode)
+void Actualize_Sample_Ed(ptk_data *ptk, char gode)
 {
     int32 sed_real_range_start;
     int32 sed_real_range_end;
@@ -513,7 +513,7 @@ void Actualize_Sample_Ed(char gode)
 
             Gui_Draw_Button_Box(722, (Cur_Height - 150), 50, 16, "Sel. All", BUTTON_NORMAL | Allow | BUTTON_TEXT_CENTERED);
 
-            Display_Sample_Buffers(Allow | ReadOnly);
+            Display_Sample_Buffers(ptk, Allow | ReadOnly);
         }
 
         sed_real_range_start = sed_range_start;
@@ -563,7 +563,7 @@ void Actualize_Sample_Ed(char gode)
             {
                 if(Sample_Rotate_Left(sed_real_range_start, sed_real_range_end, 1))
                 {
-                    Refresh_Sample(FALSE);
+                    Refresh_Sample(ptk, FALSE);
                 }
             }
 
@@ -572,7 +572,7 @@ void Actualize_Sample_Ed(char gode)
             {
                 if(Sample_Rotate_Right(sed_real_range_start, sed_real_range_end, 1))
                 {
-                    Refresh_Sample(FALSE);
+                    Refresh_Sample(ptk, FALSE);
                 }
             }
 
@@ -581,7 +581,7 @@ void Actualize_Sample_Ed(char gode)
             {
                 if(Sample_Rotate_Left(sed_real_range_start, sed_real_range_end, (sed_real_range_end - sed_real_range_start) / 2))
                 {
-                    Refresh_Sample(FALSE);
+                    Refresh_Sample(ptk, FALSE);
                 }
             }
 
@@ -590,7 +590,7 @@ void Actualize_Sample_Ed(char gode)
             {
                 if(Sample_Rotate_Right(sed_real_range_start, sed_real_range_end, (sed_real_range_end - sed_real_range_start) / 2))
                 {
-                    Refresh_Sample(FALSE);
+                    Refresh_Sample(ptk, FALSE);
                 }
             }
 
@@ -599,7 +599,7 @@ void Actualize_Sample_Ed(char gode)
             {
                 if(Sample_Cut(sed_real_range_start, sed_real_range_end, TRUE))
                 {
-                    Refresh_Sample(TRUE);
+                    Refresh_Sample(ptk, TRUE);
                 }
             }
 
@@ -608,7 +608,7 @@ void Actualize_Sample_Ed(char gode)
             {
                 if(Sample_Copy(sed_real_range_start, sed_real_range_end))
                 {
-                    Display_Sample_Buffers(Allow | ReadOnly);
+                    Display_Sample_Buffers(ptk, Allow | ReadOnly);
                 }
             }
 
@@ -617,7 +617,7 @@ void Actualize_Sample_Ed(char gode)
             {
                 if(Sample_Paste(sed_real_range_start))
                 {
-                    Refresh_Sample(TRUE);
+                    Refresh_Sample(ptk, TRUE);
                 }
             }
 
@@ -626,7 +626,7 @@ void Actualize_Sample_Ed(char gode)
             {
                 if(Sample_Crop(sed_real_range_start, sed_real_range_end))
                 {
-                    Refresh_Sample(TRUE);
+                    Refresh_Sample(ptk, TRUE);
                 }
             }
 
@@ -635,7 +635,7 @@ void Actualize_Sample_Ed(char gode)
             {
                 if(Sample_Reverse(sed_real_range_start, sed_real_range_end))
                 {
-                    Refresh_Sample(FALSE);
+                    Refresh_Sample(ptk, FALSE);
                 }
             }
 
@@ -643,28 +643,28 @@ void Actualize_Sample_Ed(char gode)
             if(gode == SMPED_BUF1)
             {
                 cur_sample_buffer = 0;
-                Display_Sample_Buffers(Allow | ReadOnly);
+                Display_Sample_Buffers(ptk, Allow | ReadOnly);
             }
 
             // Select buffer 2
             if(gode == SMPED_BUF2)
             {
                 cur_sample_buffer = 1;
-                Display_Sample_Buffers(Allow | ReadOnly);
+                Display_Sample_Buffers(ptk, Allow | ReadOnly);
             }
 
             // Select buffer 3
             if(gode == SMPED_BUF3)
             {
                 cur_sample_buffer = 2;
-                Display_Sample_Buffers(Allow | ReadOnly);
+                Display_Sample_Buffers(ptk, Allow | ReadOnly);
             }
 
             // Select buffer 4
             if(gode == SMPED_BUF4)
             {
                 cur_sample_buffer = 3;
-                Display_Sample_Buffers(Allow | ReadOnly);
+                Display_Sample_Buffers(ptk, Allow | ReadOnly);
             }
 
             // Zap
@@ -672,7 +672,7 @@ void Actualize_Sample_Ed(char gode)
             {
                 if(Sample_Cut(sed_real_range_start, sed_real_range_end, FALSE))
                 {
-                    Refresh_Sample(TRUE);
+                    Refresh_Sample(ptk, TRUE);
                 }
             }
 
@@ -717,7 +717,7 @@ void Actualize_Sample_Ed(char gode)
             {
                 if(Sample_Duplicate(sed_real_range_start, sed_real_range_end))
                 {
-                    Refresh_Sample(TRUE);
+                    Refresh_Sample(ptk, TRUE);
                 }
             }
 
@@ -726,7 +726,7 @@ void Actualize_Sample_Ed(char gode)
             {
                 if(Sample_InsertZero(sed_real_range_start, sed_real_range_end))
                 {
-                    Refresh_Sample(TRUE);
+                    Refresh_Sample(ptk, TRUE);
                 }
             }
 
@@ -740,7 +740,7 @@ void Actualize_Sample_Ed(char gode)
 
 // ------------------------------------------------------
 // Right mouse buttons events
-void Mouse_Right_Sample_Ed(void)
+void Mouse_Right_Sample_Ed(ptk_data *ptk)
 {
     int Allow = TRUE;
 
@@ -815,21 +815,21 @@ void Mouse_Right_Sample_Ed(void)
 
 // ------------------------------------------------------
 // Middle mouse buttons events
-void Mouse_Middle_Sample_Ed(void)
+void Mouse_Middle_Sample_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_SAMPLE_EDIT)
     {
         if(zcheckMouse(WAVE_LEFT + 1, (Cur_Height - 150), LARGE_SMP_VIEW, SAMPLE_LINES_HEIGHT))
         {
-            if(sed_range_mode && sed_range_start != sed_range_end) Zoom_In_Sel();
-            else Zoom_Out_Sel();
+            if(sed_range_mode && sed_range_start != sed_range_end) Zoom_In_Sel(ptk);
+            else Zoom_Out_Sel(ptk);
         }
     }
 }
 
 // ------------------------------------------------------
 // Left mouse buttons events
-void Mouse_Left_Sample_Ed(void)
+void Mouse_Left_Sample_Ed(ptk_data *ptk)
 {
     int Allow = TRUE;
 
@@ -1125,13 +1125,13 @@ void Mouse_Left_Sample_Ed(void)
             // Zoom in
             if(zcheckMouse(650, (Cur_Height - 114), 60, 16) && sed_range_mode)
             {
-                Zoom_In_Sel();
+                Zoom_In_Sel(ptk);
             }
 
             // Zoom out
             if(zcheckMouse(650, (Cur_Height - 96), 60, 16))
             {
-                Zoom_Out_Sel();
+                Zoom_Out_Sel(ptk);
             }
 
             // Bottom arrow left
@@ -1165,7 +1165,7 @@ void Mouse_Left_Sample_Ed(void)
 
 // ------------------------------------------------------
 // Mouse wheel events
-void Mouse_Wheel_Sample_Ed(int roll_amount)
+void Mouse_Wheel_Sample_Ed(ptk_data *ptk, int roll_amount)
 {
     if(userscreen == USER_SCREEN_SAMPLE_EDIT)
     {
@@ -1187,7 +1187,7 @@ void Mouse_Wheel_Sample_Ed(int roll_amount)
 
 // ------------------------------------------------------
 // Sliders events
-void Mouse_Sliders_Sample_Ed(void)
+void Mouse_Sliders_Sample_Ed(ptk_data *ptk)
 {
     int Mouse_Pos;
     double test;
@@ -1281,7 +1281,7 @@ void Mouse_Sliders_Sample_Ed(void)
 
 // ------------------------------------------------------
 // Make sure the loop infos are sane
-void Check_Loops(void)
+void Check_Loops(ptk_data *ptk)
 {
     if(LoopStart[Current_Instrument][Current_Instrument_Split] < 0) LoopStart[Current_Instrument][Current_Instrument_Split] = 0;
     if(LoopStart[Current_Instrument][Current_Instrument_Split] > SampleLength[Current_Instrument][Current_Instrument_Split])
@@ -1302,7 +1302,7 @@ void Check_Loops(void)
 
 // ------------------------------------------------------
 // Bring the sample editor up to date
-void Refresh_Sample(int clear_sel)
+void Refresh_Sample(ptk_data *ptk, int clear_sel)
 {
     int ReadOnly;
     int Allow = 0;
@@ -1334,14 +1334,14 @@ void Refresh_Sample(int clear_sel)
     outlong(712, (Cur_Height - 42), sed_display_length, 12);
     outlong(650, (Cur_Height - 60), sed_range_start, 10);
     outlong(650, (Cur_Height - 42), sed_range_end, 11);
-    Check_Loops();
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT) Actualize_Instrument_Ed(0, 4);
-    Display_Sample_Buffers(Allow | ReadOnly);
+    Check_Loops(ptk);
+    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT) Actualize_Instrument_Ed(ptk, 0, 4);
+    Display_Sample_Buffers(ptk, Allow | ReadOnly);
 }
 
 // ------------------------------------------------------
 // Notify the user selected buffer visually
-void Display_Sample_Buffers(int Allow)
+void Display_Sample_Buffers(ptk_data *ptk, int Allow)
 {
     switch(cur_sample_buffer)
     {
@@ -1379,7 +1379,7 @@ void Display_Sample_Buffers(int Allow)
 
 // ------------------------------------------------------
 // Display a selection
-void Zoom_In_Sel()
+void Zoom_In_Sel(ptk_data *ptk)
 {
     int max_length;
     sed_range_mode = FALSE;
@@ -1404,7 +1404,7 @@ void Zoom_In_Sel()
 
 // ------------------------------------------------------
 // Move from a selection
-void Zoom_Out_Sel()
+void Zoom_Out_Sel(ptk_data *ptk)
 {
     int start_test;
     sed_display_start -= sed_display_length;

@@ -71,9 +71,9 @@ extern char Midi_Name[20];
 
 // ------------------------------------------------------
 // Functions
-void Draw_Midi_Ed(void);
-void Actualize_Midi_Ed(char gode);
-void Mouse_Left_Midi_Ed(void);
-void Mouse_Right_Midi_Ed(void);
+void Draw_Midi_Ed(ptk_data *ptk);
+void Actualize_Midi_Ed(ptk_data *ptk, char gode);
+void Mouse_Left_Midi_Ed(ptk_data *ptk);
+void Mouse_Right_Midi_Ed(ptk_data *ptk);
 
 #endif

@@ -88,7 +88,7 @@ char *Get_Keyboard_Label(void);
 char *Get_Keyboard_FileName(void);
 void Load_Keyboard_Def(char *FileName);
 
-void Draw_Master_Ed(void)
+void Draw_Master_Ed(ptk_data *ptk)
 {
     Get_Phony_Palette();
 
@@ -638,7 +638,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
             {
                 FullScreen = TRUE;
                 teac = 9;
-                Switch_FullScreen(Cur_Width, Cur_Height);
+                Switch_FullScreen(ptk, Cur_Width, Cur_Height);
             }
         }
 
@@ -649,7 +649,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
             {
                 FullScreen = FALSE;
                 teac = 9;
-                Switch_FullScreen(Cur_Width, Cur_Height);
+                Switch_FullScreen(ptk, Cur_Width, Cur_Height);
             }
         }
 
@@ -859,7 +859,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
     }
 }
 
-void Mouse_Sliders_Master_Ed(void)
+void Mouse_Sliders_Master_Ed(ptk_data *ptk)
 {
     int Real_Palette_Idx;
 

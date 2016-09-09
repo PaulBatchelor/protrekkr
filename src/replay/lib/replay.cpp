@@ -49,6 +49,9 @@
 #include "../../../src/include/ptk.h"
 #endif
 
+/* TODO: global yeah you get it*/
+extern ptk_data *g_ptk;
+
 // ------------------------------------------------------
 // Variables
 int SamplesPerTick;
@@ -861,7 +864,7 @@ int delay_time;
     char nameins[128][20];
     char SampleName[128][16][64];
     unsigned char nPatterns = 1;
-    void Actualize_303_Ed(char gode);
+    void Actualize_303_Ed(ptk_data *ptk, char gode);
     extern char sr_isrecording;
     extern int32 sed_range_start;
     extern int32 sed_range_end;
@@ -902,13 +905,13 @@ void ComputeCoefs(int freq, int r, int t);
 void Record_Delay_Event();
 
 #if defined(PTK_FX_TICK0)
-    void Do_Effects_Tick_0(void);
+    void Do_Effects_Tick_0(ptk_data *ptk);
 #endif
 #if defined(PTK_FX_PATTERNLOOP)
-    void Do_Pattern_Loop(int track);
+    void Do_Pattern_Loop(ptk_data *ptk, int track);
 #endif
 
-void Do_Effects_Ticks_X(void);
+void Do_Effects_Ticks_X(ptk_data *ptk);
 float Filter(int stereo, float x, char i);
 float filter2p(int stereo, int ch, float input, float f, float q);
 float filter2px(int stereo, int ch, float input, float f, float q);
@@ -925,7 +928,7 @@ float filterhp2(int stereo, int ch, float input, float f, float q);
 
 #if defined(PTK_303)
     void live303(int pltr_eff_row, int pltr_dat_row);
-    void Fire303(unsigned char number, int unit);
+    void Fire303(ptk_data *ptk, unsigned char number, int unit);
     void Go303(void);
 #endif
 
@@ -934,7 +937,7 @@ float Resonance(float v);
 float Bandwidth(int v);
 void Reverb_work(void);
 
-void Initreverb(void);
+void Initreverb(ptk_data *ptk);
 
 #if defined(PTK_FLANGER)
     float Filter_FlangerL(int track, float input);
@@ -942,7 +945,7 @@ void Initreverb(void);
 #endif
 
 volatile int Done_Reset;
-void Reset_Values(void);
+void Reset_Values(ptk_data *ptk);
 
 // ------------------------------------------------------
 // Audio mixer, float version
@@ -959,7 +962,7 @@ void STDCALL MixerFloat(float *buf1, float* buf2, Uint32 Len)
 #endif
         for(Uint32 i = 0; i < Len; ++i)
         {
-            GetPlayerValues();
+            GetPlayerValues(g_ptk);
 
 #if !defined(__STAND_ALONE__)
             // Gather datas for the scopes and the vumeters
@@ -1037,7 +1040,7 @@ void STDCALL MixerFloat(float *buf1, float* buf2, Uint32 Len)
 
         if(local_curr_ramp_vol <= 0.0f)
         {
-            Reset_Values();
+            Reset_Values(g_ptk);
         }
 
 #if !defined(__STAND_ALONE__)
@@ -1047,7 +1050,7 @@ void STDCALL MixerFloat(float *buf1, float* buf2, Uint32 Len)
 
 // ------------------------------------------------------
 // Audio mixer
-void STDCALL Mixer(Uint8 *Buffer, Uint32 Len)
+void STDCALL Mixer(ptk_data *ptk, Uint8 *Buffer, Uint32 Len)
 {
 #if defined(__MACOSX__)
     float *pSamples_flt = (float *) Buffer;
@@ -1073,7 +1076,7 @@ void STDCALL Mixer(Uint8 *Buffer, Uint32 Len)
         for(i = Len - 1; i >= 0; i -= 4)
 #endif
         {
-            GetPlayerValues();
+            GetPlayerValues(ptk);
 
 #if !defined(__STAND_ALONE__)
             // Gather datas for the scopes and the vumeters
@@ -1166,7 +1169,7 @@ void STDCALL Mixer(Uint8 *Buffer, Uint32 Len)
 
         if(local_curr_ramp_vol <= 0.0f)
         {
-            Reset_Values();
+            Reset_Values(ptk);
         }
 
 #if !defined(__STAND_ALONE__)
@@ -1178,16 +1181,17 @@ void STDCALL Mixer(Uint8 *Buffer, Uint32 Len)
 // Init the replayer driver
 #if !defined(__WINAMP__)
 #if defined(__WIN32__)
-int STDCALL Ptk_InitDriver(HWND hWnd, int milliseconds)
+/*TODO: whatever... */
+int STDCALL Ptk_InitDriver(ptk, HWND hWnd, int milliseconds)
 {
     AUDIO_Milliseconds = milliseconds;
 #else
-int STDCALL Ptk_InitDriver(int milliseconds)
+int STDCALL Ptk_InitDriver(ptk_data *ptk, int milliseconds)
 {
     AUDIO_Milliseconds = milliseconds;
 #endif
 #else
-int STDCALL Ptk_InitDriver(void)
+int STDCALL Ptk_InitDriver(ptk, void)
 {
 #endif
 
@@ -1230,12 +1234,12 @@ int STDCALL Ptk_InitDriver(void)
 
 #if !defined(__STAND_ALONE__) || defined(__WINAMP__)
 #if defined(PTK_LIMITER_MASTER)
-    Mas_Compressor_Set_Variables_Master(100.0f, 0.0f);
+    Mas_Compressor_Set_Variables_Master(ptk, 100.0f, 0.0f);
 #endif
 #if defined(PTK_LIMITER_TRACKS)
     for(i = 0; i < MAX_TRACKS; i++)
     {
-        Mas_Compressor_Set_Variables_Track(i, 100.0f, 0.0f);
+        Mas_Compressor_Set_Variables_Track(ptk, i, 100.0f, 0.0f);
     }
 #endif
 #endif
@@ -1323,7 +1327,7 @@ int STDCALL Ptk_InitDriver(void)
 
 #else  // __WINAMP__
 
-    Pre_Song_Init();
+    Pre_Song_Init(ptk);
 
 #endif // __WINAMP__
 
@@ -1344,7 +1348,7 @@ void Mod_Dat_Read(void *Dest, int size)
 }
 
 #if defined(PTK_INSTRUMENTS)
-short *Unpack_Sample(int Dest_Length, char Pack_Type, int BitRate)
+short *Unpack_Sample(ptk, int Dest_Length, char Pack_Type, int BitRate)
 {
     int Packed_Length;
     short *Dest_Buffer;
@@ -1449,7 +1453,7 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
     {
         Cur_Module += 4;
 
-        Pre_Song_Init();
+        Pre_Song_Init(ptk);
 
         Mod_Dat_Read(&nPatterns, sizeof(char));
         Mod_Dat_Read(&Songtracks, sizeof(char));
@@ -1586,7 +1590,7 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
                     if(Apply_Interpolation)
                     {
                         Save_Len /= 2;
-                        Sample_Buffer = Unpack_Sample(Save_Len,
+                        Sample_Buffer = Unpack_Sample(ptk, Save_Len,
                                                       SampleCompression[swrite],
                                                       SampleCompression[swrite] == SMP_PACK_MP3 ?
 #if defined(PTK_MP3)
@@ -1628,7 +1632,7 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
                     }
                     else
                     {
-                        RawSamples[swrite][0][slwrite] = Unpack_Sample(Save_Len,
+                        RawSamples[swrite][0][slwrite] = Unpack_Sample(ptk, Save_Len,
                                                                        SampleCompression[swrite],
                                                                        SampleCompression[swrite] == SMP_PACK_MP3 ?
 #if defined(PTK_MP3)
@@ -1652,7 +1656,7 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
                     {
                         if(Apply_Interpolation)
                         {
-                            Sample_Buffer = Unpack_Sample(Save_Len,
+                            Sample_Buffer = Unpack_Sample(ptk, Save_Len,
                                                           SampleCompression[swrite],
                                                           SampleCompression[swrite] == SMP_PACK_MP3 ?
 #if defined(PTK_MP3)
@@ -1689,7 +1693,7 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
                         }
                         else
                         {
-                            RawSamples[swrite][1][slwrite] = Unpack_Sample(Save_Len,
+                            RawSamples[swrite][1][slwrite] = Unpack_Sample(ptk, Save_Len,
                                                                            SampleCompression[swrite],
                                                                            SampleCompression[swrite] == SMP_PACK_MP3 ?
 #if defined(PTK_MP3)
@@ -1726,7 +1730,7 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
 
             Mod_Dat_Read(&TPan[twrite], sizeof(float));
             ComputeStereo(twrite);
-            FixStereo(twrite);
+            FixStereo(ptk, twrite);
 
             Mod_Dat_Read(&FType[twrite], sizeof(int));
             Mod_Dat_Read(&FRez[twrite], sizeof(int));
@@ -1881,7 +1885,7 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
 #endif
 
         Song_Position = start_position;
-        Post_Song_Init();
+        Post_Song_Init(ptk);
         return(TRUE);
     }
     else
@@ -1893,7 +1897,7 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
 
 // ------------------------------------------------------
 // Release the replayer driver
-void PTKEXPORT Ptk_ReleaseDriver(void)
+void PTKEXPORT Ptk_ReleaseDriver(ptk_data *ptk)
 {
 #if !defined(__STAND_ALONE__)
     int i;
@@ -1955,7 +1959,7 @@ void PTKEXPORT Ptk_SetPosition(int new_position)
 
 // ------------------------------------------------------
 // Reset some values before starting playing
-void Reset_Values(void)
+void Reset_Values(ptk_data *ptk)
 {
     int i;
 
@@ -1980,7 +1984,7 @@ void Reset_Values(void)
 
         for(i = 0; i < MAX_TRACKS; i++)
         {
-            ResetFilters(i);
+            ResetFilters(ptk, i);
 
 #if defined(PTK_TRACKFILTERS)
             CCut[i] = 0.0f;
@@ -2028,7 +2032,7 @@ void Reset_Values(void)
 #endif
 
 #if defined(PTK_COMPRESSOR)
-        Initreverb();
+        Initreverb(ptk);
 #endif
 
         for(int stopper = 0; stopper < MAX_TRACKS; stopper++)
@@ -2065,7 +2069,7 @@ void Reset_Values(void)
 
 #if !defined(__STAND_ALONE__)
 #if !defined(__NO_MIDI__)
-        Midi_AllNotesOff();
+        Midi_AllNotesOff(ptk);
 #endif
         // Clear all midi channels
         Clear_Midi_Channels_Pool();
@@ -2087,7 +2091,7 @@ void Reset_Values(void)
 
 // ------------------------------------------------------
 // Start replaying
-void PTKEXPORT Ptk_Play(void)
+void PTKEXPORT Ptk_Play(ptk_data *ptk)
 {
 
 #if !defined(__STAND_ALONE__)
@@ -2111,7 +2115,7 @@ void PTKEXPORT Ptk_Play(void)
     local_ramp_vol = 1.0f;
     local_curr_ramp_vol = 0.0f;
 
-    Reset_Values();
+    Reset_Values(ptk);
     Done_Reset = FALSE;
 
 #if !defined(__STAND_ALONE__)
@@ -2137,7 +2141,7 @@ extern "C"
 // Stop replaying
 extern int AUDIO_Play_Flag;
 
-void PTKEXPORT Ptk_Stop(void)
+void PTKEXPORT Ptk_Stop(ptk_data *ptk)
 {
 #if defined(__PSP__)
     // Thanks to MIPS, that machine really sucks
@@ -2184,7 +2188,7 @@ void PTKEXPORT Ptk_Stop(void)
 
 // ------------------------------------------------------
 // Init replay variables before loading a module
-void Pre_Song_Init(void)
+void Pre_Song_Init(ptk_data *ptk)
 {
     int i;
 
@@ -2214,14 +2218,14 @@ void Pre_Song_Init(void)
 #endif
 
 #if defined(PTK_TRACK_EQ)
-        init_eq(&EqDat[ini]);
+        init_eq(ptk, &EqDat[ini]);
 #endif
 
         Channels_Polyphony[ini] = 1;
         Channels_MultiNotes[ini] = 1;
         Channels_Effects[ini] = 1;
 
-        ResetFilters(ini);
+        ResetFilters(ptk, ini);
 
 #if !defined(__STAND_ALONE__)
         CHAN_MIDI_PRG[ini] = ini;
@@ -2317,14 +2321,14 @@ void Pre_Song_Init(void)
 #endif
 
 #if defined(PTK_INSTRUMENTS)
-    Free_Samples();
+    Free_Samples(ptk);
 #endif
 
 }
 
 // ------------------------------------------------------
 // Init the replayer datas
-void Post_Song_Init(void)
+void Post_Song_Init(ptk_data *ptk)
 {
     int i;
     int j;
@@ -2432,7 +2436,7 @@ void Post_Song_Init(void)
     SubCounter = 0;
     Subicounter = 0;
 
-    Reset_Values();
+    Reset_Values(ptk);
 
 #if defined(PTK_FX_PATTERNLOOP)
     repeat_loop_pos = 0;
@@ -2508,7 +2512,7 @@ void Post_Song_Init(void)
     Song_Position_Visual = Song_Position;
 
 #if defined(PTK_SHUFFLE)
-    Update_Shuffle();
+    Update_Shuffle(ptk);
 #endif
 
     local_ramp_vol = 1.0f;
@@ -2522,7 +2526,7 @@ void Post_Song_Init(void)
     {
         CCoef[spl] = float((float) CSend[spl] / 127.0f);
         ComputeStereo(spl);
-        FixStereo(spl);
+        FixStereo(ptk, spl);
     }
 
     Songplaying_Pattern = 0;
@@ -2591,7 +2595,7 @@ void Proc_Next_Visual_Line()
 
 // ------------------------------------------------------
 // Main Player Routine
-void Sp_Player(void)
+void Sp_Player(ptk_data *ptk)
 {
 #if defined(PTK_INSTRUMENTS)
     unsigned int res_dec;
@@ -2634,7 +2638,7 @@ void Sp_Player(void)
         {
 
 #if defined(PTK_FX_TICK0)
-            Do_Effects_Tick_0();
+            Do_Effects_Tick_0(ptk);
 #endif
             Subicounter = 0;
 
@@ -2668,12 +2672,12 @@ void Sp_Player(void)
                     if(pl_eff_row[i] == 0x31)
                     {
                         track3031 = ct;
-                        Fire303(pl_dat_row[i], 0);
+                        Fire303(ptk, pl_dat_row[i], 0);
                     }
                     if(pl_eff_row[i] == 0x32)
                     {
                         track3032 = ct;
-                        Fire303(pl_dat_row[i], 1);
+                        Fire303(ptk, pl_dat_row[i], 1);
                     }
 #endif
                 }
@@ -2691,7 +2695,7 @@ void Sp_Player(void)
                     }
 
 #if !defined(__STAND_ALONE__) && !defined(__WINAMP__)
-                    if(!sr_isrecording) Actualize_303_Ed(0);
+                    if(!sr_isrecording) Actualize_303_Ed(ptk, 0);
 #endif
 
                 }
@@ -2748,12 +2752,12 @@ void Sp_Player(void)
                     {
                         if((pl_pan_row == 0x90 && pl_eff_row[i] < 128) && c_midiout != -1)
                         {
-                            Midi_Send(176 + CHAN_MIDI_PRG[ct], pl_eff_row[i], pl_dat_row[i]);
+                            Midi_Send(ptk, 176 + CHAN_MIDI_PRG[ct], pl_eff_row[i], pl_dat_row[i]);
                         }
 
                         if((pl_eff_row[i] == 0x80 && pl_dat_row[i] < 128) && c_midiout != -1)
                         {
-                            Midi_Send(176 + CHAN_MIDI_PRG[ct], 0, pl_dat_row[i]);
+                            Midi_Send(ptk, 176 + CHAN_MIDI_PRG[ct], 0, pl_dat_row[i]);
                         }
                     }
 #endif
@@ -2827,7 +2831,7 @@ void Sp_Player(void)
 #if !defined(__NO_MIDI__)
                         if(Midi_Current_Notes[CHAN_MIDI_PRG[ct]][j])
                         {
-                            Midi_NoteOff(ct, Midi_Current_Notes[CHAN_MIDI_PRG[ct]][j]);
+                            Midi_NoteOff(ptk, ct, Midi_Current_Notes[CHAN_MIDI_PRG[ct]][j]);
                             Midi_Current_Notes[CHAN_MIDI_PRG[ct]][j] = 0;
                         }
 #endif
@@ -2845,7 +2849,7 @@ void Sp_Player(void)
                         {
                             if(!glide)
                             {
-                                free_sub_channel = Get_Free_Sub_Channel(ct, Channels_Polyphony[ct]);
+                                free_sub_channel = Get_Free_Sub_Channel(ptk, ct, Channels_Polyphony[ct]);
                             }
                             else
                             {
@@ -2888,7 +2892,7 @@ void Sp_Player(void)
                             }
 
                             // Start to play it with the specified volume
-                            Schedule_Instrument(ct,
+                            Schedule_Instrument(ptk, ct,
                                                 free_sub_channel,           // From Channels_Polyphony not Channels_MultiNotes
                                                 pl_note[i],
                                                 pl_sample[i],
@@ -2932,7 +2936,7 @@ void Sp_Player(void)
 #if !defined(__NO_MIDI__)
                             if(Midi_Current_Notes[CHAN_MIDI_PRG[ct]][i])
                             {
-                                Midi_NoteOff(ct, Midi_Current_Notes[CHAN_MIDI_PRG[ct]][i]);
+                                Midi_NoteOff(ptk, ct, Midi_Current_Notes[CHAN_MIDI_PRG[ct]][i]);
                                 Midi_Current_Notes[CHAN_MIDI_PRG[ct]][i] = 0;
                             }
 #endif
@@ -2948,14 +2952,14 @@ void Sp_Player(void)
                 // see if a 303 is running on that track
                 if(trigger_note_off)
                 {
-                    noteoff303(ct);
+                    noteoff303(ptk, ct);
                 }
 #endif
 
 #if defined(PTK_FX_PATTERNLOOP)
             if(CHAN_ACTIVE_STATE[Song_Position][ct])
             {
-                Do_Pattern_Loop(ct);
+                Do_Pattern_Loop(ptk, ct);
             }
 #endif
 
@@ -2972,7 +2976,7 @@ void Sp_Player(void)
 
         if(!SubCounter)
         {
-            Do_Effects_Ticks_X();
+            Do_Effects_Ticks_X(ptk);
         }
 
         // Record at tick 0 but wait for some effects (like the speed change)
@@ -2997,7 +3001,7 @@ void Sp_Player(void)
         {
             shuffleswitch = -shuffleswitch;
 
-            Update_Shuffle();
+            Update_Shuffle(ptk);
 #else
         if(PosInTick > SamplesPerTick)
         {
@@ -3049,7 +3053,7 @@ void Sp_Player(void)
 #if !defined(__STAND_ALONE__)
                     if(is_recording_2)
                     {
-                        Next_Line_Pattern_Auto(&Song_Position, Patbreak_Line, &Pattern_Line);
+                        Next_Line_Pattern_Auto(ptk, &Song_Position, Patbreak_Line, &Pattern_Line);
                     }
                     else
 #endif
@@ -3124,7 +3128,7 @@ void Sp_Player(void)
 #if !defined(__STAND_ALONE__)
                     if(is_recording_2)
                     {
-                        Next_Line_Pattern_Auto(&Song_Position, patternLines[pSequence[Song_Position]], &Pattern_Line);
+                        Next_Line_Pattern_Auto(ptk, &Song_Position, patternLines[pSequence[Song_Position]], &Pattern_Line);
                     }
                     else
 #endif
@@ -3224,7 +3228,7 @@ void Sp_Player(void)
                    sp_Cvol_Synth[c][i] <= 0.0f)
                 {
                     Cut_Stage[c][i] = FALSE;
-                    Play_Instrument(c, i);
+                    Play_Instrument(ptk, c, i);
                 }
             }
             else
@@ -3233,7 +3237,7 @@ void Sp_Player(void)
                 if(Glide_Stage[c][i])
                 {
                     Glide_Stage[c][i] = FALSE;
-                    Play_Instrument(c, i);
+                    Play_Instrument(ptk, c, i);
                 }
             }
 
@@ -3295,7 +3299,7 @@ ByPass_Wav:
                     // We had some signal (on any channel)
                     gotsome = TRUE;
 
-                    Set_Spline_Boundaries(sp_Position[c][i].half.first,
+                    Set_Spline_Boundaries(ptk, sp_Position[c][i].half.first,
                                           Current_Pointer,
                                           Player_LT[c][i],
                                           Player_LW[c][i],
@@ -3305,12 +3309,12 @@ ByPass_Wav:
 
                     if(Player_WL[c][i])
                     {
-                        Curr_Signal_L[i] = Process_Sample(Player_WL[c][i], c, i, res_dec);
+                        Curr_Signal_L[i] = Process_Sample(ptk, Player_WL[c][i], c, i, res_dec);
                         // Is it stereo sample ?
                         if(Player_SC[c][i] == 2)
                         {
                             grown = TRUE;
-                            Curr_Signal_R[i] = Process_Sample(Player_WR[c][i], c, i, res_dec);
+                            Curr_Signal_R[i] = Process_Sample(ptk, Player_WR[c][i], c, i, res_dec);
                         }
                     }
 
@@ -3520,12 +3524,12 @@ ByPass_Wav:
             }
 
 #if defined(PTK_303)
-            noteoff303(c);
+            noteoff303(ptk, c);
 #endif
 
 #if !defined(__STAND_ALONE__)
     #if !defined(__NO_MIDI__)
-            Midi_NoteOff(c, -1);
+            Midi_NoteOff(ptk, c, -1);
     #endif
 #endif
 
@@ -3846,12 +3850,12 @@ ByPass_Wav:
         // Compress the track signal
         if(Compress_Track[c])
         {
-            All_Signal_L = Mas_Compressor_Track(c,
+            All_Signal_L = Mas_Compressor_Track(ptk, c,
                                                 All_Signal_L / 32767.0f,
                                                 &rms_sumL_Track[c],
                                                 mas_comp_bufferL_Track[c],
                                                 &mas_envL_Track[c]) * 32767.0f;
-            All_Signal_R = Mas_Compressor_Track(c,
+            All_Signal_R = Mas_Compressor_Track(ptk, c,
                                                 All_Signal_R / 32767.0f,
                                                 &rms_sumR_Track[c],
                                                 mas_comp_bufferR_Track[c],
@@ -3864,8 +3868,8 @@ ByPass_Wav:
            EqDat[c].mg != 1.0f ||
            EqDat[c].hg != 1.0f)
         {
-            All_Signal_L = do_eq(&EqDat[c], All_Signal_L, 0);
-            All_Signal_R = do_eq(&EqDat[c], All_Signal_R, 1);
+            All_Signal_L = do_eq(ptk, &EqDat[c], All_Signal_L, 0);
+            All_Signal_R = do_eq(ptk, &EqDat[c], All_Signal_R, 1);
         }
 #endif
 
@@ -3946,7 +3950,7 @@ ByPass_Wav:
 
 // ------------------------------------------------------
 // Look for a free sub channel
-int Get_Free_Sub_Channel(int channel, int polyphony)
+int Get_Free_Sub_Channel(ptk_data *ptk, int channel, int polyphony)
 {
     int i;
     int oldest;
@@ -4005,7 +4009,7 @@ int Get_Free_Sub_Channel(int channel, int polyphony)
 // Record an instrument for playing it later
 // (We use this to avoid immediately chaning the instrument
 //  during volume ramping as the previous one is still being played).
-void Schedule_Instrument(int channel,
+void Schedule_Instrument(ptk_data *ptk, int channel,
                          int sub_channel,
                          int inote,
                          int sample,
@@ -4052,7 +4056,7 @@ void Schedule_Instrument(int channel,
 
 // ------------------------------------------------------
 // Play a waveform
-void Play_Instrument(int channel, int sub_channel)
+void Play_Instrument(ptk_data *ptk, int channel, int sub_channel)
 {
     int inote;
     int sample;
@@ -4529,21 +4533,21 @@ void Play_Instrument(int channel, int sub_channel)
                 // Remove the previous note
                 if(midi_sub_channel >= 1 && Midi_Current_Notes[CHAN_MIDI_PRG[channel]][midi_sub_channel - 1])
                 {
-                    Midi_NoteOff(channel, Midi_Current_Notes[CHAN_MIDI_PRG[channel]][midi_sub_channel - 1]);
+                    Midi_NoteOff(ptk, channel, Midi_Current_Notes[CHAN_MIDI_PRG[channel]][midi_sub_channel - 1]);
                     Midi_Current_Notes[CHAN_MIDI_PRG[channel]][midi_sub_channel - 1] = 0;
                 }
 
                 // Set the midi program if it was modified
                 if(LastProgram[CHAN_MIDI_PRG[channel]] != Midiprg[associated_sample])
                 {
-                    Midi_Send(192 + CHAN_MIDI_PRG[channel], Midiprg[associated_sample], 127);
+                    Midi_Send(ptk, 192 + CHAN_MIDI_PRG[channel], Midiprg[associated_sample], 127);
                     LastProgram[CHAN_MIDI_PRG[channel]] = Midiprg[associated_sample];
                 }
 
                 // Send the note to the midi device
                 float veloc = vol * mas_vol * local_mas_vol * local_ramp_vol;
 
-                Midi_Send(144 + CHAN_MIDI_PRG[channel], mnote, (int) (veloc * 127));
+                Midi_Send(ptk, 144 + CHAN_MIDI_PRG[channel], mnote, (int) (veloc * 127));
                 if(midi_sub_channel < 0) Midi_Current_Notes[CHAN_MIDI_PRG[channel]][(-midi_sub_channel) - 1] = mnote;
                 else Midi_Current_Notes[CHAN_MIDI_PRG[channel]][midi_sub_channel - 1] = mnote;
             }
@@ -4557,7 +4561,7 @@ void Play_Instrument(int channel, int sub_channel)
 // ------------------------------------------------------
 // Handle patterns effects
 #if defined(PTK_FX_TICK0)
-void Do_Effects_Tick_0(void)
+void Do_Effects_Tick_0(ptk_data *ptk)
 {
 
 #if defined(PTK_FX_ARPEGGIO) || defined(PTK_FX_VIBRATO) || defined(PTK_FX_REVERSE) || defined(PTK_SHUFFLE) || \
@@ -4618,7 +4622,7 @@ void Do_Effects_Tick_0(void)
 #if defined(PTK_SHUFFLE)
                 case 0x25:
                     shuffle = (int) ((float) pltr_dat_row[j] * 0.39216f);
-                    Update_Shuffle();
+                    Update_Shuffle(ptk);
 
 #if !defined(__STAND_ALONE__) && !defined(__WINAMP__)
                     gui_bpm_action = TRUE;
@@ -4691,7 +4695,7 @@ void Do_Effects_Tick_0(void)
                     SamplesPerSub = SamplesPerTick / 6;
 
 #if defined(PTK_SHUFFLE)
-                    Update_Shuffle();
+                    Update_Shuffle(ptk);
 #endif
 
 #if !defined(__STAND_ALONE__) && !defined(__WINAMP__)
@@ -4709,7 +4713,7 @@ void Do_Effects_Tick_0(void)
 }
 
 #if defined(PTK_FX_PATTERNLOOP)
-void Do_Pattern_Loop(int track)
+void Do_Pattern_Loop(ptk_data *ptk, int track)
 {
     int j;
     int pltr_eff_row[MAX_FX];
@@ -4769,7 +4773,7 @@ void Do_Pattern_Loop(int track)
 
 // ------------------------------------------------------
 // Process ticks X effects
-void Do_Effects_Ticks_X(void)
+void Do_Effects_Ticks_X(ptk_data *ptk)
 {
     int i;
 
@@ -4859,7 +4863,7 @@ void Do_Effects_Ticks_X(void)
 #if !defined(__NO_MIDI__)
                         if(Midi_Current_Notes[CHAN_MIDI_PRG[trackef]][i])
                         {
-                            Midi_NoteOff(trackef, Midi_Current_Notes[CHAN_MIDI_PRG[trackef]][i]);
+                            Midi_NoteOff(ptk, trackef, Midi_Current_Notes[CHAN_MIDI_PRG[trackef]][i]);
                             Midi_Current_Notes[CHAN_MIDI_PRG[trackef]][i] = 0;
                         }
 #endif
@@ -5140,7 +5144,7 @@ void Do_Effects_Ticks_X(void)
 #if !defined(__NO_MIDI__)
                                 if(Midi_Current_Notes[CHAN_MIDI_PRG[trackef]][j])
                                 {
-                                    Midi_NoteOff(trackef, Midi_Current_Notes[CHAN_MIDI_PRG[trackef]][j]);
+                                    Midi_NoteOff(ptk, trackef, Midi_Current_Notes[CHAN_MIDI_PRG[trackef]][j]);
                                     Midi_Current_Notes[CHAN_MIDI_PRG[trackef]][j] = 0;
                                 }
 #endif
@@ -5150,13 +5154,13 @@ void Do_Effects_Ticks_X(void)
 
                         for(i = 0; i < Channels_MultiNotes[trackef]; i++)
                         {
-                            free_sub_channel = Get_Free_Sub_Channel(trackef, Channels_Polyphony[trackef]);
+                            free_sub_channel = Get_Free_Sub_Channel(ptk, trackef, Channels_Polyphony[trackef]);
                             if(free_sub_channel == -1) free_sub_channel = i;
 
                             // Mark it as playing
                             Note_Sub_Channels[trackef][i] = i;
                             Reserved_Sub_Channels[trackef][i] = free_sub_channel;
-                            Schedule_Instrument(trackef,
+                            Schedule_Instrument(ptk, trackef,
                                                 free_sub_channel,
                                                 pltr_note[i],
                                                 pltr_sample[i],
@@ -5346,7 +5350,7 @@ void Do_Effects_Ticks_X(void)
 
 // ------------------------------------------------------
 // Reset the tracks filters
-void ResetFilters(int tr)
+void ResetFilters(ptk_data *ptk, int tr)
 {
     buf024[0][tr] = 0.0f;
     buf124[0][tr] = 0.0f;
@@ -5393,7 +5397,7 @@ float ApplyLfo(float cy, int trcy)
 
 // ------------------------------------------------------
 // Set stereo panning
-void ComputeStereo(int channel)
+void ComputeStereo(ptk_data *ptk, int channel)
 {
     Old_LVol[channel] = sqrtf(1.0f - TPan[channel]);
     Old_RVol[channel] = sqrtf(TPan[channel]);
@@ -5401,7 +5405,7 @@ void ComputeStereo(int channel)
 
 // ------------------------------------------------------
 // Bring stereo panning up to date
-void FixStereo(int channel)
+void FixStereo(ptk_data *ptk, int channel)
 {
     LVol[channel] = Old_LVol[channel];
     RVol[channel] = Old_RVol[channel];
@@ -5409,7 +5413,7 @@ void FixStereo(int channel)
 
 // ------------------------------------------------------
 // Main mixing routine
-void GetPlayerValues(void)
+void GetPlayerValues(ptk_data *ptk)
 {
     left_chorus = 0.0f;
     right_chorus = 0.0f;
@@ -5419,7 +5423,7 @@ void GetPlayerValues(void)
     if(mas_comp_pos_rms_buffer > MAS_COMPRESSOR_SIZE - 1) mas_comp_pos_rms_buffer = 0;
 #endif
 
-    Sp_Player();
+    Sp_Player(ptk);
 
     // Wait for the audio latency before starting to play
     if(Songplaying)
@@ -5463,8 +5467,8 @@ void GetPlayerValues(void)
     if(mas_ratio_Master > 0.01f)
     {
 #endif
-        left_float = Mas_Compressor_Master(left_float, &rms_sumL_Master, mas_comp_bufferL_Master, &mas_envL_Master);
-        right_float = Mas_Compressor_Master(right_float, &rms_sumR_Master, mas_comp_bufferR_Master, &mas_envR_Master);
+        left_float = Mas_Compressor_Master(ptk, left_float, &rms_sumL_Master, mas_comp_bufferL_Master, &mas_envL_Master);
+        right_float = Mas_Compressor_Master(ptk, right_float, &rms_sumR_Master, mas_comp_bufferR_Master, &mas_envR_Master);
     }
 #endif
 
@@ -5844,7 +5848,7 @@ void live303(int pltr_eff_row, int pltr_dat_row)
     }
 }
 
-void Fire303(unsigned char number, int unit)
+void Fire303(ptk_data *ptk, unsigned char number, int unit)
 {
     tb303engine[unit].tbLine = 0;
    
@@ -5991,12 +5995,12 @@ void Fire303(unsigned char number, int unit)
     }
 
 #if !defined(__STAND_ALONE__) && !defined(__WINAMP__)
-    if(!sr_isrecording) Actualize_303_Ed(0);
+    if(!sr_isrecording) Actualize_303_Ed(ptk, 0);
 #endif
 
 }
 
-void noteoff303(char strack)
+void noteoff303(ptk_data *ptk, char strack)
 {
     if(strack == track3031)
     {
@@ -6043,7 +6047,7 @@ void Go303(void)
 // ------------------------------------------------------
 // Bank initializer
 #if !defined(__STAND_ALONE__) || defined(__WINAMP__)
-void init_sample_bank(void)
+void init_sample_bank(ptk_data *ptk)
 {
     Reset_303_Parameters(&tb303[0]);
     Reset_303_Parameters(&tb303[1]);
@@ -6067,14 +6071,14 @@ void init_sample_bank(void)
             sprintf(nameins[inico], "Untitled");
 #endif
 
-            ResetSynthParameters(&PARASynth[inico]);
+            ResetSynthParameters(ptk, &PARASynth[inico]);
 
-            KillInst(inico, TRUE);
+            KillInst(ptk, inico, TRUE);
         }
     }
 }
 
-void KillInst(int inst_nbr, int all_splits)
+void KillInst(ptk_data *ptk, int inst_nbr, int all_splits)
 {
     int first_split = 0;
     int last_split = MAX_INSTRS_SPLITS;
@@ -6158,7 +6162,7 @@ void KillInst(int inst_nbr, int all_splits)
 // Next Function: used to reset synthparameters Structure
 // Well, I think the default preset is not very cool, but nah!
 #if defined(PTK_SYNTH)
-void ResetSynthParameters(SynthParameters *TSP)
+void ResetSynthParameters(ptk_data *ptk, SynthParameters *TSP)
 {
 
 #if !defined(__WINAMP__)
@@ -6237,7 +6241,7 @@ void ResetSynthParameters(SynthParameters *TSP)
 // ------------------------------------------------------
 // Free all allocated Samples
 #if defined(PTK_INSTRUMENTS)
-void Free_Samples(void)
+void Free_Samples(ptk_data *ptk)
 {
     for(int freer = 0; freer < MAX_INSTRS; freer++)
     {
@@ -6280,7 +6284,7 @@ void Free_Samples(void)
 // ------------------------------------------------------
 // Initialize the reverb data
 #if defined(PTK_COMPRESSOR)
-void Initreverb(void)
+void Initreverb(ptk_data *ptk)
 {
     int i;
     int mlrw;
@@ -6301,7 +6305,7 @@ void Initreverb(void)
         counters_R[i] = mlrw;
     }
 
-    InitRevervbFilter();
+    InitRevervbFilter(ptk);
 
     LFP_L.Reset();
     LFP_R.Reset();
@@ -6309,7 +6313,8 @@ void Initreverb(void)
     rev_counter = 99999;
 }
 
-void InitRevervbFilter(void)
+/* TODO: Holy shit they mispelled reverb */
+void InitRevervbFilter(ptk_data *ptk)
 {
     int i;
 
@@ -6445,7 +6450,7 @@ float Filter_FlangerR(int track, float input)
 float mas_attack = 0.977579f;
 float mas_release = 0.977579f;
 
-float Do_RMS(float input, float *rms_sum, float *buffer)
+float Do_RMS(ptk_data *ptk, float input, float *rms_sum, float *buffer)
 {
     *rms_sum -= buffer[mas_comp_pos_rms_buffer];
     buffer[mas_comp_pos_rms_buffer] = input * input;
@@ -6457,7 +6462,7 @@ float Do_RMS(float input, float *rms_sum, float *buffer)
 
 #if defined(PTK_LIMITER_TRACKS)
 #if !defined(__STAND_ALONE__) || defined(__WINAMP__)
-void Mas_Compressor_Set_Variables_Track(int Track, float threshold, float ratio)
+void Mas_Compressor_Set_Variables_Track(ptk_data *ptk, int Track, float threshold, float ratio)
 {
     if(threshold < 0.01f) threshold = 0.01f;
     if(threshold > 100.0f) threshold = 100.0f;
@@ -6470,10 +6475,10 @@ void Mas_Compressor_Set_Variables_Track(int Track, float threshold, float ratio)
 }
 #endif
 
-float Mas_Compressor_Track(int Track, float input, float *rms_sum, float *buffer, float *env)
+float Mas_Compressor_Track(ptk_data *ptk, int Track, float input, float *rms_sum, float *buffer, float *env)
 {
     float gain;
-    float rmsf = Do_RMS(input, rms_sum, buffer);
+    float rmsf = Do_RMS(ptk, input, rms_sum, buffer);
 
     float theta = rmsf > *env ? mas_attack : mas_release;
     *env = (1.0f - theta) * rmsf + theta * *env;
@@ -6489,7 +6494,7 @@ float Mas_Compressor_Track(int Track, float input, float *rms_sum, float *buffer
 
 #if defined(PTK_LIMITER_MASTER)
 #if !defined(__STAND_ALONE__) || defined(__WINAMP__)
-void Mas_Compressor_Set_Variables_Master(float threshold, float ratio)
+void Mas_Compressor_Set_Variables_Master(ptk_data *ptk, float threshold, float ratio)
 {
     if(threshold < 0.01f) threshold = 0.01f;
     if(threshold > 100.0f) threshold = 100.0f;
@@ -6502,10 +6507,10 @@ void Mas_Compressor_Set_Variables_Master(float threshold, float ratio)
 }
 #endif
 
-float Mas_Compressor_Master(float input, float *rms_sum, float *buffer, float *env)
+float Mas_Compressor_Master(ptk_data *ptk, float input, float *rms_sum, float *buffer, float *env)
 {
     float gain;
-    float rmsf = Do_RMS(input, rms_sum, buffer);
+    float rmsf = Do_RMS(ptk, input, rms_sum, buffer);
 
     float theta = rmsf > *env ? mas_attack : mas_release;
     *env = (1.0f - theta) * rmsf + theta * *env;
@@ -6528,7 +6533,7 @@ int Get_Pattern_Offset(ptk_data *ptk, int pattern, int track, int row)
 
 // ------------------------------------------------------
 // Calculate the boundaries of a carrier for splines calculatation
-void Set_Spline_Boundaries(unsigned int Position,
+void Set_Spline_Boundaries(ptk_data *ptk, unsigned int Position,
                            unsigned int *Boundaries,
                            int LoopType,
                            unsigned int LoopWay,
@@ -6613,7 +6618,7 @@ void Set_Spline_Boundaries(unsigned int Position,
 
 // ------------------------------------------------------
 // Obtain the sample loocated at the current position
-float Process_Sample(short *Data, int c, int i, unsigned int res_dec)
+float Process_Sample(ptk_data *ptk, short *Data, int c, int i, unsigned int res_dec)
 {
 #if defined(__STAND_ALONE__) && !defined(__WINAMP__)
 #if defined(PTK_USE_CUBIC)
@@ -6692,7 +6697,7 @@ float FastPow(float a, float b)
 // Public domain stuff from Neil C. / Etanza Systems
 static float vsa = (float) (1.0 / 4294967295.0);
 
-void init_eq(LPEQSTATE es)
+void init_eq(ptk_data *ptk, LPEQSTATE es)
 {
     memset(es, 0, sizeof(EQSTATE));
     es->lg = 1.0f;
@@ -6702,7 +6707,7 @@ void init_eq(LPEQSTATE es)
     es->hf = 2.0f * sinf(PIf * (5000.0f / fMIX_RATE));
 }
 
-float do_eq(LPEQSTATE es, float sample, int Left)
+float do_eq(ptk_data *ptk, LPEQSTATE es, float sample, int Left)
 {
     float l;
     float m;
@@ -6730,7 +6735,7 @@ float do_eq(LPEQSTATE es, float sample, int Left)
 #endif
 
 #if defined(PTK_SHUFFLE)
-void Update_Shuffle(void)
+void Update_Shuffle(ptk_data *ptk)
 {
     if(shuffleswitch == 1) shufflestep = -((SamplesPerTick * shuffle) / 200);
     else shufflestep = (SamplesPerTick * shuffle) / 200;

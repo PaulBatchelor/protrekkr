@@ -38,6 +38,7 @@
 // Includes
 #include <SDL/SDL.h>
 
+#include "ptk_data.h"
 #include "../support/include/main.h"
 #include "../replay/lib/include/replay.h"
 
@@ -304,7 +305,6 @@ typedef struct
     int cStatus;
 } MARKER, *LPMARKER;
 
-#include "ptk_data.h"
 
 // ------------------------------------------------------
 // Variables
@@ -440,7 +440,7 @@ void GetBackMouse(void);
 void SeqFill(int st, int en, char n);
 void PutBackMouse(void);
 void Read_SMPT(void);
-void Initreverb(void);
+void Initreverb(ptk_data *ptk);
 void init_sample_bank(void);
 int Get_Number_Of_Splits(int n_index);
 void Clear_Instrument_Dat(int n_index, int split, int lenfir);
@@ -448,7 +448,7 @@ void AllocateWave(int n_index, int split, long lenfir,
                   int samplechans, int clear,
                   short *Waveform1, short *Waveform2);
 void LoadFile(ptk_data *ptk, int Freeindex, const char *str);
-void RefreshSample(void);
+void RefreshSample(ptk_data *ptk);
 void value_box(int x, int y, int val, int flags);
 void value_box3(int x, int y, char val, int flags);
 void value_box4(int x, int y, char val);
@@ -477,7 +477,7 @@ void draw_lfoed(void);
 void draw_tracked(void);
 void DeleteInstrument(ptk_data *ptk);
 void Sp_Player(void);             
-void Pre_Song_Init(void);
+void Pre_Song_Init(ptk_data *ptk);
 void Reverb_work(void);
 void StartRec(void);
 void Notify_Edit(void);

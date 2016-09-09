@@ -66,7 +66,7 @@ extern int Type_Mp3_BitRate[];
 extern char At3_BitRate[MAX_INSTRS];
 extern int Type_At3_BitRate[];
 
-void Lock_Sample(int instr_nbr, int split);
+void Lock_Sample(ptk_data *ptk, int instr_nbr, int split);
 
 // ------------------------------------------------------
 // Functions
@@ -89,7 +89,7 @@ void set_instr_global(void)
     }
 }
 
-void Draw_Instrument_Ed(void)
+void Draw_Instrument_Ed(ptk_data *ptk)
 {
     Draw_Editors_Bar(USER_SCREEN_INSTRUMENT_EDIT);
 
@@ -131,7 +131,7 @@ void Draw_Instrument_Ed(void)
     } //Switch Sampler Screen
 }
 
-void Actualize_Instrument_Ed(int typex, char gode)
+void Actualize_Instrument_Ed(ptk_data *ptk, int typex, char gode)
 {
     int FineTune_Value;
     int Allow_GSM = BUTTON_DISABLED;
@@ -140,7 +140,7 @@ void Actualize_Instrument_Ed(int typex, char gode)
     int Allow_TRUESPEECH = BUTTON_DISABLED;
     int Allow_AT3 = BUTTON_DISABLED;
 
-    Check_Loops();
+    Check_Loops(ptk);
 
     if(userscreen == USER_SCREEN_INSTRUMENT_EDIT)
     {
@@ -302,7 +302,7 @@ void Actualize_Instrument_Ed(int typex, char gode)
                         Gui_Draw_Arrows_Number_Box(570, (Cur_Height - 98), Midiprg[Current_Instrument], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
                     }
 
-                    Actualize_Instruments_Synths_List(1);
+                    Actualize_Instruments_Synths_List(ptk, 1);
 #endif
                 }
                 if(gode == 0 || gode == 12)
@@ -454,7 +454,7 @@ void Actualize_Instrument_Ed(int typex, char gode)
                             // Perform the samples lock on all splits
                             for(i = 0; i < 16; i++)
                             {
-                                Lock_Sample(Current_Instrument, i);
+                                Lock_Sample(ptk, Current_Instrument, i);
                             }
                         }
                         else
@@ -462,8 +462,8 @@ void Actualize_Instrument_Ed(int typex, char gode)
                             // Unlock them
                             for(i = 0; i < 16; i++)
                             {
-                                Restore_WaveForm(Current_Instrument, 0, i);
-                                Restore_WaveForm(Current_Instrument, 1, i);
+                                Restore_WaveForm(ptk, Current_Instrument, 0, i);
+                                Restore_WaveForm(ptk, Current_Instrument, 1, i);
                                 if(RawSamples_Swap[Current_Instrument][0][i])
                                 {
                                     free(RawSamples_Swap[Current_Instrument][0][i]);
@@ -489,7 +489,7 @@ void Actualize_Instrument_Ed(int typex, char gode)
 
                 if(gode == 16 || gode == 17 || gode == 18 || gode == 19)
                 {
-                    Actualize_Instruments_Synths_List(1);
+                    Actualize_Instruments_Synths_List(ptk, 1);
                 }
 
                 break;
@@ -536,7 +536,7 @@ void Actualize_Instrument_Ed(int typex, char gode)
     } //User screen == 2
 }
 
-void Mouse_Sliders_Instrument_Ed(void)
+void Mouse_Sliders_Instrument_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_INSTRUMENT_EDIT)
     {
@@ -564,7 +564,7 @@ void Mouse_Sliders_Instrument_Ed(void)
     }
 }
 
-void Mouse_Left_Instrument_Ed(void)
+void Mouse_Left_Instrument_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && seditor == 1)
     {
@@ -615,14 +615,14 @@ void Mouse_Left_Instrument_Ed(void)
             Current_Instrument_Split--;
             gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             teac = 0;
-            Renew_Sample_Ed();
+            Renew_Sample_Ed(ptk);
         }
         if(zcheckMouse(614, (Cur_Height - 134), 16, 16) && Current_Instrument_Split < 15)
         {
             Current_Instrument_Split++;
             gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             teac = 0;
-            Renew_Sample_Ed();
+            Renew_Sample_Ed(ptk);
         }
 
 #if !defined(__NO_MIDI__)
@@ -683,9 +683,9 @@ void Mouse_Left_Instrument_Ed(void)
         {
             if(zcheckMouse(268, (Cur_Height - 108), 88, 16))
             {
-                if(File_Exist_Req("%s"SLASH"%s.pti", Dir_Instrs, nameins[Current_Instrument]))
+                if(File_Exist_Req(ptk, "%s"SLASH"%s.pti", Dir_Instrs, nameins[Current_Instrument]))
                 {
-                    Display_Requester(&Overwrite_Requester, GUI_CMD_SAVE_INSTRUMENT);
+                    Display_Requester(ptk, &Overwrite_Requester, GUI_CMD_SAVE_INSTRUMENT);
                 }
                 else
                 {
@@ -706,9 +706,9 @@ void Mouse_Left_Instrument_Ed(void)
             {
                 sprintf(Name, "Untitled.wav");
             }
-            if(File_Exist_Req("%s"SLASH"%s", Dir_Samples, Name))
+            if(File_Exist_Req(ptk, "%s"SLASH"%s", Dir_Samples, Name))
             {
-                Display_Requester(&Overwrite_Requester, GUI_CMD_EXPORT_WAV);
+                Display_Requester(ptk, &Overwrite_Requester, GUI_CMD_EXPORT_WAV);
             }
             else
             {
@@ -936,7 +936,7 @@ void Mouse_Left_Instrument_Ed(void)
     }
 }
 
-void Mouse_Right_Instrument_Ed(void)
+void Mouse_Right_Instrument_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && seditor == 0)
     {
@@ -1004,15 +1004,15 @@ void Mouse_Right_Instrument_Ed(void)
                         {
                             for(j = 0; j < 16; j++)
                             {
-                                Lock_Sample(i, j);
+                                Lock_Sample(ptk, i, j);
                             }
                         }
                         else
                         {
                             for(j = 0; j < 16; j++)
                             {
-                                Restore_WaveForm(i, 0, j);
-                                Restore_WaveForm(i, 1, j);
+                                Restore_WaveForm(ptk, i, 0, j);
+                                Restore_WaveForm(ptk, i, 1, j);
                                 if(RawSamples_Swap[i][0][j])
                                 {
                                     free(RawSamples_Swap[i][0][j]);
@@ -1037,7 +1037,7 @@ void Mouse_Right_Instrument_Ed(void)
                     Gui_Draw_Button_Box(729, (Cur_Height - 116) + (18 * 4), 60, 16, "Lock / All", Allow_Global | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
                     outlong(729, (Cur_Height - 134) + (18 * 4), SampleLength[Current_Instrument][Current_Instrument_Split], 0);
                 }
-                Actualize_Instruments_Synths_List(1);
+                Actualize_Instruments_Synths_List(ptk, 1);
             }
         }
 
@@ -1062,7 +1062,7 @@ void Mouse_Right_Instrument_Ed(void)
     }
 }
 
-void Afloop(void)
+void Afloop(ptk_data *ptk)
 {
     int iose;
     if(actuloop == 1 || actuloop == 3)
@@ -1112,7 +1112,7 @@ void Afloop(void)
     actuloop = 0;
 }
 
-void Mouse_Left_Repeat_Instrument_Ed(void)
+void Mouse_Left_Repeat_Instrument_Ed(ptk_data *ptk)
 {
     int32 *Cur_Loop_Start = (int32 *) &LoopStart[Current_Instrument][Current_Instrument_Split];
     int32 *Cur_Loop_End = (int32 *) &LoopEnd[Current_Instrument][Current_Instrument_Split];
@@ -1148,7 +1148,7 @@ void Mouse_Left_Repeat_Instrument_Ed(void)
     }
 }
 
-void Mouse_Sliders_Right_Instrument_Ed(void)
+void Mouse_Sliders_Right_Instrument_Ed(ptk_data *ptk)
 {
     int32 *Cur_Loop_Start = (int32 *) &LoopStart[Current_Instrument][Current_Instrument_Split];
     int32 *Cur_Loop_End = (int32 *) &LoopEnd[Current_Instrument][Current_Instrument_Split];
@@ -1464,8 +1464,8 @@ void Actualize_Instruments_Synths_List(ptk_data *ptk, int modeac)
                 }
             }
 
-            Draw_Lists_Slider(Instrs_ykar);
-            Dump_Instruments_Synths_List(395, 41);
+            Draw_Lists_Slider(ptk, Instrs_ykar);
+            Dump_Instruments_Synths_List(ptk, 395, 41);
 
             Gui_Draw_Button_Box(394, 24, Cur_Width - 522, 16, "", BUTTON_NORMAL | BUTTON_DISABLED);
             switch(ptk->Scopish)
@@ -1507,7 +1507,7 @@ void Actualize_Instruments_Synths_List(ptk_data *ptk, int modeac)
 
 // ------------------------------------------------------
 // Lock a sample in order to test it
-void Lock_Sample(int instr_nbr, int split)
+void Lock_Sample(ptk_data *ptk, int instr_nbr, int split)
 {
     int PackedLen = 0;
     short *PackedSample;
@@ -1551,7 +1551,7 @@ void Lock_Sample(int instr_nbr, int split)
         RawSamples_Swap[instr_nbr][i][split] = (short *) malloc(Size * 2 + 8);
         memset(RawSamples_Swap[instr_nbr][i][split], 0, Size * 2 + 8);
 
-        Save_WaveForm(instr_nbr, i, split);
+        Save_WaveForm(ptk, instr_nbr, i, split);
 
         Dest_Buffer = (short *) malloc(Size * 2 + 8);
         memset(Dest_Buffer, 0, Size * 2 + 8);
@@ -1731,7 +1731,7 @@ void Lock_Sample(int instr_nbr, int split)
 
 // ------------------------------------------------------
 // Copy a sample into the back buffer
-void Save_WaveForm(int Instr_Nbr, int Channel, int Split)
+void Save_WaveForm(ptk_data *ptk, int Instr_Nbr, int Channel, int Split)
 {
     int i;
 
@@ -1746,7 +1746,7 @@ void Save_WaveForm(int Instr_Nbr, int Channel, int Split)
 
 // ------------------------------------------------------
 // Copy a sample from the back buffer
-void Restore_WaveForm(int Instr_Nbr, int Channel, int Split)
+void Restore_WaveForm(ptk_data *ptk, int Instr_Nbr, int Channel, int Split)
 {
     int i;
 

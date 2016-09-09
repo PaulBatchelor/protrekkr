@@ -661,7 +661,7 @@ void Dump_Files_List(ptk_data *ptk, int xr, int yr)
                                 File = fopen(Get_FileName(rel_val), "rb");
                                 if(File)
                                 {
-                                    int Size = Get_File_Size(File);
+                                    int Size = Get_File_Size(ptk, File);
                                     if(Size == 0)
                                     {
                                         sprintf(Size_String, "0");

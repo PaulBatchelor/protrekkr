@@ -2153,7 +2153,7 @@ void Reset_Track(ptk_data *ptk, int Position, int Track)
     FLANGER_OFFSET2[Track] = float(FLANGER_OFFSET[Track] - FLANGER_DELAY[Track]);
     FLANGER_OFFSET1[Track] = float(FLANGER_OFFSET[Track] - FLANGER_DELAY[Track]);
 
-    init_eq(&EqDat[Track]);
+    init_eq(ptk, &EqDat[Track]);
 
     CHAN_MUTE_STATE[Track] = FALSE;
     for(i = 0; i < Song_Length; i++)
@@ -2161,7 +2161,7 @@ void Reset_Track(ptk_data *ptk, int Position, int Track)
         CHAN_ACTIVE_STATE[i][Track] = TRUE;
     }
     ComputeStereo(Track);
-    FixStereo(Track);
+    FixStereo(ptk, Track);
 
     Set_Track_Zoom(ptk, Track, (TRACK_TYPE) Global_Patterns_Font);
 }
@@ -2253,7 +2253,7 @@ void Copy_Track(ptk_data *ptk, int Position, int Track_Src, int Track_Dst)
         CHAN_ACTIVE_STATE[i][Track_Dst] = CHAN_ACTIVE_STATE[i][Track_Src];
     }
     ComputeStereo(Track_Dst);
-    FixStereo(Track_Dst);
+    FixStereo(ptk, Track_Dst);
 
     /* Make sure the track still look the same */
     Set_Track_Zoom(ptk, Track_Dst, Get_Track_Zoom(ptk, Track_Src));

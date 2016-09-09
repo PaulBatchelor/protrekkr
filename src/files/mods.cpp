@@ -343,15 +343,15 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
 
             Songplaying = FALSE;
 
-            Free_Samples();
+            Free_Samples(ptk);
             Clear_Patterns_Pool(ptk);
 
 #if !defined(__NO_MIDI__) && !defined(__WINAMP__)
-            Midi_Reset();
+            Midi_Reset(ptk);
 #endif
 
             init_sample_bank();
-            Pre_Song_Init();
+            Pre_Song_Init(ptk);
             int Patterns;
 
             if(digibooster)
@@ -393,8 +393,8 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                 Digi_Mod = (unsigned char *) malloc((Patterns * 64 * 4 * channels) + Smps_Length + 1084);
                 if(!Digi_Mod)
                 {
-                    Status_Box("Not enough memory.");
-                    Clear_Input();
+                    Status_Box(ptk, "Not enough memory.");
+                    Clear_Input(ptk);
                     return;
                 }
                 memset(Digi_Mod, 0, (Patterns * 64 * 4 * channels) + Smps_Length + 1084);
@@ -661,7 +661,7 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                     // Precalc the speed for that row
                     for(pw2 = 0; pw2 < channels; pw2++)
                     {
-                        int tmo = Get_Pattern_Offset(pSequence[pwrite], pw2, li2);
+                        int tmo = Get_Pattern_Offset(ptk, pSequence[pwrite], pw2, li2);
                         int f_byte = Getc_Mod();
                         int t_sample = f_byte >> 4;
                         int t_period = ((f_byte - (t_sample << 4)) << 8) + (int) Getc_Mod();
@@ -710,7 +710,7 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                                             // Check if we already have recorded it
                                             for(k = 0; k < channels; k++)
                                             {
-                                                int free_chan = Get_Pattern_Offset(pSequence[pwrite], k, li2);
+                                                int free_chan = Get_Pattern_Offset(ptk, pSequence[pwrite], k, li2);
                                                 if(*(RawPatterns + free_chan + PATTERN_FX2) == 0xf0 &&
                                                    *(RawPatterns + free_chan + PATTERN_FXDATA2) == found_tempo)
                                                 {
@@ -722,7 +722,7 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                                             {
                                                 for(k = 0; k < channels; k++)
                                                 {
-                                                    int free_chan = Get_Pattern_Offset(pSequence[pwrite], k, li2);
+                                                    int free_chan = Get_Pattern_Offset(ptk, pSequence[pwrite], k, li2);
                                                     if(!*(RawPatterns + free_chan + PATTERN_FX2))
                                                     {
                                                         found_free_chan = TRUE;
@@ -769,7 +769,7 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                     Seek_Mod(1084 + (pSequence[pwrite] * (4 * channels * 64) + (4 * channels * li2)), SEEK_SET);
                     for(pw2 = 0; pw2 < channels; pw2++)
                     {
-                        int tmo = Get_Pattern_Offset(pSequence[pwrite], pw2, li2);
+                        int tmo = Get_Pattern_Offset(ptk, pSequence[pwrite], pw2, li2);
                         int f_byte = Getc_Mod();
                         int t_sample = f_byte >> 4;
                         int t_period = ((f_byte - (t_sample << 4)) << 8) + (int) Getc_Mod();
@@ -1158,7 +1158,7 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
             {
                 TPan[i] = mt_pannels[i];
                 ComputeStereo(i);
-                FixStereo(i);
+                FixStereo(ptk, i);
             }
 
             Use_Cubic = NONE_INT;
@@ -1170,21 +1170,21 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
             free(Mod_Dat);
             Mod_Dat = NULL;
 
-            Load_Old_Reverb_Presets(0);
+            Load_Old_Reverb_Presets(ptk, 0);
 
             Init_Tracker_Context_After_ModLoad(ptk);
 
         }
         else
         {
-            Status_Box("Not enough memory.");
+            Status_Box(ptk, "Not enough memory.");
         }
     }
     else
     {
-        Status_Box("Protracker module loading failed. (Possible cause: file not found)");
+        Status_Box(ptk, "Protracker module loading failed. (Possible cause: file not found)");
     }
 
-    Clear_Input();
+    Clear_Input(ptk);
 }
 #endif // __WINAMP__

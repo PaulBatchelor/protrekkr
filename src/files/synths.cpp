@@ -36,8 +36,8 @@
 // ------------------------------------------------------
 // Load the data of a synth instrument
 // (The new version (v4) use correct data aligment)
-void Read_Synth_Params(int (*Read_Function)(void *, int ,int, FILE *),
-                       int (*Read_Function_Swap)(void *, int ,int, FILE *),
+void Read_Synth_Params(ptk_data *ptk, int (*Read_Function)(ptk_data *, void *, int ,int, FILE *),
+                       int (*Read_Function_Swap)(ptk_data *, void *, int ,int, FILE *),
                        FILE *in,
                        int idx,
                        int read_disto,
@@ -52,103 +52,103 @@ void Read_Synth_Params(int (*Read_Function)(void *, int ,int, FILE *),
     {
         if(read_disto && read_lfo_adsr)
         {
-            Read_Function(&PARASynth[idx], sizeof(SynthParameters), 1, in);
+            Read_Function(ptk, &PARASynth[idx], sizeof(SynthParameters), 1, in);
         }
         else
         {
             if(read_disto)
             {
-                Read_Function(&PARASynth[idx], sizeof(SynthParameters) - 32, 1, in);
+                Read_Function(ptk, &PARASynth[idx], sizeof(SynthParameters) - 32, 1, in);
             }
             else
             {
                 if(Ntk_Beta)
                 {
-                    Read_Function(&PARASynth[idx].presetname, sizeof(char), 20, in);
+                    Read_Function(ptk, &PARASynth[idx].presetname, sizeof(char), 20, in);
         
-                    Read_Function(&PARASynth[idx].osc1_waveform, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].osc2_waveform, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].osc1_waveform, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].osc2_waveform, sizeof(char), 1, in);
         
-                    Read_Function_Swap(&PARASynth[idx].osc1_pw, sizeof(int), 1, in);
-                    Read_Function_Swap(&PARASynth[idx].osc2_pw, sizeof(int), 1, in);
+                    Read_Function_Swap(ptk, &PARASynth[idx].osc1_pw, sizeof(int), 1, in);
+                    Read_Function_Swap(ptk, &PARASynth[idx].osc2_pw, sizeof(int), 1, in);
         
-                    Read_Function(&PARASynth[idx].osc2_detune, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].osc2_finetune, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].osc2_detune, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].osc2_finetune, sizeof(char), 1, in);
         
-                    Read_Function(&PARASynth[idx].vcf_cutoff, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].vcf_resonance, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].vcf_cutoff, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].vcf_resonance, sizeof(char), 1, in);
                     char phony;
-                    Read_Function(&phony, sizeof(char), 1, in);
-                    Read_Function(&phony, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].vcf_type, sizeof(char), 1, in);
-                    Read_Function(&phony, sizeof(char), 1, in);
-                    Read_Function(&phony, sizeof(char), 1, in);
-                    Read_Function(&phony, sizeof(char), 1, in);
+                    Read_Function(ptk, &phony, sizeof(char), 1, in);
+                    Read_Function(ptk, &phony, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].vcf_type, sizeof(char), 1, in);
+                    Read_Function(ptk, &phony, sizeof(char), 1, in);
+                    Read_Function(ptk, &phony, sizeof(char), 1, in);
+                    Read_Function(ptk, &phony, sizeof(char), 1, in);
     
-                    Read_Function_Swap(&PARASynth[idx].env1_attack, sizeof(int), 1, in);
-                    Read_Function_Swap(&PARASynth[idx].env1_decay, sizeof(int), 1, in);
-                    Read_Function(&PARASynth[idx].env1_sustain, sizeof(char), 1, in);   //44
-                    Read_Function(&phony, sizeof(char), 1, in);
-                    Read_Function(&phony, sizeof(char), 1, in);
-                    Read_Function(&phony, sizeof(char), 1, in);
+                    Read_Function_Swap(ptk, &PARASynth[idx].env1_attack, sizeof(int), 1, in);
+                    Read_Function_Swap(ptk, &PARASynth[idx].env1_decay, sizeof(int), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].env1_sustain, sizeof(char), 1, in);   //44
+                    Read_Function(ptk, &phony, sizeof(char), 1, in);
+                    Read_Function(ptk, &phony, sizeof(char), 1, in);
+                    Read_Function(ptk, &phony, sizeof(char), 1, in);
     
-                    Read_Function_Swap(&PARASynth[idx].env1_release, sizeof(int), 1, in);
-                    Read_Function_Swap(&PARASynth[idx].env2_attack, sizeof(int), 1, in);
-                    Read_Function_Swap(&PARASynth[idx].env2_decay, sizeof(int), 1, in);
-                    Read_Function(&PARASynth[idx].env2_sustain, sizeof(char), 1, in);
-                    Read_Function(&phony, sizeof(char), 1, in);
-                    Read_Function(&phony, sizeof(char), 1, in);
-                    Read_Function(&phony, sizeof(char), 1, in);
-                    Read_Function_Swap(&PARASynth[idx].env2_release, sizeof(int), 1, in);//61
+                    Read_Function_Swap(ptk, &PARASynth[idx].env1_release, sizeof(int), 1, in);
+                    Read_Function_Swap(ptk, &PARASynth[idx].env2_attack, sizeof(int), 1, in);
+                    Read_Function_Swap(ptk, &PARASynth[idx].env2_decay, sizeof(int), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].env2_sustain, sizeof(char), 1, in);
+                    Read_Function(ptk, &phony, sizeof(char), 1, in);
+                    Read_Function(ptk, &phony, sizeof(char), 1, in);
+                    Read_Function(ptk, &phony, sizeof(char), 1, in);
+                    Read_Function_Swap(ptk, &PARASynth[idx].env2_release, sizeof(int), 1, in);//61
     
-                    Read_Function_Swap(&PARASynth[idx].lfo1_period, sizeof(int), 1, in);
-                    Read_Function_Swap(&PARASynth[idx].lfo2_period, sizeof(int), 1, in);
+                    Read_Function_Swap(ptk, &PARASynth[idx].lfo1_period, sizeof(int), 1, in);
+                    Read_Function_Swap(ptk, &PARASynth[idx].lfo2_period, sizeof(int), 1, in);
 
-                    Read_Function(&PARASynth[idx].lfo1_osc1_pw, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].lfo1_osc2_pw, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].lfo1_osc1_pw, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].lfo1_osc2_pw, sizeof(char), 1, in);
                     PARASynth[idx].lfo1_osc1_pitch = 0x40;
                     PARASynth[idx].lfo1_osc2_pitch = 0x40;
-                    Read_Function(&PARASynth[idx].lfo1_osc1_volume, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].lfo1_osc2_volume, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].lfo1_vcf_cutoff, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].lfo1_vcf_resonance, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].lfo1_osc1_volume, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].lfo1_osc2_volume, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].lfo1_vcf_cutoff, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].lfo1_vcf_resonance, sizeof(char), 1, in);
 
-                    Read_Function(&PARASynth[idx].lfo2_osc1_pw, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].lfo2_osc2_pw, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].lfo2_osc1_pw, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].lfo2_osc2_pw, sizeof(char), 1, in);
                     PARASynth[idx].lfo2_osc1_pitch = 0x40;
                     PARASynth[idx].lfo2_osc2_pitch = 0x40;
-                    Read_Function(&PARASynth[idx].lfo2_osc1_volume, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].lfo2_osc2_volume, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].lfo2_vcf_cutoff, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].lfo2_vcf_resonance, sizeof(char), 1, in);//81
-                    Read_Function(&PARASynth[idx].env1_osc1_pw, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].env1_osc2_pw, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].lfo2_osc1_volume, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].lfo2_osc2_volume, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].lfo2_vcf_cutoff, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].lfo2_vcf_resonance, sizeof(char), 1, in);//81
+                    Read_Function(ptk, &PARASynth[idx].env1_osc1_pw, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].env1_osc2_pw, sizeof(char), 1, in);
                     PARASynth[idx].env1_osc1_pitch = 0x40;
                     PARASynth[idx].env1_osc2_pitch = 0x40;
-                    Read_Function(&PARASynth[idx].env1_osc1_volume, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].env1_osc2_volume, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].env1_vcf_cutoff, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].env1_vcf_resonance, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].env1_osc1_volume, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].env1_osc2_volume, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].env1_vcf_cutoff, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].env1_vcf_resonance, sizeof(char), 1, in);
 
-                    Read_Function(&PARASynth[idx].env2_osc1_pw, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].env2_osc2_pw, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].env2_osc1_pw, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].env2_osc2_pw, sizeof(char), 1, in);
                     PARASynth[idx].env2_osc1_pitch = 0x40;
                     PARASynth[idx].env2_osc2_pitch = 0x40;
-                    Read_Function(&PARASynth[idx].env2_osc1_volume, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].env2_osc2_volume, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].env2_vcf_cutoff, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].env2_vcf_resonance, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].env2_osc1_volume, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].env2_osc2_volume, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].env2_vcf_cutoff, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].env2_vcf_resonance, sizeof(char), 1, in);
 
-                    Read_Function(&PARASynth[idx].osc3_volume, sizeof(char), 1, in);
-                    Read_Function(&PARASynth[idx].osc3_switch, sizeof(char), 1, in);//96
-                    Read_Function(&phony, sizeof(char), 1, in);
-                    Read_Function(&phony, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].osc3_volume, sizeof(char), 1, in);
+                    Read_Function(ptk, &PARASynth[idx].osc3_switch, sizeof(char), 1, in);//96
+                    Read_Function(ptk, &phony, sizeof(char), 1, in);
+                    Read_Function(ptk, &phony, sizeof(char), 1, in);
                     PARASynth[idx].ptc_glide = 0;
                     PARASynth[idx].glb_volume = 127;
                 }
                 else
                 {
-                    Read_Function(&PARASynth[idx], sizeof(SynthParameters) - 4 - 32, 1, in);
+                    Read_Function(ptk, &PARASynth[idx], sizeof(SynthParameters) - 4 - 32, 1, in);
                 }
             }
         }
@@ -180,95 +180,95 @@ void Read_Synth_Params(int (*Read_Function)(void *, int ,int, FILE *),
     }
     else
     {
-        Read_Function(&PARASynth[idx].presetname, sizeof(char), 20, in);
+        Read_Function(ptk, &PARASynth[idx].presetname, sizeof(char), 20, in);
         
-        Read_Function(&PARASynth[idx].osc1_waveform, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].osc2_waveform, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].osc1_waveform, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].osc2_waveform, sizeof(char), 1, in);
         
-        Read_Function_Swap(&PARASynth[idx].osc1_pw, sizeof(int), 1, in);
-        Read_Function_Swap(&PARASynth[idx].osc2_pw, sizeof(int), 1, in);
+        Read_Function_Swap(ptk, &PARASynth[idx].osc1_pw, sizeof(int), 1, in);
+        Read_Function_Swap(ptk, &PARASynth[idx].osc2_pw, sizeof(int), 1, in);
         
-        Read_Function(&PARASynth[idx].osc2_detune, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].osc2_finetune, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].osc2_detune, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].osc2_finetune, sizeof(char), 1, in);
         
-        Read_Function(&PARASynth[idx].vcf_cutoff, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].vcf_resonance, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].vcf_type, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].vcf_cutoff, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].vcf_resonance, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].vcf_type, sizeof(char), 1, in);
     
-        Read_Function_Swap(&PARASynth[idx].env1_attack, sizeof(int), 1, in);
-        Read_Function_Swap(&PARASynth[idx].env1_decay, sizeof(int), 1, in);
-        Read_Function(&PARASynth[idx].env1_sustain, sizeof(char), 1, in);
-        Read_Function_Swap(&PARASynth[idx].env1_release, sizeof(int), 1, in);
+        Read_Function_Swap(ptk, &PARASynth[idx].env1_attack, sizeof(int), 1, in);
+        Read_Function_Swap(ptk, &PARASynth[idx].env1_decay, sizeof(int), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env1_sustain, sizeof(char), 1, in);
+        Read_Function_Swap(ptk, &PARASynth[idx].env1_release, sizeof(int), 1, in);
     
-        Read_Function_Swap(&PARASynth[idx].env2_attack, sizeof(int), 1, in);
-        Read_Function_Swap(&PARASynth[idx].env2_decay, sizeof(int), 1, in);
-        Read_Function(&PARASynth[idx].env2_sustain, sizeof(char), 1, in);
-        Read_Function_Swap(&PARASynth[idx].env2_release, sizeof(int), 1, in);
+        Read_Function_Swap(ptk, &PARASynth[idx].env2_attack, sizeof(int), 1, in);
+        Read_Function_Swap(ptk, &PARASynth[idx].env2_decay, sizeof(int), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env2_sustain, sizeof(char), 1, in);
+        Read_Function_Swap(ptk, &PARASynth[idx].env2_release, sizeof(int), 1, in);
     
-        Read_Function_Swap(&PARASynth[idx].lfo1_period, sizeof(int), 1, in);
-        Read_Function_Swap(&PARASynth[idx].lfo2_period, sizeof(int), 1, in);
+        Read_Function_Swap(ptk, &PARASynth[idx].lfo1_period, sizeof(int), 1, in);
+        Read_Function_Swap(ptk, &PARASynth[idx].lfo2_period, sizeof(int), 1, in);
 
-        Read_Function(&PARASynth[idx].lfo1_osc1_pw, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].lfo1_osc2_pw, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].lfo1_osc1_pitch, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].lfo1_osc2_pitch, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].lfo1_osc1_volume, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].lfo1_osc2_volume, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].lfo1_vcf_cutoff, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].lfo1_vcf_resonance, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo1_osc1_pw, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo1_osc2_pw, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo1_osc1_pitch, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo1_osc2_pitch, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo1_osc1_volume, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo1_osc2_volume, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo1_vcf_cutoff, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo1_vcf_resonance, sizeof(char), 1, in);
 
-        Read_Function(&PARASynth[idx].lfo2_osc1_pw, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].lfo2_osc2_pw, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].lfo2_osc1_pitch, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].lfo2_osc2_pitch, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].lfo2_osc1_volume, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].lfo2_osc2_volume, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].lfo2_vcf_cutoff, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].lfo2_vcf_resonance, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo2_osc1_pw, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo2_osc2_pw, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo2_osc1_pitch, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo2_osc2_pitch, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo2_osc1_volume, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo2_osc2_volume, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo2_vcf_cutoff, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].lfo2_vcf_resonance, sizeof(char), 1, in);
 
-        Read_Function(&PARASynth[idx].env1_osc1_pw, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].env1_osc2_pw, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].env1_osc1_pitch, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].env1_osc2_pitch, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].env1_osc1_volume, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].env1_osc2_volume, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].env1_vcf_cutoff, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].env1_vcf_resonance, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env1_osc1_pw, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env1_osc2_pw, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env1_osc1_pitch, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env1_osc2_pitch, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env1_osc1_volume, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env1_osc2_volume, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env1_vcf_cutoff, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env1_vcf_resonance, sizeof(char), 1, in);
 
-        Read_Function(&PARASynth[idx].env2_osc1_pw, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].env2_osc2_pw, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].env2_osc1_pitch, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].env2_osc2_pitch, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].env2_osc1_volume, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].env2_osc2_volume, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].env2_vcf_cutoff, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].env2_vcf_resonance, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env2_osc1_pw, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env2_osc2_pw, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env2_osc1_pitch, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env2_osc2_pitch, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env2_osc1_volume, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env2_osc2_volume, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env2_vcf_cutoff, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].env2_vcf_resonance, sizeof(char), 1, in);
 
-        Read_Function(&PARASynth[idx].osc3_volume, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].osc3_switch, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].osc3_volume, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].osc3_switch, sizeof(char), 1, in);
 
-        Read_Function(&PARASynth[idx].ptc_glide, sizeof(char), 1, in);
-        Read_Function(&PARASynth[idx].glb_volume, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].ptc_glide, sizeof(char), 1, in);
+        Read_Function(ptk, &PARASynth[idx].glb_volume, sizeof(char), 1, in);
 
         if(read_disto)
         {
-            Read_Function(&PARASynth[idx].disto, sizeof(char), 1, in);
+            Read_Function(ptk, &PARASynth[idx].disto, sizeof(char), 1, in);
         }
 
         if(read_lfo_adsr)
         {
-            Read_Function_Swap(&PARASynth[idx].lfo1_attack, sizeof(int), 1, in);
-            Read_Function_Swap(&PARASynth[idx].lfo1_decay, sizeof(int), 1, in);
-            Read_Function(&PARASynth[idx].lfo1_sustain, sizeof(char), 1, in);
-            Read_Function_Swap(&PARASynth[idx].lfo1_release, sizeof(int), 1, in);
+            Read_Function_Swap(ptk, &PARASynth[idx].lfo1_attack, sizeof(int), 1, in);
+            Read_Function_Swap(ptk, &PARASynth[idx].lfo1_decay, sizeof(int), 1, in);
+            Read_Function(ptk, &PARASynth[idx].lfo1_sustain, sizeof(char), 1, in);
+            Read_Function_Swap(ptk, &PARASynth[idx].lfo1_release, sizeof(int), 1, in);
 
-            Read_Function_Swap(&PARASynth[idx].lfo2_attack, sizeof(int), 1, in);
-            Read_Function_Swap(&PARASynth[idx].lfo2_decay, sizeof(int), 1, in);
-            Read_Function(&PARASynth[idx].lfo2_sustain, sizeof(char), 1, in);
-            Read_Function_Swap(&PARASynth[idx].lfo2_release, sizeof(int), 1, in);
+            Read_Function_Swap(ptk, &PARASynth[idx].lfo2_attack, sizeof(int), 1, in);
+            Read_Function_Swap(ptk, &PARASynth[idx].lfo2_decay, sizeof(int), 1, in);
+            Read_Function(ptk, &PARASynth[idx].lfo2_sustain, sizeof(char), 1, in);
+            Read_Function_Swap(ptk, &PARASynth[idx].lfo2_release, sizeof(int), 1, in);
         }
 
-        if(Combine) Read_Function(&PARASynth[idx].osc_combine, sizeof(char), 1, in);
+        if(Combine) Read_Function(ptk, &PARASynth[idx].osc_combine, sizeof(char), 1, in);
     }
 
     if(!Env_Modulation)
@@ -293,100 +293,101 @@ void Read_Synth_Params(int (*Read_Function)(void *, int ,int, FILE *),
 
 // ------------------------------------------------------
 // Save the data of a synth instrument
-void Write_Synth_Params(int (*Write_Function)(void *, int ,int, FILE *),
-                        int (*Write_Function_Swap)(void *, int ,int, FILE *),
+void Write_Synth_Params(ptk_data *ptk, 
+                        int (*Write_Function)(ptk_data *,void *, int ,int, FILE *),
+                        int (*Write_Function_Swap)(ptk_data *,void *, int ,int, FILE *),
                         FILE *in,
                         int idx)
 {
-    Write_Function(&PARASynth[idx].presetname, sizeof(char), 20, in);
+    Write_Function(ptk, &PARASynth[idx].presetname, sizeof(char), 20, in);
 
-    Write_Function(&PARASynth[idx].osc1_waveform, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].osc2_waveform, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].osc1_waveform, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].osc2_waveform, sizeof(char), 1, in);
 
-    Write_Function_Swap(&PARASynth[idx].osc1_pw, sizeof(int), 1, in);
-    Write_Function_Swap(&PARASynth[idx].osc2_pw, sizeof(int), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].osc1_pw, sizeof(int), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].osc2_pw, sizeof(int), 1, in);
 
-    Write_Function(&PARASynth[idx].osc2_detune, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].osc2_finetune, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].osc2_detune, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].osc2_finetune, sizeof(char), 1, in);
 
-    Write_Function(&PARASynth[idx].vcf_cutoff, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].vcf_resonance, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].vcf_type, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].vcf_cutoff, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].vcf_resonance, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].vcf_type, sizeof(char), 1, in);
 
-    Write_Function_Swap(&PARASynth[idx].env1_attack, sizeof(int), 1, in);
-    Write_Function_Swap(&PARASynth[idx].env1_decay, sizeof(int), 1, in);
-    Write_Function(&PARASynth[idx].env1_sustain, sizeof(char), 1, in);
-    Write_Function_Swap(&PARASynth[idx].env1_release, sizeof(int), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].env1_attack, sizeof(int), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].env1_decay, sizeof(int), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env1_sustain, sizeof(char), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].env1_release, sizeof(int), 1, in);
 
-    Write_Function_Swap(&PARASynth[idx].env2_attack, sizeof(int), 1, in);
-    Write_Function_Swap(&PARASynth[idx].env2_decay, sizeof(int), 1, in);
-    Write_Function(&PARASynth[idx].env2_sustain, sizeof(char), 1, in);
-    Write_Function_Swap(&PARASynth[idx].env2_release, sizeof(int), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].env2_attack, sizeof(int), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].env2_decay, sizeof(int), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env2_sustain, sizeof(char), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].env2_release, sizeof(int), 1, in);
 
-    Write_Function_Swap(&PARASynth[idx].lfo1_period, sizeof(int), 1, in);
-    Write_Function_Swap(&PARASynth[idx].lfo2_period, sizeof(int), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].lfo1_period, sizeof(int), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].lfo2_period, sizeof(int), 1, in);
 
-    Write_Function(&PARASynth[idx].lfo1_osc1_pw, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].lfo1_osc2_pw, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].lfo1_osc1_pitch, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].lfo1_osc2_pitch, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].lfo1_osc1_volume, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].lfo1_osc2_volume, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].lfo1_vcf_cutoff, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].lfo1_vcf_resonance, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo1_osc1_pw, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo1_osc2_pw, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo1_osc1_pitch, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo1_osc2_pitch, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo1_osc1_volume, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo1_osc2_volume, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo1_vcf_cutoff, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo1_vcf_resonance, sizeof(char), 1, in);
 
-    Write_Function(&PARASynth[idx].lfo2_osc1_pw, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].lfo2_osc2_pw, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].lfo2_osc1_pitch, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].lfo2_osc2_pitch, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].lfo2_osc1_volume, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].lfo2_osc2_volume, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].lfo2_vcf_cutoff, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].lfo2_vcf_resonance, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo2_osc1_pw, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo2_osc2_pw, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo2_osc1_pitch, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo2_osc2_pitch, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo2_osc1_volume, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo2_osc2_volume, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo2_vcf_cutoff, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo2_vcf_resonance, sizeof(char), 1, in);
 
-    Write_Function(&PARASynth[idx].env1_osc1_pw, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].env1_osc2_pw, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].env1_osc1_pitch, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].env1_osc2_pitch, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].env1_osc1_volume, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].env1_osc2_volume, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].env1_vcf_cutoff, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].env1_vcf_resonance, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env1_osc1_pw, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env1_osc2_pw, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env1_osc1_pitch, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env1_osc2_pitch, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env1_osc1_volume, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env1_osc2_volume, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env1_vcf_cutoff, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env1_vcf_resonance, sizeof(char), 1, in);
 
-    Write_Function(&PARASynth[idx].env2_osc1_pw, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].env2_osc2_pw, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].env2_osc1_pitch, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].env2_osc2_pitch, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].env2_osc1_volume, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].env2_osc2_volume, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].env2_vcf_cutoff, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].env2_vcf_resonance, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env2_osc1_pw, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env2_osc2_pw, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env2_osc1_pitch, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env2_osc2_pitch, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env2_osc1_volume, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env2_osc2_volume, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env2_vcf_cutoff, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].env2_vcf_resonance, sizeof(char), 1, in);
 
-    Write_Function(&PARASynth[idx].osc3_volume, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].osc3_switch, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].osc3_volume, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].osc3_switch, sizeof(char), 1, in);
 
-    Write_Function(&PARASynth[idx].ptc_glide, sizeof(char), 1, in);
-    Write_Function(&PARASynth[idx].glb_volume, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].ptc_glide, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].glb_volume, sizeof(char), 1, in);
 
-    Write_Function(&PARASynth[idx].disto, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].disto, sizeof(char), 1, in);
 
-    Write_Function_Swap(&PARASynth[idx].lfo1_attack, sizeof(int), 1, in);
-    Write_Function_Swap(&PARASynth[idx].lfo1_decay, sizeof(int), 1, in);
-    Write_Function(&PARASynth[idx].lfo1_sustain, sizeof(char), 1, in);
-    Write_Function_Swap(&PARASynth[idx].lfo1_release, sizeof(int), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].lfo1_attack, sizeof(int), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].lfo1_decay, sizeof(int), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo1_sustain, sizeof(char), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].lfo1_release, sizeof(int), 1, in);
 
-    Write_Function_Swap(&PARASynth[idx].lfo2_attack, sizeof(int), 1, in);
-    Write_Function_Swap(&PARASynth[idx].lfo2_decay, sizeof(int), 1, in);
-    Write_Function(&PARASynth[idx].lfo2_sustain, sizeof(char), 1, in);
-    Write_Function_Swap(&PARASynth[idx].lfo2_release, sizeof(int), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].lfo2_attack, sizeof(int), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].lfo2_decay, sizeof(int), 1, in);
+    Write_Function(ptk, &PARASynth[idx].lfo2_sustain, sizeof(char), 1, in);
+    Write_Function_Swap(ptk, &PARASynth[idx].lfo2_release, sizeof(int), 1, in);
 
-    Write_Function(&PARASynth[idx].osc_combine, sizeof(char), 1, in);
+    Write_Function(ptk, &PARASynth[idx].osc_combine, sizeof(char), 1, in);
 }
 
 // ------------------------------------------------------
 // Load a synth preset
 #if !defined(__WINAMP__)
-void LoadSynth(char *FileName)
+void LoadSynth(ptk_data *ptk, char *FileName)
 {
     FILE *in;
     int new_version = FALSE;
@@ -416,8 +417,8 @@ void LoadSynth(char *FileName)
                 break;
         }
 
-        Status_Box("Loading Synthesizer -> structure...");
-        ResetSynthParameters(&PARASynth[Current_Instrument]);
+        Status_Box(ptk, "Loading Synthesizer -> structure...");
+        ResetSynthParameters(ptk, &PARASynth[Current_Instrument]);
 
         PARASynth[Current_Instrument].disto = 0;
 
@@ -431,7 +432,7 @@ void LoadSynth(char *FileName)
         PARASynth[Current_Instrument].lfo2_sustain = 128;
         PARASynth[Current_Instrument].lfo2_release = 0x10000;
 
-        Read_Synth_Params(Read_Data, Read_Data_Swap, in, Current_Instrument,
+        Read_Synth_Params(ptk, Read_Data, Read_Data_Swap, in, Current_Instrument,
                           TRUE, TRUE, new_version,
                           Env_Modulation, New_Env, FALSE, Combine);
 
@@ -441,23 +442,23 @@ void LoadSynth(char *FileName)
 
         Synthprg[Current_Instrument] = SYNTH_WAVE_CURRENT;
         sprintf(nameins[Current_Instrument],PARASynth[Current_Instrument].presetname);
-        Actualize_Synth_Ed(UPDATE_SYNTH_ED_ALL);
+        Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_ALL);
 
-        Actualize_Instrument_Ed(0, 0);
-        Actualize_DiskIO_Ed(0);
+        Actualize_Instrument_Ed(ptk, 0, 0);
+        Actualize_DiskIO_Ed(ptk, 0);
         Actualize_Patterned(ptk);
-        Status_Box("Synthesizer program loaded ok.");
+        Status_Box(ptk, "Synthesizer program loaded ok.");
         fclose(in);
     }
     else
     {
-        Status_Box("Synthesizer program loading failed. (Possible cause: file not found)");
+        Status_Box(ptk, "Synthesizer program loading failed. (Possible cause: file not found)");
     }
 }
 
 // ------------------------------------------------------
 // Save the current synth preset
-void SaveSynth(void)
+void SaveSynth(ptk_data *ptk)
 {
     FILE *in;
     char Temph[MAX_PATH];
@@ -465,26 +466,26 @@ void SaveSynth(void)
 
     sprintf(extension, "TWNNSYN4");
     sprintf (Temph, "Saving '%s.pts' synthesizer program in presets directory...", PARASynth[Current_Instrument].presetname);
-    Status_Box(Temph);
+    Status_Box(ptk, Temph);
 
     sprintf(Temph, "%s"SLASH"%s.pts", Dir_Presets, PARASynth[Current_Instrument].presetname);
 
     in = fopen(Temph, "wb");
     if(in != NULL)
     {
-        Write_Data(extension, sizeof(char), 9, in);
-        Write_Synth_Params(Write_Data, Write_Data_Swap, in, Current_Instrument);
+        Write_Data(ptk, extension, sizeof(char), 9, in);
+        Write_Synth_Params(ptk, Write_Data, Write_Data_Swap, in, Current_Instrument);
         fclose(in);
 
-        Read_SMPT();
+        Read_SMPT(ptk);
         last_index = -1;
-        Actualize_Files_List(0);
-        Status_Box("Synthesizer program saved succesfully."); 
+        Actualize_Files_List(ptk, 0);
+        Status_Box(ptk, "Synthesizer program saved succesfully."); 
     }
     else
     {
-        Status_Box("Synthesizer program save failed.");
+        Status_Box(ptk, "Synthesizer program save failed.");
     }
-    Clear_Input();
+    Clear_Input(ptk);
 }
 #endif

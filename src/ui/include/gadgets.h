@@ -32,6 +32,9 @@
 #ifndef _GADGETS_H_
 #define _GADGETS_H_
 
+/*TODO main.h is troublesome for ptk_data...*/
+#include "../../include/ptk_data.h"
+
 // ------------------------------------------------------
 // Includes
 #if defined(__GCC__)

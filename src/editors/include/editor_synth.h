@@ -65,12 +65,12 @@
 
 // ------------------------------------------------------
 // Functions
-void Draw_Synth_Ed(void);
-void Actualize_Synth_Ed(char gode);
-void Mouse_Sliders_Synth_Ed(void);
-void Mouse_Right_Synth_Ed(void);
-void Mouse_Left_Synth_Ed(void);
-void Actualize_SynthParSlider(void);
-void IniCsParNames(void);
+void Draw_Synth_Ed(ptk_data *ptk);
+void Actualize_Synth_Ed(ptk_data *ptk, char gode);
+void Mouse_Sliders_Synth_Ed(ptk_data *ptk);
+void Mouse_Right_Synth_Ed(ptk_data *ptk);
+void Mouse_Left_Synth_Ed(ptk_data *ptk);
+void Actualize_SynthParSlider(ptk_data *ptk);
+void IniCsParNames(ptk_data *ptk);
 
 #endif

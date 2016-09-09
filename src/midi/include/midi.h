@@ -51,22 +51,22 @@ extern int midiout_changed;
 
 // ------------------------------------------------------
 // Functions
-void Midi_AllNotesOff(void);
-void Midi_Reset(void);
+void Midi_AllNotesOff(ptk_data *ptk);
+void Midi_Reset(ptk_data *ptk);
 
-void Midi_GetAll(void);
-void Midi_FreeAll(void);
+void Midi_GetAll(ptk_data *ptk);
+void Midi_FreeAll(ptk_data *ptk);
 
-void Midi_InitIn(void);
-void Midi_CloseIn(void);
-void Midi_InitOut(void);
-void Midi_CloseOut(void);
+void Midi_InitIn(ptk_data *ptk);
+void Midi_CloseIn(ptk_data *ptk);
+void Midi_InitOut(ptk_data *ptk);
+void Midi_CloseOut(ptk_data *ptk);
 
-void Midi_NoteOff(int channel, int note);
-void Midi_Send(int nbr_track, int eff_dat, int row_dat);
+void Midi_NoteOff(ptk_data *ptk, int channel, int note);
+void Midi_Send(ptk_data *ptk, int nbr_track, int eff_dat, int row_dat);
 
-char *Midi_GetInName(void);
-char *Midi_GetOutName(void);
+char *Midi_GetInName(ptk_data *ptk);
+char *Midi_GetOutName(ptk_data *ptk);
 
 #endif
 

@@ -41,8 +41,8 @@
 
 // ------------------------------------------------------
 // Functions
-void Read_Synth_Params(int (*Read_Function)(void *, int ,int, FILE *),
-                       int (*Read_Function_Swap)(void *, int ,int, FILE *),
+void Read_Synth_Params(ptk_data *ptk, int (*Read_Function)(ptk_data *,void *, int ,int, FILE *),
+                       int (*Read_Function_Swap)(ptk_data *,void *, int ,int, FILE *),
                        FILE *in,
                        int idx,
                        int read_disto,
@@ -52,11 +52,11 @@ void Read_Synth_Params(int (*Read_Function)(void *, int ,int, FILE *),
                        int New_Env,
                        int Ntk_Beta,
                        int Combine);
-void Write_Synth_Params(int (*Write_Function)(void *, int ,int, FILE *),
-                        int (*Write_Function_Swap)(void *, int ,int, FILE *),
+void Write_Synth_Params(ptk_data *ptk, int (*Write_Function)(ptk_data *, void *, int ,int, FILE *),
+                        int (*Write_Function_Swap)(ptk_data *, void *, int ,int, FILE *),
                         FILE *in,
                         int idx);
-void LoadSynth(char *FileName);
-void SaveSynth(void);
+void LoadSynth(ptk_data *ptk, char *FileName);
+void SaveSynth(ptk_data *ptk);
 
 #endif

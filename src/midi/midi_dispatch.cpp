@@ -39,6 +39,8 @@
 // ------------------------------------------------------
 // Variables
 extern int gui_bpm_action;
+/*TODO: remove this ugly global variable */
+extern ptk_data *g_ptk;
 
 // ------------------------------------------------------
 // Master volume (LIVE)
@@ -388,6 +390,7 @@ void Midi_Transport_LiveRec(int Data)
 // Set pattern row (EDIT)
 void Midi_Edit_Set_Row(int Data)
 {
+    ptk_data *ptk = g_ptk;
     if(!is_recording && !Songplaying)
     {
         int Pos = Get_Song_Position(ptk);
@@ -443,6 +446,8 @@ void Midi_Edit_Set_Instrument(int Data)
 // Switch track on/off (LIVE)
 void Midi_Edit_Track_On_Off(int Data)
 {
+    /*TODO: remove this ugly global variable */
+    ptk_data *ptk = g_ptk;
     Ext_Pos_Switch = Get_Song_Position(ptk);
     Ext_Track_Switch = Track_Under_Caret;
     gui_action = GUI_CMD_SWITCH_TRACK_STATUS;
@@ -544,7 +549,7 @@ MIDI_PTK_CMD Str_Midi_Commands[NBR_MIDI_AUTOMATION] =
 
 // ------------------------------------------------------
 // Run various command associated to midi messages
-void Dispatch_Midi_Msg(int CC, int Data)
+void Dispatch_Midi_Msg(ptk_data *ptk, int CC, int Data)
 {
     int i;
 

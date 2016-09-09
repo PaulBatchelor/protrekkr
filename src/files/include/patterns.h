@@ -43,14 +43,14 @@
 
 // ------------------------------------------------------
 // Functions
-void Load_Pattern_Data(int (*Read_Function)(void *, int ,int, FILE *),
-                      int (*Read_Function_Swap)(void *, int ,int, FILE *),
+void Load_Pattern_Data(ptk_data *, int (*Read_Function)(ptk_data *ptk, void *, int ,int, FILE *),
+                      int (*Read_Function_Swap)(ptk_data *, void *, int ,int, FILE *),
                       FILE *in,
                       int version);
-void Save_Pattern_Data(int (*Write_Function)(void *, int ,int, FILE *),
+void Save_Pattern_Data(ptk_data *ptk, int (*Write_Function)(ptk_data *, void *, int ,int, FILE *),
                       int (*Write_Function_Swap)(void *, int ,int, FILE *),
                       FILE *in);
-void LoadPattern(char *FileName);
-void SavePattern(void);
+void LoadPattern(ptk_data *ptk, char *FileName);
+void SavePattern(ptk_data *ptk);
 
 #endif

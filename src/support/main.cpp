@@ -32,7 +32,6 @@
 // ------------------------------------------------------
 // Includes
 #include "../include/ptk.h"
-
 #if defined(__AROS__)
 #include <cstdlib>
 #define SDL_putenv putenv
@@ -356,6 +355,7 @@ void Load_Keyboard_Def(char *FileName)
     }
 }
 
+extern ptk_data *g_ptk;
 // ------------------------------------------------------
 // Main part of the tracker interface
 #if defined(__WIN32__)
@@ -383,7 +383,9 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
     int in_note;
     char Win_Coords[64];
     Uint32 ExePath_Size = MAX_PATH;
-    ptk_init(&ptk);
+    /*TODO: No more global struct */
+    ptk_data *ptk = g_ptk;
+    ptk_init(ptk);
 #if defined(__MACOSX__)
     Uint32 Path_Length;
 #endif
@@ -493,7 +495,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 
     // Set the default palette before loading the config file
     Restore_Default_Palette(Default_Palette1, Default_Beveled1);
-    LoadConfig();
+    LoadConfig(ptk);
 
     if(!strlen(Keyboard_Name)) sprintf(Keyboard_Name, "%s", "kben.txt");
 
@@ -578,7 +580,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
     Ptk_Palette[0].g = 0;
     Ptk_Palette[0].b = 0;
 
-    if(!Switch_FullScreen(Cur_Width, Cur_Height))
+    if(!Switch_FullScreen(ptk, Cur_Width, Cur_Height))
     {
         Message_Error("Can't open screen.");
         SDL_Quit();
@@ -595,10 +597,10 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 
 #if !defined(__NO_MIDI__)
     // Load midi devices infos
-    Midi_GetAll();
+    Midi_GetAll(ptk);
 #endif
 
-    if(!Init_Context(&ptk))
+    if(!Init_Context(ptk))
     {
         SDL_Quit();
         exit(0);
@@ -630,7 +632,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 
     if(argc != 1)
     {
-        LoadFile(&ptk, 0, argv[1]);
+        LoadFile(ptk, 0, argv[1]);
     }
 
     while(!Prog_End)
@@ -728,7 +730,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
                         if(Keys[SDLK_RETURN])
                         {
                             FullScreen ^= TRUE;
-                            Switch_FullScreen(Cur_Width, Cur_Height);
+                            Switch_FullScreen(ptk, Cur_Width, Cur_Height);
                         }
                     }
                     break;
@@ -838,7 +840,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
                 case SDL_QUIT:
                     if(!In_Requester)
                     {
-                        Display_Requester(&Exit_Requester, GUI_CMD_NOP);
+                        Display_Requester(ptk, &Exit_Requester, GUI_CMD_NOP);
                     }
                     break;
 
@@ -846,7 +848,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
                     // Nullify it
                     sprintf(Win_Coords, "SDL_VIDEO_WINDOW_POS=");
                     SDL_putenv(Win_Coords);
-                    Switch_FullScreen(Events[i].resize.w, Events[i].resize.h);
+                    Switch_FullScreen(ptk, Events[i].resize.w, Events[i].resize.h);
                     break;
 
                 case SDL_ACTIVEEVENT:
@@ -876,11 +878,11 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
             }
         }
 
-        if(ptk.Display_Pointer) Display_Mouse_Pointer(Mouse.old_x, Mouse.old_y, TRUE);
+        if(ptk->Display_Pointer) Display_Mouse_Pointer(Mouse.old_x, Mouse.old_y, TRUE);
 
-        if(!Screen_Update(&ptk)) break;
+        if(!Screen_Update(ptk)) break;
 
-        if(ptk.Display_Pointer) Display_Mouse_Pointer(Mouse.x, Mouse.y, FALSE);
+        if(ptk->Display_Pointer) Display_Mouse_Pointer(Mouse.x, Mouse.y, FALSE);
 
         // Flush all pending blits
         if(Nbr_Update_Rects) SDL_UpdateRects(Main_Screen, Nbr_Update_Rects, Update_Stack);
@@ -892,7 +894,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
         // Display the title requester once
         if(!Burn_Title)
         {
-            Display_Requester(&Title_Requester, GUI_CMD_REFRESH_PALETTE);
+            Display_Requester(ptk, &Title_Requester, GUI_CMD_REFRESH_PALETTE);
             Burn_Title = TRUE;
         }
 
@@ -903,7 +905,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 #endif
 
     }
-    SaveConfig();
+    SaveConfig(ptk);
 
 	if(ExePath) free(ExePath);
 
@@ -951,18 +953,18 @@ int Switch_FullScreen(ptk_data *ptk, int Width, int Height)
     }
     Cur_Width = Width;
     Cur_Height = Height;
-    ptk.CONSOLE_WIDTH = Cur_Width;
-    ptk.CHANNELS_WIDTH = Cur_Width - 20;
-    ptk.TRACKS_WIDTH = Cur_Width - 20 - PAT_COL_NOTE;
-    ptk.CONSOLE_HEIGHT = Cur_Height;
-    ptk.CONSOLE_HEIGHT2 = Cur_Height;
+    ptk->CONSOLE_WIDTH = Cur_Width;
+    ptk->CHANNELS_WIDTH = Cur_Width - 20;
+    ptk->TRACKS_WIDTH = Cur_Width - 20 - PAT_COL_NOTE;
+    ptk->CONSOLE_HEIGHT = Cur_Height;
+    ptk->CONSOLE_HEIGHT2 = Cur_Height;
     MAX_PATT_SCREEN_X = Cur_Width - 19;
     Set_Pattern_Size(ptk);
-    restx = ptk.CONSOLE_WIDTH - 640;
-    resty = ptk.CONSOLE_HEIGHT - 492;
-    ptk.CONSOLE_HEIGHT2 = ptk.CONSOLE_HEIGHT - 42;
+    restx = ptk->CONSOLE_WIDTH - 640;
+    resty = ptk->CONSOLE_HEIGHT - 492;
+    ptk->CONSOLE_HEIGHT2 = ptk->CONSOLE_HEIGHT - 42;
     fsize = 638 + restx;
-    Visible_Columns = ptk.CONSOLE_WIDTH / 128;
+    Visible_Columns = ptk->CONSOLE_WIDTH / 128;
 
     // Flush any pending rects
     Nbr_Update_Rects = 0;

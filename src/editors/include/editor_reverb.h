@@ -79,12 +79,12 @@ extern char Reverb_Name[20];
 
 // ------------------------------------------------------
 // Functions
-void Draw_Reverb_Ed(void);
-void Actualize_Reverb_Ed(int gode);
-void Mouse_Right_Reverb_Ed(void);
-void Mouse_Left_Reverb_Ed(void);
-void Mouse_Sliders_Reverb_Ed(void);
-void Mouse_Sliders_Right_Reverb_Ed(void);
-void Mouse_Reverb_Ed();
+void Draw_Reverb_Ed(ptk_data *ptk);
+void Actualize_Reverb_Ed(ptk_data *ptk, int gode);
+void Mouse_Right_Reverb_Ed(ptk_data *ptk);
+void Mouse_Left_Reverb_Ed(ptk_data *ptk);
+void Mouse_Sliders_Reverb_Ed(ptk_data *ptk);
+void Mouse_Sliders_Right_Reverb_Ed(ptk_data *ptk);
+void Mouse_Reverb_Ed(ptk_data *ptk);
 
 #endif

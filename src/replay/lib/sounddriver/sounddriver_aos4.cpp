@@ -82,7 +82,7 @@ void *AUDIO_Thread(void *arg)
             AUDIO_Acknowledge = FALSE;
             if(AUDIO_Play_Flag)
             {
-                AUDIO_Mixer((Uint8 *) buf, AUDIO_SoundBuffer_Size);
+                AUDIO_Mixer(ptk, (Uint8 *) buf, AUDIO_SoundBuffer_Size);
             }
             else
             {

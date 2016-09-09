@@ -43,7 +43,7 @@ extern EQSTATE EqDat[MAX_TRACKS];
 void Display_Track_Compressor(void);
 void Display_Track_Volume(void);
 
-void Draw_Track_Fx_Ed(void)
+void Draw_Track_Fx_Ed(ptk_data *ptk)
 {
     Draw_Editors_Bar(USER_SCREEN_TRACK_FX_EDIT);
 
@@ -83,7 +83,7 @@ void Draw_Track_Fx_Ed(void)
     Gui_Draw_Button_Box(710 + (22 * 2), (Cur_Height - 40), 16, 16, H_ I_, BUTTON_NORMAL | BUTTON_NO_BORDER | BUTTON_TEXT_CENTERED);
 }
 
-void Actualize_Track_Fx_Ed(char gode)
+void Actualize_Track_Fx_Ed(ptk_data *ptk, char gode)
 {
     if(userscreen == USER_SCREEN_TRACK_FX_EDIT)
     {
@@ -238,7 +238,7 @@ void Actualize_Track_Fx_Ed(char gode)
     }//User gui screen match
 }
 
-void Mouse_Sliders_Track_Fx_Ed(void)
+void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_TRACK_FX_EDIT)
     {
@@ -298,7 +298,7 @@ void Mouse_Sliders_Track_Fx_Ed(void)
         if(zcheckMouse(602, (Cur_Height - 103), 67, 18) &&
            Compress_Track[Track_Under_Caret])
         {
-            Mas_Compressor_Set_Variables_Track(Track_Under_Caret,
+            Mas_Compressor_Set_Variables_Track(ptk, Track_Under_Caret,
                                                (Mouse.x - 612.0f) * 2.0f,
                                                 mas_comp_ratio_Track[Track_Under_Caret]);
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
@@ -309,7 +309,7 @@ void Mouse_Sliders_Track_Fx_Ed(void)
         if(zcheckMouse(602, (Cur_Height - 85), 67, 18) &&
            Compress_Track[Track_Under_Caret])
         {
-            Mas_Compressor_Set_Variables_Track(Track_Under_Caret,
+            Mas_Compressor_Set_Variables_Track(ptk, Track_Under_Caret,
                                                mas_comp_threshold_Track[Track_Under_Caret],
                                                (Mouse.x - 612.0f) * 2.0f);
             gui_action = GUI_CMD_UPDATE_TRACK_FX_ED;
@@ -401,7 +401,7 @@ void Mouse_Sliders_Track_Fx_Ed(void)
     }
 }
 
-void Mouse_Left_Track_Fx_Ed(void)
+void Mouse_Left_Track_Fx_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_TRACK_FX_EDIT)
     {

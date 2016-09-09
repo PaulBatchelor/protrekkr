@@ -101,7 +101,7 @@ void Me_Handler(void)
                 {
                     if(*ptrAUDIO_Play_Flag)
                     {
-                        AUDIO_Mixer((Uint8 *) ptrBuffer1, *ptrAUDIO_SoundBuffer_Size);
+                        AUDIO_Mixer(ptk, (Uint8 *) ptrBuffer1, *ptrAUDIO_SoundBuffer_Size);
                     }
                     else
                     {
@@ -116,7 +116,7 @@ void Me_Handler(void)
                 {
                     if(*ptrAUDIO_Play_Flag)
                     {
-                        AUDIO_Mixer((Uint8 *) ptrBuffer2, *ptrAUDIO_SoundBuffer_Size);
+                        AUDIO_Mixer(ptk, (Uint8 *) ptrBuffer2, *ptrAUDIO_SoundBuffer_Size);
                     }
                     else
                     {

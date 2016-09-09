@@ -41,14 +41,14 @@
 
 // ------------------------------------------------------
 // Functions
-void Load_Reverb_Data(int (*Read_Function)(void *, int ,int, FILE *),
-                      int (*Read_Function_Swap)(void *, int ,int, FILE *),
+void Load_Reverb_Data(ptk_data *ptk, int (*Read_Function)(ptk_data *, void *, int ,int, FILE *),
+                      int (*Read_Function_Swap)(ptk_data *, void *, int ,int, FILE *),
                       FILE *in, int New);
-void Save_Reverb_Data(int (*Write_Function)(void *, int ,int, FILE *),
-                      int (*Write_Function_Swap)(void *, int ,int, FILE *),
+void Save_Reverb_Data(ptk_data *ptk, int (*Write_Function)(ptk_data *, void *, int ,int, FILE *),
+                      int (*Write_Function_Swap)(ptk_data *, void *, int ,int, FILE *),
                       FILE *in);
-void LoadReverb(char *FileName);
-void SaveReverb(void);
-void Load_Old_Reverb_Presets(int Type);
+void LoadReverb(ptk_data *ptk, char *FileName);
+void SaveReverb(ptk_data *ptk);
+void Load_Old_Reverb_Presets(ptk_data *ptk, int Type);
 
 #endif

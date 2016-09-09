@@ -339,14 +339,14 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
         // Filter type
         if(zcheckMouse(79, (Cur_Height - 80), 16, 16) && FType[Track_Under_Caret] > 0)
         {
-            ResetFilters(Track_Under_Caret);
+            ResetFilters(ptk, Track_Under_Caret);
             FType[Track_Under_Caret]--;
             teac = 0;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
         }
         if(zcheckMouse(123, (Cur_Height - 80), 16, 16) && FType[Track_Under_Caret] < MAX_FILTER)
         {
-            ResetFilters(Track_Under_Caret);
+            ResetFilters(ptk, Track_Under_Caret);
             FType[Track_Under_Caret]++;
             teac = 0;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
@@ -547,14 +547,14 @@ void Mouse_Right_Track_Ed(ptk_data *ptk)
         // Filter type
         if(zcheckMouse(79, (Cur_Height - 80), 16, 16) && FType[Track_Under_Caret] > 0)
         {
-            ResetFilters(Track_Under_Caret);
+            ResetFilters(ptk, Track_Under_Caret);
             FType[Track_Under_Caret] -= 16;
             teac = 0;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
         }
         if(zcheckMouse(123, (Cur_Height - 80), 16, 16) && FType[Track_Under_Caret] < MAX_FILTER)
         {
-            ResetFilters(Track_Under_Caret);
+            ResetFilters(ptk, Track_Under_Caret);
             FType[Track_Under_Caret] += 16;
             teac = 0;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;

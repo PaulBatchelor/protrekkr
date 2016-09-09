@@ -79,7 +79,7 @@ SCREEN_COORD Pos_Midi_Automation[] =
 void Display_Midi_Automation(int Idx);
 void Mod_Midi_Automation_Value(int Amount);
 
-void Draw_Midi_Ed(void)
+void Draw_Midi_Ed(ptk_data *ptk)
 {
     char middev[80];
 
@@ -117,7 +117,7 @@ void Draw_Midi_Ed(void)
     Gui_Draw_Button_Box(749, (Cur_Height - 142), 34, 16, "Save", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
 }
 
-void Actualize_Midi_Ed(char gode)
+void Actualize_Midi_Ed(ptk_data *ptk, char gode)
 {
     if(userscreen == USER_SCREEN_SETUP_MIDI)
     {
@@ -213,8 +213,8 @@ void Actualize_Midi_Ed(char gode)
 
         // -----------
 #if !defined(__NO_MIDI__)
-        Midi_InitIn();
-        Midi_InitOut();
+        Midi_InitIn(ptk);
+        Midi_InitOut(ptk);
 #endif
 
         // Select midi in device
@@ -228,7 +228,7 @@ void Actualize_Midi_Ed(char gode)
 #if !defined(__NO_MIDI__)
             if(c_midiin != -1)
             {
-                Gui_Draw_Button_Box(132, (Cur_Height - 134), 182, 16, Midi_GetInName(), BUTTON_NORMAL | BUTTON_DISABLED);
+                Gui_Draw_Button_Box(132, (Cur_Height - 134), 182, 16, Midi_GetInName(ptk), BUTTON_NORMAL | BUTTON_DISABLED);
             }
             else
             {
@@ -250,7 +250,7 @@ void Actualize_Midi_Ed(char gode)
 #if !defined(__NO_MIDI__)
             if(c_midiout != -1)
             {
-                Gui_Draw_Button_Box(132, (Cur_Height - 117), 182, 16, Midi_GetOutName(), BUTTON_NORMAL | BUTTON_DISABLED);
+                Gui_Draw_Button_Box(132, (Cur_Height - 117), 182, 16, Midi_GetOutName(ptk), BUTTON_NORMAL | BUTTON_DISABLED);
             }
             else
             {
@@ -263,7 +263,7 @@ void Actualize_Midi_Ed(char gode)
     }
 }
 
-void Mouse_Right_Midi_Ed(void)
+void Mouse_Right_Midi_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_SETUP_MIDI)
     {
@@ -271,16 +271,16 @@ void Mouse_Right_Midi_Ed(void)
     }
 }
 
-void Mouse_Left_Midi_Ed(void)
+void Mouse_Left_Midi_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_SETUP_MIDI)
     {
         // Save the data
         if(zcheckMouse(749, (Cur_Height - 142), 34, 16))
         {
-            if(File_Exist_Req("%s"SLASH"%s.pmi", Dir_MidiCfg, Midi_Name))
+            if(File_Exist_Req(ptk, "%s"SLASH"%s.pmi", Dir_MidiCfg, Midi_Name))
             {
-                Display_Requester(&Overwrite_Requester, GUI_CMD_SAVE_MIDICFG);
+                Display_Requester(ptk, &Overwrite_Requester, GUI_CMD_SAVE_MIDICFG);
             }
             else
             {
@@ -339,7 +339,7 @@ void Mouse_Left_Midi_Ed(void)
 #if !defined(__NO_MIDI__)
         if(zcheckMouse(12, (Cur_Height - 99), 82, 16) == 1 && c_midiout != -1)
         {
-            Midi_NoteOff(Track_Under_Caret, -1);
+            Midi_NoteOff(ptk, Track_Under_Caret, -1);
             int i;
             for(i = 0; i < MAX_POLYPHONY; i++)
             {
@@ -353,7 +353,7 @@ void Mouse_Left_Midi_Ed(void)
 #if !defined(__NO_MIDI__)
         if(zcheckMouse(12, (Cur_Height - 81), 82, 16) == 1 && c_midiout != -1)
         {
-            Midi_AllNotesOff();
+            Midi_AllNotesOff(ptk);
             gui_action = GUI_CMD_MIDI_NOTE_OFF_ALL_TRACKS;
         }
 #endif

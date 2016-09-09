@@ -53,7 +53,7 @@ extern char *cur_dir;
 
 // ------------------------------------------------------
 // Save the configuration file
-void SaveConfig(void)
+void SaveConfig(ptk_data *ptk)
 {
     FILE *out;
     char extension[10];
@@ -64,7 +64,7 @@ void SaveConfig(void)
     signed char phony = -1;
 
     sprintf(extension, "PROTCFGF");
-    Status_Box("Saving 'ptk.cfg'...");
+    Status_Box(ptk, "Saving 'ptk.cfg'...");
 
 #ifdef __linux__
     sprintf(FileName, "%s/.ptk.cfg", getenv("HOME"));
@@ -78,91 +78,91 @@ void SaveConfig(void)
     out = fopen(FileName, "wb");
     if(out != NULL)
     {
-        Write_Data(extension, sizeof(char), 9, out);
-        Write_Data_Swap(&Current_Edit_Steps, sizeof(Current_Edit_Steps), 1, out);
-        Write_Data_Swap(&patt_highlight, sizeof(patt_highlight), 1, out);
-        Write_Data_Swap(&AUDIO_Milliseconds, sizeof(AUDIO_Milliseconds), 1, out);
+        Write_Data(ptk, extension, sizeof(char), 9, out);
+        Write_Data_Swap(ptk, &Current_Edit_Steps, sizeof(Current_Edit_Steps), 1, out);
+        Write_Data_Swap(ptk, &patt_highlight, sizeof(patt_highlight), 1, out);
+        Write_Data_Swap(ptk, &AUDIO_Milliseconds, sizeof(AUDIO_Milliseconds), 1, out);
 
 #if defined(__NO_MIDI__)
-        Write_Data(&phony, sizeof(phony), 1, out);
+        Write_Data(ptk, &phony, sizeof(phony), 1, out);
 #else
-        Write_Data(&c_midiin, sizeof(c_midiin), 1, out);
+        Write_Data(ptk, &c_midiin, sizeof(c_midiin), 1, out);
 #endif
 
 #if defined(__NO_MIDI__)
-        Write_Data(&phony, sizeof(phony), 1, out);
+        Write_Data(ptk, &phony, sizeof(phony), 1, out);
 #else
-        Write_Data(&c_midiout, sizeof(c_midiout), 1, out);
+        Write_Data(ptk, &c_midiout, sizeof(c_midiout), 1, out);
 #endif
 
-        Write_Data_Swap(&MouseWheel_Multiplier, sizeof(MouseWheel_Multiplier), 1, out);
-        Write_Data(&Rows_Decimal, sizeof(Rows_Decimal), 1, out);
-        Write_Data(&FullScreen, sizeof(FullScreen), 1, out);
+        Write_Data_Swap(ptk, &MouseWheel_Multiplier, sizeof(MouseWheel_Multiplier), 1, out);
+        Write_Data(ptk, &Rows_Decimal, sizeof(Rows_Decimal), 1, out);
+        Write_Data(ptk, &FullScreen, sizeof(FullScreen), 1, out);
 
         for(i = 0; i < NUMBER_COLORS; i++)
         {
             Real_Palette_Idx = Idx_Palette[i];
-            Write_Data(&Ptk_Palette[Real_Palette_Idx].r, sizeof(char), 1, out);
-            Write_Data(&Ptk_Palette[Real_Palette_Idx].g, sizeof(char), 1, out);
-            Write_Data(&Ptk_Palette[Real_Palette_Idx].b, sizeof(char), 1, out);
+            Write_Data(ptk, &Ptk_Palette[Real_Palette_Idx].r, sizeof(char), 1, out);
+            Write_Data(ptk, &Ptk_Palette[Real_Palette_Idx].g, sizeof(char), 1, out);
+            Write_Data(ptk, &Ptk_Palette[Real_Palette_Idx].b, sizeof(char), 1, out);
         }
-        Write_Data(&See_Prev_Next_Pattern, sizeof(See_Prev_Next_Pattern), 1, out);
-        Write_Data_Swap(&Beveled, sizeof(Beveled), 1, out);
-        Write_Data_Swap(&Continuous_Scroll, sizeof(Continuous_Scroll), 1, out);
-        Write_Data(&AutoSave, sizeof(AutoSave), 1, out);
-        Write_Data(&AutoBackup, sizeof(AutoBackup), 1, out);
+        Write_Data(ptk, &See_Prev_Next_Pattern, sizeof(See_Prev_Next_Pattern), 1, out);
+        Write_Data_Swap(ptk, &Beveled, sizeof(Beveled), 1, out);
+        Write_Data_Swap(ptk, &Continuous_Scroll, sizeof(Continuous_Scroll), 1, out);
+        Write_Data(ptk, &AutoSave, sizeof(AutoSave), 1, out);
+        Write_Data(ptk, &AutoBackup, sizeof(AutoBackup), 1, out);
         
-        Write_Data(&Dir_Mods, sizeof(Dir_Mods), 1, out);
-        Write_Data(&Dir_Instrs, sizeof(Dir_Instrs), 1, out);
-        Write_Data(&Dir_Presets, sizeof(Dir_Presets), 1, out);
-        Write_Data(&Dir_Reverbs, sizeof(Dir_Reverbs), 1, out);
-        Write_Data(&Dir_MidiCfg, sizeof(Dir_MidiCfg), 1, out);
-        Write_Data(&Dir_Patterns, sizeof(Dir_Patterns), 1, out);
-        Write_Data(&Dir_Samples, sizeof(Dir_Samples), 1, out);
-        Write_Data(KeyboardName, MAX_PATH, 1, out);
+        Write_Data(ptk, &Dir_Mods, sizeof(Dir_Mods), 1, out);
+        Write_Data(ptk, &Dir_Instrs, sizeof(Dir_Instrs), 1, out);
+        Write_Data(ptk, &Dir_Presets, sizeof(Dir_Presets), 1, out);
+        Write_Data(ptk, &Dir_Reverbs, sizeof(Dir_Reverbs), 1, out);
+        Write_Data(ptk, &Dir_MidiCfg, sizeof(Dir_MidiCfg), 1, out);
+        Write_Data(ptk, &Dir_Patterns, sizeof(Dir_Patterns), 1, out);
+        Write_Data(ptk, &Dir_Samples, sizeof(Dir_Samples), 1, out);
+        Write_Data(ptk, KeyboardName, MAX_PATH, 1, out);
 
-        Write_Data(&rawrender_32float, sizeof(char), 1, out);
-        Write_Data(&rawrender_multi, sizeof(char), 1, out);
-        Write_Data(&rawrender_target, sizeof(char), 1, out);
-        Write_Data(&Large_Patterns, sizeof(char), 1, out);
-        Write_Data(&ptk.Scopish_LeftRight, sizeof(char), 1, out);
+        Write_Data(ptk, &rawrender_32float, sizeof(char), 1, out);
+        Write_Data(ptk, &rawrender_multi, sizeof(char), 1, out);
+        Write_Data(ptk, &rawrender_target, sizeof(char), 1, out);
+        Write_Data(ptk, &Large_Patterns, sizeof(char), 1, out);
+        Write_Data(ptk, &ptk->Scopish_LeftRight, sizeof(char), 1, out);
  
-        Write_Data(&Paste_Across, sizeof(char), 1, out);
-        Write_Data(&Jazz_Edit, sizeof(char), 1, out);
-        Write_Data(&Accidental, sizeof(char), 1, out);
+        Write_Data(ptk, &Paste_Across, sizeof(char), 1, out);
+        Write_Data(ptk, &Jazz_Edit, sizeof(char), 1, out);
+        Write_Data(ptk, &Accidental, sizeof(char), 1, out);
 
-        Write_Data(&Use_Shadows, sizeof(char), 1, out);
-        Write_Data(&Global_Patterns_Font, sizeof(char), 1, out);
+        Write_Data(ptk, &Use_Shadows, sizeof(char), 1, out);
+        Write_Data(ptk, &Global_Patterns_Font, sizeof(char), 1, out);
 
-        Write_Data(&metronome_magnify, sizeof(int), 1, out);
+        Write_Data(ptk, &metronome_magnify, sizeof(int), 1, out);
 
         // Save the compelte midi automation config
-        Save_MidiCfg_Data(Write_Data, Write_Data_Swap, out);
+        Save_MidiCfg_Data(ptk, Write_Data, Write_Data_Swap, out);
 
-        Write_Data_Swap(&Cur_Width, sizeof(int), 1, out);
-        Write_Data_Swap(&Cur_Height, sizeof(int), 1, out);
+        Write_Data_Swap(ptk, &Cur_Width, sizeof(int), 1, out);
+        Write_Data_Swap(ptk, &Cur_Height, sizeof(int), 1, out);
 
         Cur_Left = -1;
         Cur_Top = -1;
-        Write_Data_Swap(&Cur_Left, sizeof(int), 1, out);
-        Write_Data_Swap(&Cur_Top, sizeof(int), 1, out);
+        Write_Data_Swap(ptk, &Cur_Left, sizeof(int), 1, out);
+        Write_Data_Swap(ptk, &Cur_Top, sizeof(int), 1, out);
 
         fclose(out);
 
-        Read_SMPT();
+        Read_SMPT(ptk);
         last_index = -1;
-        Actualize_Files_List(0);
-        Status_Box("Configuration file saved succesfully.");  
+        Actualize_Files_List(ptk, 0);
+        Status_Box(ptk, "Configuration file saved succesfully.");  
     }
     else
     {
-        Status_Box("Configuration file save failed.");
+        Status_Box(ptk, "Configuration file save failed.");
     }
 }
 
 // ------------------------------------------------------
 // Load the configuration file
-void LoadConfig(void)
+void LoadConfig(ptk_data *ptk)
 {
     FILE *in;
     int i;
@@ -187,65 +187,65 @@ void LoadConfig(void)
         // Reading and checking extension...
         char extension[10];
 
-        Read_Data(extension, sizeof(char), 9, in);
+        Read_Data(ptk, extension, sizeof(char), 9, in);
         if(strcmp(extension, "PROTCFGF") == 0)
         {
-            Read_Data_Swap(&Current_Edit_Steps, sizeof(Current_Edit_Steps), 1, in);
-            Read_Data_Swap(&patt_highlight, sizeof(patt_highlight), 1, in);
-            Read_Data_Swap(&AUDIO_Milliseconds, sizeof(AUDIO_Milliseconds), 1, in);
+            Read_Data_Swap(ptk, &Current_Edit_Steps, sizeof(Current_Edit_Steps), 1, in);
+            Read_Data_Swap(ptk, &patt_highlight, sizeof(patt_highlight), 1, in);
+            Read_Data_Swap(ptk, &AUDIO_Milliseconds, sizeof(AUDIO_Milliseconds), 1, in);
 
 #if defined(__NO_MIDI__)
-            Read_Data(&phony, sizeof(phony), 1, in);
+            Read_Data(ptk, &phony, sizeof(phony), 1, in);
 #else
-            Read_Data(&c_midiin, sizeof(c_midiin), 1, in);
+            Read_Data(ptk, &c_midiin, sizeof(c_midiin), 1, in);
 #endif
 
 #if defined(__NO_MIDI__)
-            Read_Data(&phony, sizeof(phony), 1, in);
+            Read_Data(ptk, &phony, sizeof(phony), 1, in);
 #else
-            Read_Data(&c_midiout, sizeof(c_midiout), 1, in);
+            Read_Data(ptk, &c_midiout, sizeof(c_midiout), 1, in);
 #endif
 
-            Read_Data_Swap(&MouseWheel_Multiplier, sizeof(MouseWheel_Multiplier), 1, in);
-            Read_Data(&Rows_Decimal, sizeof(Rows_Decimal), 1, in);
-            Read_Data(&FullScreen, sizeof(FullScreen), 1, in);
+            Read_Data_Swap(ptk, &MouseWheel_Multiplier, sizeof(MouseWheel_Multiplier), 1, in);
+            Read_Data(ptk, &Rows_Decimal, sizeof(Rows_Decimal), 1, in);
+            Read_Data(ptk, &FullScreen, sizeof(FullScreen), 1, in);
 
             for(i = 0; i < NUMBER_COLORS; i++)
             {
                 Real_Palette_Idx = Idx_Palette[i];
-                Read_Data(&Ptk_Palette[Real_Palette_Idx].r, sizeof(char), 1, in);
-                Read_Data(&Ptk_Palette[Real_Palette_Idx].g, sizeof(char), 1, in);
-                Read_Data(&Ptk_Palette[Real_Palette_Idx].b, sizeof(char), 1, in);
+                Read_Data(ptk, &Ptk_Palette[Real_Palette_Idx].r, sizeof(char), 1, in);
+                Read_Data(ptk, &Ptk_Palette[Real_Palette_Idx].g, sizeof(char), 1, in);
+                Read_Data(ptk, &Ptk_Palette[Real_Palette_Idx].b, sizeof(char), 1, in);
                 Ptk_Palette[Real_Palette_Idx].unused = 0;
             }
-            Read_Data(&See_Prev_Next_Pattern, sizeof(See_Prev_Next_Pattern), 1, in);
-            Read_Data_Swap(&Beveled, sizeof(Beveled), 1, in);
-            Read_Data_Swap(&Continuous_Scroll, sizeof(Continuous_Scroll), 1, in);
-            Read_Data(&AutoSave, sizeof(AutoSave), 1, in);
-            Read_Data(&AutoBackup, sizeof(AutoBackup), 1, in);
-            Read_Data(&Dir_Mods, sizeof(Dir_Mods), 1, in);
-            Read_Data(&Dir_Instrs, sizeof(Dir_Instrs), 1, in);
-            Read_Data(&Dir_Presets, sizeof(Dir_Presets), 1, in);
-            Read_Data(&Dir_Reverbs, sizeof(Dir_Reverbs), 1, in);
-            Read_Data(&Dir_MidiCfg, sizeof(Dir_MidiCfg), 1, in);
-            Read_Data(&Dir_Patterns, sizeof(Dir_Patterns), 1, in);
-            Read_Data(&Dir_Samples, sizeof(Dir_Samples), 1, in);
-            Read_Data(KeyboardName, MAX_PATH, 1, in);
+            Read_Data(ptk, &See_Prev_Next_Pattern, sizeof(See_Prev_Next_Pattern), 1, in);
+            Read_Data_Swap(ptk, &Beveled, sizeof(Beveled), 1, in);
+            Read_Data_Swap(ptk, &Continuous_Scroll, sizeof(Continuous_Scroll), 1, in);
+            Read_Data(ptk, &AutoSave, sizeof(AutoSave), 1, in);
+            Read_Data(ptk, &AutoBackup, sizeof(AutoBackup), 1, in);
+            Read_Data(ptk, &Dir_Mods, sizeof(Dir_Mods), 1, in);
+            Read_Data(ptk, &Dir_Instrs, sizeof(Dir_Instrs), 1, in);
+            Read_Data(ptk, &Dir_Presets, sizeof(Dir_Presets), 1, in);
+            Read_Data(ptk, &Dir_Reverbs, sizeof(Dir_Reverbs), 1, in);
+            Read_Data(ptk, &Dir_MidiCfg, sizeof(Dir_MidiCfg), 1, in);
+            Read_Data(ptk, &Dir_Patterns, sizeof(Dir_Patterns), 1, in);
+            Read_Data(ptk, &Dir_Samples, sizeof(Dir_Samples), 1, in);
+            Read_Data(ptk, KeyboardName, MAX_PATH, 1, in);
 
-            Read_Data(&rawrender_32float, sizeof(char), 1, in);
-            Read_Data(&rawrender_multi, sizeof(char), 1, in);
-            Read_Data(&rawrender_target, sizeof(char), 1, in);
-            Read_Data(&Large_Patterns, sizeof(char), 1, in);
-            Read_Data(&ptk.Scopish_LeftRight, sizeof(char), 1, in);
+            Read_Data(ptk, &rawrender_32float, sizeof(char), 1, in);
+            Read_Data(ptk, &rawrender_multi, sizeof(char), 1, in);
+            Read_Data(ptk, &rawrender_target, sizeof(char), 1, in);
+            Read_Data(ptk, &Large_Patterns, sizeof(char), 1, in);
+            Read_Data(ptk, &ptk->Scopish_LeftRight, sizeof(char), 1, in);
 
-            Read_Data(&Paste_Across, sizeof(char), 1, in);
-            Read_Data(&Jazz_Edit, sizeof(char), 1, in);
-            Read_Data(&Accidental, sizeof(char), 1, in);
+            Read_Data(ptk, &Paste_Across, sizeof(char), 1, in);
+            Read_Data(ptk, &Jazz_Edit, sizeof(char), 1, in);
+            Read_Data(ptk, &Accidental, sizeof(char), 1, in);
 
-            Read_Data(&Use_Shadows, sizeof(char), 1, in);
-            Read_Data(&Global_Patterns_Font, sizeof(char), 1, in);
+            Read_Data(ptk, &Use_Shadows, sizeof(char), 1, in);
+            Read_Data(ptk, &Global_Patterns_Font, sizeof(char), 1, in);
 
-            Read_Data(&metronome_magnify, sizeof(int), 1, in);
+            Read_Data(ptk, &metronome_magnify, sizeof(int), 1, in);
 
             if(Large_Patterns)
             {
@@ -261,13 +261,13 @@ void LoadConfig(void)
             }
 
             // Reload the compelte midi automation config
-            Load_MidiCfg_Data(Read_Data, Read_Data_Swap, in);
+            Load_MidiCfg_Data(ptk, Read_Data, Read_Data_Swap, in);
 
-            Read_Data_Swap(&Cur_Width, sizeof(int), 1, in);
-            Read_Data_Swap(&Cur_Height, sizeof(int), 1, in);
+            Read_Data_Swap(ptk, &Cur_Width, sizeof(int), 1, in);
+            Read_Data_Swap(ptk, &Cur_Height, sizeof(int), 1, in);
 
-            Read_Data_Swap(&Cur_Left, sizeof(int), 1, in);
-            Read_Data_Swap(&Cur_Top, sizeof(int), 1, in);
+            Read_Data_Swap(ptk, &Cur_Left, sizeof(int), 1, in);
+            Read_Data_Swap(ptk, &Cur_Top, sizeof(int), 1, in);
             Desktop = SDL_SetVideoMode(0, 0, 0, 0);
             // Check if the coords are too big
             if(Cur_Width > SDL_GetVideoSurface()->w)

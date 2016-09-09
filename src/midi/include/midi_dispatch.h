@@ -116,7 +116,7 @@ extern MIDI_PTK_CMD Str_Midi_Commands[NBR_MIDI_AUTOMATION];
 
 // ------------------------------------------------------
 // Functions
-void Dispatch_Midi_Msg(int CC, int Data);
-void Init_Midi_Ctrl(int CC, int Data);
+void Dispatch_Midi_Msg(ptk_data *ptk, int CC, int Data);
+void Init_Midi_Ctrl(ptk_data *ptk, int CC, int Data);
 
 #endif

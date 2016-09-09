@@ -32,7 +32,7 @@ BOOL WINAPI _DllMainCRTStartup(HANDLE hInst, ULONG ul_reason_for_call, LPVOID lp
 // ----------------------------------------------------------------
 #define PBLEN 1572864
 extern unsigned char *RawPatterns;
-void STDCALL Mixer(Uint8 *Buffer, Uint32 Len);
+void STDCALL Mixer(ptk, Uint8 *Buffer, Uint32 Len);
 int LoadPtk(char *FileName);
 int Calc_Length(void);
 int Alloc_Patterns_Pool(void);
@@ -101,7 +101,7 @@ void Set_Default_Channels_Polyphony(void)
 
 void init()
 { 
-    Ptk_InitDriver();
+    Ptk_InitDriver(ptk, );
     Alloc_Patterns_Pool();
 }
 
@@ -168,7 +168,7 @@ int play(const char *fn)
 	// current volume.
 	mod.outMod->SetVolume(-666); 
 
-    Ptk_Play();
+    Ptk_Play(ptk);
     done = 0;
 
 	// launch decode thread
@@ -198,7 +198,7 @@ int ispaused()
 // stop playing.
 void stop()
 {
-    Ptk_Stop();
+    Ptk_Stop(ptk);
 
 	if (thread_handle != INVALID_HANDLE_VALUE)
 	{
@@ -363,7 +363,7 @@ void eq_set(int on, char data[10], int preamp)
 int get_576_samples(char *buf)
 {
 	int l = 576 * NCH * (BPS / 8);
-    Mixer((BYTE *) buf, l);
+    Mixer(ptk, (BYTE *) buf, l);
 	return l;
 }
 

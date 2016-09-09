@@ -104,7 +104,7 @@ void Display_Decay_Slider(int Index);
 
 // ------------------------------------------------------
 // Display the panel
-void Draw_Reverb_Ed(void)
+void Draw_Reverb_Ed(ptk_data *ptk)
 {
     //Gadgets_Reverb.Create_List(Gadgets_Reverb_List, &Reverb_IDs);
 
@@ -144,7 +144,7 @@ void Draw_Reverb_Ed(void)
 
 // ------------------------------------------------------
 // Redraw the elements on the screen
-void Mouse_Reverb_Ed()
+void Mouse_Reverb_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_REVERB_EDIT)
     {
@@ -155,7 +155,7 @@ void Mouse_Reverb_Ed()
 
 // ------------------------------------------------------
 // Redraw the elements on the screen
-void Actualize_Reverb_Ed(int gode)
+void Actualize_Reverb_Ed(ptk_data *ptk, int gode)
 {
     if(userscreen == USER_SCREEN_REVERB_EDIT)
     {
@@ -287,7 +287,7 @@ void Actualize_Reverb_Ed(int gode)
 
 // ------------------------------------------------------
 // Handle right mouse buttons events
-void Mouse_Right_Reverb_Ed(void)
+void Mouse_Right_Reverb_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_REVERB_EDIT)
     {
@@ -295,7 +295,7 @@ void Mouse_Right_Reverb_Ed(void)
         {
             num_echoes -= 2;
             if(num_echoes < 1) num_echoes = 1;
-            Initreverb();
+            Initreverb(ptk);
             gui_action = GUI_CMD_UPDATE_REVERB_ED;
             teac = UPDATE_REVERB_ED_ALL;
         }
@@ -305,7 +305,7 @@ void Mouse_Right_Reverb_Ed(void)
         {
             num_echoes += 2;
             if(num_echoes > 10) num_echoes = 10;
-            Initreverb();
+            Initreverb(ptk);
             gui_action = GUI_CMD_UPDATE_REVERB_ED;
             teac = UPDATE_REVERB_ED_ALL;
         }
@@ -321,7 +321,7 @@ void Mouse_Right_Reverb_Ed(void)
                 if(delays[i] < 83) delays[i] = 83;
                 teac = 0;
                 gui_action = GUI_CMD_UPDATE_REVERB_ED;
-                Initreverb();
+                Initreverb(ptk);
                 break;
             }
 
@@ -332,7 +332,7 @@ void Mouse_Right_Reverb_Ed(void)
                 if(delays[i] > 15000) delays[i] = 15000;
                 teac = 0;
                 gui_action = GUI_CMD_UPDATE_REVERB_ED;
-                Initreverb();
+                Initreverb(ptk);
                 break;
             }
         }
@@ -342,7 +342,7 @@ void Mouse_Right_Reverb_Ed(void)
 
 // ------------------------------------------------------
 // Handle left mouse buttons events
-void Mouse_Left_Reverb_Ed(void)
+void Mouse_Left_Reverb_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_REVERB_EDIT)
     {
@@ -352,7 +352,7 @@ void Mouse_Left_Reverb_Ed(void)
         {
             num_echoes--;
             if(num_echoes < 1) num_echoes = 1;
-            Initreverb();
+            Initreverb(ptk);
             gui_action = GUI_CMD_UPDATE_REVERB_ED;
             teac = UPDATE_REVERB_ED_ALL;
         }
@@ -362,7 +362,7 @@ void Mouse_Left_Reverb_Ed(void)
         {
             num_echoes++;
             if(num_echoes > 10) num_echoes = 10;
-            Initreverb();
+            Initreverb(ptk);
             gui_action = GUI_CMD_UPDATE_REVERB_ED;
             teac = UPDATE_REVERB_ED_ALL;
         }
@@ -370,9 +370,9 @@ void Mouse_Left_Reverb_Ed(void)
         // Save the data
         if(zcheckMouse(749, (Cur_Height - 142), 34, 16))
         {
-            if(File_Exist_Req("%s"SLASH"%s.prv", Dir_Reverbs, Reverb_Name))
+            if(File_Exist_Req(ptk, "%s"SLASH"%s.prv", Dir_Reverbs, Reverb_Name))
             {
-                Display_Requester(&Overwrite_Requester, GUI_CMD_SAVE_REVERB);
+                Display_Requester(ptk, &Overwrite_Requester, GUI_CMD_SAVE_REVERB);
             }
             else
             {
@@ -401,7 +401,7 @@ void Mouse_Left_Reverb_Ed(void)
                 decays[i] = 0.0f;
                 teac = 0;
                 gui_action = GUI_CMD_UPDATE_REVERB_ED;
-                Initreverb();
+                Initreverb(ptk);
                 break;
             }
         }
@@ -415,7 +415,7 @@ void Mouse_Left_Reverb_Ed(void)
                 if(delays[i] < 83) delays[i] = 83;
                 teac = 0;
                 gui_action = GUI_CMD_UPDATE_REVERB_ED;
-                Initreverb();
+                Initreverb(ptk);
                 break;
             }
 
@@ -426,7 +426,7 @@ void Mouse_Left_Reverb_Ed(void)
                 if(delays[i] > 15000) delays[i] = 15000;
                 teac = 0;
                 gui_action = GUI_CMD_UPDATE_REVERB_ED;
-                Initreverb();
+                Initreverb(ptk);
                 break;
             }
         }
@@ -435,7 +435,7 @@ void Mouse_Left_Reverb_Ed(void)
 
 // ------------------------------------------------------
 // Handle sliders events
-void Mouse_Sliders_Reverb_Ed(void)
+void Mouse_Sliders_Reverb_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_REVERB_EDIT)
     {
@@ -457,7 +457,7 @@ void Mouse_Sliders_Reverb_Ed(void)
                 decays[i] = s_offset * 0.015625f;
                 teac = 0;
                 gui_action = GUI_CMD_UPDATE_REVERB_ED;
-                Initreverb();
+                Initreverb(ptk);
                 break;
             }
         }
@@ -471,7 +471,7 @@ void Mouse_Sliders_Reverb_Ed(void)
                 if(delays[i] < 83) delays[i] = 83;
                 teac = 0;
                 gui_action = GUI_CMD_UPDATE_REVERB_ED;
-                Initreverb();
+                Initreverb(ptk);
                 break;
             }
 
@@ -482,7 +482,7 @@ void Mouse_Sliders_Reverb_Ed(void)
                 if(delays[i] > 15000) delays[i] = 15000;
                 teac = 0;
                 gui_action = GUI_CMD_UPDATE_REVERB_ED;
-                Initreverb();
+                Initreverb(ptk);
                 break;
             }
         }
@@ -491,7 +491,7 @@ void Mouse_Sliders_Reverb_Ed(void)
 
 // ------------------------------------------------------
 // Handle right mouse button sliders events
-void Mouse_Sliders_Right_Reverb_Ed(void)
+void Mouse_Sliders_Right_Reverb_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_REVERB_EDIT)
     {
@@ -506,7 +506,7 @@ void Mouse_Sliders_Right_Reverb_Ed(void)
                 if(delays[i] < 83) delays[i] = 83;
                 teac = 0;
                 gui_action = GUI_CMD_UPDATE_REVERB_ED;
-                Initreverb();
+                Initreverb(ptk);
                 break;
             }
 
@@ -517,7 +517,7 @@ void Mouse_Sliders_Right_Reverb_Ed(void)
                 if(delays[i] > 15000) delays[i] = 15000;
                 teac = 0;
                 gui_action = GUI_CMD_UPDATE_REVERB_ED;
-                Initreverb();
+                Initreverb(ptk);
                 break;
             }
         }

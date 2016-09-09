@@ -35,13 +35,13 @@
 
 // ------------------------------------------------------
 // Load the data from a reverb file (or a module)
-void Load_Reverb_Data(int (*Read_Function)(void *, int ,int, FILE *),
-                      int (*Read_Function_Swap)(void *, int ,int, FILE *),
+void Load_Reverb_Data(ptk_data *ptk, int (*Read_Function)(ptk_data *, void *, int ,int, FILE *),
+                      int (*Read_Function_Swap)(ptk_data *, void *, int ,int, FILE *),
                       FILE *in, int New)
 {
     int i;
 
-    Read_Function(&num_echoes, sizeof(char), 1, in);
+    Read_Function(ptk, &num_echoes, sizeof(char), 1, in);
 
     for(i = 0; i < MAX_COMB_FILTERS; i++)
     {
@@ -52,40 +52,40 @@ void Load_Reverb_Data(int (*Read_Function)(void *, int ,int, FILE *),
 
     for(i = 0; i < num_echoes; i++)
     {
-        Read_Function_Swap(&delays[i], sizeof(int), 1, in);
+        Read_Function_Swap(ptk, &delays[i], sizeof(int), 1, in);
         if(New) delays[i] /= 2;
     }
     for(i = 0; i < num_echoes; i++)
     {
-        Read_Function_Swap(&decays[i], sizeof(float), 1, in);
+        Read_Function_Swap(ptk, &decays[i], sizeof(float), 1, in);
     }
 }
 
 #if !defined(__WINAMP__)
 // ------------------------------------------------------
 // Save the data to a reverb file (or a module)
-void Save_Reverb_Data(int (*Write_Function)(void *, int ,int, FILE *),
-                      int (*Write_Function_Swap)(void *, int ,int, FILE *),
+void Save_Reverb_Data(ptk_data *ptk, int (*Write_Function)(ptk_data *, void *, int ,int, FILE *),
+                      int (*Write_Function_Swap)(ptk_data *, void *, int ,int, FILE *),
                       FILE *out)
 {
     int i;
 
-    Write_Function(&num_echoes, sizeof(char), 1, out);
+    Write_Function(ptk, &num_echoes, sizeof(char), 1, out);
 
     // Save the reverb data
     for(i = 0; i < num_echoes; i++)
     {
-        Write_Function_Swap(&delays[i], sizeof(int), 1, out);
+        Write_Function_Swap(ptk, &delays[i], sizeof(int), 1, out);
     }
     for(i = 0; i < num_echoes; i++)
     {
-        Write_Function_Swap(&decays[i], sizeof(float), 1, out);
+        Write_Function_Swap(ptk, &decays[i], sizeof(float), 1, out);
     }
 }
 
 // ------------------------------------------------------
 // Load a reverb file
-void LoadReverb(char *FileName)
+void LoadReverb(ptk_data *ptk, char *FileName)
 {
     FILE *in;
     int New_Reverb = FALSE;
@@ -109,30 +109,30 @@ void LoadReverb(char *FileName)
             }
 
             // Ok, extension matched!
-            Status_Box("Loading Reverb data...");
+            Status_Box(ptk, "Loading Reverb data...");
 
-            Read_Data(Reverb_Name, sizeof(char), 20, in);
-            Load_Reverb_Data(Read_Data, Read_Data_Swap, in, New_Reverb);
-            Initreverb();
-            Actualize_Reverb_Ed(0);
+            Read_Data(ptk, Reverb_Name, sizeof(char), 20, in);
+            Load_Reverb_Data(ptk, Read_Data, Read_Data_Swap, in, New_Reverb);
+            Initreverb(ptk);
+            Actualize_Reverb_Ed(ptk, 0);
 
-            Status_Box("Reverb data loaded ok.");
+            Status_Box(ptk, "Reverb data loaded ok.");
         }
         else
         {
-            Status_Box("That file is not a "TITLE" Reverb file...");
+            Status_Box(ptk, "That file is not a "TITLE" Reverb file...");
         }
         fclose(in);
     }
     else
     {
-        Status_Box("Reverb data loading failed. (Possible cause: file not found)");
+        Status_Box(ptk, "Reverb data loading failed. (Possible cause: file not found)");
     }
 }
 
 // ------------------------------------------------------
 // Save a reverb file
-void SaveReverb(void)
+void SaveReverb(ptk_data *ptk)
 {
     FILE *in;
     char Temph[96];
@@ -140,35 +140,35 @@ void SaveReverb(void)
 
     sprintf(extension, "TWNNREV1");
     sprintf(Temph, "Saving '%s.prv' data in reverbs directory...", Reverb_Name);
-    Status_Box(Temph);
+    Status_Box(ptk, Temph);
     sprintf(Temph, "%s"SLASH"%s.prv", Dir_Reverbs, Reverb_Name);
 
     in = fopen(Temph, "wb");
     if(in != NULL)
     {
-        Write_Data(extension, sizeof(char), 9, in);
-        Write_Data(Reverb_Name, sizeof(char), 20, in);
+        Write_Data(ptk, extension, sizeof(char), 9, in);
+        Write_Data(ptk, Reverb_Name, sizeof(char), 20, in);
 
-        Save_Reverb_Data(Write_Data, Write_Data_Swap, in);
+        Save_Reverb_Data(ptk, Write_Data, Write_Data_Swap, in);
 
         fclose(in);
-        Read_SMPT();
+        Read_SMPT(ptk);
         last_index = -1;
-        Actualize_Files_List(0);
-        Status_Box("Reverb data saved succesfully.");   
+        Actualize_Files_List(ptk, 0);
+        Status_Box(ptk, "Reverb data saved succesfully.");   
     }
     else
     {
-        Status_Box("Reverb data save failed.");
+        Status_Box(ptk, "Reverb data save failed.");
     }
 
-    Clear_Input();
+    Clear_Input(ptk);
 }
 #endif
 
 // ------------------------------------------------------
 // Load the old presets
-void Load_Old_Reverb_Presets(int Type)
+void Load_Old_Reverb_Presets(ptk_data *ptk, int Type)
 {
     int i;
 

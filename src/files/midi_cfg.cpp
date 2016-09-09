@@ -37,37 +37,37 @@
 #if !defined(__WINAMP__)
 // ------------------------------------------------------
 // Load the data from a midi config file
-void Load_MidiCfg_Data(int (*Read_Function)(void *, int ,int, FILE *),
-                       int (*Read_Function_Swap)(void *, int ,int, FILE *),
+void Load_MidiCfg_Data(ptk_data *ptk, int (*Read_Function)(ptk_data *, void *, int ,int, FILE *),
+                       int (*Read_Function_Swap)(ptk_data *, void *, int ,int, FILE *),
                        FILE *in)
 {
     int i;
 
     for(i = 0; i < NBR_MIDI_DISPATCH_MSG; i++)
     {
-        Read_Function_Swap(&Midi_Dispatch_Table[i].CC, sizeof(int), 1, in);
-        Read_Function_Swap(&Midi_Dispatch_Table[i].Automation, sizeof(int), 1, in);
+        Read_Function_Swap(ptk, &Midi_Dispatch_Table[i].CC, sizeof(int), 1, in);
+        Read_Function_Swap(ptk, &Midi_Dispatch_Table[i].Automation, sizeof(int), 1, in);
     }
 }
 
 // ------------------------------------------------------
 // Save the data to a midi config file
-void Save_MidiCfg_Data(int (*Write_Function)(void *, int ,int, FILE *),
-                       int (*Write_Function_Swap)(void *, int ,int, FILE *),
+void Save_MidiCfg_Data(ptk_data *ptk, int (*Write_Function)(ptk_data *, void *, int ,int, FILE *),
+                       int (*Write_Function_Swap)(ptk_data *, void *, int ,int, FILE *),
                        FILE *out)
 {
     int i;
 
     for(i = 0; i < NBR_MIDI_DISPATCH_MSG; i++)
     {
-        Write_Function_Swap(&Midi_Dispatch_Table[i].CC, sizeof(int), 1, out);
-        Write_Function_Swap(&Midi_Dispatch_Table[i].Automation, sizeof(int), 1, out);
+        Write_Function_Swap(ptk, &Midi_Dispatch_Table[i].CC, sizeof(int), 1, out);
+        Write_Function_Swap(ptk, &Midi_Dispatch_Table[i].Automation, sizeof(int), 1, out);
     }
 }
 
 // ------------------------------------------------------
 // Load a reverb file
-void LoadMidiCfg(char *FileName)
+void LoadMidiCfg(ptk_data *ptk, char *FileName)
 {
     FILE *in;
     in = fopen(FileName, "rb");
@@ -81,29 +81,29 @@ void LoadMidiCfg(char *FileName)
         if(strcmp(extension, "PROTMID1") == 0)
         {
             // Ok, extension matched!
-            Status_Box("Loading midi config data...");
+            Status_Box(ptk, "Loading midi config data...");
 
-            Read_Data(Midi_Name, sizeof(char), 20, in);
-            Load_MidiCfg_Data(Read_Data, Read_Data_Swap, in);
-            Actualize_Midi_Ed(0);
+            Read_Data(ptk, Midi_Name, sizeof(char), 20, in);
+            Load_MidiCfg_Data(ptk, Read_Data, Read_Data_Swap, in);
+            Actualize_Midi_Ed(ptk, 0);
 
-            Status_Box("Midi config data loaded ok.");
+            Status_Box(ptk, "Midi config data loaded ok.");
         }
         else
         {
-            Status_Box("That file is not a "TITLE" midi config file...");
+            Status_Box(ptk, "That file is not a "TITLE" midi config file...");
         }
         fclose(in);
     }
     else
     {
-        Status_Box("Midi config data loading failed. (Possible cause: file not found)");
+        Status_Box(ptk, "Midi config data loading failed. (Possible cause: file not found)");
     }
 }
 
 // ------------------------------------------------------
 // Save a midi config file
-void SaveMidiCfg(void)
+void SaveMidiCfg(ptk_data *ptk)
 {
     FILE *in;
     char Temph[96];
@@ -111,28 +111,28 @@ void SaveMidiCfg(void)
 
     sprintf(extension, "PROTMID1");
     sprintf(Temph, "Saving '%s.pmi' data in midi configs directory...", Midi_Name);
-    Status_Box(Temph);
+    Status_Box(ptk, Temph);
     sprintf(Temph, "%s"SLASH"%s.pmi", Dir_MidiCfg, Midi_Name);
 
     in = fopen(Temph, "wb");
     if(in != NULL)
     {
-        Write_Data(extension, sizeof(char), 9, in);
-        Write_Data(Midi_Name, sizeof(char), 20, in);
+        Write_Data(ptk, extension, sizeof(char), 9, in);
+        Write_Data(ptk, Midi_Name, sizeof(char), 20, in);
 
-        Save_MidiCfg_Data(Write_Data, Write_Data_Swap, in);
+        Save_MidiCfg_Data(ptk, Write_Data, Write_Data_Swap, in);
 
         fclose(in);
-        Read_SMPT();
+        Read_SMPT(ptk);
         last_index = -1;
-        Actualize_Files_List(0);
-        Status_Box("Midi config data saved succesfully.");   
+        Actualize_Files_List(ptk, 0);
+        Status_Box(ptk, "Midi config data saved succesfully.");   
     }
     else
     {
-        Status_Box("Midi config data save failed.");
+        Status_Box(ptk, "Midi config data save failed.");
     }
 
-    Clear_Input();
+    Clear_Input(ptk);
 }
 #endif

@@ -44,9 +44,9 @@
 
 // ------------------------------------------------------
 // Functions
-void Draw_Track_Fx_Ed(void);
-void Actualize_Track_Fx_Ed(char gode);
-void Mouse_Sliders_Track_Fx_Ed(void);
-void Mouse_Left_Track_Fx_Ed(void);
+void Draw_Track_Fx_Ed(ptk_data *ptk);
+void Actualize_Track_Fx_Ed(ptk_data *ptk, char gode);
+void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk);
+void Mouse_Left_Track_Fx_Ed(ptk_data *ptk);
 
 #endif

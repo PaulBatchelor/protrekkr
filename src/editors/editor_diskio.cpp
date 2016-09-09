@@ -101,15 +101,15 @@ TRACK_POS Tracks_Position[MAX_TRACKS] =
 
 // ------------------------------------------------------
 // Functions
-int Calc_Length(void);
+int Calc_Length(ptk_data *ptk);
 void Reset_Song_Length(void);
-void Display_Song_Length(void);
+void Display_Song_Length(ptk_data *ptk);
 void Display_Tracks_To_Render(void);
 void Check_Tracks_To_Render(void);
 int Is_Track_To_Render_Solo(int nbr);
 void Check_Tracks_To_Render_To_Solo(void);
 
-void Draw_DiskIO_Ed(void)
+void Draw_DiskIO_Ed(ptk_data *ptk)
 {
     Draw_Editors_Bar(USER_SCREEN_DISKIO_EDIT);
 
@@ -120,7 +120,7 @@ void Draw_DiskIO_Ed(void)
     outlong(254, (Cur_Height - 94), Final_Mod_Length, 7);
 
     Gui_Draw_Button_Box(254, (Cur_Height - 76), 80, 16, "Calc Length", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
-    Display_Song_Length();
+    Display_Song_Length(ptk);
 
     Gui_Draw_Button_Box(8, (Cur_Height - 94), 80, 16, "Title", BUTTON_NORMAL | BUTTON_DISABLED);
     Gui_Draw_Button_Box(8, (Cur_Height - 76), 80, 16, "Produced By", BUTTON_NORMAL | BUTTON_DISABLED);
@@ -145,7 +145,7 @@ void Draw_DiskIO_Ed(void)
 
 // ------------------------------------------------------
 // Refresh function
-void Actualize_DiskIO_Ed(int gode)
+void Actualize_DiskIO_Ed(ptk_data *ptk, int gode)
 {
     if(userscreen == USER_SCREEN_DISKIO_EDIT)
     {
@@ -296,7 +296,7 @@ void Actualize_DiskIO_Ed(int gode)
 
 // ------------------------------------------------------
 // Handle right mouse button
-void Mouse_Right_DiskIO_Ed(void)
+void Mouse_Right_DiskIO_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_DISKIO_EDIT)
     {
@@ -341,7 +341,7 @@ void Mouse_Right_DiskIO_Ed(void)
 
 // ------------------------------------------------------
 // Handle left mouse button
-void Mouse_Left_DiskIO_Ed(void)
+void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
 {
     int i;
     char WavFileName[MAX_PATH];
@@ -351,9 +351,9 @@ void Mouse_Left_DiskIO_Ed(void)
         // Save song
         if(zcheckMouse(8, (Cur_Height - 112), 80, 16))
         {
-            if(File_Exist_Req("%s"SLASH"%s.ptk", Dir_Mods, name))
+            if(File_Exist_Req(ptk, "%s"SLASH"%s.ptk", Dir_Mods, name))
             {
-                Display_Requester(&Overwrite_Requester, GUI_CMD_SAVE_MODULE);
+                Display_Requester(ptk, &Overwrite_Requester, GUI_CMD_SAVE_MODULE);
             }
             else
             {
@@ -363,9 +363,9 @@ void Mouse_Left_DiskIO_Ed(void)
         // Save final
         if(zcheckMouse(254, (Cur_Height - 130), 80, 16))
         {
-            if(File_Exist_Req("%s"SLASH"%s.ptp", Dir_Mods, name))
+            if(File_Exist_Req(ptk, "%s"SLASH"%s.ptp", Dir_Mods, name))
             {
-                Display_Requester(&Overwrite_Requester, GUI_CMD_SAVE_FINAL);
+                Display_Requester(ptk, &Overwrite_Requester, GUI_CMD_SAVE_FINAL);
             }
             else
             {
@@ -380,7 +380,7 @@ void Mouse_Left_DiskIO_Ed(void)
         // Calc length
         if(zcheckMouse(254, (Cur_Height - 76), 80, 16))
         {
-            Calc_Length();
+            Calc_Length(ptk);
         }
 
         if(zcheckMouse(90, (Cur_Height - 130), 80, 16))
@@ -421,7 +421,7 @@ void Mouse_Left_DiskIO_Ed(void)
         // Zzaapp
         if(zcheckMouse(8, (Cur_Height - 130), 80, 16))
         {
-            Display_Requester(&Zzaapp_Requester, GUI_CMD_NEW_MODULE);
+            Display_Requester(ptk, &Zzaapp_Requester, GUI_CMD_NEW_MODULE);
         }
 
         if(zcheckMouse(90, (Cur_Height - 112), 80, 16))
@@ -435,7 +435,7 @@ void Mouse_Left_DiskIO_Ed(void)
                     for(i = 0; i < Songtracks; i++)
                     {
                         sprintf(WavFileName, "%%s"SLASH"%%s_%x.wav", i);
-                        if(File_Exist(WavFileName, Dir_Mods, name))
+                        if(File_Exist(ptk, WavFileName, Dir_Mods, name))
                         {
                             any_file = TRUE;
                             break;
@@ -444,7 +444,7 @@ void Mouse_Left_DiskIO_Ed(void)
                     if(any_file)
                     {
                         Overwrite_Requester.Text = "Some .wav files are about to be overwritten, is that ok ?";
-                        Display_Requester(&Overwrite_Requester, GUI_CMD_RENDER_WAV);
+                        Display_Requester(ptk, &Overwrite_Requester, GUI_CMD_RENDER_WAV);
                     }
                     else
                     {
@@ -453,9 +453,9 @@ void Mouse_Left_DiskIO_Ed(void)
                 }
                 else
                 {
-                    if(File_Exist_Req("%s"SLASH"%s.wav", Dir_Mods, name))
+                    if(File_Exist_Req(ptk, "%s"SLASH"%s.wav", Dir_Mods, name))
                     {
-                        Display_Requester(&Overwrite_Requester, GUI_CMD_RENDER_WAV);
+                        Display_Requester(ptk, &Overwrite_Requester, GUI_CMD_RENDER_WAV);
                     }
                     else
                     {
@@ -581,7 +581,7 @@ void Mouse_Left_DiskIO_Ed(void)
     }
 }
 
-void Display_Song_Length(void)
+void Display_Song_Length(ptk_data *ptk)
 {
     char ms[64];
 
@@ -658,7 +658,7 @@ void Display_Tracks_To_Render(void)
 
 // ------------------------------------------------------
 // Clear tracks to render status
-void Reset_Tracks_To_Render(void)
+void Reset_Tracks_To_Render(ptk_data *ptk)
 {
     int i;
     for(i = 0; i < Songtracks; i++)

@@ -79,11 +79,11 @@ int Final_Mod_Length;
 
 // ------------------------------------------------------
 // Functions
-int Read_Mod_Data(void *Datas, int Unit, int Length, FILE *Handle);
-int Read_Mod_Data_Swap(void *Datas, int Unit, int Length, FILE *Handle);
-short *Unpack_Sample(FILE *FileHandle, int Dest_Length, char Pack_Type, int BitRate);
-void Swap_Short_Buffer(short *buffer, int size);
-short *Swap_New_Sample(short *buffer, int sample, int bank);
+int Read_Mod_Data(ptk_data *ptk, void *Datas, int Unit, int Length, FILE *Handle);
+int Read_Mod_Data_Swap(ptk_data *ptk, void *Datas, int Unit, int Length, FILE *Handle);
+short *Unpack_Sample(ptk_data *ptk, FILE *FileHandle, int Dest_Length, char Pack_Type, int BitRate);
+void Swap_Short_Buffer(ptk_data *ptk, short *buffer, int size);
+short *Swap_New_Sample(ptk_data *ptk, short *buffer, int sample, int bank);
 
 // ------------------------------------------------------
 // Prepare the tracker interface once a module has been loaded
@@ -102,7 +102,7 @@ void Init_Tracker_Context_After_ModLoad(ptk_data *ptk)
 
     Final_Mod_Length = 0;
 
-    Post_Song_Init();
+    Post_Song_Init(ptk);
 
 #if !defined(__WINAMP__)
     Draw_Scope(ptk);
@@ -113,10 +113,10 @@ void Init_Tracker_Context_After_ModLoad(ptk_data *ptk)
     rchorus_counter = MIX_RATE;
     lchorus_counter2 = MIX_RATE - lchorus_delay;
     rchorus_counter2 = MIX_RATE - rchorus_delay;
-    Initreverb();
+    Initreverb(ptk);
 
 #if defined(PTK_LIMITER_MASTER)
-    Mas_Compressor_Set_Variables_Master(mas_comp_threshold_Master,
+    Mas_Compressor_Set_Variables_Master(ptk, mas_comp_threshold_Master,
                                         mas_comp_ratio_Master);
 #endif
 
@@ -124,23 +124,23 @@ void Init_Tracker_Context_After_ModLoad(ptk_data *ptk)
     int i;
     for(i = 0; i < MAX_TRACKS; i++)
     {
-        Mas_Compressor_Set_Variables_Track(i,
+        Mas_Compressor_Set_Variables_Track(ptk, i,
                                            mas_comp_threshold_Track[i],
                                            mas_comp_ratio_Track[i]);
     }
 #endif
 
-    Reset_Song_Length();
+    Reset_Song_Length(ptk);
 
 #if !defined(__WINAMP__)
-    Display_Song_Length();
+    Display_Song_Length(ptk);
 
     ptk->Scopish = SCOPE_ZONE_MOD_DIR;
     //Draw_Scope_Files_Button();
 
-    Reset_Tracks_To_Render();
+    Reset_Tracks_To_Render(ptk);
 
-    Refresh_UI_Context();
+    Refresh_UI_Context(ptk);
     Unselect_Selection(ptk);
 
 #endif
@@ -204,14 +204,14 @@ int LoadPtk(ptk_data *ptk, char *FileName)
     {
 
 #if !defined(__WINAMP__)
-        Status_Box("Attempting to load the song file...");
+        Status_Box(ptk, "Attempting to load the song file...");
 #endif
 
         Songplaying = FALSE;
 
         // Reading and checking extension...
         char extension[10];
-        Read_Data(extension, sizeof(char), 9, in);
+        Read_Data(ptk, extension, sizeof(char), 9, in);
 
         switch(extension[7])
         {
@@ -273,9 +273,9 @@ int LoadPtk(ptk_data *ptk, char *FileName)
 Read_Mod_File:
 
 #if !defined(__WINAMP__)
-        Status_Box("Loading song -> Header...");
+        Status_Box(ptk, "Loading song -> Header...");
 #endif
-        Free_Samples();
+        Free_Samples(ptk);
 
         mas_comp_threshold_Master = 100.0f;
         mas_comp_ratio_Master = 0.0f;
@@ -293,48 +293,48 @@ Read_Mod_File:
         Clear_Patterns_Pool(ptk);
 
 #if !defined(__NO_MIDI__) && !defined(__WINAMP__)
-        Midi_Reset();
+        Midi_Reset(ptk);
 #endif
 
         init_sample_bank();
-        Pre_Song_Init();
+        Pre_Song_Init(ptk);
 
         // Load the module into memory and depack it
         if(Mod_Simulate == LOAD_READMEM)
         {
-            Packed_Size = Get_File_Size(in) - 9;
+            Packed_Size = Get_File_Size(ptk, in) - 9;
             Packed_Module = (unsigned char *) malloc(Packed_Size);
             if(Packed_Module)
             {
                 if(Poly)
                 {
-                    Read_Data_Swap(&UnPacked_Size, sizeof(int), 1, in);
+                    Read_Data_Swap(ptk, &UnPacked_Size, sizeof(int), 1, in);
                 }
                 else
                 {
                     UnPacked_Size = Packed_Size * 10;
                 }
-                Read_Data(Packed_Module, sizeof(char), Packed_Size, in);
-                Mod_Memory = Depack_Data(Packed_Module, Packed_Size, UnPacked_Size);
+                Read_Data(ptk, Packed_Module, sizeof(char), Packed_Size, in);
+                Mod_Memory = Depack_Data(ptk, Packed_Module, Packed_Size, UnPacked_Size);
                 Mod_Mem_Pos = 0;
                 free(Packed_Module);
             }
         }
 
-        Read_Mod_Data(FileName, sizeof(char), 20, in);
-        Read_Mod_Data(&nPatterns, sizeof(char), 1, in);
+        Read_Mod_Data(ptk, FileName, sizeof(char), 20, in);
+        Read_Mod_Data(ptk, &nPatterns, sizeof(char), 1, in);
 
         Songtracks = MAX_TRACKS;
-        Read_Mod_Data(&Song_Length, sizeof(char), 1, in);
+        Read_Mod_Data(ptk, &Song_Length, sizeof(char), 1, in);
 
         Use_Cubic = CUBIC_INT;
 
         if(Sel_Interpolation)
         {
-            Read_Mod_Data(&Use_Cubic, sizeof(char), 1, in);
+            Read_Mod_Data(ptk, &Use_Cubic, sizeof(char), 1, in);
         }
 
-        Read_Mod_Data(pSequence, sizeof(char), 256, in);
+        Read_Mod_Data(ptk, pSequence, sizeof(char), 256, in);
 
         Clear_Patterns_Pool(ptk);
 
@@ -343,30 +343,30 @@ Read_Mod_File:
         {
             for(i = 0; i < MAX_ROWS; i++)
             {
-                Read_Mod_Data_Swap(&patternLines[i], sizeof(short), 1, in);
+                Read_Mod_Data_Swap(ptk, &patternLines[i], sizeof(short), 1, in);
             }
         }
 
         // Multi notes
         if(Multi)
         {
-            Read_Mod_Data(Channels_MultiNotes, sizeof(char), MAX_TRACKS, in);
+            Read_Mod_Data(ptk, Channels_MultiNotes, sizeof(char), MAX_TRACKS, in);
         }
 
         // Up to 4 fx
         if(XtraFx)
         {
-            Read_Mod_Data(Channels_Effects, sizeof(char), MAX_TRACKS, in);
+            Read_Mod_Data(ptk, Channels_Effects, sizeof(char), MAX_TRACKS, in);
             for(i = 0; i < MAX_TRACKS; i++)
             {
-                Read_Mod_Data_Swap(&Track_Volume[i], sizeof(float), 1, in);
+                Read_Mod_Data_Swap(ptk, &Track_Volume[i], sizeof(float), 1, in);
             }
             for(i = 0; i < MAX_TRACKS; i++)
             {
-                init_eq(&EqDat[i]);
-                Read_Mod_Data_Swap(&EqDat[i].lg, sizeof(float), 1, in);
-                Read_Mod_Data_Swap(&EqDat[i].mg, sizeof(float), 1, in);
-                Read_Mod_Data_Swap(&EqDat[i].hg, sizeof(float), 1, in);
+                init_eq(ptk, &EqDat[i]);
+                Read_Mod_Data_Swap(ptk, &EqDat[i].lg, sizeof(float), 1, in);
+                Read_Mod_Data_Swap(ptk, &EqDat[i].mg, sizeof(float), 1, in);
+                Read_Mod_Data_Swap(ptk, &EqDat[i].hg, sizeof(float), 1, in);
             }
         }
 
@@ -397,23 +397,23 @@ Read_Mod_File:
                     {
                         for(i = 0; i < MAX_POLYPHONY; i++)
                         {
-                            Read_Mod_Data(TmpPatterns_Notes + PATTERN_NOTE1 + (i * 2), sizeof(char), 1, in);
-                            Read_Mod_Data(TmpPatterns_Notes + PATTERN_INSTR1 + (i * 2), sizeof(char), 1, in);
+                            Read_Mod_Data(ptk, TmpPatterns_Notes + PATTERN_NOTE1 + (i * 2), sizeof(char), 1, in);
+                            Read_Mod_Data(ptk, TmpPatterns_Notes + PATTERN_INSTR1 + (i * 2), sizeof(char), 1, in);
                         }
                     }
                     else
                     {
-                        Read_Mod_Data(TmpPatterns_Notes + PATTERN_NOTE1, sizeof(char), 1, in);
-                        Read_Mod_Data(TmpPatterns_Notes + PATTERN_INSTR1, sizeof(char), 1, in);
+                        Read_Mod_Data(ptk, TmpPatterns_Notes + PATTERN_NOTE1, sizeof(char), 1, in);
+                        Read_Mod_Data(ptk, TmpPatterns_Notes + PATTERN_INSTR1, sizeof(char), 1, in);
                     }
-                    Read_Mod_Data(TmpPatterns_Notes + PATTERN_VOLUME, sizeof(char), 1, in);
-                    Read_Mod_Data(TmpPatterns_Notes + PATTERN_PANNING, sizeof(char), 1, in);
-                    Read_Mod_Data(TmpPatterns_Notes + PATTERN_FX, sizeof(char), 1, in);
-                    Read_Mod_Data(TmpPatterns_Notes + PATTERN_FXDATA, sizeof(char), 1, in);
+                    Read_Mod_Data(ptk, TmpPatterns_Notes + PATTERN_VOLUME, sizeof(char), 1, in);
+                    Read_Mod_Data(ptk, TmpPatterns_Notes + PATTERN_PANNING, sizeof(char), 1, in);
+                    Read_Mod_Data(ptk, TmpPatterns_Notes + PATTERN_FX, sizeof(char), 1, in);
+                    Read_Mod_Data(ptk, TmpPatterns_Notes + PATTERN_FXDATA, sizeof(char), 1, in);
                     if(Fx2)
                     {
-                        Read_Mod_Data(TmpPatterns_Notes + PATTERN_FX2, sizeof(char), 1, in);
-                        Read_Mod_Data(TmpPatterns_Notes + PATTERN_FXDATA2, sizeof(char), 1, in);
+                        Read_Mod_Data(ptk, TmpPatterns_Notes + PATTERN_FX2, sizeof(char), 1, in);
+                        Read_Mod_Data(ptk, TmpPatterns_Notes + PATTERN_FXDATA2, sizeof(char), 1, in);
                         if(!XtraFx)
                         {
                             // Check if there's data on older 2nd effects columns
@@ -429,23 +429,23 @@ Read_Mod_File:
                     }
                     if(XtraFx)
                     {
-                        Read_Mod_Data(TmpPatterns_Notes + PATTERN_FX3, sizeof(char), 1, in);
-                        Read_Mod_Data(TmpPatterns_Notes + PATTERN_FXDATA3, sizeof(char), 1, in);
-                        Read_Mod_Data(TmpPatterns_Notes + PATTERN_FX4, sizeof(char), 1, in);
-                        Read_Mod_Data(TmpPatterns_Notes + PATTERN_FXDATA4, sizeof(char), 1, in);
+                        Read_Mod_Data(ptk, TmpPatterns_Notes + PATTERN_FX3, sizeof(char), 1, in);
+                        Read_Mod_Data(ptk, TmpPatterns_Notes + PATTERN_FXDATA3, sizeof(char), 1, in);
+                        Read_Mod_Data(ptk, TmpPatterns_Notes + PATTERN_FX4, sizeof(char), 1, in);
+                        Read_Mod_Data(ptk, TmpPatterns_Notes + PATTERN_FXDATA4, sizeof(char), 1, in);
                     }
                 }
             }
         }
 
 #if !defined(__WINAMP__)
-        Status_Box("Loading song -> Sample data...");
+        Status_Box(ptk, "Loading song -> Sample data...");
 #endif
         for(int swrite = 0; swrite < MAX_INSTRS; swrite++)
         {
-            Read_Mod_Data(&nameins[swrite], sizeof(char), 20, in);
-            Read_Mod_Data(&Midiprg[swrite], sizeof(char), 1, in);
-            Read_Mod_Data(&Synthprg[swrite], sizeof(char), 1, in);
+            Read_Mod_Data(ptk, &nameins[swrite], sizeof(char), 20, in);
+            Read_Mod_Data(ptk, &Midiprg[swrite], sizeof(char), 1, in);
+            Read_Mod_Data(ptk, &Synthprg[swrite], sizeof(char), 1, in);
 
             PARASynth[swrite].disto = 0;
 
@@ -459,7 +459,7 @@ Read_Mod_File:
             PARASynth[swrite].lfo2_sustain = 128;
             PARASynth[swrite].lfo2_release = 0x10000;
 
-            Read_Synth_Params(Read_Mod_Data, Read_Mod_Data_Swap, in, swrite,
+            Read_Synth_Params(ptk, Read_Mod_Data, Read_Mod_Data_Swap, in, swrite,
                               new_disto, New_adsr, Portable, Env_Modulation,
                               New_Env, Ntk_Beta, Combine);
 
@@ -476,53 +476,53 @@ Read_Mod_File:
             SampleCompression[swrite] = SMP_PACK_INTERNAL;
             if(Pack_Scheme)
             {
-                Read_Mod_Data(&SampleCompression[swrite], sizeof(char), 1, in);
+                Read_Mod_Data(ptk, &SampleCompression[swrite], sizeof(char), 1, in);
                 if(Mp3_Scheme)
                 {
                     switch(SampleCompression[swrite])
                     {
                         case SMP_PACK_MP3:
-                            Read_Mod_Data(&Mp3_BitRate[swrite], sizeof(char), 1, in);
+                            Read_Mod_Data(ptk, &Mp3_BitRate[swrite], sizeof(char), 1, in);
                             break;
 
                         case SMP_PACK_AT3:
-                            Read_Mod_Data(&At3_BitRate[swrite], sizeof(char), 1, in);
+                            Read_Mod_Data(ptk, &At3_BitRate[swrite], sizeof(char), 1, in);
                             break;
                     }
                 }
-                SampleCompression[swrite] = Fix_Codec(SampleCompression[swrite]);
+                SampleCompression[swrite] = Fix_Codec(ptk, SampleCompression[swrite]);
             }
             for(int slwrite = 0; slwrite < MAX_INSTRS_SPLITS; slwrite++)
             {
-                Read_Mod_Data(&SampleType[swrite][slwrite], sizeof(char), 1, in);
+                Read_Mod_Data(ptk, &SampleType[swrite][slwrite], sizeof(char), 1, in);
                 if(SampleType[swrite][slwrite])
                 {
-                    if(Old_Bug) Read_Mod_Data(&SampleName[swrite][slwrite], sizeof(char), 256, in);
-                    else Read_Mod_Data(&SampleName[swrite][slwrite], sizeof(char), 64, in);
-                    Read_Mod_Data(&Basenote[swrite][slwrite], sizeof(char), 1, in);
+                    if(Old_Bug) Read_Mod_Data(ptk, &SampleName[swrite][slwrite], sizeof(char), 256, in);
+                    else Read_Mod_Data(ptk, &SampleName[swrite][slwrite], sizeof(char), 64, in);
+                    Read_Mod_Data(ptk, &Basenote[swrite][slwrite], sizeof(char), 1, in);
 
-                    Read_Mod_Data_Swap(&LoopStart[swrite][slwrite], sizeof(int), 1, in);
-                    Read_Mod_Data_Swap(&LoopEnd[swrite][slwrite], sizeof(int), 1, in);
-                    Read_Mod_Data(&LoopType[swrite][slwrite], sizeof(char), 1, in);
+                    Read_Mod_Data_Swap(ptk, &LoopStart[swrite][slwrite], sizeof(int), 1, in);
+                    Read_Mod_Data_Swap(ptk, &LoopEnd[swrite][slwrite], sizeof(int), 1, in);
+                    Read_Mod_Data(ptk, &LoopType[swrite][slwrite], sizeof(char), 1, in);
 
-                    Read_Mod_Data_Swap(&SampleLength[swrite][slwrite], sizeof(int), 1, in);
-                    Read_Mod_Data(&Finetune[swrite][slwrite], sizeof(char), 1, in);
-                    Read_Mod_Data_Swap(&Sample_Amplify[swrite][slwrite], sizeof(float), 1, in);
-                    Read_Mod_Data_Swap(&FDecay[swrite][slwrite], sizeof(float), 1, in);
+                    Read_Mod_Data_Swap(ptk, &SampleLength[swrite][slwrite], sizeof(int), 1, in);
+                    Read_Mod_Data(ptk, &Finetune[swrite][slwrite], sizeof(char), 1, in);
+                    Read_Mod_Data_Swap(ptk, &Sample_Amplify[swrite][slwrite], sizeof(float), 1, in);
+                    Read_Mod_Data_Swap(ptk, &FDecay[swrite][slwrite], sizeof(float), 1, in);
 
                     AllocateWave(swrite, slwrite, SampleLength[swrite][slwrite], 1, FALSE, NULL, NULL);
-                    Read_Mod_Data(RawSamples[swrite][0][slwrite], sizeof(short), SampleLength[swrite][slwrite], in);
-                    Swap_Sample(RawSamples[swrite][0][slwrite], swrite, slwrite);
+                    Read_Mod_Data(ptk, RawSamples[swrite][0][slwrite], sizeof(short), SampleLength[swrite][slwrite], in);
+                    Swap_Sample(ptk, RawSamples[swrite][0][slwrite], swrite, slwrite);
                     *RawSamples[swrite][0][slwrite] = 0;
 
                     // Stereo flag
-                    Read_Mod_Data(&SampleChannels[swrite][slwrite], sizeof(char), 1, in);
+                    Read_Mod_Data(ptk, &SampleChannels[swrite][slwrite], sizeof(char), 1, in);
                     if(SampleChannels[swrite][slwrite] == 2)
                     {
                         RawSamples[swrite][1][slwrite] = (short *) malloc(SampleLength[swrite][slwrite] * sizeof(short) + 8);
                         memset(RawSamples[swrite][1][slwrite], 0, SampleLength[swrite][slwrite] * sizeof(short) + 8);
-                        Read_Mod_Data(RawSamples[swrite][1][slwrite], sizeof(short), SampleLength[swrite][slwrite], in);
-                        Swap_Sample(RawSamples[swrite][1][slwrite], swrite, slwrite);
+                        Read_Mod_Data(ptk, RawSamples[swrite][1][slwrite], sizeof(short), SampleLength[swrite][slwrite], in);
+                        Swap_Sample(ptk, RawSamples[swrite][1][slwrite], swrite, slwrite);
                         *RawSamples[swrite][1][slwrite] = 0;
                     }
                 } // Exist Sample
@@ -530,7 +530,7 @@ Read_Mod_File:
         }
 
 #if !defined(__WINAMP__)
-        Status_Box("Loading song -> Track info, patterns and sequence...");   
+        Status_Box(ptk, "Loading song -> Track info, patterns and sequence...");   
 #endif
 
         Set_Default_Channels_Polyphony();
@@ -538,44 +538,44 @@ Read_Mod_File:
         // Reading Track Properties
         for(twrite = 0; twrite < Songtracks; twrite++)
         {
-            Read_Mod_Data_Swap(&TCut[twrite], sizeof(float), 1, in);
-            Read_Mod_Data_Swap(&ICut[twrite], sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &TCut[twrite], sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &ICut[twrite], sizeof(float), 1, in);
             if(ICut[twrite] > 0.0078125f) ICut[twrite] = 0.0078125f;
             if(ICut[twrite] < 0.00006103515625f) ICut[twrite] = 0.00006103515625f;
-            Read_Mod_Data_Swap(&TPan[twrite], sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &TPan[twrite], sizeof(float), 1, in);
             ComputeStereo(twrite);
-            FixStereo(twrite);
-            Read_Mod_Data_Swap(&FType[twrite], sizeof(int), 1, in);
-            Read_Mod_Data_Swap(&FRez[twrite], sizeof(int), 1, in);
-            Read_Mod_Data_Swap(&DThreshold[twrite], sizeof(float), 1, in);
-            Read_Mod_Data_Swap(&DClamp[twrite], sizeof(float), 1, in);
-            Read_Mod_Data_Swap(&DSend[twrite], sizeof(float), 1, in);
-            Read_Mod_Data_Swap(&CSend[twrite], sizeof(int), 1, in);
-            if(Poly) Read_Mod_Data(&Channels_Polyphony[twrite], sizeof(char), 1, in);
+            FixStereo(ptk, twrite);
+            Read_Mod_Data_Swap(ptk, &FType[twrite], sizeof(int), 1, in);
+            Read_Mod_Data_Swap(ptk, &FRez[twrite], sizeof(int), 1, in);
+            Read_Mod_Data_Swap(ptk, &DThreshold[twrite], sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &DClamp[twrite], sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &DSend[twrite], sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &CSend[twrite], sizeof(int), 1, in);
+            if(Poly) Read_Mod_Data(ptk, &Channels_Polyphony[twrite], sizeof(char), 1, in);
         }
 
         // Reading mod properties
         int cvalue;
-        Read_Mod_Data_Swap(&cvalue, sizeof(int), 1, in);
+        Read_Mod_Data_Swap(ptk, &cvalue, sizeof(int), 1, in);
         compressor = cvalue;
-        Read_Mod_Data_Swap(&c_threshold, sizeof(int), 1, in);
-        Read_Mod_Data_Swap(&BeatsPerMin, sizeof(int), 1, in);
-        Read_Mod_Data_Swap(&TicksPerBeat, sizeof(int), 1, in);
-        Read_Mod_Data_Swap(&mas_vol, sizeof(float), 1, in);
+        Read_Mod_Data_Swap(ptk, &c_threshold, sizeof(int), 1, in);
+        Read_Mod_Data_Swap(ptk, &BeatsPerMin, sizeof(int), 1, in);
+        Read_Mod_Data_Swap(ptk, &TicksPerBeat, sizeof(int), 1, in);
+        Read_Mod_Data_Swap(ptk, &mas_vol, sizeof(float), 1, in);
         if(mas_vol < 0.01f) mas_vol = 0.01f;
         if(mas_vol > 1.0f) mas_vol = 1.0f;
 
         if(New_Comp)
         {
             Comp_Flag = 0;
-            Read_Mod_Data(&Comp_Flag, sizeof(char), 1, in);
+            Read_Mod_Data(ptk, &Comp_Flag, sizeof(char), 1, in);
             if(Comp_Flag)
             {
-                Read_Mod_Data_Swap(&mas_comp_threshold_Master, sizeof(float), 1, in);
+                Read_Mod_Data_Swap(ptk, &mas_comp_threshold_Master, sizeof(float), 1, in);
                 if(mas_comp_threshold_Master < 0.01f) mas_comp_threshold_Master = 0.01f;
                 if(mas_comp_threshold_Master > 100.0f) mas_comp_threshold_Master = 100.0f;
 
-                Read_Mod_Data_Swap(&mas_comp_ratio_Master, sizeof(float), 1, in);
+                Read_Mod_Data_Swap(ptk, &mas_comp_ratio_Master, sizeof(float), 1, in);
                 if(mas_comp_ratio_Master < 0.01f) mas_comp_ratio_Master = 0.01f;
                 if(mas_comp_ratio_Master > 100.0f) mas_comp_ratio_Master = 100.0f;
             }
@@ -583,30 +583,30 @@ Read_Mod_File:
             {
                 for(i = 0; i < MAX_TRACKS; i++)
                 {
-                    Read_Mod_Data_Swap(&mas_comp_threshold_Track[i], sizeof(float), 1, in);
+                    Read_Mod_Data_Swap(ptk, &mas_comp_threshold_Track[i], sizeof(float), 1, in);
                 }
 
                 for(i = 0; i < MAX_TRACKS; i++)
                 {
-                    Read_Mod_Data_Swap(&mas_comp_ratio_Track[i], sizeof(float), 1, in);
+                    Read_Mod_Data_Swap(ptk, &mas_comp_ratio_Track[i], sizeof(float), 1, in);
                 }
-                Read_Mod_Data(&Compress_Track, sizeof(char), MAX_TRACKS, in);
+                Read_Mod_Data(ptk, &Compress_Track, sizeof(char), MAX_TRACKS, in);
             }
         }
 
-        if(!New_Reverb) Read_Mod_Data_Swap(&delay_time, sizeof(int), 1, in);
-        Read_Mod_Data_Swap(&Feedback, sizeof(float), 1, in);
-        if(!New_Reverb) Read_Mod_Data_Swap(&DelayType, sizeof(int), 1, in);
-        Read_Mod_Data_Swap(&lchorus_delay, sizeof(int), 1, in);
-        Read_Mod_Data_Swap(&rchorus_delay, sizeof(int), 1, in);
-        Read_Mod_Data_Swap(&lchorus_feedback, sizeof(float), 1, in);
-        Read_Mod_Data_Swap(&rchorus_feedback, sizeof(float), 1, in);
-        Read_Mod_Data_Swap(&shuffle, sizeof(int), 1, in);
+        if(!New_Reverb) Read_Mod_Data_Swap(ptk, &delay_time, sizeof(int), 1, in);
+        Read_Mod_Data_Swap(ptk, &Feedback, sizeof(float), 1, in);
+        if(!New_Reverb) Read_Mod_Data_Swap(ptk, &DelayType, sizeof(int), 1, in);
+        Read_Mod_Data_Swap(ptk, &lchorus_delay, sizeof(int), 1, in);
+        Read_Mod_Data_Swap(ptk, &rchorus_delay, sizeof(int), 1, in);
+        Read_Mod_Data_Swap(ptk, &lchorus_feedback, sizeof(float), 1, in);
+        Read_Mod_Data_Swap(ptk, &rchorus_feedback, sizeof(float), 1, in);
+        Read_Mod_Data_Swap(ptk, &shuffle, sizeof(int), 1, in);
 
         // Load the new reverb data
         if(New_Reverb)
         {
-            Load_Reverb_Data(Read_Mod_Data, Read_Mod_Data_Swap, in, !Reverb_Resonance);
+            Load_Reverb_Data(ptk, Read_Mod_Data, Read_Mod_Data_Swap, in, !Reverb_Resonance);
         }
 
         // Reading track part sequence
@@ -614,7 +614,7 @@ Read_Mod_File:
         {
             for(tps_trk = 0; tps_trk < MAX_TRACKS; tps_trk++)
             {
-                Read_Mod_Data(&CHAN_ACTIVE_STATE[tps_pos][tps_trk], sizeof(char), 1, in);
+                Read_Mod_Data(ptk, &CHAN_ACTIVE_STATE[tps_pos][tps_trk], sizeof(char), 1, in);
                 CHAN_HISTORY_STATE[tps_pos][tps_trk] = FALSE;
             }
         }
@@ -626,25 +626,25 @@ Read_Mod_File:
 
         for(twrite = 0; twrite < Songtracks; twrite++)
         {
-            Read_Mod_Data_Swap(&CHAN_MIDI_PRG[twrite], sizeof(int), 1, in);
+            Read_Mod_Data_Swap(ptk, &CHAN_MIDI_PRG[twrite], sizeof(int), 1, in);
         }
 
         for(twrite = 0; twrite < Songtracks; twrite++)
         {
-            Read_Mod_Data(&LFO_ON[twrite], sizeof(char), 1, in);
-            Read_Mod_Data_Swap(&LFO_RATE[twrite], sizeof(float), 1, in);
-            Read_Mod_Data_Swap(&LFO_AMPL[twrite], sizeof(float), 1, in);
+            Read_Mod_Data(ptk, &LFO_ON[twrite], sizeof(char), 1, in);
+            Read_Mod_Data_Swap(ptk, &LFO_RATE[twrite], sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &LFO_AMPL[twrite], sizeof(float), 1, in);
         }
 
         for(twrite = 0; twrite < Songtracks; twrite++)
         {
-            Read_Mod_Data(&FLANGER_ON[twrite], sizeof(char), 1, in);
-            Read_Mod_Data_Swap(&FLANGER_AMOUNT[twrite], sizeof(float), 1, in);
-            Read_Mod_Data_Swap(&FLANGER_DEPHASE[twrite], sizeof(float), 1, in);
-            Read_Mod_Data_Swap(&FLANGER_RATE[twrite], sizeof(float), 1, in);
-            Read_Mod_Data_Swap(&FLANGER_AMPL[twrite], sizeof(float), 1, in);
-            Read_Mod_Data_Swap(&FLANGER_FEEDBACK[twrite], sizeof(float), 1, in);
-            Read_Mod_Data_Swap(&FLANGER_DELAY[twrite], sizeof(int), 1, in);
+            Read_Mod_Data(ptk, &FLANGER_ON[twrite], sizeof(char), 1, in);
+            Read_Mod_Data_Swap(ptk, &FLANGER_AMOUNT[twrite], sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &FLANGER_DEPHASE[twrite], sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &FLANGER_RATE[twrite], sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &FLANGER_AMPL[twrite], sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &FLANGER_FEEDBACK[twrite], sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &FLANGER_DELAY[twrite], sizeof(int), 1, in);
             FLANGER_OFFSET[twrite] = 8192;
             FLANGER_OFFSET2[twrite] = float(FLANGER_OFFSET[twrite] - FLANGER_DELAY[twrite]);
             FLANGER_OFFSET1[twrite] = float(FLANGER_OFFSET[twrite] - FLANGER_DELAY[twrite]);
@@ -652,99 +652,99 @@ Read_Mod_File:
 
         if(!Flanger_Bug)
         {
-            Read_Mod_Data_Swap(&FLANGER_DEPHASE, sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &FLANGER_DEPHASE, sizeof(float), 1, in);
         }
 
         for(tps_trk = 0; tps_trk < Songtracks; tps_trk++)
         {
-            Read_Mod_Data_Swap(&CHAN_MUTE_STATE[tps_trk], sizeof(int), 1, in);
+            Read_Mod_Data_Swap(ptk, &CHAN_MUTE_STATE[tps_trk], sizeof(int), 1, in);
         }
 
-        Read_Mod_Data(&Songtracks, sizeof(char), 1, in);
+        Read_Mod_Data(ptk, &Songtracks, sizeof(char), 1, in);
 
         for(tps_trk = 0; tps_trk < MAX_TRACKS; tps_trk++)
         {
-            Read_Mod_Data(&Disclap[tps_trk], sizeof(char), 1, in);
-            if(!Portable) Read_Mod_Data(&fake_value, sizeof(char), 1, in);
+            Read_Mod_Data(ptk, &Disclap[tps_trk], sizeof(char), 1, in);
+            if(!Portable) Read_Mod_Data(ptk, &fake_value, sizeof(char), 1, in);
         }
 
         if(!Ntk_Beta)       // Nothing like that in ntk beta
         {
-            Read_Mod_Data(artist, sizeof(char), 20, in);
-            Read_Mod_Data(style, sizeof(char), 20, in);
+            Read_Mod_Data(ptk, artist, sizeof(char), 20, in);
+            Read_Mod_Data(ptk, style, sizeof(char), 20, in);
 
-            if(!Portable) Read_Mod_Data(&Ye_Old_Phony_Value, sizeof(char), 1, in);
+            if(!Portable) Read_Mod_Data(ptk, &Ye_Old_Phony_Value, sizeof(char), 1, in);
 
-            Read_Mod_Data(beatsync, sizeof(char), MAX_INSTRS, in);
+            Read_Mod_Data(ptk, beatsync, sizeof(char), MAX_INSTRS, in);
 
             for(i = 0; i < MAX_INSTRS; i++)
             {
-                Read_Mod_Data_Swap(&beatlines[i], sizeof(short), 1, in);
+                Read_Mod_Data_Swap(ptk, &beatlines[i], sizeof(short), 1, in);
             }
 
-            Read_Mod_Data_Swap(&Reverb_Filter_Cutoff, sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &Reverb_Filter_Cutoff, sizeof(float), 1, in);
 
             if(Reverb_Resonance)
             {
-                Read_Mod_Data_Swap(&Reverb_Filter_Resonance, sizeof(float), 1, in);
+                Read_Mod_Data_Swap(ptk, &Reverb_Filter_Resonance, sizeof(float), 1, in);
             }
             if(Stereo_Reverb)
             {
-                Read_Mod_Data(&Reverb_Stereo_Amount, sizeof(char), 1, in);
+                Read_Mod_Data(ptk, &Reverb_Stereo_Amount, sizeof(char), 1, in);
             }
 
             for(i = 0; i < MAX_INSTRS; i++)
             {
-                Read_Mod_Data_Swap(&Sample_Vol[i], sizeof(float), 1, in);
+                Read_Mod_Data_Swap(ptk, &Sample_Vol[i], sizeof(float), 1, in);
             }
 
-            if(!Portable) Read_Mod_Data(&Ye_Old_Phony_Value, sizeof(char), 1, in);
+            if(!Portable) Read_Mod_Data(ptk, &Ye_Old_Phony_Value, sizeof(char), 1, in);
 
             // Read the 303 datas
             for(j = 0; j < 2; j++)
             {
-                Read_Mod_Data(&tb303[j].enabled, sizeof(char), 1, in);
-                Read_Mod_Data(&tb303[j].selectedpattern, sizeof(char), 1, in);
-                Read_Mod_Data(&tb303[j].tune, sizeof(char), 1, in);
-                Read_Mod_Data(&tb303[j].cutoff, sizeof(char), 1, in);
-                Read_Mod_Data(&tb303[j].resonance, sizeof(char), 1, in);
-                Read_Mod_Data(&tb303[j].envmod, sizeof(char), 1, in);
-                Read_Mod_Data(&tb303[j].decay, sizeof(char), 1, in);
-                Read_Mod_Data(&tb303[j].accent, sizeof(char), 1, in);
-                Read_Mod_Data(&tb303[j].waveform, sizeof(char), 1, in);
+                Read_Mod_Data(ptk, &tb303[j].enabled, sizeof(char), 1, in);
+                Read_Mod_Data(ptk, &tb303[j].selectedpattern, sizeof(char), 1, in);
+                Read_Mod_Data(ptk, &tb303[j].tune, sizeof(char), 1, in);
+                Read_Mod_Data(ptk, &tb303[j].cutoff, sizeof(char), 1, in);
+                Read_Mod_Data(ptk, &tb303[j].resonance, sizeof(char), 1, in);
+                Read_Mod_Data(ptk, &tb303[j].envmod, sizeof(char), 1, in);
+                Read_Mod_Data(ptk, &tb303[j].decay, sizeof(char), 1, in);
+                Read_Mod_Data(ptk, &tb303[j].accent, sizeof(char), 1, in);
+                Read_Mod_Data(ptk, &tb303[j].waveform, sizeof(char), 1, in);
                 // Default value
                 tb303[j].scale = 1;
                 if(Tb303_Scaling)
                 {
-                    Read_Mod_Data(&tb303[j].scale, sizeof(char), 1, in);
+                    Read_Mod_Data(ptk, &tb303[j].scale, sizeof(char), 1, in);
                 }
                 tb303engine[j].tbCurMultiple = tb303[j].scale;
                 if(Portable)
                 {
                     for(i = 0; i < 32; i++)
                     {
-                        Load_303_Data(Read_Mod_Data, Read_Mod_Data_Swap, in, j, i);
+                        Load_303_Data(ptk, Read_Mod_Data, Read_Mod_Data_Swap, in, j, i);
                     }
                 }
                 else
                 {
-                    Read_Mod_Data(&tb303[j].patternlength, sizeof(char), 32, in);
-                    Read_Mod_Data(&tb303[j].tone, sizeof(char), 32 * 16, in);
-                    Read_Mod_Data(&Ye_Old_Phony_Value, sizeof(char), 1, in);
-                    Read_Mod_Data(&Ye_Old_Phony_Value, sizeof(char), 1, in);
-                    Read_Mod_Data(&Ye_Old_Phony_Value, sizeof(char), 1, in);
+                    Read_Mod_Data(ptk, &tb303[j].patternlength, sizeof(char), 32, in);
+                    Read_Mod_Data(ptk, &tb303[j].tone, sizeof(char), 32 * 16, in);
+                    Read_Mod_Data(ptk, &Ye_Old_Phony_Value, sizeof(char), 1, in);
+                    Read_Mod_Data(ptk, &Ye_Old_Phony_Value, sizeof(char), 1, in);
+                    Read_Mod_Data(ptk, &Ye_Old_Phony_Value, sizeof(char), 1, in);
                     for(k = 0; k < 32; k++)
                     {
                         for(i = 0; i < 16; i++)
                         {
-                            Read_Mod_Data_Swap(&tb303[j].flag[k][i], sizeof(struct flag303), 1, in);
+                            Read_Mod_Data_Swap(ptk, &tb303[j].flag[k][i], sizeof(struct flag303), 1, in);
                         }
                     }
-                    Read_Mod_Data(&tb303[j].pattern_name, sizeof(char), 32 * 20, in);
+                    Read_Mod_Data(ptk, &tb303[j].pattern_name, sizeof(char), 32 * 20, in);
                 }
             }
-            Read_Mod_Data_Swap(&tb303engine[0].tbVolume, sizeof(float), 1, in);
-            Read_Mod_Data_Swap(&tb303engine[1].tbVolume, sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &tb303engine[0].tbVolume, sizeof(float), 1, in);
+            Read_Mod_Data_Swap(ptk, &tb303engine[1].tbVolume, sizeof(float), 1, in);
         }
 
         fclose(in);
@@ -752,14 +752,14 @@ Read_Mod_File:
         if(!New_Reverb)
         {
             // Set the reverb to one of the old presets
-            Load_Old_Reverb_Presets(DelayType);
+            Load_Old_Reverb_Presets(ptk, DelayType);
         }
 
         // Init the tracker context
         Init_Tracker_Context_After_ModLoad(ptk);
 
 #if !defined(__WINAMP__)
-        Status_Box("Module loaded sucessfully...");
+        Status_Box(ptk, "Module loaded sucessfully...");
 #endif
 
     }
@@ -767,14 +767,14 @@ Read_Mod_File:
     {
 
 #if !defined(__WINAMP__)
-        Status_Box("Module loading failed. (Possible cause: file not found)");
+        Status_Box(ptk, "Module loading failed. (Possible cause: file not found)");
 #endif
 
         return(FALSE);
     }
 
 #if !defined(__WINAMP__)
-    Clear_Input();
+    Clear_Input(ptk);
     if(Mod_Memory) free(Mod_Memory);
 #endif
 
@@ -783,7 +783,7 @@ Read_Mod_File:
 
 // ------------------------------------------------------
 // Load and decode a packed sample
-short *Unpack_Sample(FILE *FileHandle, int Dest_Length, char Pack_Type, int BitRate)
+short *Unpack_Sample(ptk_data *ptk, FILE *FileHandle, int Dest_Length, char Pack_Type, int BitRate)
 {
     int Packed_Length;
 
@@ -791,13 +791,13 @@ short *Unpack_Sample(FILE *FileHandle, int Dest_Length, char Pack_Type, int BitR
 
     Uint8 *Packed_Read_Buffer;
 
-    Read_Mod_Data(&Packed_Length, sizeof(int), 1, FileHandle);
+    Read_Mod_Data(ptk, &Packed_Length, sizeof(int), 1, FileHandle);
     if(Packed_Length == -1)
     {
         // Sample wasn't packed
         Packed_Read_Buffer = (Uint8 *) malloc(Dest_Length * 2 + 8);
         memset(Packed_Read_Buffer, 0, Dest_Length * 2 + 8);
-        Read_Mod_Data(Packed_Read_Buffer, sizeof(char), Dest_Length * 2, FileHandle);
+        Read_Mod_Data(ptk, Packed_Read_Buffer, sizeof(char), Dest_Length * 2, FileHandle);
         return((short *) Packed_Read_Buffer);
     }
     else
@@ -805,7 +805,7 @@ short *Unpack_Sample(FILE *FileHandle, int Dest_Length, char Pack_Type, int BitR
 
         Packed_Read_Buffer = (Uint8 *) malloc(Packed_Length);
         // Read the packer buffer
-        Read_Mod_Data(Packed_Read_Buffer, sizeof(char), Packed_Length, FileHandle);
+        Read_Mod_Data(ptk, Packed_Read_Buffer, sizeof(char), Packed_Length, FileHandle);
         Dest_Buffer = (short *) malloc(Dest_Length * 2 + 8);
         memset(Dest_Buffer, 0, Dest_Length * 2 + 8);
 
@@ -853,7 +853,7 @@ short *Unpack_Sample(FILE *FileHandle, int Dest_Length, char Pack_Type, int BitR
 // ------------------------------------------------------
 // Save a packed sample
 #if !defined(__WINAMP__)
-void Pack_Sample(FILE *FileHandle, short *Sample, int Size, char Pack_Type, int BitRate)
+void Pack_Sample(ptk_data *ptk, FILE *FileHandle, short *Sample, int Size, char Pack_Type, int BitRate)
 {
     int PackedLen = 0;
     short *PackedSample = NULL;
@@ -943,28 +943,28 @@ void Pack_Sample(FILE *FileHandle, short *Sample, int Size, char Pack_Type, int 
     if(PackedLen)
     {
         // Write the encoded length
-        Write_Mod_Data(&PackedLen, sizeof(char), 4, FileHandle);
+        Write_Mod_Data(ptk, &PackedLen, sizeof(char), 4, FileHandle);
         // Write the encoded datas
-        Write_Mod_Data(PackedSample, sizeof(char), PackedLen, FileHandle);
+        Write_Mod_Data(ptk, PackedSample, sizeof(char), PackedLen, FileHandle);
     }
     else
     {
         // Couldn't pack (too small or user do not want that to happen)
         PackedLen = -1;
-        Write_Mod_Data(&PackedLen, sizeof(char), 4, FileHandle);
-        Write_Mod_Data(Sample, sizeof(char), Size * 2, FileHandle);
+        Write_Mod_Data(ptk, &PackedLen, sizeof(char), 4, FileHandle);
+        Write_Mod_Data(ptk, Sample, sizeof(char), Size * 2, FileHandle);
     }
     if(PackedSample) free(PackedSample);
 }
 
 // ------------------------------------------------------
 // Write data into a module file
-int Write_Mod_Data(void *Datas, int Unit, int Length, FILE *Handle)
+int Write_Mod_Data(ptk_data *ptk, void *Datas, int Unit, int Length, FILE *Handle)
 {
     switch(Mod_Simulate)
     {
         case SAVE_WRITE:
-            Write_Data(Datas, Unit, Length, Handle);
+            Write_Data(ptk, Datas, Unit, Length, Handle);
             break;
 
         case SAVE_CALCLEN:
@@ -981,7 +981,7 @@ int Write_Mod_Data(void *Datas, int Unit, int Length, FILE *Handle)
 
 // ------------------------------------------------------
 // Write data into a module file (handling bytes swapping)
-int Write_Mod_Data_Swap(void *Datas, int Unit, int Length, FILE *Handle)
+int Write_Mod_Data_Swap(ptk_data *ptk, void *Datas, int Unit, int Length, FILE *Handle)
 {
     short sswap_value;
     int iswap_value;
@@ -991,7 +991,7 @@ int Write_Mod_Data_Swap(void *Datas, int Unit, int Length, FILE *Handle)
     switch(Mod_Simulate)
     {
         case SAVE_WRITE:
-            Write_Data_Swap(Datas, Unit, Length, Handle);
+            Write_Data_Swap(ptk, Datas, Unit, Length, Handle);
             break;
 
         case SAVE_CALCLEN:
@@ -1027,12 +1027,12 @@ int Write_Mod_Data_Swap(void *Datas, int Unit, int Length, FILE *Handle)
 
 // ------------------------------------------------------
 // Read data from a module file
-int Read_Mod_Data(void *Datas, int Unit, int Length, FILE *Handle)
+int Read_Mod_Data(ptk_data *ptk, void *Datas, int Unit, int Length, FILE *Handle)
 {
     switch(Mod_Simulate)
     {
         case LOAD_READ:
-            Read_Data(Datas, Unit, Length, Handle);
+            Read_Data(ptk, Datas, Unit, Length, Handle);
             break;
 
         case LOAD_READMEM:
@@ -1045,7 +1045,7 @@ int Read_Mod_Data(void *Datas, int Unit, int Length, FILE *Handle)
 
 // ------------------------------------------------------
 // Read data from a module file
-int Read_Mod_Data_Swap(void *Datas, int Unit, int Length, FILE *Handle)
+int Read_Mod_Data_Swap(ptk_data *ptk, void *Datas, int Unit, int Length, FILE *Handle)
 {
     short svalue;
     int ivalue;
@@ -1053,7 +1053,7 @@ int Read_Mod_Data_Swap(void *Datas, int Unit, int Length, FILE *Handle)
     switch(Mod_Simulate)
     {
         case LOAD_READ:
-            Read_Data_Swap(Datas, Unit, Length, Handle);
+            Read_Data_Swap(ptk, Datas, Unit, Length, Handle);
             break;
 
         case LOAD_READMEM:
@@ -1104,7 +1104,7 @@ int File_Exist(char *Format, char *Directory, char *FileName)
 // ------------------------------------------------------
 // Check if a file exists and prepare a requester if it does
 #if !defined(__WINAMP__)
-int File_Exist_Req(char *Format, char *Directory, char *FileName)
+int File_Exist_Req(ptk_data *ptk, char *Format, char *Directory, char *FileName)
 {
     char Temph[MAX_PATH];
 
@@ -1122,7 +1122,7 @@ int File_Exist_Req(char *Format, char *Directory, char *FileName)
 
 // ------------------------------------------------------
 // Return the size of an opened file
-int Get_File_Size(FILE *Handle)
+int Get_File_Size(ptk_data *ptk, FILE *Handle)
 {
     int File_Size;
     int Current_Pos;
@@ -1138,7 +1138,7 @@ int Get_File_Size(FILE *Handle)
 
 // ------------------------------------------------------
 // Remvove the spaces chars located at the end of a string
-void rtrim_string(char *string, int maxlen)
+void rtrim_string(ptk_data *ptk, char *string, int maxlen)
 {
     int len = strlen(string);
 
@@ -1183,13 +1183,13 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
         if(NewFormat)
         {
             sprintf(Temph, "Saving '%s.ptp' song in modules directory...", FileName);
-            Status_Box(Temph);
+            Status_Box(ptk, Temph);
             sprintf(Temph, "%s"SLASH"%s.ptp", Dir_Mods, FileName);
         }
         else
         {
             sprintf(Temph, "Saving '%s.ptk' song in modules directory...", FileName);
-            Status_Box(Temph);
+            Status_Box(ptk, Temph);
             sprintf(Temph, "%s"SLASH"%s.ptk", Dir_Mods, FileName);
         }
         in = fopen(Temph, "wb");
@@ -1204,13 +1204,13 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
         if(NewFormat)
         {
             // .ptp
-            Ok_Memory = SavePtp(in, Simulate, FileName);
+            Ok_Memory = SavePtp(ptk, in, Simulate, FileName);
         }
         else
         {
             // .ptk
-            if(strlen(FileName)) rtrim_string(FileName, 20);
-            Write_Mod_Data(FileName, sizeof(char), 20, in);
+            if(strlen(FileName)) rtrim_string(ptk, FileName, 20);
+            Write_Mod_Data(ptk, FileName, sizeof(char), 20, in);
 
             nPatterns = 0;
 
@@ -1272,27 +1272,27 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
                 }
             }
 */
-            Write_Mod_Data(&nPatterns, sizeof(char), 1, in);
-            Write_Mod_Data(&Song_Length, sizeof(char), 1, in);
-            Write_Mod_Data(&Use_Cubic, sizeof(char), 1, in);
+            Write_Mod_Data(ptk, &nPatterns, sizeof(char), 1, in);
+            Write_Mod_Data(ptk, &Song_Length, sizeof(char), 1, in);
+            Write_Mod_Data(ptk, &Use_Cubic, sizeof(char), 1, in);
 
-            Write_Mod_Data(pSequence, sizeof(char), MAX_SEQUENCES, in);
+            Write_Mod_Data(ptk, pSequence, sizeof(char), MAX_SEQUENCES, in);
 
-            Swap_Short_Buffer(patternLines, MAX_ROWS);
-            Write_Mod_Data(patternLines, sizeof(short), MAX_ROWS, in);
-            Swap_Short_Buffer(patternLines, MAX_ROWS);
+            Swap_Short_Buffer(ptk, patternLines, MAX_ROWS);
+            Write_Mod_Data(ptk, patternLines, sizeof(short), MAX_ROWS, in);
+            Swap_Short_Buffer(ptk, patternLines, MAX_ROWS);
 
-            Write_Mod_Data(Channels_MultiNotes, sizeof(char), MAX_TRACKS, in);
-            Write_Mod_Data(Channels_Effects, sizeof(char), MAX_TRACKS, in);
+            Write_Mod_Data(ptk, Channels_MultiNotes, sizeof(char), MAX_TRACKS, in);
+            Write_Mod_Data(ptk, Channels_Effects, sizeof(char), MAX_TRACKS, in);
             for(i = 0; i < MAX_TRACKS; i++)
             {
-                Write_Mod_Data_Swap(&Track_Volume[i], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &Track_Volume[i], sizeof(float), 1, in);
             }
             for(i = 0; i < MAX_TRACKS; i++)
             {
-                Write_Mod_Data_Swap(&EqDat[i].lg, sizeof(float), 1, in);
-                Write_Mod_Data_Swap(&EqDat[i].mg, sizeof(float), 1, in);
-                Write_Mod_Data_Swap(&EqDat[i].hg, sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &EqDat[i].lg, sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &EqDat[i].mg, sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &EqDat[i].hg, sizeof(float), 1, in);
             }
 
             // Clean the unused patterns garbage (doesn't seem to do much)
@@ -1330,54 +1330,54 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
 
             for(int pwrite = 0; pwrite < nPatterns; pwrite++)
             {
-                Write_Mod_Data(RawPatterns + (pwrite * PATTERN_LEN),
+                Write_Mod_Data(ptk, RawPatterns + (pwrite * PATTERN_LEN),
                                sizeof(char), PATTERN_LEN, in);
             }
 
             // Writing sample data
             for(int swrite = 0; swrite < MAX_INSTRS; swrite++)
             {
-                rtrim_string(nameins[swrite], 20);
-                Write_Mod_Data(nameins[swrite], sizeof(char), 20, in);
-                Write_Mod_Data(&Midiprg[swrite], sizeof(char), 1, in);
-                Write_Mod_Data(&Synthprg[swrite], sizeof(char), 1, in);
+                rtrim_string(ptk, nameins[swrite], 20);
+                Write_Mod_Data(ptk, nameins[swrite], sizeof(char), 20, in);
+                Write_Mod_Data(ptk, &Midiprg[swrite], sizeof(char), 1, in);
+                Write_Mod_Data(ptk, &Synthprg[swrite], sizeof(char), 1, in);
 
-                Write_Synth_Params(Write_Mod_Data, Write_Mod_Data_Swap, in, swrite);
+                Write_Synth_Params(ptk, Write_Mod_Data, Write_Mod_Data_Swap, in, swrite);
 
                 // Compression type
-                Write_Mod_Data(&SampleCompression[swrite], sizeof(char), 1, in);
+                Write_Mod_Data(ptk, &SampleCompression[swrite], sizeof(char), 1, in);
                 switch(SampleCompression[swrite])
                 {
                     case SMP_PACK_MP3:
-                        Write_Mod_Data(&Mp3_BitRate[swrite], sizeof(char), 1, in);
+                        Write_Mod_Data(ptk, &Mp3_BitRate[swrite], sizeof(char), 1, in);
                         break;
 
                     case SMP_PACK_AT3:
-                        Write_Mod_Data(&At3_BitRate[swrite], sizeof(char), 1, in);
+                        Write_Mod_Data(ptk, &At3_BitRate[swrite], sizeof(char), 1, in);
                         break;
                 }
 
                 // 16 splits / instrument
                 for(int slwrite = 0; slwrite < MAX_INSTRS_SPLITS; slwrite++)
                 {
-                    Write_Mod_Data(&SampleType[swrite][slwrite], sizeof(char), 1, in);
+                    Write_Mod_Data(ptk, &SampleType[swrite][slwrite], sizeof(char), 1, in);
                     if(SampleType[swrite][slwrite])
                     {
-                        rtrim_string(SampleName[swrite][slwrite], 64);
-                        Write_Mod_Data(SampleName[swrite][slwrite], sizeof(char), 64, in);
-                        Write_Mod_Data(&Basenote[swrite][slwrite], sizeof(char), 1, in);
+                        rtrim_string(ptk, SampleName[swrite][slwrite], 64);
+                        Write_Mod_Data(ptk, SampleName[swrite][slwrite], sizeof(char), 64, in);
+                        Write_Mod_Data(ptk, &Basenote[swrite][slwrite], sizeof(char), 1, in);
                         
-                        Write_Mod_Data_Swap(&LoopStart[swrite][slwrite], sizeof(int), 1, in);
-                        Write_Mod_Data_Swap(&LoopEnd[swrite][slwrite], sizeof(int), 1, in);
-                        Write_Mod_Data(&LoopType[swrite][slwrite], sizeof(char), 1, in);
+                        Write_Mod_Data_Swap(ptk, &LoopStart[swrite][slwrite], sizeof(int), 1, in);
+                        Write_Mod_Data_Swap(ptk, &LoopEnd[swrite][slwrite], sizeof(int), 1, in);
+                        Write_Mod_Data(ptk, &LoopType[swrite][slwrite], sizeof(char), 1, in);
                         
-                        Write_Mod_Data_Swap(&SampleLength[swrite][slwrite], sizeof(int), 1, in);
-                        Write_Mod_Data(&Finetune[swrite][slwrite], sizeof(char), 1, in);
-                        Write_Mod_Data_Swap(&Sample_Amplify[swrite][slwrite], sizeof(float), 1, in);
-                        Write_Mod_Data_Swap(&FDecay[swrite][slwrite], sizeof(float), 1, in);
+                        Write_Mod_Data_Swap(ptk, &SampleLength[swrite][slwrite], sizeof(int), 1, in);
+                        Write_Mod_Data(ptk, &Finetune[swrite][slwrite], sizeof(char), 1, in);
+                        Write_Mod_Data_Swap(ptk, &Sample_Amplify[swrite][slwrite], sizeof(float), 1, in);
+                        Write_Mod_Data_Swap(ptk, &FDecay[swrite][slwrite], sizeof(float), 1, in);
 
                         // All samples are converted into 16 bits
-                        Write_Unpacked_Sample(Write_Mod_Data, in, swrite, slwrite);
+                        Write_Unpacked_Sample(ptk, Write_Mod_Data, in, swrite, slwrite);
                     }// Exist Sample
                 }
             }
@@ -1385,158 +1385,158 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
             // Writing Track Properties
             for(twrite = 0; twrite < MAX_TRACKS; twrite++)
             {
-                Write_Mod_Data_Swap(&TCut[twrite], sizeof(float), 1, in);
-                Write_Mod_Data_Swap(&ICut[twrite], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &TCut[twrite], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &ICut[twrite], sizeof(float), 1, in);
 
-                Write_Mod_Data_Swap(&TPan[twrite], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &TPan[twrite], sizeof(float), 1, in);
 
-                Write_Mod_Data_Swap(&FType[twrite], sizeof(int), 1, in);
-                Write_Mod_Data_Swap(&FRez[twrite], sizeof(int), 1, in);
-                Write_Mod_Data_Swap(&DThreshold[twrite], sizeof(float), 1, in);
-                Write_Mod_Data_Swap(&DClamp[twrite], sizeof(float), 1, in);
-                Write_Mod_Data_Swap(&DSend[twrite], sizeof(float), 1, in);
-                Write_Mod_Data_Swap(&CSend[twrite], sizeof(int), 1, in);
-                Write_Mod_Data(&Channels_Polyphony[twrite], sizeof(char), 1, in);
+                Write_Mod_Data_Swap(ptk, &FType[twrite], sizeof(int), 1, in);
+                Write_Mod_Data_Swap(ptk, &FRez[twrite], sizeof(int), 1, in);
+                Write_Mod_Data_Swap(ptk, &DThreshold[twrite], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &DClamp[twrite], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &DSend[twrite], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &CSend[twrite], sizeof(int), 1, in);
+                Write_Mod_Data(ptk, &Channels_Polyphony[twrite], sizeof(char), 1, in);
             }
 
             // Writing mod properties
             int cvalue;   
             cvalue = compressor;
-            Write_Mod_Data_Swap(&cvalue, sizeof(int), 1, in);
-            Write_Mod_Data_Swap(&c_threshold, sizeof(int), 1, in);
-            Write_Mod_Data_Swap(&BeatsPerMin, sizeof(int), 1, in);
-            Write_Mod_Data_Swap(&TicksPerBeat, sizeof(int), 1, in);
-            Write_Mod_Data_Swap(&mas_vol, sizeof(float), 1, in);
+            Write_Mod_Data_Swap(ptk, &cvalue, sizeof(int), 1, in);
+            Write_Mod_Data_Swap(ptk, &c_threshold, sizeof(int), 1, in);
+            Write_Mod_Data_Swap(ptk, &BeatsPerMin, sizeof(int), 1, in);
+            Write_Mod_Data_Swap(ptk, &TicksPerBeat, sizeof(int), 1, in);
+            Write_Mod_Data_Swap(ptk, &mas_vol, sizeof(float), 1, in);
             
-            Write_Mod_Data(&Comp_Flag, sizeof(char), 1, in);
-            Write_Mod_Data_Swap(&mas_comp_threshold_Master, sizeof(float), 1, in);
-            Write_Mod_Data_Swap(&mas_comp_ratio_Master, sizeof(float), 1, in);
+            Write_Mod_Data(ptk, &Comp_Flag, sizeof(char), 1, in);
+            Write_Mod_Data_Swap(ptk, &mas_comp_threshold_Master, sizeof(float), 1, in);
+            Write_Mod_Data_Swap(ptk, &mas_comp_ratio_Master, sizeof(float), 1, in);
 
             for(i = 0; i < MAX_TRACKS; i++)
             {
                 if(mas_comp_threshold_Track[i] < 0.01f) mas_comp_threshold_Track[i] = 0.01f;
                 if(mas_comp_threshold_Track[i] > 100.0f) mas_comp_threshold_Track[i] = 100.0f;
-                Write_Mod_Data_Swap(&mas_comp_threshold_Track[i], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &mas_comp_threshold_Track[i], sizeof(float), 1, in);
             }
             for(i = 0; i < MAX_TRACKS; i++)
             {
                 if(mas_comp_ratio_Track[i] < 0.01f) mas_comp_ratio_Track[i] = 0.01f;
                 if(mas_comp_ratio_Track[i] > 100.0f) mas_comp_ratio_Track[i] = 100.0f;
-                Write_Mod_Data_Swap(&mas_comp_ratio_Track[i], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &mas_comp_ratio_Track[i], sizeof(float), 1, in);
             }
-            Write_Mod_Data(&Compress_Track, sizeof(char), MAX_TRACKS, in);
+            Write_Mod_Data(ptk, &Compress_Track, sizeof(char), MAX_TRACKS, in);
 
-            Write_Mod_Data_Swap(&Feedback, sizeof(float), 1, in);
-            Write_Mod_Data_Swap(&lchorus_delay, sizeof(int), 1, in);
-            Write_Mod_Data_Swap(&rchorus_delay, sizeof(int), 1, in);
-            Write_Mod_Data_Swap(&lchorus_feedback, sizeof(float), 1, in);
-            Write_Mod_Data_Swap(&rchorus_feedback, sizeof(float), 1, in);
-            Write_Mod_Data_Swap(&shuffle, sizeof(int), 1, in);
+            Write_Mod_Data_Swap(ptk, &Feedback, sizeof(float), 1, in);
+            Write_Mod_Data_Swap(ptk, &lchorus_delay, sizeof(int), 1, in);
+            Write_Mod_Data_Swap(ptk, &rchorus_delay, sizeof(int), 1, in);
+            Write_Mod_Data_Swap(ptk, &lchorus_feedback, sizeof(float), 1, in);
+            Write_Mod_Data_Swap(ptk, &rchorus_feedback, sizeof(float), 1, in);
+            Write_Mod_Data_Swap(ptk, &shuffle, sizeof(int), 1, in);
 
             // Save the reverb data
-            Save_Reverb_Data(Write_Mod_Data, Write_Mod_Data_Swap, in);
+            Save_Reverb_Data(ptk, Write_Mod_Data, Write_Mod_Data_Swap, in);
 
             // Writing part sequence data
             for(int tps_pos = 0; tps_pos < MAX_SEQUENCES; tps_pos++)
             {
                 for(tps_trk = 0; tps_trk < MAX_TRACKS; tps_trk++)
                 {
-                    Write_Mod_Data(&CHAN_ACTIVE_STATE[tps_pos][tps_trk], sizeof(char), 1, in);
+                    Write_Mod_Data(ptk, &CHAN_ACTIVE_STATE[tps_pos][tps_trk], sizeof(char), 1, in);
                 }
             }
 
             for(twrite = 0; twrite < MAX_TRACKS; twrite++)
             {
-                Write_Mod_Data_Swap(&CHAN_MIDI_PRG[twrite], sizeof(int), 1, in);
+                Write_Mod_Data_Swap(ptk, &CHAN_MIDI_PRG[twrite], sizeof(int), 1, in);
             }
 
             for(twrite = 0; twrite < MAX_TRACKS; twrite++)
             {
-                Write_Mod_Data(&LFO_ON[twrite], sizeof(char), 1, in);
-                Write_Mod_Data_Swap(&LFO_RATE[twrite], sizeof(float), 1, in);
-                Write_Mod_Data_Swap(&LFO_AMPL[twrite], sizeof(float), 1, in);
+                Write_Mod_Data(ptk, &LFO_ON[twrite], sizeof(char), 1, in);
+                Write_Mod_Data_Swap(ptk, &LFO_RATE[twrite], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &LFO_AMPL[twrite], sizeof(float), 1, in);
             }
 
             for(twrite = 0; twrite < MAX_TRACKS; twrite++)
             {
-                Write_Mod_Data(&FLANGER_ON[twrite], sizeof(char), 1, in);
-                Write_Mod_Data_Swap(&FLANGER_AMOUNT[twrite], sizeof(float), 1, in);
-                Write_Mod_Data_Swap(&FLANGER_DEPHASE[twrite], sizeof(float), 1, in);
-                Write_Mod_Data_Swap(&FLANGER_RATE[twrite], sizeof(float), 1, in);
-                Write_Mod_Data_Swap(&FLANGER_AMPL[twrite], sizeof(float), 1, in);
-                Write_Mod_Data_Swap(&FLANGER_FEEDBACK[twrite], sizeof(float), 1, in);
-                Write_Mod_Data_Swap(&FLANGER_DELAY[twrite], sizeof(int), 1, in);
+                Write_Mod_Data(ptk, &FLANGER_ON[twrite], sizeof(char), 1, in);
+                Write_Mod_Data_Swap(ptk, &FLANGER_AMOUNT[twrite], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &FLANGER_DEPHASE[twrite], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &FLANGER_RATE[twrite], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &FLANGER_AMPL[twrite], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &FLANGER_FEEDBACK[twrite], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &FLANGER_DELAY[twrite], sizeof(int), 1, in);
             }
 
             // Was a bug
-            //Write_Mod_Data_Swap(&FLANGER_DEPHASE, sizeof(float), 1, in);
+            //Write_Mod_Data_Swap(ptk, &FLANGER_DEPHASE, sizeof(float), 1, in);
 
             for(tps_trk = 0; tps_trk < MAX_TRACKS; tps_trk++)
             {
-                Write_Mod_Data_Swap(&CHAN_MUTE_STATE[tps_trk], sizeof(int), 1, in);
+                Write_Mod_Data_Swap(ptk, &CHAN_MUTE_STATE[tps_trk], sizeof(int), 1, in);
             }
-            Write_Mod_Data(&Songtracks, sizeof(char), 1, in);
+            Write_Mod_Data(ptk, &Songtracks, sizeof(char), 1, in);
 
             for(tps_trk = 0; tps_trk < MAX_TRACKS; tps_trk++)
             {
-                Write_Mod_Data(&Disclap[tps_trk], sizeof(char), 1, in);
+                Write_Mod_Data(ptk, &Disclap[tps_trk], sizeof(char), 1, in);
             }
 
-            rtrim_string(artist, 20);
-            Write_Mod_Data(artist, sizeof(char), 20, in);
-            rtrim_string(style, 20);
-            Write_Mod_Data(style, sizeof(char), 20, in);
+            rtrim_string(ptk, artist, 20);
+            Write_Mod_Data(ptk, artist, sizeof(char), 20, in);
+            rtrim_string(ptk, style, 20);
+            Write_Mod_Data(ptk, style, sizeof(char), 20, in);
 
-            Write_Mod_Data(beatsync, sizeof(char), 128, in);
+            Write_Mod_Data(ptk, beatsync, sizeof(char), 128, in);
 
             for(i = 0; i < 128; i++)
             {
-                Write_Mod_Data_Swap(&beatlines[i], sizeof(short), 1, in);
+                Write_Mod_Data_Swap(ptk, &beatlines[i], sizeof(short), 1, in);
             }
-            Write_Mod_Data_Swap(&Reverb_Filter_Cutoff, sizeof(float), 1, in);
-            Write_Mod_Data_Swap(&Reverb_Filter_Resonance, sizeof(float), 1, in);
-            Write_Mod_Data(&Reverb_Stereo_Amount, sizeof(char), 1, in);
+            Write_Mod_Data_Swap(ptk, &Reverb_Filter_Cutoff, sizeof(float), 1, in);
+            Write_Mod_Data_Swap(ptk, &Reverb_Filter_Resonance, sizeof(float), 1, in);
+            Write_Mod_Data(ptk, &Reverb_Stereo_Amount, sizeof(char), 1, in);
 
             for(i = 0; i < 128; i++)
             {
-                Write_Mod_Data_Swap(&Sample_Vol[i], sizeof(float), 1, in);
+                Write_Mod_Data_Swap(ptk, &Sample_Vol[i], sizeof(float), 1, in);
             }
 
             // Include the patterns names
             for(i = 0; i < 32; i++)
             {
-                rtrim_string(tb303[0].pattern_name[i], 20);
-                rtrim_string(tb303[1].pattern_name[i], 20);
+                rtrim_string(ptk, tb303[0].pattern_name[i], 20);
+                rtrim_string(ptk, tb303[1].pattern_name[i], 20);
             }
             
             for(j = 0; j < 2; j++)
             {
-                Write_Mod_Data(&tb303[j].enabled, sizeof(char), 1, in);
-                Write_Mod_Data(&tb303[j].selectedpattern, sizeof(char), 1, in);
-                Write_Mod_Data(&tb303[j].tune, sizeof(char), 1, in);
-                Write_Mod_Data(&tb303[j].cutoff, sizeof(char), 1, in);
-                Write_Mod_Data(&tb303[j].resonance, sizeof(char), 1, in);
-                Write_Mod_Data(&tb303[j].envmod, sizeof(char), 1, in);
-                Write_Mod_Data(&tb303[j].decay, sizeof(char), 1, in);
-                Write_Mod_Data(&tb303[j].accent, sizeof(char), 1, in);
-                Write_Mod_Data(&tb303[j].waveform, sizeof(char), 1, in);
-                Write_Mod_Data(&tb303[j].scale, sizeof(char), 1, in);
+                Write_Mod_Data(ptk, &tb303[j].enabled, sizeof(char), 1, in);
+                Write_Mod_Data(ptk, &tb303[j].selectedpattern, sizeof(char), 1, in);
+                Write_Mod_Data(ptk, &tb303[j].tune, sizeof(char), 1, in);
+                Write_Mod_Data(ptk, &tb303[j].cutoff, sizeof(char), 1, in);
+                Write_Mod_Data(ptk, &tb303[j].resonance, sizeof(char), 1, in);
+                Write_Mod_Data(ptk, &tb303[j].envmod, sizeof(char), 1, in);
+                Write_Mod_Data(ptk, &tb303[j].decay, sizeof(char), 1, in);
+                Write_Mod_Data(ptk, &tb303[j].accent, sizeof(char), 1, in);
+                Write_Mod_Data(ptk, &tb303[j].waveform, sizeof(char), 1, in);
+                Write_Mod_Data(ptk, &tb303[j].scale, sizeof(char), 1, in);
 
                 for(i = 0; i < 32; i++)
                 {
-                    Save_303_Data(Write_Mod_Data, Write_Mod_Data_Swap, in, j, i); 
+                    Save_303_Data(ptk, Write_Mod_Data, Write_Mod_Data_Swap, in, j, i); 
                 }
             }
 
-            Write_Mod_Data_Swap(&tb303engine[0].tbVolume, sizeof(float), 1, in);
-            Write_Mod_Data_Swap(&tb303engine[1].tbVolume, sizeof(float), 1, in);
+            Write_Mod_Data_Swap(ptk, &tb303engine[0].tbVolume, sizeof(float), 1, in);
+            Write_Mod_Data_Swap(ptk, &tb303engine[1].tbVolume, sizeof(float), 1, in);
         }
 
         if(!Simulate)
         {
             fclose(in);
             last_index = -1;
-            Read_SMPT();
+            Read_SMPT(ptk);
             Actualize_Files_List(ptk, 0);
 
             if(Ok_Memory)
@@ -1550,14 +1550,14 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
                 {
                     sprintf(name, "Module '%s.ptk' saved succesfully.", FileName);
                 }
-                Status_Box(name);
+                Status_Box(ptk, name);
             }
         }
-        if(!Ok_Memory) Status_Box("Not enough memory.");
+        if(!Ok_Memory) Status_Box(ptk, "Not enough memory.");
     }
     else
     {
-        if(!Simulate) Status_Box("Module save failed.");   
+        if(!Simulate) Status_Box(ptk, "Module save failed.");   
     }
 
     return(Mod_Length);
@@ -1565,7 +1565,7 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
 
 // ------------------------------------------------------
 // Pack a module
-Uint8 *Pack_Data(Uint8 *Memory, int *Size)
+Uint8 *Pack_Data(ptk_data *ptk, Uint8 *Memory, int *Size)
 {
     z_stream c_stream; // compression stream
     int Comp_Len = -1;
@@ -1594,7 +1594,7 @@ Uint8 *Pack_Data(Uint8 *Memory, int *Size)
 
 // ------------------------------------------------------
 // Depack a compressed module
-Uint8 *Depack_Data(Uint8 *Memory, int Sizen, int Size_Out)
+Uint8 *Depack_Data(ptk_data *ptk, Uint8 *Memory, int Sizen, int Size_Out)
 {
     z_stream d_stream;
 
@@ -1620,7 +1620,7 @@ Uint8 *Depack_Data(Uint8 *Memory, int Sizen, int Size_Out)
 // ------------------------------------------------------
 // Backup a module
 #if !defined(__WINAMP__)
-void Backup_Module(char *FileName)
+void Backup_Module(ptk_data *ptk, char *FileName)
 {
     FILE *In;
     FILE *Out;
@@ -1637,7 +1637,7 @@ void Backup_Module(char *FileName)
     {
         // If the module already exists then load it
         // and make a backup before saving the new version
-        backup_size = Get_File_Size(In);
+        backup_size = Get_File_Size(ptk, In);
         backup_mem = (unsigned char *) malloc(backup_size);
         if(backup_mem)
         {
@@ -1681,12 +1681,12 @@ int Pack_Module(ptk_data *ptk, char *FileName)
     if(!strlen(FileName))
     {
         sprintf(name, "Can't save module without a name...");
-        Status_Box(name);
+        Status_Box(ptk, name);
         return(FALSE);
     }
 
     // Backup the old version of the module
-    if(AutoBackup) Backup_Module(FileName);
+    if(AutoBackup) Backup_Module(ptk, FileName);
 
     // Save the new one
     sprintf(Temph, "%s"SLASH"%s.ptk", Dir_Mods, FileName);
@@ -1698,15 +1698,15 @@ int Pack_Module(ptk_data *ptk, char *FileName)
     Uint8 *Final_Mem = (Uint8 *) malloc(Len);
     SavePtk(ptk, FileName, FALSE, SAVE_WRITEMEM, Final_Mem);
 
-    Final_Mem_Out = Pack_Data(Final_Mem, &Len);
+    Final_Mem_Out = Pack_Data(ptk, Final_Mem, &Len);
 
     output = fopen(Temph, "wb");
     if(output)
     {
         sprintf(extension, "PROTREKO");
-        Write_Data(extension, sizeof(char), 9, output);
-        Write_Data_Swap(&Depack_Size, sizeof(int), 1, output);
-        Write_Data(Final_Mem_Out, sizeof(char), Len, output);
+        Write_Data(ptk, extension, sizeof(char), 9, output);
+        Write_Data_Swap(ptk, &Depack_Size, sizeof(int), 1, output);
+        Write_Data(ptk, Final_Mem_Out, sizeof(char), Len, output);
         fclose(output);
         sprintf(name, "Module '%s.ptk' saved succesfully.", FileName);
     }
@@ -1717,9 +1717,9 @@ int Pack_Module(ptk_data *ptk, char *FileName)
     if(Final_Mem_Out) free(Final_Mem_Out);
     if(Final_Mem) free(Final_Mem);
 
-    Clear_Input();
-    Status_Box(name);
-    Read_SMPT();
+    Clear_Input(ptk);
+    Status_Box(ptk, name);
+    Read_SMPT(ptk);
     last_index = -1;
     Actualize_Files_List(ptk, 0);
     return(FALSE);
@@ -1735,7 +1735,7 @@ int TestMod(ptk_data *ptk)
     Uint8 *Final_Mem = (Uint8 *) malloc(Len);
     SavePtk(ptk, "", TRUE, SAVE_WRITEMEM, Final_Mem);
 
-    Final_Mem_Out = Pack_Data(Final_Mem, &Len);
+    Final_Mem_Out = Pack_Data(ptk, Final_Mem, &Len);
 
     if(Final_Mem_Out) free(Final_Mem_Out);
     if(Final_Mem) free(Final_Mem);
@@ -1746,7 +1746,7 @@ int TestMod(ptk_data *ptk)
 // ------------------------------------------------------
 // Switch the endianness of a 16 bit buffer
 // (size is the number of short elements, not bytes)
-void Swap_Short_Buffer(short *buffer, int size)
+void Swap_Short_Buffer(ptk_data *ptk, short *buffer, int size)
 {
 #if defined(__BIG_ENDIAN__)
     int i;
@@ -1760,22 +1760,22 @@ void Swap_Short_Buffer(short *buffer, int size)
 
 // ------------------------------------------------------
 // Switch the endianness of a sample
-void Swap_Sample(short *buffer, int sample, int bank)
+void Swap_Sample(ptk_data *ptk, short *buffer, int sample, int bank)
 {
 #if defined(__BIG_ENDIAN__)
-    Swap_Short_Buffer(buffer, SampleLength[sample][bank]);
+    Swap_Short_Buffer(ptk, buffer, SampleLength[sample][bank]);
 #endif
 }
 
 // ------------------------------------------------------
 // Create a new buffer and switch the endianness of a sample
-short *Swap_New_Sample(short *buffer, int sample, int bank)
+short *Swap_New_Sample(ptk_data *ptk, short *buffer, int sample, int bank)
 {
 #if defined(__BIG_ENDIAN__)
     short *new_buffer = (short *) malloc(SampleLength[sample][bank] * sizeof(short) + 8);
     memset(new_buffer, 0, SampleLength[sample][bank] * sizeof(short) + 8);
     memcpy(new_buffer, buffer, SampleLength[sample][bank] * sizeof(short));
-    Swap_Sample(new_buffer, sample, bank);
+    Swap_Sample(ptk, new_buffer, sample, bank);
     return(new_buffer);
 #else
     return(NULL);
@@ -1784,48 +1784,48 @@ short *Swap_New_Sample(short *buffer, int sample, int bank)
 
 // ------------------------------------------------------
 // Save a given unpacked sample
-void Write_Unpacked_Sample(int (*Write_Function)(void *, int ,int, FILE *),
+void Write_Unpacked_Sample(ptk_data *ptk, int (*Write_Function)(ptk_data *, void *, int ,int, FILE *),
                            FILE *in, int sample, int bank)
 {
     short *swap_buffer;
 
-    swap_buffer = Swap_New_Sample(Get_WaveForm(sample, 0, bank), sample, bank);
+    swap_buffer = Swap_New_Sample(ptk, Get_WaveForm(ptk, sample, 0, bank), sample, bank);
     if(swap_buffer)
     {
-        Write_Function(swap_buffer, sizeof(short), SampleLength[sample][bank], in);
+        Write_Function(ptk, swap_buffer, sizeof(short), SampleLength[sample][bank], in);
         free(swap_buffer);
     }
     else
     {
-        Write_Function(Get_WaveForm(sample, 0, bank), sizeof(short), SampleLength[sample][bank], in);
+        Write_Function(ptk, Get_WaveForm(ptk, sample, 0, bank), sizeof(short), SampleLength[sample][bank], in);
     }
 
-    Write_Function(&SampleChannels[sample][bank], sizeof(char), 1, in);
+    Write_Function(ptk, &SampleChannels[sample][bank], sizeof(char), 1, in);
     if(SampleChannels[sample][bank] == 2)
     {
-        swap_buffer = Swap_New_Sample(Get_WaveForm(sample, 1, bank), sample, bank);
+        swap_buffer = Swap_New_Sample(ptk, Get_WaveForm(ptk, sample, 1, bank), sample, bank);
         if(swap_buffer)
         {
-            Write_Function(swap_buffer, sizeof(short), SampleLength[sample][bank], in);
+            Write_Function(ptk, swap_buffer, sizeof(short), SampleLength[sample][bank], in);
             free(swap_buffer);
         }
         else
         {
-            Write_Function(Get_WaveForm(sample, 1, bank), sizeof(short), SampleLength[sample][bank], in);
+            Write_Function(ptk, Get_WaveForm(ptk, sample, 1, bank), sizeof(short), SampleLength[sample][bank], in);
         }
     }
 }
 
 // ------------------------------------------------------
 // Write data into a file
-int Write_Data(void *value, int size, int amount, FILE *handle)
+int Write_Data(ptk_data *ptk, void *value, int size, int amount, FILE *handle)
 {
     return(fwrite(value, size, amount, handle));
 }
 
 // ------------------------------------------------------
 // Write data into a file taking care of the endianness
-int Write_Data_Swap(void *value, int size, int amount, FILE *handle)
+int Write_Data_Swap(ptk_data *ptk, void *value, int size, int amount, FILE *handle)
 {
     short sswap_value;
     int iswap_value;
@@ -1837,12 +1837,12 @@ int Write_Data_Swap(void *value, int size, int amount, FILE *handle)
         case 2:
             svalue = (short *) value;
             sswap_value = Swap_16(*svalue);
-            return(Write_Data(&sswap_value, size, amount, handle));
+            return(Write_Data(ptk, &sswap_value, size, amount, handle));
 
         case 4:
             ivalue = (int *) value;
             iswap_value = Swap_32(*ivalue);
-            return(Write_Data(&iswap_value, size, amount, handle));
+            return(Write_Data(ptk, &iswap_value, size, amount, handle));
 
         default:
             printf("Invalid writing size.\n");
@@ -1853,14 +1853,14 @@ int Write_Data_Swap(void *value, int size, int amount, FILE *handle)
 
 // ------------------------------------------------------
 // Read data from a file
-int Read_Data(void *value, int size, int amount, FILE *handle)
+int Read_Data(ptk_data *ptk, void *value, int size, int amount, FILE *handle)
 {
     return(fread(value, size, amount, handle));
 }
 
 // ------------------------------------------------------
 // Read data from a file taking care of the endianness
-int Read_Data_Swap(void *value, int size, int amount, FILE *handle)
+int Read_Data_Swap(ptk_data *ptk, void *value, int size, int amount, FILE *handle)
 {
     short svalue;
     int ivalue;
@@ -1869,13 +1869,13 @@ int Read_Data_Swap(void *value, int size, int amount, FILE *handle)
     switch(size)
     {
         case 2:
-            ret_value = Read_Data(&svalue, size, amount, handle);
+            ret_value = Read_Data(ptk, &svalue, size, amount, handle);
             svalue = Swap_16(svalue);
             *((short *) value) = (int) svalue;
             return(ret_value);
 
         case 4:
-            ret_value = Read_Data(&ivalue, size, amount, handle);
+            ret_value = Read_Data(ptk, &ivalue, size, amount, handle);
             ivalue = Swap_32(ivalue);
             *((int *) value) = (int) ivalue;
             return(ret_value);
@@ -1893,7 +1893,7 @@ int song_Seconds;
 int song_Minutes;
 int song_Hours;
 
-int Calc_Length(void)
+int Calc_Length(ptk_data *ptk)
 {
     int i;
     int k;
@@ -2058,13 +2058,13 @@ int Calc_Length(void)
     song_Hours = ilen / 60 / 24;
 
 #if !defined(__WINAMP__)
-    Display_Song_Length();
+    Display_Song_Length(ptk);
 #endif
 
     return((int) (len * 1000));
 }
 
-void Reset_Song_Length(void)
+void Reset_Song_Length(ptk_data *ptk)
 {
     song_Hours = 0;
     song_Minutes = 0;
@@ -2073,7 +2073,7 @@ void Reset_Song_Length(void)
 
 // ------------------------------------------------------
 // Return the data of an unpacked sample
-short *Get_WaveForm(int Instr_Nbr, int Channel, int Split)
+short *Get_WaveForm(ptk_data *ptk, int Instr_Nbr, int Channel, int Split)
 {
 #if !defined(__WINAMP__)
     if(SamplesSwap[Instr_Nbr])
@@ -2205,13 +2205,13 @@ void Clear_Input(ptk_data *ptk)
     if(snamesel == INPUT_303_PATTERN)
     {
         snamesel = INPUT_NONE;
-        Actualize_303_Ed(0);
+        Actualize_303_Ed(ptk, 0);
     }
 
     if(snamesel == INPUT_SYNTH_NAME)
     {
         snamesel = INPUT_NONE;
-        Actualize_Synth_Ed(0);
+        Actualize_Synth_Ed(ptk, 0);
     }
 
     if(snamesel == INPUT_MODULE_NAME ||
@@ -2219,7 +2219,7 @@ void Clear_Input(ptk_data *ptk)
        snamesel == INPUT_MODULE_STYLE)
     {
         snamesel = INPUT_NONE;
-        Actualize_DiskIO_Ed(0);
+        Actualize_DiskIO_Ed(ptk, 0);
     }
 
     if(snamesel == INPUT_INSTRUMENT_NAME)
@@ -2231,26 +2231,26 @@ void Clear_Input(ptk_data *ptk)
     if(snamesel == INPUT_REVERB_NAME)
     {
         snamesel = INPUT_NONE;
-        Actualize_Reverb_Ed(0);
+        Actualize_Reverb_Ed(ptk, 0);
     }
 
     if(snamesel == INPUT_MIDI_NAME)
     {
         snamesel = INPUT_NONE;
-        Actualize_Midi_Ed(0);
+        Actualize_Midi_Ed(ptk, 0);
     }
 
     if(snamesel == INPUT_SELECTION_NAME)
     {
         snamesel = INPUT_NONE;
-        Actualize_Seq_Ed(0);
+        Actualize_Seq_Ed(ptk, 0);
     }
 }
 #endif
 
 // ------------------------------------------------------
 // Make sure an instrument isn't using a non existant codec
-int Fix_Codec(int Scheme)
+int Fix_Codec(ptk_data *, int Scheme)
 {
 #if !defined(__AT3_CODEC__)
     if(Scheme == SMP_PACK_AT3) return SMP_PACK_INTERNAL;

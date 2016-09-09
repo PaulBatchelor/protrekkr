@@ -1624,21 +1624,21 @@ void Draw_Editors_Bar(ptk_data *ptk, int Highlight)
 
 // ------------------------------------------------------
 // Refresh the whole interface context
-void Refresh_UI_Context(void)
+void Refresh_UI_Context(ptk_data *ptk)
 {
     switch(userscreen)
     {
         case USER_SCREEN_REVERB_EDIT:
-            Draw_Reverb_Ed();
+            Draw_Reverb_Ed(ptk);
             break;
         case USER_SCREEN_DISKIO_EDIT:
-            Draw_DiskIO_Ed();
+            Draw_DiskIO_Ed(ptk);
             break;
         case USER_SCREEN_TB303_EDIT:
-            Draw_303_Ed();
+            Draw_303_Ed(ptk);
             break;
         case USER_SCREEN_INSTRUMENT_EDIT:
-            Draw_Instrument_Ed();
+            Draw_Instrument_Ed(ptk);
             break;
         case USER_SCREEN_SEQUENCER:
             Draw_Sequencer_Ed();
@@ -1647,22 +1647,22 @@ void Refresh_UI_Context(void)
             Draw_Track_Ed();
             break;
         case USER_SCREEN_SETUP_EDIT:
-            Draw_Master_Ed();
+            Draw_Master_Ed(ptk);
             break;
         case USER_SCREEN_SETUP_MIDI:
-            Draw_Midi_Ed();
+            Draw_Midi_Ed(ptk);
             break;
         case USER_SCREEN_SYNTH_EDIT:
-            Draw_Synth_Ed();
+            Draw_Synth_Ed(ptk);
             break;
         case USER_SCREEN_SAMPLE_EDIT:
-            Draw_Sample_Ed();
+            Draw_Sample_Ed(ptk);
             break;
         case USER_SCREEN_FX_SETUP_EDIT:
             Draw_Fx_Ed();
             break;
         case USER_SCREEN_TRACK_FX_EDIT:
-            Draw_Track_Fx_Ed();
+            Draw_Track_Fx_Ed(ptk);
             break;
         case USER_SCREEN_LARGE_PATTERN:
             Draw_Editors_Bar(USER_SCREEN_LARGE_PATTERN);
@@ -1670,27 +1670,27 @@ void Refresh_UI_Context(void)
     }
     seditor = 0;
     
-    Actualize_Midi_Ed(0);
-    Actualize_Reverb_Ed(0);
-    Actualize_DiskIO_Ed(0);
-    Actualize_303_Ed(0);
-    Actualize_Instrument_Ed(0, 0);
-    Actualize_Sequencer();
+    Actualize_Midi_Ed(ptk, 0);
+    Actualize_Reverb_Ed(ptk, 0);
+    Actualize_DiskIO_Ed(ptk, 0);
+    Actualize_303_Ed(ptk, 0);
+    Actualize_Instrument_Ed(ptk, 0, 0);
+    Actualize_Sequencer(ptk);
     Display_Master_Comp();
     Display_Master_Volume();
     Display_Shuffle();
     Actualize_Master(ptk, 0);
     Actualize_Master(ptk, 4);
 
-    Actualize_Seq_Ed(0);
+    Actualize_Seq_Ed(ptk, 0);
     Actualize_Track_Ed(0);
-    Actualize_Master_Ed(0);
-    Actualize_Synth_Ed(UPDATE_SYNTH_ED_ALL);
-    Actualize_Sample_Ed(0);
-    Actualize_Fx_Ed(0);
-    Actualize_Track_Fx_Ed(0);
+    Actualize_Master_Ed(ptk, 0);
+    Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_ALL);
+    Actualize_Sample_Ed(ptk, 0);
+    Actualize_Fx_Ed(ptk, 0);
+    Actualize_Track_Fx_Ed(ptk, 0);
     Actualize_Patterned(ptk);
-    Actualize_Instruments_Synths_List(0);
+    Actualize_Instruments_Synths_List(ptk, 0);
     Display_Beat_Time();
 }
 
@@ -1839,9 +1839,9 @@ void bjbox(int x, int y, int sx, int sy)
 
 // ------------------------------------------------------
 // Display a status message at the bottom of the screen
-void Status_Box(char const *str)
+void Status_Box(ptk, ptk_data *ptk, char const *str)
 {
-    Gui_Draw_Button_Box(0, ptk.CONSOLE_HEIGHT - 21, fsize, 18, str, BUTTON_NORMAL | BUTTON_DISABLED);
+    Gui_Draw_Button_Box(0, ptk->CONSOLE_HEIGHT - 21, fsize, 18, str, BUTTON_NORMAL | BUTTON_DISABLED);
 }
       
 // ------------------------------------------------------

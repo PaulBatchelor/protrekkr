@@ -48,11 +48,11 @@ extern int Tracks_To_Render[MAX_TRACKS];
 
 // ------------------------------------------------------
 // Functions
-void Draw_DiskIO_Ed(void);
-void Actualize_DiskIO_Ed(int gode);
-void Mouse_Right_DiskIO_Ed(void);
-void Mouse_Left_DiskIO_Ed(void);
-void Display_Song_Length(void);
-void Reset_Tracks_To_Render(void);
+void Draw_DiskIO_Ed(ptk_data *ptk);
+void Actualize_DiskIO_Ed(ptk_data *ptk, int gode);
+void Mouse_Right_DiskIO_Ed(ptk_data *ptk);
+void Mouse_Left_DiskIO_Ed(ptk_data *ptk);
+void Display_Song_Length(ptk_data *ptk);
+void Reset_Tracks_To_Render(ptk_data *ptk);
 
 #endif

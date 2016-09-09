@@ -44,15 +44,15 @@
 
 // ------------------------------------------------------
 // Functions
-void Draw_Sample_Ed(void);
-void Draw_Wave_Data(void);
-void Actualize_Sample_Ed(char gode);
-void Renew_Sample_Ed(void);
-void Mouse_Left_Sample_Ed(void);
-void Mouse_Middle_Sample_Ed(void);
-void Mouse_Right_Sample_Ed(void);
-void Mouse_Wheel_Sample_Ed(int roll_amount);
-void Mouse_Sliders_Sample_Ed(void);
-void Check_Loops(void);
+void Draw_Sample_Ed(ptk_data *ptk);
+void Draw_Wave_Data(ptk_data *ptk);
+void Actualize_Sample_Ed(ptk_data *ptk, char gode);
+void Renew_Sample_Ed(ptk_data *ptk);
+void Mouse_Left_Sample_Ed(ptk_data *ptk);
+void Mouse_Middle_Sample_Ed(ptk_data *ptk);
+void Mouse_Right_Sample_Ed(ptk_data *ptk);
+void Mouse_Wheel_Sample_Ed(ptk_data *ptk, int roll_amount);
+void Mouse_Sliders_Sample_Ed(ptk_data *ptk);
+void Check_Loops(ptk_data *ptk);
 
 #endif

@@ -60,33 +60,33 @@ int Allow_Phase_Distortion_OSC2 = TRUE;
 
 /* TODO: is this needed? */   
 void Actualize_Patterned(ptk_data *ptk);
-void Actualize_SynthParSlider(void);
-void Actualize_Sequencer(void);
-void Renew_Sample_Ed(void);
-void Center_SynthParam_OSC1(void);
-void Center_SynthParam_OSC2(void);
-void Center_SynthParam_VCF(void);
-void Center_SynthParam_LFO1(void);
-void Center_SynthParam_LFO2(void);
-void Center_SynthParam_ENV1(void);
-void Center_SynthParam_ENV2(void);
-void Center_SynthParam_Misc(void);
-void Rand_OSC1();
-void Rand_OSC2();
-void Rand_VCF();
-void Rand_LFO1();
-void Rand_LFO2();
-void Rand_ENV1();
-void Rand_ENV2();
-void Rand_Misc();
-void CParcha_OSC1(int cpar);
-void CParcha_OSC2(int cpar);
-void CParcha_VCF(int cpar);
-void CParcha_LFO1(int cpar);
-void CParcha_LFO2(int cpar);
-void CParcha_ENV1(int cpar);
-void CParcha_ENV2(int cpar);
-void CParcha_Misc(int cpar);
+void Actualize_SynthParSlider(ptk_data *ptk);
+void Actualize_Sequencer(ptk_data *ptk);
+void Renew_Sample_Ed(ptk_data *ptk);
+void Center_SynthParam_OSC1(ptk_data *ptk);
+void Center_SynthParam_OSC2(ptk_data *ptk);
+void Center_SynthParam_VCF(ptk_data *ptk);
+void Center_SynthParam_LFO1(ptk_data *ptk);
+void Center_SynthParam_LFO2(ptk_data *ptk);
+void Center_SynthParam_ENV1(ptk_data *ptk);
+void Center_SynthParam_ENV2(ptk_data *ptk);
+void Center_SynthParam_Misc(ptk_data *ptk);
+void Rand_OSC1(ptk_data *ptk);
+void Rand_OSC2(ptk_data *ptk);
+void Rand_VCF(ptk_data *ptk);
+void Rand_LFO1(ptk_data *ptk);
+void Rand_LFO2(ptk_data *ptk);
+void Rand_ENV1(ptk_data *ptk);
+void Rand_ENV2(ptk_data *ptk);
+void Rand_Misc(ptk_data *ptk);
+void CParcha_OSC1(ptk_data *ptk, int cpar);
+void CParcha_OSC2(ptk_data *ptk, int cpar);
+void CParcha_VCF(ptk_data *ptk, int cpar);
+void CParcha_LFO1(ptk_data *ptk, int cpar);
+void CParcha_LFO2(ptk_data *ptk, int cpar);
+void CParcha_ENV1(ptk_data *ptk, int cpar);
+void CParcha_ENV2(ptk_data *ptk, int cpar);
+void CParcha_Misc(ptk_data *ptk, int cpar);
 
 // 2 = no filter by legacy
 int filter_vcf_type_plus[] =
@@ -215,7 +215,7 @@ int Pos_Tbl_Synth_Misc;
 int Size_Tbl_Synth_Misc = (sizeof(Tbl_Synth_Misc) / sizeof(int)) - 1;
 char Names_Tbl_Synth_Misc[(sizeof(Tbl_Synth_Misc) / sizeof(int))][24];
 
-void Draw_Synth_Ed(void)
+void Draw_Synth_Ed(ptk_data *ptk)
 {
     Draw_Editors_Bar(USER_SCREEN_SYNTH_EDIT);
 
@@ -245,7 +245,7 @@ void Draw_Synth_Ed(void)
     Gui_Draw_Button_Box(546, (Cur_Height - 59) - 1, 35, 16, "Misc.", BUTTON_NORMAL | BUTTON_DISABLED | BUTTON_TEXT_CENTERED);
 }
 
-void Actualize_Synth_Ed(char gode)
+void Actualize_Synth_Ed(ptk_data *ptk, char gode)
 {
     if(userscreen == USER_SCREEN_SYNTH_EDIT)
     {
@@ -286,7 +286,7 @@ void Actualize_Synth_Ed(char gode)
             Gui_Draw_Button_Box(524, (Cur_Height - 113) - 1, 16, 16, "C", Allow_Button | BUTTON_TEXT_CENTERED);
             Gui_Draw_Button_Box(294, (Cur_Height - 113) - 1, 16, 16, "\03", Allow_Button | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
             Gui_Draw_Button_Box(460, (Cur_Height - 113) - 1, 16, 16, "\04", Allow_Button | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
-            Actualize_Instruments_Synths_List(1);
+            Actualize_Instruments_Synths_List(ptk, 1);
         }
 
         if(gode == UPDATE_SYNTH_ED_ALL ||
@@ -358,7 +358,7 @@ void Actualize_Synth_Ed(char gode)
         if(gode == UPDATE_SYNTH_ED_ALL || gode == UPDATE_SYNTH_ED_VALUES)
         {
             value_box4(566, (Cur_Height - 150), Current_Instrument);
-            Actualize_SynthParSlider();
+            Actualize_SynthParSlider(ptk);
         }
 
         if(gode == UPDATE_SYNTH_ED_ALL ||
@@ -376,20 +376,20 @@ void Actualize_Synth_Ed(char gode)
             {
                 Gui_Draw_Button_Box(592, (Cur_Height - 150), 164, 16, PARASynth[Current_Instrument].presetname, Allow_Button | BUTTON_INPUT);
             }
-            Actualize_Instruments_Synths_List(1);
+            Actualize_Instruments_Synths_List(ptk, 1);
         }
 
         if(gode == UPDATE_SYNTH_ED_VALIDATE_PARAMS)
         {
-            CParcha_OSC1(csynth_slv_OSC1);
-            CParcha_OSC2(csynth_slv_OSC2);
-            CParcha_VCF(csynth_slv_VCF);
-            CParcha_LFO1(csynth_slv_LFO1);
-            CParcha_LFO2(csynth_slv_LFO2);
-            CParcha_ENV1(csynth_slv_ENV1);
-            CParcha_ENV2(csynth_slv_ENV2);
-            CParcha_Misc(csynth_slv_Misc);
-            Actualize_SynthParSlider();
+            CParcha_OSC1(ptk, csynth_slv_OSC1);
+            CParcha_OSC2(ptk, csynth_slv_OSC2);
+            CParcha_VCF(ptk, csynth_slv_VCF);
+            CParcha_LFO1(ptk, csynth_slv_LFO1);
+            CParcha_LFO2(ptk, csynth_slv_LFO2);
+            CParcha_ENV1(ptk, csynth_slv_ENV1);
+            CParcha_ENV2(ptk, csynth_slv_ENV2);
+            CParcha_Misc(ptk, csynth_slv_Misc);
+            Actualize_SynthParSlider(ptk);
         }
 
         if(gode == UPDATE_SYNTH_ED_ALL ||
@@ -414,7 +414,7 @@ void Actualize_Synth_Ed(char gode)
                 Gui_Draw_Button_Box( 24, (Cur_Height - 113) - 1, 16, 16, "\03", BUTTON_NORMAL | BUTTON_DISABLED | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
                 Gui_Draw_Button_Box(190, (Cur_Height - 113) - 1, 16, 16, "\04", BUTTON_NORMAL | BUTTON_DISABLED | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
             }
-            Actualize_SynthParSlider();
+            Actualize_SynthParSlider(ptk);
         }
 
         if(gode == UPDATE_SYNTH_ED_ALL || gode == UPDATE_SYNTH_ED_OSC2_PARAMS)
@@ -439,7 +439,7 @@ void Actualize_Synth_Ed(char gode)
                 Gui_Draw_Button_Box(190, (Cur_Height - 59) - 1, 16, 16, "\04", BUTTON_NORMAL | BUTTON_DISABLED | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
             }
 
-            Actualize_SynthParSlider();
+            Actualize_SynthParSlider(ptk);
         }
 
         if(gode == UPDATE_SYNTH_ED_ALL || gode == UPDATE_SYNTH_ED_VCF_PARAMS)
@@ -448,7 +448,7 @@ void Actualize_Synth_Ed(char gode)
             if(Pos_Tbl_Synth_VCF > Size_Tbl_Synth_VCF) Pos_Tbl_Synth_VCF = Size_Tbl_Synth_VCF;
             Gui_Draw_Arrows_Number_Box2(331, (Cur_Height - 131) - 1, Pos_Tbl_Synth_VCF + 1, Allow_Button | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
             Gui_Draw_Button_Box(331 + 62, (Cur_Height - 131) - 1, 111, 16, Names_Tbl_Synth_VCF[Pos_Tbl_Synth_VCF], BUTTON_NORMAL | BUTTON_DISABLED);
-            Actualize_SynthParSlider();
+            Actualize_SynthParSlider(ptk);
         }
 
         if(gode == UPDATE_SYNTH_ED_ALL || gode == UPDATE_SYNTH_ED_LFO1_PARAMS)
@@ -473,7 +473,7 @@ void Actualize_Synth_Ed(char gode)
                 Gui_Draw_Button_Box(294, (Cur_Height - 77) - 1, 16, 16, "\03", Allow_Button | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
                 Gui_Draw_Button_Box(460, (Cur_Height - 77) - 1, 16, 16, "\04", Allow_Button | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
             }
-            Actualize_SynthParSlider();
+            Actualize_SynthParSlider(ptk);
         }
 
         if(gode == UPDATE_SYNTH_ED_ALL || gode == UPDATE_SYNTH_ED_LFO2_PARAMS)
@@ -498,7 +498,7 @@ void Actualize_Synth_Ed(char gode)
                 Gui_Draw_Button_Box(294, (Cur_Height - 41) - 1, 16, 16, "\03", Allow_Button | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
                 Gui_Draw_Button_Box(460, (Cur_Height - 41) - 1, 16, 16, "\04", Allow_Button | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
             }
-            Actualize_SynthParSlider();
+            Actualize_SynthParSlider(ptk);
         }
 
         if(gode == UPDATE_SYNTH_ED_ALL || gode == UPDATE_SYNTH_ED_ENV1_PARAMS)
@@ -523,7 +523,7 @@ void Actualize_Synth_Ed(char gode)
                 Gui_Draw_Button_Box(546, (Cur_Height - 113) - 1, 16, 16, "\03", Allow_Button | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
                 Gui_Draw_Button_Box(712, (Cur_Height - 113) - 1, 16, 16, "\04", Allow_Button | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
             }
-            Actualize_SynthParSlider();
+            Actualize_SynthParSlider(ptk);
         }
 
         if(gode == UPDATE_SYNTH_ED_ALL || gode == UPDATE_SYNTH_ED_ENV2_PARAMS)
@@ -548,7 +548,7 @@ void Actualize_Synth_Ed(char gode)
                 Gui_Draw_Button_Box(546, (Cur_Height - 77) - 1, 16, 16, "\03", Allow_Button | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
                 Gui_Draw_Button_Box(712, (Cur_Height - 77) - 1, 16, 16, "\04", Allow_Button | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
             }
-            Actualize_SynthParSlider();
+            Actualize_SynthParSlider(ptk);
         }
 
         if(gode == UPDATE_SYNTH_ED_ALL || gode == UPDATE_SYNTH_ED_Misc_PARAMS)
@@ -573,7 +573,7 @@ void Actualize_Synth_Ed(char gode)
                 Gui_Draw_Button_Box(546, (Cur_Height - 41) - 1, 16, 16, "\03", BUTTON_NORMAL | BUTTON_DISABLED | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
                 Gui_Draw_Button_Box(712, (Cur_Height - 41) - 1, 16, 16, "\04", BUTTON_NORMAL | BUTTON_DISABLED | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
             }
-            Actualize_SynthParSlider();
+            Actualize_SynthParSlider(ptk);
         }
 
         if(gode == UPDATE_SYNTH_ED_ALL ||
@@ -632,7 +632,7 @@ void Check_Slider(int *Value, int x, int y)
     }
 }
 
-void Mouse_Sliders_Synth_Ed(void)
+void Mouse_Sliders_Synth_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_SYNTH_EDIT && Allow_All)
     {
@@ -1016,7 +1016,7 @@ void Check_Parameters_Arrows(int Value_Step)
     }  
 }
 
-void Mouse_Right_Synth_Ed(void)
+void Mouse_Right_Synth_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_SYNTH_EDIT)
     {
@@ -1056,7 +1056,7 @@ void Mouse_Right_Synth_Ed(void)
     }
 }
 
-void Mouse_Left_Synth_Ed(void)
+void Mouse_Left_Synth_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_SYNTH_EDIT)
     {
@@ -1085,9 +1085,9 @@ void Mouse_Left_Synth_Ed(void)
             // Save the data
             if(zcheckMouse(758, (Cur_Height - 150), 34, 16))
             {
-                if(File_Exist_Req("%s"SLASH"%s.pts", Dir_Presets, PARASynth[Current_Instrument].presetname))
+                if(File_Exist_Req(ptk, "%s"SLASH"%s.pts", Dir_Presets, PARASynth[Current_Instrument].presetname))
                 {
-                    Display_Requester(&Overwrite_Requester, GUI_CMD_SAVE_SYNTH);
+                    Display_Requester(ptk, &Overwrite_Requester, GUI_CMD_SAVE_SYNTH);
                 }
                 else
                 {
@@ -1106,14 +1106,14 @@ void Mouse_Left_Synth_Ed(void)
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             }
 
-            if(zcheckMouse(254, (Cur_Height - 131) - 1, 34, 16)) Rand_OSC1();
-            if(zcheckMouse(254, (Cur_Height - 77) - 1, 34, 16)) Rand_OSC2();
-            if(zcheckMouse(506, (Cur_Height - 131) - 1, 34, 16)) Rand_VCF();
-            if(zcheckMouse(506, (Cur_Height - 95) - 1, 34, 16)) Rand_LFO1();
-            if(zcheckMouse(506, (Cur_Height - 59) - 1, 34, 16)) Rand_LFO2();
-            if(zcheckMouse(755, (Cur_Height - 131) - 1, 34, 16)) Rand_ENV1();
-            if(zcheckMouse(755, (Cur_Height - 95) - 1, 34, 16)) Rand_ENV2();
-            if(zcheckMouse(755, (Cur_Height - 59) - 1, 34, 16)) Rand_Misc();
+            if(zcheckMouse(254, (Cur_Height - 131) - 1, 34, 16)) Rand_OSC1(ptk);
+            if(zcheckMouse(254, (Cur_Height - 77) - 1, 34, 16)) Rand_OSC2(ptk);
+            if(zcheckMouse(506, (Cur_Height - 131) - 1, 34, 16)) Rand_VCF(ptk);
+            if(zcheckMouse(506, (Cur_Height - 95) - 1, 34, 16)) Rand_LFO1(ptk);
+            if(zcheckMouse(506, (Cur_Height - 59) - 1, 34, 16)) Rand_LFO2(ptk);
+            if(zcheckMouse(755, (Cur_Height - 131) - 1, 34, 16)) Rand_ENV1(ptk);
+            if(zcheckMouse(755, (Cur_Height - 95) - 1, 34, 16)) Rand_ENV2(ptk);
+            if(zcheckMouse(755, (Cur_Height - 59) - 1, 34, 16)) Rand_Misc(ptk);
 
             Check_Sliders_Arrows(1);
 
@@ -1124,7 +1124,7 @@ void Mouse_Left_Synth_Ed(void)
             {
                 if(Allow_Phase_Distortion_OSC1 || Pos_Tbl_Synth_OSC1 != 0)
                 {
-                    Center_SynthParam_OSC1();
+                    Center_SynthParam_OSC1(ptk);
                     gui_action = GUI_CMD_UPDATE_SYNTH_ED;
                     teac = UPDATE_SYNTH_ED_OSC1_PARAMS;
                 }
@@ -1135,7 +1135,7 @@ void Mouse_Left_Synth_Ed(void)
             {
                 if(Allow_Phase_Distortion_OSC2 || Pos_Tbl_Synth_OSC2 != 0)
                 {
-                    Center_SynthParam_OSC2();
+                    Center_SynthParam_OSC2(ptk);
                     gui_action = GUI_CMD_UPDATE_SYNTH_ED;
                     teac = UPDATE_SYNTH_ED_OSC2_PARAMS;
                 }
@@ -1144,7 +1144,7 @@ void Mouse_Left_Synth_Ed(void)
             // Center VCF
             if(zcheckMouse(524, (Cur_Height - 113) - 1, 16, 16))
             {
-                Center_SynthParam_VCF();
+                Center_SynthParam_VCF(ptk);
                 gui_action = GUI_CMD_UPDATE_SYNTH_ED;
                 teac = UPDATE_SYNTH_ED_VCF_PARAMS;
             }  
@@ -1158,7 +1158,7 @@ void Mouse_Left_Synth_Ed(void)
                 }
                 else
                 {
-                    Center_SynthParam_LFO1();
+                    Center_SynthParam_LFO1(ptk);
                     gui_action = GUI_CMD_UPDATE_SYNTH_ED;
                     teac = UPDATE_SYNTH_ED_LFO1_PARAMS;
                 }
@@ -1173,7 +1173,7 @@ void Mouse_Left_Synth_Ed(void)
                 }
                 else
                 {
-                    Center_SynthParam_LFO2();
+                    Center_SynthParam_LFO2(ptk);
                     gui_action = GUI_CMD_UPDATE_SYNTH_ED;
                     teac = UPDATE_SYNTH_ED_LFO2_PARAMS;
                 }
@@ -1188,7 +1188,7 @@ void Mouse_Left_Synth_Ed(void)
                 }
                 else
                 {
-                    Center_SynthParam_ENV1();
+                    Center_SynthParam_ENV1(ptk);
                     gui_action = GUI_CMD_UPDATE_SYNTH_ED;
                     teac = UPDATE_SYNTH_ED_ENV1_PARAMS;
                 }
@@ -1203,7 +1203,7 @@ void Mouse_Left_Synth_Ed(void)
                 }
                 else
                 {
-                    Center_SynthParam_ENV2();
+                    Center_SynthParam_ENV2(ptk);
                     gui_action = GUI_CMD_UPDATE_SYNTH_ED;
                     teac = UPDATE_SYNTH_ED_ENV2_PARAMS;
                 }
@@ -1215,7 +1215,7 @@ void Mouse_Left_Synth_Ed(void)
                 if((Allow_Phase_Distortion_OSC1 || Allow_Phase_Distortion_OSC2) ||
                    Pos_Tbl_Synth_Misc > 0)
                 {
-                    Center_SynthParam_Misc();
+                    Center_SynthParam_Misc(ptk);
                     gui_action = GUI_CMD_UPDATE_SYNTH_ED;
                     teac = UPDATE_SYNTH_ED_Misc_PARAMS;
                 }
@@ -1366,7 +1366,7 @@ void Mouse_Left_Synth_Ed(void)
     }
 }
 
-void Actualize_SynthParSlider(void)
+void Actualize_SynthParSlider(ptk_data *ptk)
 {
 
     SynthParameters *Cur_SynthParam = &PARASynth[Current_Instrument];
@@ -1899,7 +1899,7 @@ void Actualize_SynthParSlider(void)
     // -----------------------------
 }
 
-void Center_SynthParam_OSC1(void)
+void Center_SynthParam_OSC1(ptk_data *ptk)
 {
     SynthParameters *Cur_SynthParam = &PARASynth[Current_Instrument];
 
@@ -1937,7 +1937,7 @@ void Center_SynthParam_OSC1(void)
     }
 }
 
-void Center_SynthParam_OSC2(void)
+void Center_SynthParam_OSC2(ptk_data *ptk)
 {
     SynthParameters *Cur_SynthParam = &PARASynth[Current_Instrument];
 
@@ -1980,7 +1980,7 @@ void Center_SynthParam_OSC2(void)
     }
 }
 
-void Center_SynthParam_VCF(void)
+void Center_SynthParam_VCF(ptk_data *ptk)
 {
     SynthParameters *Cur_SynthParam = &PARASynth[Current_Instrument];
 
@@ -1998,7 +1998,7 @@ void Center_SynthParam_VCF(void)
     }
 }
 
-void Center_SynthParam_LFO1(void)
+void Center_SynthParam_LFO1(ptk_data *ptk)
 {
     SynthParameters *Cur_SynthParam = &PARASynth[Current_Instrument];
 
@@ -2071,7 +2071,7 @@ void Center_SynthParam_LFO1(void)
     }
 }
 
-void Center_SynthParam_LFO2(void)
+void Center_SynthParam_LFO2(ptk_data *ptk)
 {
     SynthParameters *Cur_SynthParam = &PARASynth[Current_Instrument];
 
@@ -2144,7 +2144,7 @@ void Center_SynthParam_LFO2(void)
     }
 }
 
-void Center_SynthParam_ENV1(void)
+void Center_SynthParam_ENV1(ptk_data *ptk)
 {
     SynthParameters *Cur_SynthParam = &PARASynth[Current_Instrument];
 
@@ -2192,7 +2192,7 @@ void Center_SynthParam_ENV1(void)
     }
 }
 
-void Center_SynthParam_ENV2(void)
+void Center_SynthParam_ENV2(ptk_data *ptk)
 {
     SynthParameters *Cur_SynthParam = &PARASynth[Current_Instrument];
 
@@ -2240,7 +2240,7 @@ void Center_SynthParam_ENV2(void)
     }
 }
 
-void Center_SynthParam_Misc(void)
+void Center_SynthParam_Misc(ptk_data *ptk)
 {
     SynthParameters *Cur_SynthParam = &PARASynth[Current_Instrument];
 
@@ -2263,7 +2263,7 @@ void Center_SynthParam_Misc(void)
     }
 }
 
-void CParcha_OSC1(int cpar)
+void CParcha_OSC1(ptk_data *ptk, int cpar)
 {
     switch(Pos_Tbl_Synth_OSC1)
     {
@@ -2293,7 +2293,7 @@ void CParcha_OSC1(int cpar)
     }
 }
 
-void CParcha_OSC2(int cpar)
+void CParcha_OSC2(ptk_data *ptk, int cpar)
 {
     switch(Pos_Tbl_Synth_OSC2)
     {
@@ -2327,7 +2327,7 @@ void CParcha_OSC2(int cpar)
     }
 }
 
-void CParcha_VCF(int cpar)
+void CParcha_VCF(ptk_data *ptk, int cpar)
 {
     switch(Pos_Tbl_Synth_VCF)
     {
@@ -2341,7 +2341,7 @@ void CParcha_VCF(int cpar)
     }
 }
 
-void CParcha_LFO1(int cpar)
+void CParcha_LFO1(ptk_data *ptk, int cpar)
 {
     switch(Pos_Tbl_Synth_LFO1)
     {
@@ -2399,7 +2399,7 @@ void CParcha_LFO1(int cpar)
     }
 }
 
-void CParcha_LFO2(int cpar)
+void CParcha_LFO2(ptk_data *ptk, int cpar)
 {
     switch(Pos_Tbl_Synth_LFO2)
     {
@@ -2457,7 +2457,7 @@ void CParcha_LFO2(int cpar)
     }
 }
 
-void CParcha_ENV1(int cpar)
+void CParcha_ENV1(ptk_data *ptk, int cpar)
 {
     switch(Pos_Tbl_Synth_ENV1)
     {
@@ -2495,7 +2495,7 @@ void CParcha_ENV1(int cpar)
     }
 }
 
-void CParcha_ENV2(int cpar)
+void CParcha_ENV2(ptk_data *ptk, int cpar)
 {
     switch(Pos_Tbl_Synth_ENV2)
     {
@@ -2533,7 +2533,7 @@ void CParcha_ENV2(int cpar)
     }
 }
 
-void CParcha_Misc(int cpar)
+void CParcha_Misc(ptk_data *ptk, int cpar)
 {
     switch(Pos_Tbl_Synth_Misc)
     {
@@ -2551,7 +2551,7 @@ void CParcha_Misc(int cpar)
     }
 }
 
-void Rand_OSC1()
+void Rand_OSC1(ptk_data *ptk)
 {
     PARASynth[Current_Instrument].osc1_waveform = rand() % 7;
     if(Allow_Phase_Distortion_OSC1)
@@ -2563,10 +2563,10 @@ void Rand_OSC1()
     PARASynth[Current_Instrument].env1_sustain = rand() & 0x7f;
     PARASynth[Current_Instrument].env1_release = rand();
     PARASynth[Current_Instrument].osc3_volume = rand() & 0x7f;
-    Actualize_Synth_Ed(UPDATE_SYNTH_ED_VALUES);
+    Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_VALUES);
 }
 
-void Rand_OSC2()
+void Rand_OSC2(ptk_data *ptk)
 {
     PARASynth[Current_Instrument].osc2_waveform = rand() % 7;
     if(Allow_Phase_Distortion_OSC2)
@@ -2580,18 +2580,18 @@ void Rand_OSC2()
     PARASynth[Current_Instrument].env2_release = rand();
     PARASynth[Current_Instrument].osc2_detune = rand() & 0x7f;
 
-    Actualize_Synth_Ed(UPDATE_SYNTH_ED_VALUES);
+    Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_VALUES);
 }
 
-void Rand_VCF()
+void Rand_VCF(ptk_data *ptk)
 {
     PARASynth[Current_Instrument].vcf_type = rand() % 5;
     PARASynth[Current_Instrument].vcf_cutoff = rand() & 0x7f;
     PARASynth[Current_Instrument].vcf_resonance = rand() & 0x7f;
-    Actualize_Synth_Ed(UPDATE_SYNTH_ED_VALUES);
+    Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_VALUES);
 }
 
-void Rand_LFO1()
+void Rand_LFO1(ptk_data *ptk)
 {
     PARASynth[Current_Instrument].lfo1_period = rand() & 0x7f;
     if(Allow_Phase_Distortion_OSC1)
@@ -2613,10 +2613,10 @@ void Rand_LFO1()
     PARASynth[Current_Instrument].lfo1_decay = rand();
     PARASynth[Current_Instrument].lfo1_sustain = rand() & 0x7f;
     PARASynth[Current_Instrument].lfo1_release = rand();
-    Actualize_Synth_Ed(UPDATE_SYNTH_ED_VALUES);
+    Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_VALUES);
 }
 
-void Rand_LFO2()
+void Rand_LFO2(ptk_data *ptk)
 {
     PARASynth[Current_Instrument].lfo2_period = rand() & 0x7f;
     if(Allow_Phase_Distortion_OSC1)
@@ -2638,10 +2638,10 @@ void Rand_LFO2()
     PARASynth[Current_Instrument].lfo2_decay = rand();
     PARASynth[Current_Instrument].lfo2_sustain = rand() & 0x7f;
     PARASynth[Current_Instrument].lfo2_release = rand();
-    Actualize_Synth_Ed(UPDATE_SYNTH_ED_VALUES);
+    Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_VALUES);
 }
 
-void Rand_ENV1()
+void Rand_ENV1(ptk_data *ptk)
 {
     if(Allow_Phase_Distortion_OSC1)
     {
@@ -2658,10 +2658,10 @@ void Rand_ENV1()
     PARASynth[Current_Instrument].env1_osc1_pitch = rand() & 0x7f;
     PARASynth[Current_Instrument].env1_osc2_pitch = rand() & 0x7f;
 
-    Actualize_Synth_Ed(UPDATE_SYNTH_ED_VALUES);
+    Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_VALUES);
 }
 
-void Rand_ENV2()
+void Rand_ENV2(ptk_data *ptk)
 {
     if(Allow_Phase_Distortion_OSC1)
     {
@@ -2678,10 +2678,10 @@ void Rand_ENV2()
     PARASynth[Current_Instrument].env2_osc1_pitch = rand() & 0x7f;
     PARASynth[Current_Instrument].env2_osc2_pitch = rand() & 0x7f;
 
-    Actualize_Synth_Ed(UPDATE_SYNTH_ED_VALUES);
+    Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_VALUES);
 }
 
-void Rand_Misc()
+void Rand_Misc(ptk_data *ptk)
 {
     if(Allow_Phase_Distortion_OSC1 || Allow_Phase_Distortion_OSC2)
     {
@@ -2689,10 +2689,10 @@ void Rand_Misc()
     }
     PARASynth[Current_Instrument].glb_volume = 100;
     PARASynth[Current_Instrument].disto = rand() & 0x7f;
-    Actualize_Synth_Ed(UPDATE_SYNTH_ED_VALUES);
+    Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_VALUES);
 }
 
-void IniCsParNames(void)
+void IniCsParNames(ptk_data *ptk)
 {
     sprintf(Names_Tbl_Synth_OSC1[0], "Pulse Phase");
     sprintf(Names_Tbl_Synth_OSC1[1], "Attack");

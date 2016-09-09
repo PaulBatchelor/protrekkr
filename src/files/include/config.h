@@ -42,7 +42,7 @@
 
 // ------------------------------------------------------
 // Functions
-void SaveConfig(void);
-void LoadConfig(void);
+void SaveConfig(ptk_data *ptk);
+void LoadConfig(ptk_data *ptk);
 
 #endif
