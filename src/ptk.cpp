@@ -1627,7 +1627,7 @@ int Screen_Update(ptk_data *ptk)
         Fillrect(0, 0, ptk->CONSOLE_WIDTH, ptk->CONSOLE_HEIGHT);
 
         last_index = -1;
-        Gui_Draw_Button_Box(MIN_VUMETER - 4, 6, (MAX_VUMETER - MIN_VUMETER) + 6, 16, "", BUTTON_NORMAL | BUTTON_DISABLED);
+        Gui_Draw_Button_Box(MIN_VUMETER - 4, 6, (MAX_VUMETER - MIN_VUMETER) + 6, 16, "blah", BUTTON_NORMAL | BUTTON_DISABLED);
 
         Display_Master_Comp();
         Display_Master_Volume();

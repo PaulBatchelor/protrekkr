@@ -1,6 +1,9 @@
 - Remove MIDI support (sorry not sorry)
+- Refactor Menu Bar
+- Make Sporth PTK file player (plugin)
 - Fix main.h issues
 - Figure out how to remove global data struct pointer
 - Remove WINAMP support
 - De-Classify CSynth
 - Remove Windows Support (mostly about Linux/OSX now)
+- Redo Reverb Utility

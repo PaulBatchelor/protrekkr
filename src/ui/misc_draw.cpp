@@ -1648,9 +1648,9 @@ void Refresh_UI_Context(ptk_data *ptk)
         case USER_SCREEN_SETUP_EDIT:
             Draw_Master_Ed(ptk);
             break;
-        case USER_SCREEN_SETUP_MIDI:
-            Draw_Midi_Ed(ptk);
-            break;
+        //case USER_SCREEN_SETUP_MIDI:
+            //Draw_Midi_Ed(ptk);
+            //break;
         case USER_SCREEN_SYNTH_EDIT:
             Draw_Synth_Ed(ptk);
             break;
@@ -1669,7 +1669,7 @@ void Refresh_UI_Context(ptk_data *ptk)
     }
     seditor = 0;
     
-    Actualize_Midi_Ed(ptk, 0);
+    //Actualize_Midi_Ed(ptk, 0);
     Actualize_Reverb_Ed(ptk, 0);
     Actualize_DiskIO_Ed(ptk, 0);
     Actualize_303_Ed(ptk, 0);
@@ -1703,6 +1703,8 @@ void Print_String(char *str, int x, int y, int size_x, int flags)
     }
     PrintString(x, y, USE_FONT, (char *) str);
 }
+
+void chunkymonkey() {};
 
 // ------------------------------------------------------
 // Draw a clickable box with a text
@@ -1810,6 +1812,7 @@ void Gui_Draw_Button_Box(int x, int y, int sx, int sy, const char *str, int flag
         PrintString(x + 4, y + y_center, flags & BUTTON_LOW_FONT ? USE_FONT_LOW : USE_FONT, (char *) str);
     }
 }
+
 
 // ------------------------------------------------------
 // Draw a clear box
@@ -2003,7 +2006,13 @@ void Realslider_Horiz(int x, int y, int value, int displayed, int maximum, int s
     else SetColor(COL_STATIC_MED);
     bjbox(x + 1, y + 1, size, 16 - 1);
 
-    Gui_Draw_Button_Box(x + 1 + (int) Pos_slider, y + 1, (int) caret_size, 16 - 2, "", BUTTON_NORMAL | (enable ? 0 : BUTTON_DISABLED));
+    Gui_Draw_Button_Box(
+        x + 1 + (int) Pos_slider, 
+        y + 1, 
+        (int) caret_size, 16 - 2, 
+        "", BUTTON_NORMAL | 
+        (enable ? 0 : BUTTON_DISABLED)
+    );
 }
 
 // ------------------------------------------------------
