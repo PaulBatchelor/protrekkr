@@ -1468,7 +1468,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(gui_action == GUI_CMD_UPDATE_MIDI_ED)
         {
-            Actualize_Midi_Ed(ptk, teac);
+            //Actualize_Midi_Ed(ptk, teac);
         }
 
         if(gui_action == GUI_CMD_NEW_MODULE)
@@ -3367,7 +3367,7 @@ void Keyboard_Handler(ptk_data *ptk)
         }
         if(Keys[SDLK_F12])
         {
-            gui_action = GUI_CMD_SELECT_MIDI_SETUP;
+            //gui_action = GUI_CMD_SELECT_MIDI_SETUP;
         }
     }
 
@@ -5705,12 +5705,12 @@ void Mouse_Handler(ptk_data *ptk)
         if(zcheckMouse(20 + (TAB_LARG * 8), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_REVERB_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_REVERB_EDIT;
         if(zcheckMouse(20 + (TAB_LARG * 9), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_DISKIO_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_DISKIO_EDIT;
         if(zcheckMouse(20 + (TAB_LARG * 10), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SETUP_EDIT || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_SCREEN_SETUP_EDIT;
-        if(zcheckMouse(20 + (TAB_LARG * 11), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SETUP_MIDI || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_MIDI_SETUP;
+        //if(zcheckMouse(20 + (TAB_LARG * 11), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SETUP_MIDI || Patterns_Lines_Offset)) gui_action = GUI_CMD_SELECT_MIDI_SETUP;
 
         Mouse_Left_Track_Fx_Ed(ptk);
         Mouse_Left_Sequencer_Ed(ptk);
         Mouse_Left_Reverb_Ed(ptk);
-        Mouse_Left_Midi_Ed(ptk);
+        //Mouse_Left_Midi_Ed(ptk);
         Mouse_Left_DiskIO_Ed(ptk);
         Mouse_Left_Track_Ed(ptk);
         Mouse_Left_Instrument_Ed(ptk);
