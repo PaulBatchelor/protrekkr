@@ -115,8 +115,6 @@ int Get_Track_Size(ptk_data *ptk, int Track, int *Column);
 int Get_Track_Real_Size(ptk_data *ptk, int Track);
 int Get_Last_Track_Column(ptk_data *ptk, int track);
 int Get_Visible_Complete_Tracks(ptk_data *ptk);
-/* TODO: Why is this not in Replay? */
-int Get_Pattern_Offset(ptk_data *ptk, int track, int row, int pattern);
 void Reset_Patterns_Zoom(ptk_data *ptk);
 void Toggle_Track_Zoom(ptk_data *ptk, int track, int large);
 void Clear_Track_Zoom(ptk_data *ptk, int track);
