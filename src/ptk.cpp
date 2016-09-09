@@ -88,10 +88,7 @@ ptk_data *g_ptk = &ptk;
 char Visible_Columns = 0;
 //int rs_coef = 32768;
 
-int gui_lx = -1;
-int gui_ly = -1;
-int gui_lxs = -1;
-int gui_lys = -1;
+//int ptk->gui_ly = -1;
 int gui_pushed = 0;
 char teac = 0;
 int liveparam = 0;
@@ -5092,15 +5089,15 @@ char zcheckMouse(ptk_data *ptk, int x, int y, int xs, int ys)
 {
     if(!gui_pushed && Mouse.x > x && Mouse.x < x + xs && Mouse.y > y && Mouse.y < y + ys + 1)
     {
-        gui_lx = x;
-        gui_ly = y;
-        gui_lxs = xs;
-        gui_lys = ys;
+        ptk->gui_lx = x;
+        ptk->gui_ly = y;
+        ptk->gui_lxs = xs;
+        ptk->gui_lys = ys;
         gui_pushed = Mouse.button_oneshot;
         ptk->fluzy = -1;
         return(1);
     }
-    if(gui_pushed && x == gui_lx && y == gui_ly && xs == gui_lxs && ys == gui_lys)
+    if(gui_pushed && x == ptk->gui_lx && y == ptk->gui_ly && xs == ptk->gui_lxs && ys == ptk->gui_lys)
     {
         return(1);
     }
@@ -6835,4 +6832,8 @@ void ptk_init(ptk_data *ptk)
 
     ptk->fluzy = -1;
     ptk->rs_coef = 32768;
+    ptk->gui_lx = -1;
+    ptk->gui_ly = -1;
+    ptk->gui_lxs = -1;
+    ptk->gui_lys = -1;
 }

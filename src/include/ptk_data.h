@@ -19,5 +19,9 @@ typedef struct {
     char Scopish_LeftRight;
     int fluzy;
     int rs_coef;
+    int gui_lx;
+    int gui_ly;
+    int gui_lxs;
+    int gui_lys;
 } ptk_data;
 #endif
