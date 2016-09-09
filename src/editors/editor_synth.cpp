@@ -58,7 +58,6 @@ int Allow_Button_Pushed;
 int Allow_Phase_Distortion_OSC1 = TRUE;
 int Allow_Phase_Distortion_OSC2 = TRUE;
 
-/* TODO: is this needed? */   
 void Renew_Sample_Ed(ptk_data *ptk);
 void Center_SynthParam_OSC1(ptk_data *ptk);
 void Center_SynthParam_OSC2(ptk_data *ptk);
