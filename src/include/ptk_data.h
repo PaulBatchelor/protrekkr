@@ -29,5 +29,6 @@ typedef struct {
     char seditor;
     char tipoftheday[256];
     int ctipoftheday;
+    char sas;
 } ptk_data;
 #endif

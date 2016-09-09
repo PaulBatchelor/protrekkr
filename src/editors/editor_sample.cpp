@@ -1211,7 +1211,7 @@ void Mouse_Sliders_Sample_Ed(ptk_data *ptk)
                 sed_range_end = sed_display_start + (int32) test;
                 teac = 4;
 
-                if(!sas)
+                if(!ptk->sas)
                 {
                     // Selection start
                     sed_range_start = sed_range_end;
@@ -1236,7 +1236,7 @@ void Mouse_Sliders_Sample_Ed(ptk_data *ptk)
 
                 gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
                 draw_sampled_wave = TRUE;
-                sas = TRUE;
+                ptk->sas = TRUE;
             } // SAMPLETYPE
         } // MOUSEBOX
 

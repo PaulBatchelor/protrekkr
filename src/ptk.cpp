@@ -96,8 +96,6 @@ int Done_Tip = FALSE;
 char Current_Instrument_Split = 0;
 
 int player_pos = -1;
-int xew = 0;
-char sas = FALSE;
 int flagger = 0;
 int ltretnote = 0;
 int ltretnote_raw = 0;
@@ -5250,7 +5248,7 @@ void Mouse_Handler(ptk_data *ptk)
     else
     {
         // leftbutton
-        sas = FALSE;
+        ptk->sas = FALSE;
     }
 
     // Check Zones for GUI clicks -----------------------------------
@@ -6834,4 +6832,5 @@ void ptk_init(ptk_data *ptk)
     ptk->multifactor = 4;
     ptk->seditor = 0;
     ptk->ctipoftheday = 0;
+    ptk->sas = FALSE;
 }
