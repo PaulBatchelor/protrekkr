@@ -61,10 +61,8 @@
 
 // ------------------------------------------------------
 // Variables
-#if !defined(__WINAMP__)
 extern REQUESTER Overwrite_Requester;
 extern char OverWrite_Name[1024];
-#endif
 
 extern SynthParameters PARASynth[128];
 
@@ -89,11 +87,9 @@ short *Swap_New_Sample(ptk_data *ptk, short *buffer, int sample, int bank);
 // Prepare the tracker interface once a module has been loaded
 void Init_Tracker_Context_After_ModLoad(ptk_data *ptk)
 {
-#if !defined(__WINAMP__)
     Track_Under_Caret = 0;
     Current_Instrument = 0;
     Column_Under_Caret = 0;
-#endif
 
     Pattern_Line = 0;
     Pattern_Line_Visual = 0;
@@ -104,10 +100,8 @@ void Init_Tracker_Context_After_ModLoad(ptk_data *ptk)
 
     Post_Song_Init(ptk);
 
-#if !defined(__WINAMP__)
     Draw_Scope(ptk);
     gui_track = 0;
-#endif
 
     lchorus_counter = MIX_RATE;
     rchorus_counter = MIX_RATE;
@@ -132,7 +126,6 @@ void Init_Tracker_Context_After_ModLoad(ptk_data *ptk)
 
     Reset_Song_Length(ptk);
 
-#if !defined(__WINAMP__)
     Display_Song_Length(ptk);
 
     ptk->Scopish = SCOPE_ZONE_MOD_DIR;
@@ -142,8 +135,6 @@ void Init_Tracker_Context_After_ModLoad(ptk_data *ptk)
 
     Refresh_UI_Context(ptk);
     Unselect_Selection(ptk);
-
-#endif
 
 }
 
@@ -203,9 +194,7 @@ int LoadPtk(ptk_data *ptk, char *FileName)
     if(in != NULL)
     {
 
-#if !defined(__WINAMP__)
         Status_Box(ptk, "Attempting to load the song file...");
-#endif
 
         Songplaying = FALSE;
 
@@ -272,9 +261,7 @@ int LoadPtk(ptk_data *ptk, char *FileName)
 
 Read_Mod_File:
 
-#if !defined(__WINAMP__)
         Status_Box(ptk, "Loading song -> Header...");
-#endif
         Free_Samples(ptk);
 
         mas_comp_threshold_Master = 100.0f;
@@ -286,13 +273,11 @@ Read_Mod_File:
             mas_comp_ratio_Track[i] = 0.0f;
         }
 
-#if !defined(__WINAMP__)
         allow_save = TRUE;
-#endif
 
         Clear_Patterns_Pool(ptk);
 
-#if !defined(__NO_MIDI__) && !defined(__WINAMP__)
+#if !defined(__NO_MIDI__)
         Midi_Reset(ptk);
 #endif
 
@@ -438,9 +423,7 @@ Read_Mod_File:
             }
         }
 
-#if !defined(__WINAMP__)
         Status_Box(ptk, "Loading song -> Sample data...");
-#endif
         for(int swrite = 0; swrite < MAX_INSTRS; swrite++)
         {
             Read_Mod_Data(ptk, &nameins[swrite], sizeof(char), 20, in);
@@ -529,9 +512,7 @@ Read_Mod_File:
             }
         }
 
-#if !defined(__WINAMP__)
         Status_Box(ptk, "Loading song -> Track info, patterns and sequence...");   
-#endif
 
         Set_Default_Channels_Polyphony();
 
@@ -758,25 +739,18 @@ Read_Mod_File:
         // Init the tracker context
         Init_Tracker_Context_After_ModLoad(ptk);
 
-#if !defined(__WINAMP__)
         Status_Box(ptk, "Module loaded sucessfully...");
-#endif
 
     }
     else
     {
 
-#if !defined(__WINAMP__)
         Status_Box(ptk, "Module loading failed. (Possible cause: file not found)");
-#endif
-
         return(FALSE);
     }
 
-#if !defined(__WINAMP__)
     Clear_Input(ptk);
     if(Mod_Memory) free(Mod_Memory);
-#endif
 
     return(TRUE);
 }
@@ -852,7 +826,6 @@ short *Unpack_Sample(ptk_data *ptk, FILE *FileHandle, int Dest_Length, char Pack
 
 // ------------------------------------------------------
 // Save a packed sample
-#if !defined(__WINAMP__)
 void Pack_Sample(ptk_data *ptk, FILE *FileHandle, short *Sample, int Size, char Pack_Type, int BitRate)
 {
     int PackedLen = 0;
@@ -1023,7 +996,6 @@ int Write_Mod_Data_Swap(ptk_data *ptk, void *Datas, int Unit, int Length, FILE *
     }
     return(0);
 }
-#endif // __WINAMP__
 
 // ------------------------------------------------------
 // Read data from a module file
@@ -1084,7 +1056,6 @@ int Read_Mod_Data_Swap(ptk_data *ptk, void *Datas, int Unit, int Length, FILE *H
 
 // ------------------------------------------------------
 // Check if a file exists
-#if !defined(__WINAMP__)
 int File_Exist(ptk_data *ptk, char *Format, char *Directory, char *FileName)
 {
     FILE *in;
@@ -1099,11 +1070,9 @@ int File_Exist(ptk_data *ptk, char *Format, char *Directory, char *FileName)
     }
     return(FALSE);
 }
-#endif
 
 // ------------------------------------------------------
 // Check if a file exists and prepare a requester if it does
-#if !defined(__WINAMP__)
 int File_Exist_Req(ptk_data *ptk, char *Format, char *Directory, char *FileName)
 {
     char Temph[MAX_PATH];
@@ -1118,7 +1087,6 @@ int File_Exist_Req(ptk_data *ptk, char *Format, char *Directory, char *FileName)
     }
     return(FALSE);
 }
-#endif
 
 // ------------------------------------------------------
 // Return the size of an opened file
@@ -1133,8 +1101,6 @@ int Get_File_Size(ptk_data *ptk, FILE *Handle)
     fseek(Handle, Current_Pos, SEEK_SET);
     return(File_Size);
 }
-
-#if !defined(__WINAMP__)
 
 // ------------------------------------------------------
 // Remvove the spaces chars located at the end of a string
@@ -1590,7 +1556,6 @@ Uint8 *Pack_Data(ptk_data *ptk, Uint8 *Memory, int *Size)
     *Size = c_stream.total_out;
     return(Final_Mem_Out);
 }
-#endif // __WINAMP__
 
 // ------------------------------------------------------
 // Depack a compressed module
@@ -1619,7 +1584,6 @@ Uint8 *Depack_Data(ptk_data *ptk, Uint8 *Memory, int Sizen, int Size_Out)
 
 // ------------------------------------------------------
 // Backup a module
-#if !defined(__WINAMP__)
 void Backup_Module(ptk_data *ptk, char *FileName)
 {
     FILE *In;
@@ -1741,7 +1705,6 @@ int TestMod(ptk_data *ptk)
     if(Final_Mem) free(Final_Mem);
     return(Len);
 }
-#endif
 
 // ------------------------------------------------------
 // Switch the endianness of a 16 bit buffer
@@ -2057,9 +2020,7 @@ int Calc_Length(ptk_data *ptk)
     song_Minutes = (ilen / 60);
     song_Hours = ilen / 60 / 24;
 
-#if !defined(__WINAMP__)
     Display_Song_Length(ptk);
-#endif
 
     return((int) (len * 1000));
 }
@@ -2075,13 +2036,11 @@ void Reset_Song_Length(ptk_data *ptk)
 // Return the data of an unpacked sample
 short *Get_WaveForm(ptk_data *ptk, int Instr_Nbr, int Channel, int Split)
 {
-#if !defined(__WINAMP__)
     if(SamplesSwap[Instr_Nbr])
     {
         return(RawSamples_Swap[Instr_Nbr][Channel][Split]); 
     }
     else
-#endif
     {
         return(RawSamples[Instr_Nbr][Channel][Split]); 
     }
@@ -2128,12 +2087,8 @@ void Clear_Instrument_Dat(int n_index, int split, int lenfir)
         beatsync[n_index] = FALSE;
 
         // Internal is default compression
-#if !defined(__WINAMP__)
         SampleCompression[n_index] = SMP_PACK_INTERNAL;
         SamplesSwap[n_index] = FALSE;
-#else
-        SampleCompression[n_index] = SMP_PACK_NONE;
-#endif
         Mp3_BitRate[n_index] = 0;
         At3_BitRate[n_index] = 0;
     }
@@ -2156,7 +2111,6 @@ void AllocateWave(int n_index, int split, long lenfir,
             RawSamples[n_index][1][split] = NULL;
         }
 
-#if !defined(__WINAMP__)
         if(RawSamples_Swap[n_index][0][split]) free(RawSamples_Swap[n_index][0][split]);
         RawSamples_Swap[n_index][0][split] = NULL;
         if(SampleChannels[n_index][split] == 2)
@@ -2164,7 +2118,6 @@ void AllocateWave(int n_index, int split, long lenfir,
             if(RawSamples_Swap[n_index][1][split]) free(RawSamples_Swap[n_index][1][split]);
             RawSamples_Swap[n_index][1][split] = NULL;
         }
-#endif
 
     }
 
@@ -2199,7 +2152,6 @@ void AllocateWave(int n_index, int split, long lenfir,
 
 // ------------------------------------------------------
 // Clear any pending input
-#if !defined(__WINAMP__)
 void Clear_Input(ptk_data *ptk)
 {
     if(snamesel == INPUT_303_PATTERN)
@@ -2246,7 +2198,6 @@ void Clear_Input(ptk_data *ptk)
         Actualize_Seq_Ed(ptk, 0);
     }
 }
-#endif
 
 // ------------------------------------------------------
 // Make sure an instrument isn't using a non existant codec
