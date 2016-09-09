@@ -483,8 +483,6 @@ void Post_Song_Init(ptk_data *ptk);
 void ResetSynthParameters(ptk_data *ptk, SynthParameters *TSP);
 #endif
 
-/*TODO: this is a duplicate declaration ?*/
-void Free_Samples(ptk_data *ptk);
 #if defined(PTK_LIMITER_MASTER)
 void Mas_Compressor_Set_Variables_Master(ptk_data *ptk, float treshold, float ratio);
 float Mas_Compressor_Master(ptk_data *ptk, float input, float *rms_sum, float *Buffer, float *Env);
