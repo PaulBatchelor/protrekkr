@@ -23,5 +23,6 @@ typedef struct {
     int gui_ly;
     int gui_lxs;
     int gui_lys;
+    char trkchan;
 } ptk_data;
 #endif

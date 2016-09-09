@@ -324,10 +324,10 @@ void Actualize_Track_Ed(ptk_data *ptk, char gode)
             }
         }
         
-        if(trkchan == TRUE)
+        if(ptk->trkchan == TRUE)
         {
             Actupated(ptk, 0);
-            trkchan = FALSE;
+            ptk->trkchan = FALSE;
         }
     } // Userscreen match found
 }
@@ -358,7 +358,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
             Track_Under_Caret--;
             teac = 0;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
-            trkchan = TRUE;
+            ptk->trkchan = TRUE;
         }
 
         // Next track
@@ -367,7 +367,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
             Track_Under_Caret++;
             teac = 0;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
-            trkchan = TRUE;
+            ptk->trkchan = TRUE;
         }
 
         // Delay send
@@ -442,7 +442,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
             }
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
             teac = 10;
-            trkchan = TRUE;
+            ptk->trkchan = TRUE;
         }
 
         // Solo track
@@ -454,7 +454,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
             }
             CHAN_MUTE_STATE[Track_Under_Caret] = 0;
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
-            trkchan = TRUE;
+            ptk->trkchan = TRUE;
             teac = 10;
         }
 
@@ -466,7 +466,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
                 CHAN_MUTE_STATE[solify] = 0;
             }
             gui_action = GUI_CMD_UPDATE_TRACK_ED;
-            trkchan = TRUE;
+            ptk->trkchan = TRUE;
             teac = 10;
         }
 

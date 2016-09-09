@@ -93,7 +93,7 @@ int gui_pushed = 0;
 char teac = 0;
 int liveparam = 0;
 int livevalue = 0;
-char trkchan = TRUE;
+
 int pos_space = 0;
 int multifactor = 4;
 char seditor = 0;
@@ -6836,4 +6836,5 @@ void ptk_init(ptk_data *ptk)
     ptk->gui_ly = -1;
     ptk->gui_lxs = -1;
     ptk->gui_lys = -1;
+    ptk->trkchan = TRUE;
 }
