@@ -93,8 +93,6 @@ int livevalue = 0;
 
 char Current_Instrument_Split = 0;
 
-int player_pos = -1;
-
 int posletter = 0;
 int Column_Under_Caret = 0;
 int Track_Under_Caret = 0;
@@ -1562,7 +1560,7 @@ int Screen_Update(ptk_data *ptk)
         if(ptk->gui_action == GUI_CMD_TIMED_REFRESH_SEQUENCER)
         {
             Actualize_Sequencer(ptk);
-            player_pos = Get_Song_Position(ptk);
+            ptk->player_pos = Get_Song_Position(ptk);
         }
 
         if(ptk->gui_action == GUI_CMD_DELETE_INSTRUMENT)
@@ -1733,7 +1731,7 @@ int Screen_Update(ptk_data *ptk)
     // Refresh the sequencer each time the song position is different
     if(Songplaying)
     {
-        if(player_pos != Song_Position_Visual)
+        if(ptk->player_pos != Song_Position_Visual)
         {
             ptk->gui_action = GUI_CMD_TIMED_REFRESH_SEQUENCER;
         }
@@ -2238,7 +2236,7 @@ void SongPlay(ptk_data *ptk)
     Ptk_Stop(ptk);
     liveparam = 0;
     livevalue = 0;
-    player_pos = -1;
+    ptk->player_pos = -1;
 
     Post_Song_Init(ptk);
     Ptk_Play(ptk);
@@ -4136,7 +4134,7 @@ void Keyboard_Handler(ptk_data *ptk)
                 key_record_first_time = FALSE;
                 old_key_Pattern_Line = Pattern_Line;
                 Clear_Midi_Channels_Pool();
-                player_pos = -1;
+                ptk->player_pos = -1;
                 metronome_rows_counter = 0;
                 Post_Song_Init(ptk);
                 Ptk_Play(ptk);
@@ -6830,4 +6828,5 @@ void ptk_init(ptk_data *ptk)
     ptk->gui_action = GUI_CMD_NOP;
     ptk->gui_pushed = 0;
     ptk->Done_Tip = FALSE;
+    ptk->player_pos = -1;
 }

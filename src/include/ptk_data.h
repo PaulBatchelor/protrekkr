@@ -40,5 +40,7 @@ typedef struct {
 
     int gui_pushed;
     int Done_Tip;
+
+    int player_pos;
 } ptk_data;
 #endif
