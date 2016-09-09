@@ -98,6 +98,7 @@ char Current_Instrument_Split = 0;
 int player_pos = -1;
 
 int posletter = 0;
+int gui_action = GUI_CMD_NOP;
 int gui_action_metronome = GUI_CMD_NOP;
 int Column_Under_Caret = 0;
 int Track_Under_Caret = 0;
