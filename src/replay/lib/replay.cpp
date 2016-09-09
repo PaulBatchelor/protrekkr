@@ -6305,7 +6305,7 @@ void Initreverb(ptk_data *ptk)
         counters_R[i] = mlrw;
     }
 
-    InitRevervbFilter(ptk);
+    InitReverbFilter(ptk);
 
     LFP_L.Reset();
     LFP_R.Reset();
@@ -6313,8 +6313,7 @@ void Initreverb(ptk_data *ptk)
     rev_counter = 99999;
 }
 
-/* TODO: Holy shit they mispelled reverb */
-void InitRevervbFilter(ptk_data *ptk)
+void InitReverbFilter(ptk_data *ptk)
 {
     int i;
 

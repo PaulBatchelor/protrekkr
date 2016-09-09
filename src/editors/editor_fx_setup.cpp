@@ -135,7 +135,7 @@ void Actualize_Fx_Ed(ptk_data *ptk, char gode)
             Realslider(77, (Cur_Height - 84), c_threshold, compressor);
             
             // Re-generate
-            if(gode == 7) InitRevervbFilter(ptk);
+            if(gode == 7) InitReverbFilter(ptk);
         }
 
         if(gode == 0 || gode == 8)

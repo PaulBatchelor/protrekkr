@@ -496,7 +496,7 @@ float Do_RMS(ptk_data *ptk, float input, float *rms_sum, float *buffer);
 #endif
 int Get_Free_Sub_Channel(ptk_data *ptk, int channel, int polyphony);
 int Get_Pattern_Offset(ptk_data *ptk, int pattern, int track, int row);
-void InitRevervbFilter(ptk_data *ptk);
+void InitReverbFilter(ptk_data *ptk);
 void Set_Spline_Boundaries(ptk_data *ptk, unsigned int Position,
                            unsigned int *Boundaries,
                            int LoopType,
