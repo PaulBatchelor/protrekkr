@@ -4143,11 +4143,8 @@ void Keyboard_Handler(ptk_data *ptk)
 
         int i;
 
-        if(is_recording)
-        {
-            // Start the real recording
-            if(!is_recording_2 && (retnote_raw < NOTE_OFF && retnote_raw > 0) && key_record_first_time)
-            {
+        if(is_recording) { // Start the real recording
+            if(!is_recording_2 && (retnote_raw < NOTE_OFF && retnote_raw > 0) && key_record_first_time) {
                 // Start recording
                 is_recording_2 = 1;
                 Nbr_Sub_NoteOff = 0;
@@ -4168,8 +4165,7 @@ void Keyboard_Handler(ptk_data *ptk)
         }
 
         int Record_Key_Pressed = FALSE;
-        for(i = 0; i < 37; i++)
-        {
+        for(i = 0; i < 37; i++) {
             if(Record_Keys[i])
             {
                 Record_Key_Pressed = TRUE;

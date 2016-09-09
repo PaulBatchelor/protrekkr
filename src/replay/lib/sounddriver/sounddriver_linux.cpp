@@ -124,6 +124,7 @@ int _init_JACK()
     if (jaudio_client == NULL)
         return FALSE;
 
+
     jaudio_port1 = jack_port_register(jaudio_client, "out1", JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
     jaudio_port2 = jack_port_register(jaudio_client, "out2", JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
 
@@ -133,7 +134,31 @@ int _init_JACK()
 
     AUDIO_Latency = jack_get_buffer_size(jaudio_client);
 
+    jack_port_t *jack_port_list[] = {
+        jaudio_port1,
+        jaudio_port2
+    };
+
     jack_activate(jaudio_client);
+
+    int chan = 0;
+
+    const char **ports = jack_get_ports (jaudio_client, NULL, NULL,
+                JackPortIsPhysical|JackPortIsInput);
+
+    if (ports == NULL) {
+        fprintf(stderr, "no physical playback ports\n");
+        exit (1);
+    }
+
+    for(chan = 0; chan < 2; chan++) {
+        if (jack_connect(
+            jaudio_client,   
+            jack_port_name (jack_port_list[chan]), 
+            ports[chan])) {
+                fprintf (stderr, "cannot connect output ports\n");
+        }
+    }    
 
     return TRUE;
 }
