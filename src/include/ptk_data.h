@@ -36,5 +36,6 @@ typedef struct {
     int last_index;
 
     int gui_action_metronome;
+    int gui_action;
 } ptk_data;
 #endif

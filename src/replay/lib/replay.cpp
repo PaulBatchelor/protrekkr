@@ -4684,7 +4684,7 @@ void Do_Effects_Tick_0(ptk_data *ptk)
                     {
                         Songplaying = FALSE;
 #if !defined(__STAND_ALONE__) && !defined(__WINAMP__)
-                        gui_action = GUI_CMD_STOP_SONG;
+                        ptk->gui_action = GUI_CMD_STOP_SONG;
 #endif
                         break;
                     }

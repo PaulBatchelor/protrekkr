@@ -235,14 +235,14 @@ void Mouse_Sliders_Fx_Ed(ptk_data *ptk)
             if(Feedback < 0) Feedback = 0;
             if(Feedback > 0.88f) Feedback = 0.88f;
 
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 2;
         }
         
         if(zcheckMouse(ptk, 77, (Cur_Height - 84), 148, 16) && compressor)
         {
             c_threshold = Mouse.x - 87;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 7;
         }
         // Reverb filter cutoff
@@ -251,7 +251,7 @@ void Mouse_Sliders_Fx_Ed(ptk_data *ptk)
             Reverb_Filter_Cutoff = (float)(Mouse.x - 87) / 50.0f;
             if(Reverb_Filter_Cutoff < 0.02f) Reverb_Filter_Cutoff = 0.02f;
             if(Reverb_Filter_Cutoff > 0.99f) Reverb_Filter_Cutoff = 0.99f;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 9;
         }  
         // Reverb filter resonance
@@ -260,7 +260,7 @@ void Mouse_Sliders_Fx_Ed(ptk_data *ptk)
             Reverb_Filter_Resonance = (float)(Mouse.x - 160) / 50.0f;
             if(Reverb_Filter_Resonance < 0.02f) Reverb_Filter_Resonance = 0.02f;
             if(Reverb_Filter_Resonance > 0.99f) Reverb_Filter_Resonance = 0.99f;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 14;
         }  
         // Reverb stereo
@@ -270,31 +270,31 @@ void Mouse_Sliders_Fx_Ed(ptk_data *ptk)
             if(value < 0) value = 0;
             if(value > 127) value = 127;
             Reverb_Stereo_Amount = value;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 13;
         }  
         if(zcheckMouse(ptk, 307, (Cur_Height - 120), 148, 16))
         {
             lchorus_delay = (Mouse.x - 317) * 174;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 3;
         }
         if(zcheckMouse(ptk, 307, (Cur_Height - 102), 148, 16))
         {
             rchorus_delay = (Mouse.x - 317) * 174;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 4;
         }
         if(zcheckMouse(ptk, 307, (Cur_Height - 84), 148, 16))
         {
             lchorus_feedback = float(Mouse.x - 317) / 127;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 5;
         }
         if(zcheckMouse(ptk, 307, (Cur_Height - 66), 148, 16))
         {
             rchorus_feedback = float(Mouse.x - 317) / 127;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 6;
         }
 
@@ -304,7 +304,7 @@ void Mouse_Sliders_Fx_Ed(ptk_data *ptk)
             mas_attack = float(Mouse.x - 716.0f) / 55;
             if(mas_attack < 0.0f) mas_attack = 0.0f;
             if(mas_attack > 0.99f) mas_attack = 0.99f;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 14;
         }
 
@@ -314,7 +314,7 @@ void Mouse_Sliders_Fx_Ed(ptk_data *ptk)
             mas_release = float(Mouse.x - 716.0f) / 55;
             if(mas_release < 0.0f) mas_release = 0.0f;
             if(mas_release > 0.99f) mas_release = 0.99f;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 14;
         }
 */
@@ -329,13 +329,13 @@ void Mouse_Right_Fx_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 534, (Cur_Height - 120), 16, 16) == 1)
         {
             Ticks_Synchro_Left -= 10;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 10;
         }
         if(zcheckMouse(ptk, 578, (Cur_Height - 120), 16, 16) == 1)
         {
             Ticks_Synchro_Left += 10;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 10;
         }
 
@@ -343,13 +343,13 @@ void Mouse_Right_Fx_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 534, (Cur_Height - 102), 16, 16) == 1)
         {
             Ticks_Synchro_Right -= 10;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 11;
         }
         if(zcheckMouse(ptk, 578, (Cur_Height - 102), 16, 16) == 1)
         {
             Ticks_Synchro_Right += 10;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 11;
         }
     }
@@ -363,14 +363,14 @@ void Mouse_Left_Fx_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 79, (Cur_Height - 84), 16, 16) && compressor)
         {
             DelayType--;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 1;
         }
         // Delay type
         if(zcheckMouse(ptk, 79 + 44, (Cur_Height - 84), 16, 16) && compressor)
         {
             DelayType++;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 1;
         }
 
@@ -378,13 +378,13 @@ void Mouse_Left_Fx_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 534, (Cur_Height - 120), 16, 16))
         {
             Ticks_Synchro_Left--;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 10;
         }
         if(zcheckMouse(ptk, 578, (Cur_Height - 120), 16, 16))
         {
             Ticks_Synchro_Left++;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 10;
         }
 
@@ -392,39 +392,39 @@ void Mouse_Left_Fx_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 534, (Cur_Height - 102), 16, 16))
         {
             Ticks_Synchro_Right--;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 11;
         }
         if(zcheckMouse(ptk, 578, (Cur_Height - 102), 16, 16))
         {
             Ticks_Synchro_Right++;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 11;
         }
 
         if(zcheckMouse(ptk, 596, (Cur_Height - 120), 32, 16))
         {
             lchorus_delay = SamplesPerTick * Ticks_Synchro_Left;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 3;
         }
         if(zcheckMouse(ptk, 596, (Cur_Height - 102), 32, 16))
         {
             rchorus_delay = SamplesPerTick * Ticks_Synchro_Right;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 4;
         }
 
         if(compressor == FALSE && zcheckMouse(ptk, 79, (Cur_Height - 120), 32, 16))
         {
             compressor = TRUE;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 0;
         }
         if(compressor == TRUE && zcheckMouse(ptk, 113, (Cur_Height - 120), 32, 16))
         {
             compressor = FALSE;
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 0;
         }  
 
@@ -434,7 +434,7 @@ void Mouse_Left_Fx_Ed(ptk_data *ptk)
             {
                 Use_Cubic = Table_Interpolation_Dec[Use_Cubic];
             }
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 12;
         }
         if(zcheckMouse(ptk, 706 + (18 + 42) + 2, (Cur_Height - 136), 16, 16))
@@ -443,7 +443,7 @@ void Mouse_Left_Fx_Ed(ptk_data *ptk)
             {
                 Use_Cubic = Table_Interpolation_Inc[Use_Cubic];
             }
-            gui_action = GUI_CMD_UPDATE_FX_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             teac = 12;
         }
 

@@ -438,7 +438,7 @@ void Mouse_Right_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 520, (Cur_Height - 105), 16, 16) == 1)
         {
             current_palette_idx -= 10;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -446,7 +446,7 @@ void Mouse_Right_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 520 + (18 + 108) + 2, (Cur_Height - 105), 16, 16) == 1)
         {
             current_palette_idx += 10;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -455,7 +455,7 @@ void Mouse_Right_Master_Ed(ptk_data *ptk)
         {
             if(Beveled == 2) Beveled = 0;
             else Beveled = 2;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 13;
         }
 
@@ -464,7 +464,7 @@ void Mouse_Right_Master_Ed(ptk_data *ptk)
         {
             metronome_magnify -= 10;
             if(metronome_magnify < 0) metronome_magnify = 0;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 22;
         }
 
@@ -473,7 +473,7 @@ void Mouse_Right_Master_Ed(ptk_data *ptk)
         {
             metronome_magnify += 10;
             if(metronome_magnify > 128) metronome_magnify = 128;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 22;
         }
     }
@@ -489,7 +489,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
             if(AUDIO_Milliseconds > 10)
             {
                 AUDIO_Milliseconds -= 10;
-                gui_action = GUI_CMD_UPDATE_SETUP_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
                 teac = 5;
             }
         }
@@ -500,7 +500,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
             if(AUDIO_Milliseconds < 250)
             {
                 AUDIO_Milliseconds += 10;
-                gui_action = GUI_CMD_UPDATE_SETUP_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
                 teac = 5;
             }
         }
@@ -509,7 +509,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 446, (Cur_Height - 125), 16, 16))
         {
             MouseWheel_Multiplier--;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 6;
         }
 
@@ -517,7 +517,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 446 + 44, (Cur_Height - 125), 16, 16))
         {
             MouseWheel_Multiplier++;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 6;
         }
 
@@ -525,7 +525,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 446, (Cur_Height - 105), 16, 16))
         {
             patt_highlight--;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 7;
         }
 
@@ -533,7 +533,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 446 + 44, (Cur_Height - 105), 16, 16))
         {
             patt_highlight++;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 7;
         }
 
@@ -542,7 +542,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Rows_Decimal = TRUE;
             teac = 0;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             Actualize_Sequencer(ptk);
             Actupated(ptk, 0);
         }
@@ -552,7 +552,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Rows_Decimal = FALSE;
             teac = 0;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             Actualize_Sequencer(ptk);
             Actupated(ptk, 0);
         }
@@ -562,7 +562,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             See_Prev_Next_Pattern = TRUE;
             teac = 13;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             Actupated(ptk, 0);
         }
 
@@ -571,7 +571,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             See_Prev_Next_Pattern = FALSE;
             teac = 13;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             Actupated(ptk, 0);
         }
 
@@ -580,7 +580,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Continuous_Scroll = 1;
             teac = 14;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
         }
 
         // Continuous scroll
@@ -588,7 +588,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Continuous_Scroll = 0;
             teac = 14;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
         }
 
         // Paste across pattern
@@ -596,7 +596,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Paste_Across = TRUE;
             teac = 17;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
         }
 
         // Paste across pattern
@@ -604,7 +604,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Paste_Across = FALSE;
             teac = 17;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
         }
 
         // Play while editing
@@ -612,7 +612,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Jazz_Edit = TRUE;
             teac = 18;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
         }
 
         // Play while editing
@@ -620,7 +620,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Jazz_Edit = FALSE;
             teac = 18;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
         }
 
         // Accidental type
@@ -628,7 +628,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Accidental ^= TRUE;
             teac = 19;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
         }
 
         // Full screen on
@@ -657,7 +657,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 520, (Cur_Height - 105), 16, 16))
         {
             current_palette_idx--;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -665,7 +665,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 520 + (18 + 108) + 2, (Cur_Height - 105), 16, 16))
         {
             current_palette_idx++;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -674,7 +674,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Restore_Default_Palette(Default_Palette1, Default_Beveled1);
             Get_Phony_Palette();
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -683,7 +683,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Restore_Default_Palette(Default_Palette2, Default_Beveled2);
             Get_Phony_Palette();
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -692,7 +692,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Restore_Default_Palette(Default_Palette3, Default_Beveled3);
             Get_Phony_Palette();
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -701,7 +701,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Restore_Default_Palette(Default_Palette4, Default_Beveled4);
             Get_Phony_Palette();
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -710,7 +710,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Restore_Default_Palette(Default_Palette5, Default_Beveled5);
             Get_Phony_Palette();
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -719,7 +719,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Restore_Default_Palette(Default_Palette6, Default_Beveled6);
             Get_Phony_Palette();
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -728,7 +728,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Restore_Default_Palette(Default_Palette7, Default_Beveled7);
             Get_Phony_Palette();
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -737,7 +737,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Restore_Default_Palette(Default_Palette8, Default_Beveled8);
             Get_Phony_Palette();
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -746,7 +746,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             Restore_Default_Palette(Default_Palette9, Default_Beveled9);
             Get_Phony_Palette();
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -755,7 +755,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             if(Beveled == 1) Beveled = 0;
             else Beveled = 1;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 13;
         }
 
@@ -763,7 +763,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 520 + 18 + (18 + 108) + 2 + 20, (Cur_Height - 105), 40, 16))
         {
             Use_Shadows ^= TRUE;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 20;
         }
 
@@ -771,7 +771,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 120, (Cur_Height - 65), 16, 16))
         {
             Global_Patterns_Font--;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 21;
         }
 
@@ -779,7 +779,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 120 + 48 + 18, (Cur_Height - 65), 16, 16))
         {
             Global_Patterns_Font++;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 21;
         }
 
@@ -788,7 +788,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             AutoSave--;
             wait_AutoSave = 0;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 15;
         }
 
@@ -797,7 +797,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             AutoSave++;
             wait_AutoSave = 0;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 15;
         }
 
@@ -806,7 +806,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 520 + 62 + 2, (Cur_Height - 125), 16, 16))
         {
             Keyboard_Idx--;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 16;
         }
 
@@ -814,7 +814,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 520 + 62 + 2 + 108 + 18, (Cur_Height - 125), 16, 16))
         {
             Keyboard_Idx++;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 16;
         }
 #endif
@@ -825,7 +825,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
             if(metronome_magnify > 0)
             {
                 metronome_magnify--;
-                gui_action = GUI_CMD_UPDATE_SETUP_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
                 teac = 22;
             }
         }
@@ -836,7 +836,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
             if(metronome_magnify < 128)
             {
                 metronome_magnify++;
-                gui_action = GUI_CMD_UPDATE_SETUP_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
                 teac = 22;
             }
         }
@@ -846,7 +846,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             AutoBackup = TRUE;
             teac = 23;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
         }
 
         // Auto backup off
@@ -854,7 +854,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         {
             AutoBackup = FALSE;
             teac = 23;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
         }
     }
 }
@@ -870,7 +870,7 @@ void Mouse_Sliders_Master_Ed(ptk_data *ptk)
         {
             Real_Palette_Idx = Idx_Palette[current_palette_idx];
             Phony_Palette[Real_Palette_Idx].r = (int) ((Mouse.x - 10 - 518.0f)) * 2;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -879,7 +879,7 @@ void Mouse_Sliders_Master_Ed(ptk_data *ptk)
         {
             Real_Palette_Idx = Idx_Palette[current_palette_idx];
             Phony_Palette[Real_Palette_Idx].g = (int) ((Mouse.x - 10 - 518.0f)) * 2;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
 
@@ -888,7 +888,7 @@ void Mouse_Sliders_Master_Ed(ptk_data *ptk)
         {
             Real_Palette_Idx = Idx_Palette[current_palette_idx];
             Phony_Palette[Real_Palette_Idx].b = (int) ((Mouse.x - 10 - 518.0f)) * 2;
-            gui_action = GUI_CMD_UPDATE_SETUP_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             teac = 10;
         }
     }

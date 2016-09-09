@@ -70,6 +70,6 @@ extern LPREQUESTER Current_Requester;
 void Mouse_Handler_Requester(ptk_data *ptk);
 void Keyboard_Handler_Requester(ptk_data *ptk);
 int Display_Requester(ptk_data *ptk, LPREQUESTER Requester, int Action);
-int Check_Requester(LPREQUESTER Requester);
+int Check_Requester(ptk_data *ptk, LPREQUESTER Requester);
 
 #endif

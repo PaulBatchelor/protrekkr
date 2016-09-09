@@ -769,13 +769,13 @@ void Files_List_Move(ptk_data *ptk, int Amount)
             if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, 42, 16, 14))
             {
                 Instrs_index -= Amount;
-                gui_action = GUI_CMD_INSTR_SYNTH_SCROLL;
+                ptk->gui_action = GUI_CMD_INSTR_SYNTH_SCROLL;
             }
 
             if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, 164, 16, 14))
             {
                 Instrs_index += Amount;
-                gui_action = GUI_CMD_INSTR_SYNTH_SCROLL;
+                ptk->gui_action = GUI_CMD_INSTR_SYNTH_SCROLL;
             }
             break;
 
@@ -792,7 +792,7 @@ void Files_List_Move(ptk_data *ptk, int Amount)
                 {
                     lt_index[ptk->Scopish] -= Amount;
                 }
-                gui_action = GUI_CMD_FILELIST_SCROLL;
+                ptk->gui_action = GUI_CMD_FILELIST_SCROLL;
             }
 
             // Files list down
@@ -806,7 +806,7 @@ void Files_List_Move(ptk_data *ptk, int Amount)
                 {
                     lt_index[ptk->Scopish] += Amount;
                 }
-                gui_action = GUI_CMD_FILELIST_SCROLL;
+                ptk->gui_action = GUI_CMD_FILELIST_SCROLL;
             }
             break;
     }

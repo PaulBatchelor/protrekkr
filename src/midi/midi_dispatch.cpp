@@ -85,7 +85,7 @@ void Midi_303_Set_Tune(int Unit, int Data)
     //{
     //    teac = 3;
     //    Refresh_Unit = Unit;
-    //    gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
+    //    ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
     //}
 }
 
@@ -107,7 +107,7 @@ void Midi_303_Set_Cutoff(int Unit, int Data)
     //{
     //    teac = 4;
     //    Refresh_Unit = Unit;
-    //    gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
+    //    ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
     //}
 }
 
@@ -129,7 +129,7 @@ void Midi_303_Set_Resonance(int Unit, int Data)
     //{
     //    teac = 5;
     //    Refresh_Unit = Unit;
-    //    gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
+    //    ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
     //}
 }
 
@@ -151,7 +151,7 @@ void Midi_303_Set_Envmod(int Unit, int Data)
     //{
     //    teac = 6;
     //    Refresh_Unit = Unit;
-    //    gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
+    //    ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
     //}
 }
 
@@ -173,7 +173,7 @@ void Midi_303_Set_Decay(int Unit, int Data)
     //{
     //    teac = 7;
     //    Refresh_Unit = Unit;
-    //    gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
+    //    ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
     //}
 }
 
@@ -195,7 +195,7 @@ void Midi_303_Set_Accent(int Unit, int Data)
     //{
     //    teac = 8;
     //    Refresh_Unit = Unit;
-    //    gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
+    //    ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
     //}
 }
 
@@ -217,7 +217,7 @@ void Midi_303_Set_Volume(int Unit, int Data)
     //{
     //    teac = 15;
     //    Refresh_Unit = Unit;
-    //    gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
+    //    ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS_EXTERNAL;
     //}
 }
 
@@ -231,7 +231,7 @@ void Midi_303_Switch(int Data)
 {
     //sl3 ^= 1;
     //teac = 0;
-    //gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
+    //ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
 }
 
 // ------------------------------------------------------
@@ -340,42 +340,42 @@ void Midi_Transport_Play(int Data)
 {
     //plx = 0;
     //Pattern_Line = 0;
-    //gui_action = GUI_CMD_PLAY_SONG;
+    //ptk->gui_action = GUI_CMD_PLAY_SONG;
 }
 
 // ------------------------------------------------------
 // Stop playing (EDIT)
 void Midi_Transport_Stop(int Data)
 {
-    //gui_action = GUI_CMD_STOP_SONG;
+    //ptk->gui_action = GUI_CMD_STOP_SONG;
 }
 
 // ------------------------------------------------------
 // Start/Stop recording (EDIT)
 void Midi_Transport_Record(int Data)
 {
-    //gui_action = GUI_CMD_RECORD_MODE;
+    //ptk->gui_action = GUI_CMD_RECORD_MODE;
 }
 
 // ------------------------------------------------------
 // Fast forward (EDIT)
 void Midi_Transport_Forward(int Data)
 {
-    //gui_action = GUI_CMD_NEXT_POSITION;
+    //ptk->gui_action = GUI_CMD_NEXT_POSITION;
 }
 
 // ------------------------------------------------------
 // Rewind (EDIT)
 void Midi_Transport_Rewind(int Data)
 {
-    //gui_action = GUI_CMD_PREVIOUS_POSITION;
+    //ptk->gui_action = GUI_CMD_PREVIOUS_POSITION;
 }
 
 // ------------------------------------------------------
 // Start/Stop edit mode (EDIT)
 void Midi_Transport_Edit(int Data)
 {
-    //gui_action = GUI_CMD_EDIT_MODE;
+    //ptk->gui_action = GUI_CMD_EDIT_MODE;
 }
 
 // ------------------------------------------------------
@@ -383,7 +383,7 @@ void Midi_Transport_Edit(int Data)
 void Midi_Transport_LiveRec(int Data)
 {
     //sr_isrecording ^= 1;
-    //gui_action = GUI_CMD_RECORD_303;
+    //ptk->gui_action = GUI_CMD_RECORD_303;
 }
 
 // ------------------------------------------------------
@@ -400,7 +400,7 @@ void Midi_Edit_Set_Row(int Data)
     //    Pattern_Line = (int) (Data * factor);
     //    if(Pattern_Line < 0) Pattern_Line = 0;
     //    if(Pattern_Line >= Rows) Pattern_Line = Rows - 1;
-    //    gui_action = GUI_CMD_UPDATE_PATTERN;
+    //    ptk->gui_action = GUI_CMD_UPDATE_PATTERN;
     //}
 }
 
@@ -410,7 +410,7 @@ void Midi_Edit_Previous_Row(int Data)
 {
     //if(!is_recording && !Songplaying)
     //{
-    //    gui_action = GUI_CMD_GOTO_PREVIOUS_ROW;
+    //    ptk->gui_action = GUI_CMD_GOTO_PREVIOUS_ROW;
     //}
 }
 
@@ -420,7 +420,7 @@ void Midi_Edit_Next_Row(int Data)
 {
     //if(!is_recording && !Songplaying)
     //{
-    //    gui_action = GUI_CMD_GOTO_NEXT_ROW;
+    //    ptk->gui_action = GUI_CMD_GOTO_NEXT_ROW;
     //}
 }
 
@@ -431,7 +431,7 @@ void Midi_Edit_Set_Track(int Data)
     //float factor = ((float) Songtracks / 16.0f);
     //Column_Under_Caret = 0;
     //Track_Under_Caret = (int) (((float) Data * factor) / 127.0f * 15.0f);
-    //gui_action = GUI_CMD_SET_FOCUS_TRACK_EXTERNAL;
+    //ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK_EXTERNAL;
 }
 
 // ------------------------------------------------------
@@ -439,7 +439,7 @@ void Midi_Edit_Set_Track(int Data)
 void Midi_Edit_Set_Instrument(int Data)
 {
     //Current_Instrument = Data;
-    //gui_action = GUI_CMD_SELECT_INSTR_EXTERNAL;
+    //ptk->gui_action = GUI_CMD_SELECT_INSTR_EXTERNAL;
 }
 
 // ------------------------------------------------------
@@ -450,7 +450,7 @@ void Midi_Edit_Track_On_Off(int Data)
     //ptk_data *ptk = g_ptk;
     //Ext_Pos_Switch = Get_Song_Position(ptk);
     //Ext_Track_Switch = Track_Under_Caret;
-    //gui_action = GUI_CMD_SWITCH_TRACK_STATUS;
+    //ptk->gui_action = GUI_CMD_SWITCH_TRACK_STATUS;
 }
 
 // ------------------------------------------------------
@@ -458,7 +458,7 @@ void Midi_Edit_Track_On_Off(int Data)
 void Midi_Edit_Previous_Track(int Data)
 {
     //Track_Under_Caret--;
-    //gui_action = GUI_CMD_SET_FOCUS_TRACK_EXTERNAL;
+    //ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK_EXTERNAL;
 }
 
 // ------------------------------------------------------
@@ -466,7 +466,7 @@ void Midi_Edit_Previous_Track(int Data)
 void Midi_Edit_Next_Track(int Data)
 {
     //Track_Under_Caret++;
-    //gui_action = GUI_CMD_SET_FOCUS_TRACK_EXTERNAL;
+    //ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK_EXTERNAL;
 }
 
 // ------------------------------------------------------

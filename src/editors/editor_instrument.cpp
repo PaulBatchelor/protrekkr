@@ -543,21 +543,21 @@ void Mouse_Sliders_Instrument_Ed(ptk_data *ptk)
         {
             if(zcheckMouse(ptk, 426, (Cur_Height - 62), 148, 16))
             {
-                gui_action = GUI_CMD_SET_INSTRUMENT_AMPLI;
+                ptk->gui_action = GUI_CMD_SET_INSTRUMENT_AMPLI;
             }
             if(zcheckMouse(ptk, 436, (Cur_Height - 44), 128, 16))
             {
-                gui_action = GUI_CMD_SET_INSTRUMENT_FINETUNE;
+                ptk->gui_action = GUI_CMD_SET_INSTRUMENT_FINETUNE;
             }
             if(zcheckMouse(ptk, 52, (Cur_Height - 72), 148, 16))
             {
-                gui_action = GUI_CMD_SET_INSTRUMENT_DECAY;
+                ptk->gui_action = GUI_CMD_SET_INSTRUMENT_DECAY;
             }
         }
         if(zcheckMouse(ptk, 52, (Cur_Height - 54), 148, 16))
         {
             Sample_Vol[Current_Instrument] = float(Mouse.x - 62) * 0.0078125f;
-            gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             teac = 15;
         }
     }
@@ -572,7 +572,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
            SampleType[Current_Instrument][Current_Instrument_Split])
         {
             LoopStart[Current_Instrument][Current_Instrument_Split]--;
-            gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             teac = 5;
         }
         if(zcheckMouse(ptk, 176, (Cur_Height - 130), 16, 16) &&
@@ -580,7 +580,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
            SampleType[Current_Instrument][Current_Instrument_Split])
         {
             LoopStart[Current_Instrument][Current_Instrument_Split]++;
-            gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             teac = 5;
         }
         if(zcheckMouse(ptk, 296, (Cur_Height - 130), 16, 16) &&
@@ -588,7 +588,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
            SampleType[Current_Instrument][Current_Instrument_Split])
         {
             LoopEnd[Current_Instrument][Current_Instrument_Split]--;
-            gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             teac = 5;
         }
         if(zcheckMouse(ptk, 376, (Cur_Height - 130), 16, 16) &&
@@ -596,14 +596,14 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
            SampleType[Current_Instrument][Current_Instrument_Split])
         {
             LoopEnd[Current_Instrument][Current_Instrument_Split]++;
-            gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             teac = 5;
         }
         // Return to instrument editor
         if(zcheckMouse(ptk, 427, (Cur_Height - 94), 58, 16))
         {
             ptk->seditor = 0;
-            gui_action = GUI_CMD_SELECT_INSTRUMENT_EDIT;
+            ptk->gui_action = GUI_CMD_SELECT_INSTRUMENT_EDIT;
         }
     }
 
@@ -612,14 +612,14 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 570, (Cur_Height - 134), 16, 16) && Current_Instrument_Split > 0)
         {
             Current_Instrument_Split--;
-            gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             teac = 0;
             Renew_Sample_Ed(ptk);
         }
         if(zcheckMouse(ptk, 614, (Cur_Height - 134), 16, 16) && Current_Instrument_Split < 15)
         {
             Current_Instrument_Split++;
-            gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             teac = 0;
             Renew_Sample_Ed(ptk);
         }
@@ -628,13 +628,13 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 570, (Cur_Height - 98), 16, 16) && Midiprg[Current_Instrument] > -1)
         {
             Midiprg[Current_Instrument]--;
-            gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             teac = 10;
         }
         if(zcheckMouse(ptk, 614, (Cur_Height - 98), 16, 16) && Midiprg[Current_Instrument] < 127)
         {
             Midiprg[Current_Instrument]++;
-            gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             teac = 10;
         }
 #endif
@@ -644,13 +644,13 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 144, (Cur_Height - 108), 28, 16))
             {
                 beatsync[Current_Instrument] = FALSE;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 teac = 12;
             }
             if(zcheckMouse(ptk, 176, (Cur_Height - 108), 28, 16))
             {
                 beatsync[Current_Instrument] = TRUE;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 teac = 12;
             }
         }
@@ -660,13 +660,13 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 144, (Cur_Height - 90), 16, 16) && beatlines[Current_Instrument] > 1)
             {
                 beatlines[Current_Instrument]--;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 teac = 13;
             }
             if(zcheckMouse(ptk, 188, (Cur_Height - 90), 16, 16) && beatlines[Current_Instrument] < 128)
             {
                 beatlines[Current_Instrument]++;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 teac = 13;
             }
         }
@@ -675,7 +675,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 268, (Cur_Height - 134), 88, 16) && SampleType[Current_Instrument][Current_Instrument_Split])
         {
             ptk->seditor = 1;
-            gui_action = GUI_CMD_SELECT_INSTRUMENT_EDIT;
+            ptk->gui_action = GUI_CMD_SELECT_INSTRUMENT_EDIT;
         }
 
         if(Allow_Global_Sliders)
@@ -688,7 +688,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
                 }
                 else
                 {
-                    gui_action = GUI_CMD_SAVE_INSTRUMENT;
+                    ptk->gui_action = GUI_CMD_SAVE_INSTRUMENT;
                 }
             }
         }
@@ -711,7 +711,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
             }
             else
             {
-                gui_action = GUI_CMD_EXPORT_WAV;
+                ptk->gui_action = GUI_CMD_EXPORT_WAV;
             }
         }
 
@@ -721,7 +721,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
         {
             Basenote[Current_Instrument][Current_Instrument_Split]--;
             teac = 9;
-            gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
         }
 
         if(zcheckMouse(ptk, 614, (Cur_Height - 116), 16, 16) &&
@@ -730,7 +730,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
         {
             Basenote[Current_Instrument][Current_Instrument_Split]++;
             teac = 9;
-            gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
         }
 
         if(Allow_Global_Sliders)
@@ -745,7 +745,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
                 }
                 SampleCompression[Current_Instrument] = SMP_PACK_INTERNAL;
                 teac = 16;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             }
 
 #if defined(__GSM_CODEC__)
@@ -758,7 +758,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
                 }
                 SampleCompression[Current_Instrument] = SMP_PACK_GSM;
                 teac = 16;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             }
 #endif
 
@@ -772,7 +772,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
                 }
                 SampleCompression[Current_Instrument] = SMP_PACK_MP3;
                 teac = 16;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             }
 #endif
 
@@ -786,7 +786,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
                 }
                 SampleCompression[Current_Instrument] = SMP_PACK_ADPCM;
                 teac = 16;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             }
 #endif
 
@@ -800,7 +800,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
                 }
                 SampleCompression[Current_Instrument] = SMP_PACK_TRUESPEECH;
                 teac = 16;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             }
 #endif
 
@@ -814,7 +814,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
                 }
                 SampleCompression[Current_Instrument] = SMP_PACK_AT3;
                 teac = 16;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             }
 #endif
 
@@ -827,7 +827,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
                 }
                 SampleCompression[Current_Instrument] = SMP_PACK_8BIT;
                 teac = 16;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             }
 
             // Select NONE
@@ -839,7 +839,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
                 }
                 SampleCompression[Current_Instrument] = SMP_PACK_NONE;
                 teac = 16;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             }
 
 #if defined(__MP3_CODEC__)
@@ -852,7 +852,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
                 }
                 SamplesSwap[Current_Instrument] = FALSE;
                 Mp3_BitRate[Current_Instrument]--;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 teac = 17;
             }
 
@@ -865,7 +865,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
                 }
                 SamplesSwap[Current_Instrument] = FALSE;
                 Mp3_BitRate[Current_Instrument]++;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 teac = 17;
             }
 #endif
@@ -880,7 +880,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
                 }
                 SamplesSwap[Current_Instrument] = FALSE;
                 At3_BitRate[Current_Instrument]--;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 teac = 18;
             }
 
@@ -893,7 +893,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
                 }
                 SamplesSwap[Current_Instrument] = FALSE;
                 At3_BitRate[Current_Instrument]++;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 teac = 18;
             }
 #endif
@@ -902,7 +902,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 729, (Cur_Height - 116) + (18 * 4), 60, 16))
             {
                 SamplesSwap[Current_Instrument] = !SamplesSwap[Current_Instrument];
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 teac = 19;
             }
 
@@ -914,21 +914,21 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
             {
                 LoopType[Current_Instrument][Current_Instrument_Split] = SMP_LOOP_FORWARD;
                 teac = 5;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 draw_sampled_wave = TRUE;
             }
             if(zcheckMouse(ptk, 448 + 62, (Cur_Height - 80), 58, 16))
             {
                 LoopType[Current_Instrument][Current_Instrument_Split] = SMP_LOOP_PINGPONG;
                 teac = 5;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 draw_sampled_wave = TRUE;
             }
             if(zcheckMouse(ptk, 448 + 62 * 2 - 2, (Cur_Height - 80), 60, 16))
             {
                 LoopType[Current_Instrument][Current_Instrument_Split] = SMP_LOOP_NONE;
                 teac = 5;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 draw_sampled_wave = TRUE;
             }
         }
@@ -945,7 +945,7 @@ void Mouse_Right_Instrument_Ed(ptk_data *ptk)
             {
                 beatlines[Current_Instrument] -= 16;
                 if(beatlines[Current_Instrument] < 1) beatlines[Current_Instrument] = 1;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 teac = 13;
             }
 
@@ -953,7 +953,7 @@ void Mouse_Right_Instrument_Ed(ptk_data *ptk)
             {
                 beatlines[Current_Instrument] += 16;
                 if(beatlines[Current_Instrument] > 128) beatlines[Current_Instrument] = 128;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 teac = 13;
             }
         }
@@ -963,7 +963,7 @@ void Mouse_Right_Instrument_Ed(ptk_data *ptk)
         {
             if(Midiprg[Current_Instrument] > 14) Midiprg[Current_Instrument] -= 16;
             else Midiprg[Current_Instrument] = -1;
-            gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             teac = 10;
         }
 
@@ -971,7 +971,7 @@ void Mouse_Right_Instrument_Ed(ptk_data *ptk)
         {
             if(Midiprg[Current_Instrument] < 111) Midiprg[Current_Instrument] += 16;
             else Midiprg[Current_Instrument] = 127;
-            gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             teac = 10;
         }
 #endif
@@ -1046,7 +1046,7 @@ void Mouse_Right_Instrument_Ed(ptk_data *ptk)
             {
                 if(Basenote[Current_Instrument][Current_Instrument_Split] > 11) Basenote[Current_Instrument][Current_Instrument_Split] -= 12;
                 else Basenote[Current_Instrument][Current_Instrument_Split] = 0;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 teac = 9;
             }
 
@@ -1054,7 +1054,7 @@ void Mouse_Right_Instrument_Ed(ptk_data *ptk)
             {
                 if(Basenote[Current_Instrument][Current_Instrument_Split] < 107) Basenote[Current_Instrument][Current_Instrument_Split] += 12;
                 else Basenote[Current_Instrument][Current_Instrument_Split] = 119;
-                gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 teac = 9;
             }
         }
@@ -1118,30 +1118,30 @@ void Mouse_Left_Repeat_Instrument_Ed(ptk_data *ptk)
 
     if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 1)
     {
-        gui_action = GUI_CMD_NOP;
+        ptk->gui_action = GUI_CMD_NOP;
 
         if(zcheckMouse(ptk, 78, (Cur_Height - 130), 16, 16) && *Cur_Loop_Start > 0)
         {
             *Cur_Loop_Start -= 1;
-            gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             teac = 5;
         }
         if(zcheckMouse(ptk, 194, (Cur_Height - 130), 16, 16) && *Cur_Loop_Start < *Cur_Loop_End)
         {
             *Cur_Loop_Start += 1;
-            gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             teac = 5;
         }
         if(zcheckMouse(ptk, 278, (Cur_Height - 130), 16, 16) && *Cur_Loop_End > *Cur_Loop_Start)
         {
             *Cur_Loop_End -= 1;
-            gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             teac = 5;
         }
         if(zcheckMouse(ptk, 394, (Cur_Height - 130), 16, 16) && *Cur_Loop_End < (int32) SampleLength[Current_Instrument][Current_Instrument_Split])
         {
             *Cur_Loop_End += 1;
-            gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             teac = 5;
         }
     }
@@ -1154,20 +1154,20 @@ void Mouse_Sliders_Right_Instrument_Ed(ptk_data *ptk)
 
     if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 1)
     {
-        gui_action = GUI_CMD_NOP;
+        ptk->gui_action = GUI_CMD_NOP;
 
         if(zcheckMouse(ptk, 78, (Cur_Height - 130), 16, 16) && *Cur_Loop_Start > 0)
         {
             *Cur_Loop_Start -= 10;
             if(*Cur_Loop_Start < 0) *Cur_Loop_Start = 0;
-            gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             teac = 5;
         }
         if(zcheckMouse(ptk, 194, (Cur_Height - 130), 16, 16) && *Cur_Loop_Start < *Cur_Loop_End)
         {
             *Cur_Loop_Start += 10;
             if(*Cur_Loop_Start > *Cur_Loop_End) *Cur_Loop_Start = *Cur_Loop_End;
-            gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             teac = 5;
         }
         if(zcheckMouse(ptk, 278, (Cur_Height - 130), 16, 16) && *Cur_Loop_End > *Cur_Loop_Start)
@@ -1177,7 +1177,7 @@ void Mouse_Sliders_Right_Instrument_Ed(ptk_data *ptk)
             {
                 *Cur_Loop_End = *Cur_Loop_Start;
             }
-            gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             teac = 5;
         }
         if(zcheckMouse(ptk, 394, (Cur_Height - 130), 16, 16) && *Cur_Loop_End <
@@ -1188,7 +1188,7 @@ void Mouse_Sliders_Right_Instrument_Ed(ptk_data *ptk)
             {
                 *Cur_Loop_End = SampleLength[Current_Instrument][Current_Instrument_Split];
             }
-            gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             teac = 5;
         }
     }

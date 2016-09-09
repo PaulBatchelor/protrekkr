@@ -225,7 +225,7 @@ int Display_Requester(ptk_data *ptk, LPREQUESTER Requester, int Action)
 
 // ------------------------------------------------------
 // Check if a requester has been initialized and display it
-int Check_Requester(LPREQUESTER Requester)
+int Check_Requester(ptk_data *ptk, LPREQUESTER Requester)
 {
     int Pressed = 0;
     if(Current_Requester == Requester)
@@ -282,7 +282,7 @@ int Check_Requester(LPREQUESTER Requester)
             Kill_Requester();
             Pressed = Req_Pressed_Button;
             Req_Pressed_Button = 0;
-            gui_action = Requester_Action;
+            ptk->gui_action = Requester_Action;
             Requester_Action = GUI_CMD_NOP;
         }
     }

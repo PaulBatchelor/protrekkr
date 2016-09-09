@@ -308,7 +308,7 @@ void Mouse_Right_DiskIO_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 572, (Cur_Height - 86), 16, 16) == 1)
             {
                 rawrender_from -= 10;
-                gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
                 teac = 3;
             }
 
@@ -316,7 +316,7 @@ void Mouse_Right_DiskIO_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 572 + 44, (Cur_Height - 86), 16, 16) == 1)
             {
                 rawrender_from += 10;
-                gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
                 teac = 3;
             }
 
@@ -324,7 +324,7 @@ void Mouse_Right_DiskIO_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 572, (Cur_Height - 66), 16, 16) == 1)
             {
                 rawrender_to -= 10;
-                gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
                 teac = 4;
             }
 
@@ -332,7 +332,7 @@ void Mouse_Right_DiskIO_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 572 + 44, (Cur_Height - 66), 16, 16) == 1)
             {
                 rawrender_to += 10;
-                gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
                 teac = 4;
             }
         }
@@ -357,7 +357,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             }
             else
             {
-                gui_action = GUI_CMD_SAVE_MODULE;
+                ptk->gui_action = GUI_CMD_SAVE_MODULE;
             }
         }
         // Save final
@@ -369,13 +369,13 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             }
             else
             {
-                gui_action = GUI_CMD_SAVE_FINAL;
+                ptk->gui_action = GUI_CMD_SAVE_FINAL;
             }
         }
         // Calc final
         if(zcheckMouse(ptk, 254, (Cur_Height - 112), 80, 16))
         {
-            gui_action = GUI_CMD_CALC_FINAL;
+            ptk->gui_action = GUI_CMD_CALC_FINAL;
         }
         // Calc length
         if(zcheckMouse(ptk, 254, (Cur_Height - 76), 80, 16))
@@ -385,7 +385,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
 
         if(zcheckMouse(ptk, 90, (Cur_Height - 130), 80, 16))
         {
-            gui_action = GUI_CMD_MODULE_INFOS;
+            ptk->gui_action = GUI_CMD_MODULE_INFOS;
         }
 
         // Start module name input
@@ -395,7 +395,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             sprintf(name, "");
             namesize = 0;
             snamesel = INPUT_MODULE_NAME;
-            gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
         // Start artist name input
@@ -405,7 +405,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             sprintf(artist, "");
             namesize = 0;
             snamesel = INPUT_MODULE_ARTIST;
-            gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
         // Start module style input
@@ -415,7 +415,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             sprintf(style, "");
             namesize = 0;
             snamesel = INPUT_MODULE_STYLE;
-            gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
         // Zzaapp
@@ -448,7 +448,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
                     }
                     else
                     {
-                        gui_action = GUI_CMD_RENDER_WAV;
+                        ptk->gui_action = GUI_CMD_RENDER_WAV;
                     }
                 }
                 else
@@ -459,13 +459,13 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
                     }
                     else
                     {
-                        gui_action = GUI_CMD_RENDER_WAV;
+                        ptk->gui_action = GUI_CMD_RENDER_WAV;
                     }
                 }
             }
             else
             {
-                gui_action = GUI_CMD_RENDER_WAV;
+                ptk->gui_action = GUI_CMD_RENDER_WAV;
             }
         }
 
@@ -474,7 +474,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         {
             rawrender_32float = TRUE;
             teac = 1;
-            gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
         // Render as 32 bit off
@@ -482,7 +482,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         {
             rawrender_32float = FALSE;
             teac = 1;
-            gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
         // Render entire song
@@ -490,7 +490,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         {
             rawrender_range = FALSE;
             teac = 0;
-            gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
         // Render a range
@@ -498,7 +498,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         {
             rawrender_range = TRUE;
             teac = 0;
-            gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
         if(rawrender_range)
@@ -507,7 +507,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 572, (Cur_Height - 86), 16, 16) == 1)
             {
                 rawrender_from--;
-                gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
                 teac = 3;
             }
 
@@ -515,7 +515,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 572 + 44, (Cur_Height - 86), 16, 16) == 1)
             {
                 rawrender_from++;
-                gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
                 teac = 3;
             }
 
@@ -523,7 +523,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 572, (Cur_Height - 66), 16, 16) == 1)
             {
                 rawrender_to--;
-                gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
                 teac = 4;
             }
 
@@ -531,7 +531,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 572 + 44, (Cur_Height - 66), 16, 16) == 1)
             {
                 rawrender_to++;
-                gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+                ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
                 teac = 4;
             }
         }
@@ -541,7 +541,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         {
             rawrender_target = RENDER_TO_FILE;
             teac = 0;
-            gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
         // Render to mono sample
@@ -549,7 +549,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         {
             rawrender_target = RENDER_TO_MONO;
             teac = 0;
-            gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
         // Render to stereo sample
@@ -557,7 +557,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         {
             rawrender_target = RENDER_TO_STEREO;
             teac = 0;
-            gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
         // Render as multiple file
@@ -565,7 +565,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         {
             rawrender_multi = TRUE;
             teac = 5;
-            gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
         // Render as single files
@@ -573,7 +573,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         {
             rawrender_multi = FALSE;
             teac = 5;
-            gui_action = GUI_CMD_UPDATE_DISKIO_ED;
+            ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
 

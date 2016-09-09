@@ -1584,7 +1584,7 @@ void Actupated(ptk_data *ptk, int modac)
                 nlines = patternLines[pSequence[Cur_Position - 1]];
                 Pattern_Line = nlines + Pattern_Line;
                 Unselect_Selection(ptk);
-                gui_action = GUI_CMD_PREVIOUS_POSITION;
+                ptk->gui_action = GUI_CMD_PREVIOUS_POSITION;
                 return;
             }
             else
@@ -1593,7 +1593,7 @@ void Actupated(ptk_data *ptk, int modac)
                 {
                     Pattern_Line -= nlines;
                     Unselect_Selection(ptk);
-                    gui_action = GUI_CMD_NEXT_POSITION;
+                    ptk->gui_action = GUI_CMD_NEXT_POSITION;
                     return;
                 }
             }
@@ -1625,7 +1625,7 @@ void Actupated(ptk_data *ptk, int modac)
             Column_Under_Caret = 0;
             Track_Under_Caret = 0;
         }
-        gui_action = GUI_CMD_SET_FOCUS_TRACK;
+        ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
     if(Column_Under_Caret < 0)
     {
@@ -1638,7 +1638,7 @@ void Actupated(ptk_data *ptk, int modac)
         {
             max_channel_dat = Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, Track_Under_Caret) - 1;
         }
-        gui_action = GUI_CMD_SET_FOCUS_TRACK;
+        ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
         Column_Under_Caret = max_channel_dat;
     }
     if(Track_Under_Caret > Songtracks - 1)
@@ -1647,7 +1647,7 @@ void Actupated(ptk_data *ptk, int modac)
         {
             Track_Under_Caret--;
         }
-        gui_action = GUI_CMD_SET_FOCUS_TRACK;
+        ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
         gui_track = 0;
     }
     Visible_Columns = Get_Visible_Complete_Tracks(ptk);
@@ -1658,7 +1658,7 @@ void Actupated(ptk_data *ptk, int modac)
         Track_Under_Caret = Songtracks - 1;
         gui_track = Songtracks - (Visible_Columns);
         if(gui_track < 0) gui_track = 0;
-        gui_action = GUI_CMD_SET_FOCUS_TRACK;
+        ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
 
     if(!modac)
@@ -1681,13 +1681,13 @@ void Actupated(ptk_data *ptk, int modac)
         if(Track_Under_Caret >= gui_track + Visible_Columns)
         {
             Track_Under_Caret = gui_track + (Visible_Columns - 1);
-            gui_action = GUI_CMD_SET_FOCUS_TRACK;
+            ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
         }
         // Left
         if(Track_Under_Caret < gui_track)
         {
             Track_Under_Caret = gui_track;
-            gui_action = GUI_CMD_SET_FOCUS_TRACK;
+            ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
         }
     }
 
@@ -2611,12 +2611,12 @@ void Set_Track_Slider(ptk_data *ptk, int pos)
     if(Track_Under_Caret >= pos + Visible_Columns)
     {
         Track_Under_Caret = pos + Visible_Columns;
-        gui_action = GUI_CMD_SET_FOCUS_TRACK;
+        ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
     if(Track_Under_Caret < pos)
     {
         Track_Under_Caret = pos;
-        gui_action = GUI_CMD_SET_FOCUS_TRACK;
+        ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
     float fpos = (float) pos;
 
@@ -2692,7 +2692,7 @@ void Mouse_Sliders_Right_Pattern_Ed(ptk_data *ptk)
                               &In_Scrolling,
                               FALSE);
         Actupated(ptk, 0);
-        gui_action = GUI_CMD_SET_FOCUS_TRACK;
+        ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
 
     // Go to the row selected with the mouse
@@ -2864,7 +2864,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
         Draw_Pattern_Right_Stuff(ptk);
         Actupated(ptk, 0);
         teac = 0;
-        gui_action = GUI_CMD_UPDATE_SEQUENCER;
+        ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
     // Set buffer 2
     if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 2) + Patterns_Lines_Offset, 16 + 1, 14))
@@ -2873,7 +2873,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
         Draw_Pattern_Right_Stuff(ptk);
         Actupated(ptk, 0);
         teac = 0;
-        gui_action = GUI_CMD_UPDATE_SEQUENCER;
+        ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
     // Set buffer 3
     if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 3) + Patterns_Lines_Offset, 16 + 1, 14))
@@ -2882,7 +2882,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
         Draw_Pattern_Right_Stuff(ptk);
         Actupated(ptk, 0);
         teac = 0;
-        gui_action = GUI_CMD_UPDATE_SEQUENCER;
+        ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
     // Set buffer 4
     if(zcheckMouse(ptk, MAX_PATT_SCREEN_X + 1, (Cur_Height - 251) + (16 * 4) + Patterns_Lines_Offset, 16 + 1, 14))
@@ -2891,7 +2891,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
         Draw_Pattern_Right_Stuff(ptk);
         Actupated(ptk, 0);
         teac = 0;
-        gui_action = GUI_CMD_UPDATE_SEQUENCER;
+        ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
     }
 
     // Track mute
@@ -2901,7 +2901,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     {
         if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
         {
-            gui_action = GUI_CMD_SWITCH_TRACK_MUTE_STATE;
+            ptk->gui_action = GUI_CMD_SWITCH_TRACK_MUTE_STATE;
             break;
         }
         start_mute_check_x += Get_Track_Size(ptk, i, NULL);
@@ -2929,7 +2929,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     {
         if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 16, 7))
         {
-            gui_action = GUI_CMD_SWITCH_TRACK_LARGE_STATE;
+            ptk->gui_action = GUI_CMD_SWITCH_TRACK_LARGE_STATE;
             break;
         }
         start_mute_check_x += Get_Track_Size(ptk, i, NULL);
@@ -2942,7 +2942,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     {
         if(zcheckMouse(ptk, start_mute_check_x , 183 + 8, 8, 7))
         {
-            gui_action = GUI_CMD_REDUCE_TRACK_NOTES;
+            ptk->gui_action = GUI_CMD_REDUCE_TRACK_NOTES;
             break;
         }
         start_mute_check_x += Get_Track_Size(ptk, i, NULL);
@@ -2955,7 +2955,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     {
         if(zcheckMouse(ptk, start_mute_check_x, 183 + 8, 8, 7))
         {
-            gui_action = GUI_CMD_EXPAND_TRACK_NOTES;
+            ptk->gui_action = GUI_CMD_EXPAND_TRACK_NOTES;
             break;
         }
         start_mute_check_x += Get_Track_Size(ptk, i, NULL);
@@ -2968,7 +2968,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
         start_mute_check_x = pos_effects_icons[i] - 1;
         if(zcheckMouse(ptk, start_mute_check_x, 183 + 8, 8, 7))
         {
-            gui_action = GUI_CMD_REDUCE_TRACK_EFFECTS;
+            ptk->gui_action = GUI_CMD_REDUCE_TRACK_EFFECTS;
             break;
         }
     }
@@ -2980,7 +2980,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
         start_mute_check_x = pos_effects_icons[i] + 9 - 1;
         if(zcheckMouse(ptk, start_mute_check_x, 183 + 8, 8, 7))
         {
-            gui_action = GUI_CMD_EXPAND_TRACK_EFFECTS;
+            ptk->gui_action = GUI_CMD_EXPAND_TRACK_EFFECTS;
             break;
         }
     }
@@ -2998,12 +2998,12 @@ void Mouse_Right_Pattern_Ed(ptk_data *ptk)
     if(zcheckMouse(ptk, 90, 126, 16, 16))
     {
         Current_Edit_Steps = 0;
-        gui_action = GUI_CMD_UPDATE_PATTERN_ED;
+        ptk->gui_action = GUI_CMD_UPDATE_PATTERN_ED;
     }
     if(zcheckMouse(ptk, 134, 126, 16, 16))
     {
         Current_Edit_Steps = 16;
-        gui_action = GUI_CMD_UPDATE_PATTERN_ED;
+        ptk->gui_action = GUI_CMD_UPDATE_PATTERN_ED;
     }
 
     // Solo track
@@ -3017,7 +3017,7 @@ void Mouse_Right_Pattern_Ed(ptk_data *ptk)
             int tmp_track = Get_Track_Over_Mouse(ptk, Mouse.x, NULL, FALSE);
             Solo_Track(tmp_track);
             // Will unmute the correct track
-            gui_action = GUI_CMD_SWITCH_TRACK_MUTE_STATE;
+            ptk->gui_action = GUI_CMD_SWITCH_TRACK_MUTE_STATE;
         }
         start_mute_check_x += Get_Track_Size(ptk, i, NULL);
     }
@@ -3044,7 +3044,7 @@ void Mouse_Right_Pattern_Ed(ptk_data *ptk)
     for(i = gui_track; i < gui_track + tracks; i++)
     {
         if(start_mute_check_x + Cur_Char_size[i] >= MAX_PATT_SCREEN_X) break;
-        if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 16, 7)) gui_action = GUI_CMD_SWITCH_TRACK_SMALL_STATE;
+        if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 16, 7)) ptk->gui_action = GUI_CMD_SWITCH_TRACK_SMALL_STATE;
         start_mute_check_x += Get_Track_Size(ptk, i, NULL);
     }
 
@@ -3168,7 +3168,7 @@ void Goto_Previous_Column(ptk_data *ptk)
     Column_Under_Caret--;
     Actupated(ptk, 0);
     Select_Block_Keyboard(ptk, BLOCK_MARK_TRACKS);
-    gui_action = GUI_CMD_SET_FOCUS_TRACK;
+    ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
 }
 
 // ------------------------------------------------------
@@ -3179,7 +3179,7 @@ void Goto_Next_Column(ptk_data *ptk)
     Column_Under_Caret++;
     Actupated(ptk, 0);
     Select_Block_Keyboard(ptk, BLOCK_MARK_TRACKS);
-    gui_action = GUI_CMD_SET_FOCUS_TRACK;
+    ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
 }
 
 // ------------------------------------------------------
@@ -3195,7 +3195,7 @@ void Goto_Top_Left(ptk_data *ptk)
     }
     Actupated(ptk, 0);
     Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS | BLOCK_MARK_TRACKS);
-    gui_action = GUI_CMD_SET_FOCUS_TRACK;
+    ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
 }
 
 // ------------------------------------------------------
@@ -3210,7 +3210,7 @@ void Goto_Bottom_Right(ptk_data *ptk)
         Track_Under_Caret = Songtracks - 1;
     }
     Actupated(ptk, 0);
-    gui_action = GUI_CMD_SET_FOCUS_TRACK;
+    ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
     Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS | BLOCK_MARK_TRACKS);
 }
 
