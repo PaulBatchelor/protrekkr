@@ -1501,7 +1501,7 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
         if(!Simulate)
         {
             fclose(in);
-            last_index = -1;
+            ptk->last_index = -1;
             Read_SMPT(ptk);
             Actualize_Files_List(ptk, 0);
 
@@ -1684,7 +1684,7 @@ int Pack_Module(ptk_data *ptk, char *FileName)
     Clear_Input(ptk);
     Status_Box(ptk, name);
     Read_SMPT(ptk);
-    last_index = -1;
+    ptk->last_index = -1;
     Actualize_Files_List(ptk, 0);
     return(FALSE);
 }

@@ -59,7 +59,6 @@ int Instrs_ykar = 0;
 int Instrs_items = 128;
 int Instrs_index = 0;
 int Instrs_curr = 0;
-int Instrs_last_index = -1;
 
 extern char Mp3_BitRate[MAX_INSTRS];
 extern int Type_Mp3_BitRate[];

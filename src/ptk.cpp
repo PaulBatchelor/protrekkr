@@ -98,8 +98,6 @@ char Current_Instrument_Split = 0;
 int player_pos = -1;
 
 int posletter = 0;
-int last_index = -1;
-int gui_action = GUI_CMD_NOP;
 int gui_action_metronome = GUI_CMD_NOP;
 int Column_Under_Caret = 0;
 int Track_Under_Caret = 0;
@@ -720,7 +718,7 @@ int Screen_Update(ptk_data *ptk)
                 int broadcast = lt_index[ptk->Scopish] + (Mouse.y - 43) / (Font_Height + 1);
                 if(Get_FileType(ptk, broadcast) != _A_SEP)
                 {
-                    last_index = -1;
+                    ptk->last_index = -1;
                     if(broadcast != lt_curr[ptk->Scopish])
                     {
                         lt_curr[ptk->Scopish] = broadcast;
@@ -751,7 +749,7 @@ int Screen_Update(ptk_data *ptk)
             if(lt_items[ptk->Scopish])
             {
                 int broadcast = lt_index[ptk->Scopish] + (Mouse.y - 43) / 12;
-                last_index = -1;
+                ptk->last_index = -1;
                 lt_curr[ptk->Scopish] = broadcast;
                 switch(Get_FileType(ptk, lt_curr[ptk->Scopish]))
                 {
@@ -1335,7 +1333,7 @@ int Screen_Update(ptk_data *ptk)
             Status_Box(ptk, buffer);
 
             Read_SMPT(ptk);
-            last_index = -1;
+            ptk->last_index = -1;
             Actualize_Files_List(ptk, 0);
         }
 
@@ -1610,7 +1608,7 @@ int Screen_Update(ptk_data *ptk)
         SetColor(COL_BLACK);
         Fillrect(0, 0, ptk->CONSOLE_WIDTH, ptk->CONSOLE_HEIGHT);
 
-        last_index = -1;
+        ptk->last_index = -1;
         Gui_Draw_Button_Box(MIN_VUMETER - 4, 6, (MAX_VUMETER - MIN_VUMETER) + 6, 16, "blah", BUTTON_NORMAL | BUTTON_DISABLED);
 
         Display_Master_Comp();
@@ -2939,7 +2937,7 @@ Stop_WavRender:
     Actualize_DiskIO_Ed(ptk, 0);
     rawrender = FALSE;
 
-    last_index = -1;
+    ptk->last_index = -1;
     Read_SMPT(ptk);
     Actualize_Files_List(ptk, 0);
 
@@ -6829,4 +6827,5 @@ void ptk_init(ptk_data *ptk)
     ptk->ctipoftheday = 0;
     ptk->sas = FALSE;
     ptk->ltretvalue = 0;
+    ptk->last_index = -1;
 }

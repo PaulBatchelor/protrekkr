@@ -150,7 +150,7 @@ void SaveConfig(ptk_data *ptk)
         fclose(out);
 
         Read_SMPT(ptk);
-        last_index = -1;
+        ptk->last_index = -1;
         Actualize_Files_List(ptk, 0);
         Status_Box(ptk, "Configuration file saved succesfully.");  
     }

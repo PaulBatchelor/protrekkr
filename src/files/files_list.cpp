@@ -731,10 +731,10 @@ void Actualize_Files_List(ptk_data *ptk, int modeac)
 
             // Draw the files slider
             Draw_Lists_Slider(ptk, lt_ykar[ptk->Scopish]);
-            if(last_index != lt_index[ptk->Scopish])
+            if(ptk->last_index != lt_index[ptk->Scopish])
             {
                 Dump_Files_List(ptk, 395, 41);
-                last_index = lt_index[ptk->Scopish];
+                ptk->last_index = lt_index[ptk->Scopish];
             }
             break;
     }

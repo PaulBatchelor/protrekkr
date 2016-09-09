@@ -33,5 +33,6 @@ typedef struct {
     int ltretvalue;
 
     int retletter[256];
+    int last_index;
 } ptk_data;
 #endif

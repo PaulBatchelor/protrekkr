@@ -279,7 +279,7 @@ void SaveInst(ptk_data *ptk)
         fclose(in);
 
         Read_SMPT(ptk);
-        last_index = -1;
+        ptk->last_index = -1;
         Actualize_Files_List(ptk, 0);
         Actualize_Patterned(ptk);
         Status_Box(ptk, "Instrument saved succesfully."); 
