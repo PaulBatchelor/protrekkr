@@ -52,8 +52,6 @@ int PTKEXPORT Ptk_InitDriver(ptk_data *ptk, int Latency);
 #else
 int PTKEXPORT Ptk_InitDriver(void);
 #endif // __WINAMP__
-/* TODO: is this function needed ?*/
-int PTKEXPORT Ptk_InitModule(ptk_data *ptk, unsigned char *Module, int start_position);
 int PTKEXPORT Ptk_GetRow(ptk_data *ptk);
 int PTKEXPORT Ptk_GetPosition(ptk_data *ptk);
 void PTKEXPORT Ptk_SetPosition(int position);
