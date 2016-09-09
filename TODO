@@ -1,0 +1,6 @@
+- Remove MIDI support (sorry not sorry)
+- Remove unnecessary defines 
+- Figure out how to remove global data struct pointer
+- Remove WINAMP support
+- De-Classify CSynth
+- Remove Windows Support
