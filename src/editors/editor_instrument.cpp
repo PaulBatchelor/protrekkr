@@ -160,7 +160,7 @@ void Actualize_Instrument_Ed(ptk_data *ptk, int typex, char gode)
         Allow_AT3 = 0;
 #endif
 
-        if(SampleType[Current_Instrument][Current_Instrument_Split])
+        if(SampleType[Current_Instrument][ptk->Current_Instrument_Split])
         {
             Allow_Buttons = BUTTON_NORMAL;
             Allow_Buttons_Pushed = BUTTON_PUSHED;
@@ -184,33 +184,33 @@ void Actualize_Instrument_Ed(ptk_data *ptk, int typex, char gode)
                 // Instrument editor mode
                 if(gode == 0 || gode == 1)
                 {
-                    if(Sample_Amplify[Current_Instrument][Current_Instrument_Split] > 4.0f) Sample_Amplify[Current_Instrument][Current_Instrument_Split] = 4.0f;
-                    if(Sample_Amplify[Current_Instrument][Current_Instrument_Split] < 0) Sample_Amplify[Current_Instrument][Current_Instrument_Split] = 0;
-                    Realslider(426, (Cur_Height - 62), (int) (Sample_Amplify[Current_Instrument][Current_Instrument_Split] * 32.0f), Allow_Sliders);
-                    outlong_small(575, (Cur_Height - 62), (int) (Sample_Amplify[Current_Instrument][Current_Instrument_Split] * 100.0f), 1, 56, BUTTON_NORMAL | BUTTON_DISABLED);
+                    if(Sample_Amplify[Current_Instrument][ptk->Current_Instrument_Split] > 4.0f) Sample_Amplify[Current_Instrument][ptk->Current_Instrument_Split] = 4.0f;
+                    if(Sample_Amplify[Current_Instrument][ptk->Current_Instrument_Split] < 0) Sample_Amplify[Current_Instrument][ptk->Current_Instrument_Split] = 0;
+                    Realslider(426, (Cur_Height - 62), (int) (Sample_Amplify[Current_Instrument][ptk->Current_Instrument_Split] * 32.0f), Allow_Sliders);
+                    outlong_small(575, (Cur_Height - 62), (int) (Sample_Amplify[Current_Instrument][ptk->Current_Instrument_Split] * 100.0f), 1, 56, BUTTON_NORMAL | BUTTON_DISABLED);
                 }
 
                 if(gode == 0 || gode == 2)
                 {
-                    FineTune_Value = Finetune[Current_Instrument][Current_Instrument_Split];
+                    FineTune_Value = Finetune[Current_Instrument][ptk->Current_Instrument_Split];
                     if(FineTune_Value > 127)
                     {
-                        Finetune[Current_Instrument][Current_Instrument_Split] = 127;
+                        Finetune[Current_Instrument][ptk->Current_Instrument_Split] = 127;
                     }
                     if(FineTune_Value < -127)
                     {
-                        Finetune[Current_Instrument][Current_Instrument_Split] = -127;
+                        Finetune[Current_Instrument][ptk->Current_Instrument_Split] = -127;
                     }
-                    Realslider(426, (Cur_Height - 44), 64 + (Finetune[Current_Instrument][Current_Instrument_Split] / 2), Allow_Sliders);
-                    outlong_small(575, (Cur_Height - 44), (long) Finetune[Current_Instrument][Current_Instrument_Split], 0, 56, BUTTON_NORMAL | BUTTON_DISABLED);
+                    Realslider(426, (Cur_Height - 44), 64 + (Finetune[Current_Instrument][ptk->Current_Instrument_Split] / 2), Allow_Sliders);
+                    outlong_small(575, (Cur_Height - 44), (long) Finetune[Current_Instrument][ptk->Current_Instrument_Split], 0, 56, BUTTON_NORMAL | BUTTON_DISABLED);
                 }
 
                 if(gode == 0 || gode == 3)
                 {
-                    if(FDecay[Current_Instrument][Current_Instrument_Split] > 0.015625f) FDecay[Current_Instrument][Current_Instrument_Split] = 0.015625f;
-                    if(FDecay[Current_Instrument][Current_Instrument_Split] < 0.0f) FDecay[Current_Instrument][Current_Instrument_Split] = 0.0f;
-                    Realslider(52, (Cur_Height - 72), (int) (FDecay[Current_Instrument][Current_Instrument_Split] * 8192.0f), Allow_Sliders);
-                    outlong(201, (Cur_Height - 72), (int) (FDecay[Current_Instrument][Current_Instrument_Split] * 8192.0f), 0);
+                    if(FDecay[Current_Instrument][ptk->Current_Instrument_Split] > 0.015625f) FDecay[Current_Instrument][ptk->Current_Instrument_Split] = 0.015625f;
+                    if(FDecay[Current_Instrument][ptk->Current_Instrument_Split] < 0.0f) FDecay[Current_Instrument][ptk->Current_Instrument_Split] = 0.0f;
+                    Realslider(52, (Cur_Height - 72), (int) (FDecay[Current_Instrument][ptk->Current_Instrument_Split] * 8192.0f), Allow_Sliders);
+                    outlong(201, (Cur_Height - 72), (int) (FDecay[Current_Instrument][ptk->Current_Instrument_Split] * 8192.0f), 0);
                 }
 
                 char temprout[256];
@@ -218,15 +218,15 @@ void Actualize_Instrument_Ed(ptk_data *ptk, int typex, char gode)
                 {
                     if(typex == 0 || typex == 1 || typex == 2)
                     {
-                        if(SampleType[Current_Instrument][Current_Instrument_Split] != 0)
+                        if(SampleType[Current_Instrument][ptk->Current_Instrument_Split] != 0)
                         {
-                            if(SampleChannels[Current_Instrument][Current_Instrument_Split] == 2)
+                            if(SampleChannels[Current_Instrument][ptk->Current_Instrument_Split] == 2)
                             {
-                                sprintf(temprout, "%s [Stereo]", SampleName[Current_Instrument][Current_Instrument_Split]);
+                                sprintf(temprout, "%s [Stereo]", SampleName[Current_Instrument][ptk->Current_Instrument_Split]);
                             }
                             else
                             {
-                                sprintf(temprout, "%s [Mono]", SampleName[Current_Instrument][Current_Instrument_Split]);
+                                sprintf(temprout, "%s [Mono]", SampleName[Current_Instrument][ptk->Current_Instrument_Split]);
                             }
                         }
                         else
@@ -239,15 +239,15 @@ void Actualize_Instrument_Ed(ptk_data *ptk, int typex, char gode)
 
                 if(gode == 0 || gode == 4)
                 {
-                    outlong(448, (Cur_Height - 134), SampleLength[Current_Instrument][Current_Instrument_Split], 0);
+                    outlong(448, (Cur_Height - 134), SampleLength[Current_Instrument][ptk->Current_Instrument_Split], 0);
                 }
 
                 if(gode == 0 || gode == 5)
                 {
-                    outlong(448, (Cur_Height - 116), LoopStart[Current_Instrument][Current_Instrument_Split], 0);
-                    outlong(448, (Cur_Height - 98), LoopEnd[Current_Instrument][Current_Instrument_Split], 0);
+                    outlong(448, (Cur_Height - 116), LoopStart[Current_Instrument][ptk->Current_Instrument_Split], 0);
+                    outlong(448, (Cur_Height - 98), LoopEnd[Current_Instrument][ptk->Current_Instrument_Split], 0);
 
-                    switch(LoopType[Current_Instrument][Current_Instrument_Split])
+                    switch(LoopType[Current_Instrument][ptk->Current_Instrument_Split])
                     {
                         case SMP_LOOP_FORWARD:
                             Gui_Draw_Button_Box(448, (Cur_Height - 80), 60, 16, "Forward", Allow_Buttons_Pushed | BUTTON_TEXT_CENTERED);
@@ -271,13 +271,13 @@ void Actualize_Instrument_Ed(ptk_data *ptk, int typex, char gode)
 
                 if(gode == 0 || gode == 8)
                 {
-                    value_box(570, (Cur_Height - 134), Current_Instrument_Split, BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
-                    value_box3(570, (Cur_Height - 116), Basenote[Current_Instrument][Current_Instrument_Split], Allow_Buttons | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
+                    value_box(570, (Cur_Height - 134), ptk->Current_Instrument_Split, BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
+                    value_box3(570, (Cur_Height - 116), Basenote[Current_Instrument][ptk->Current_Instrument_Split], Allow_Buttons | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
                 }
 
                 if(gode == 0 || gode == 9)
                 {
-                    value_box3(570, (Cur_Height - 116), Basenote[Current_Instrument][Current_Instrument_Split], Allow_Buttons | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
+                    value_box3(570, (Cur_Height - 116), Basenote[Current_Instrument][ptk->Current_Instrument_Split], Allow_Buttons | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
                 }
                 if(gode == 0 || gode == 10)
                 {
@@ -478,11 +478,11 @@ void Actualize_Instrument_Ed(ptk_data *ptk, int typex, char gode)
                     }
                     if(SamplesSwap[Current_Instrument])
                     {
-                        outlong(729, (Cur_Height - 134) + (18 * 4), SampleLength_Packed[Current_Instrument][Current_Instrument_Split], 0);
+                        outlong(729, (Cur_Height - 134) + (18 * 4), SampleLength_Packed[Current_Instrument][ptk->Current_Instrument_Split], 0);
                     }
                     else
                     {
-                        outlong(729, (Cur_Height - 134) + (18 * 4), SampleLength[Current_Instrument][Current_Instrument_Split], 0);
+                        outlong(729, (Cur_Height - 134) + (18 * 4), SampleLength[Current_Instrument][ptk->Current_Instrument_Split], 0);
                     }
                 }
 
@@ -510,22 +510,22 @@ void Actualize_Instrument_Ed(ptk_data *ptk, int typex, char gode)
                 switch(typex)
                 {
                     case 0:
-                        outlong(487, (Cur_Height - 130), *(RawSamples[Current_Instrument][0][Current_Instrument_Split] + LoopStart[Current_Instrument][Current_Instrument_Split]), 0);
-                        outlong(114, (Cur_Height - 130), LoopStart[Current_Instrument][Current_Instrument_Split], 0);
+                        outlong(487, (Cur_Height - 130), *(RawSamples[Current_Instrument][0][ptk->Current_Instrument_Split] + LoopStart[Current_Instrument][ptk->Current_Instrument_Split]), 0);
+                        outlong(114, (Cur_Height - 130), LoopStart[Current_Instrument][ptk->Current_Instrument_Split], 0);
                         actuloop = 1;
                         break;
 
                     case 1:
-                        outlong(487, (Cur_Height - 112), *(RawSamples[Current_Instrument][0][Current_Instrument_Split] + LoopEnd[Current_Instrument][Current_Instrument_Split]), 0);
-                        outlong(314, (Cur_Height - 130), LoopEnd[Current_Instrument][Current_Instrument_Split], 0);
+                        outlong(487, (Cur_Height - 112), *(RawSamples[Current_Instrument][0][ptk->Current_Instrument_Split] + LoopEnd[Current_Instrument][ptk->Current_Instrument_Split]), 0);
+                        outlong(314, (Cur_Height - 130), LoopEnd[Current_Instrument][ptk->Current_Instrument_Split], 0);
                         actuloop = 2;
                         break;
 
                     case 2:
-                        outlong(487, (Cur_Height - 130), *(RawSamples[Current_Instrument][0][Current_Instrument_Split] + LoopStart[Current_Instrument][Current_Instrument_Split]), 0);
-                        outlong(487, (Cur_Height - 112), *(RawSamples[Current_Instrument][0][Current_Instrument_Split] + LoopEnd[Current_Instrument][Current_Instrument_Split]), 0);
-                        outlong(114, (Cur_Height - 130), LoopStart[Current_Instrument][Current_Instrument_Split], 0);
-                        outlong(314, (Cur_Height - 130), LoopEnd[Current_Instrument][Current_Instrument_Split], 0);
+                        outlong(487, (Cur_Height - 130), *(RawSamples[Current_Instrument][0][ptk->Current_Instrument_Split] + LoopStart[Current_Instrument][ptk->Current_Instrument_Split]), 0);
+                        outlong(487, (Cur_Height - 112), *(RawSamples[Current_Instrument][0][ptk->Current_Instrument_Split] + LoopEnd[Current_Instrument][ptk->Current_Instrument_Split]), 0);
+                        outlong(114, (Cur_Height - 130), LoopStart[Current_Instrument][ptk->Current_Instrument_Split], 0);
+                        outlong(314, (Cur_Height - 130), LoopEnd[Current_Instrument][ptk->Current_Instrument_Split], 0);
                         actuloop = 3;
                         break;
                 }
@@ -539,7 +539,7 @@ void Mouse_Sliders_Instrument_Ed(ptk_data *ptk)
 {
     if(userscreen == USER_SCREEN_INSTRUMENT_EDIT)
     {
-        if(SampleType[Current_Instrument][Current_Instrument_Split])
+        if(SampleType[Current_Instrument][ptk->Current_Instrument_Split])
         {
             if(zcheckMouse(ptk, 426, (Cur_Height - 62), 148, 16))
             {
@@ -568,34 +568,34 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
     if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 1)
     {
         if(zcheckMouse(ptk, 96, (Cur_Height - 130), 16, 16) &&
-           LoopStart[Current_Instrument][Current_Instrument_Split] > 0 &&
-           SampleType[Current_Instrument][Current_Instrument_Split])
+           LoopStart[Current_Instrument][ptk->Current_Instrument_Split] > 0 &&
+           SampleType[Current_Instrument][ptk->Current_Instrument_Split])
         {
-            LoopStart[Current_Instrument][Current_Instrument_Split]--;
+            LoopStart[Current_Instrument][ptk->Current_Instrument_Split]--;
             ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             ptk->teac = 5;
         }
         if(zcheckMouse(ptk, 176, (Cur_Height - 130), 16, 16) &&
-           LoopStart[Current_Instrument][Current_Instrument_Split] < LoopEnd[Current_Instrument][Current_Instrument_Split] &&
-           SampleType[Current_Instrument][Current_Instrument_Split])
+           LoopStart[Current_Instrument][ptk->Current_Instrument_Split] < LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] &&
+           SampleType[Current_Instrument][ptk->Current_Instrument_Split])
         {
-            LoopStart[Current_Instrument][Current_Instrument_Split]++;
+            LoopStart[Current_Instrument][ptk->Current_Instrument_Split]++;
             ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
             ptk->teac = 5;
         }
         if(zcheckMouse(ptk, 296, (Cur_Height - 130), 16, 16) &&
-           LoopEnd[Current_Instrument][Current_Instrument_Split] > LoopStart[Current_Instrument][Current_Instrument_Split] &&
-           SampleType[Current_Instrument][Current_Instrument_Split])
+           LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] > LoopStart[Current_Instrument][ptk->Current_Instrument_Split] &&
+           SampleType[Current_Instrument][ptk->Current_Instrument_Split])
         {
-            LoopEnd[Current_Instrument][Current_Instrument_Split]--;
+            LoopEnd[Current_Instrument][ptk->Current_Instrument_Split]--;
             ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             ptk->teac = 5;
         }
         if(zcheckMouse(ptk, 376, (Cur_Height - 130), 16, 16) &&
-           LoopEnd[Current_Instrument][Current_Instrument_Split] < SampleLength[Current_Instrument][Current_Instrument_Split] &&
-           SampleType[Current_Instrument][Current_Instrument_Split])
+           LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] < SampleLength[Current_Instrument][ptk->Current_Instrument_Split] &&
+           SampleType[Current_Instrument][ptk->Current_Instrument_Split])
         {
-            LoopEnd[Current_Instrument][Current_Instrument_Split]++;
+            LoopEnd[Current_Instrument][ptk->Current_Instrument_Split]++;
             ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             ptk->teac = 5;
         }
@@ -609,16 +609,16 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
 
     if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 0)
     {
-        if(zcheckMouse(ptk, 570, (Cur_Height - 134), 16, 16) && Current_Instrument_Split > 0)
+        if(zcheckMouse(ptk, 570, (Cur_Height - 134), 16, 16) && ptk->Current_Instrument_Split > 0)
         {
-            Current_Instrument_Split--;
+            ptk->Current_Instrument_Split--;
             ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             ptk->teac = 0;
             Renew_Sample_Ed(ptk);
         }
-        if(zcheckMouse(ptk, 614, (Cur_Height - 134), 16, 16) && Current_Instrument_Split < 15)
+        if(zcheckMouse(ptk, 614, (Cur_Height - 134), 16, 16) && ptk->Current_Instrument_Split < 15)
         {
-            Current_Instrument_Split++;
+            ptk->Current_Instrument_Split++;
             ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             ptk->teac = 0;
             Renew_Sample_Ed(ptk);
@@ -672,7 +672,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
         }
 
         // Go to loop editor
-        if(zcheckMouse(ptk, 268, (Cur_Height - 134), 88, 16) && SampleType[Current_Instrument][Current_Instrument_Split])
+        if(zcheckMouse(ptk, 268, (Cur_Height - 134), 88, 16) && SampleType[Current_Instrument][ptk->Current_Instrument_Split])
         {
             ptk->seditor = 1;
             ptk->gui_action = GUI_CMD_SELECT_INSTRUMENT_EDIT;
@@ -694,12 +694,12 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
         }
 
         // Export .wav
-        if(zcheckMouse(ptk, 268, (Cur_Height - 90), 88, 16) && SampleType[Current_Instrument][Current_Instrument_Split])
+        if(zcheckMouse(ptk, 268, (Cur_Height - 90), 88, 16) && SampleType[Current_Instrument][ptk->Current_Instrument_Split])
         {
             char Name[MAX_PATH];
-            if(strlen(SampleName[Current_Instrument][Current_Instrument_Split]))
+            if(strlen(SampleName[Current_Instrument][ptk->Current_Instrument_Split]))
             {
-                sprintf(Name, "%s", SampleName[Current_Instrument][Current_Instrument_Split]);
+                sprintf(Name, "%s", SampleName[Current_Instrument][ptk->Current_Instrument_Split]);
             }
             else
             {
@@ -716,19 +716,19 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
         }
 
         if(zcheckMouse(ptk, 570, (Cur_Height - 116), 16, 16) &&
-           Basenote[Current_Instrument][Current_Instrument_Split] > 0 &&
-           SampleType[Current_Instrument][Current_Instrument_Split])
+           Basenote[Current_Instrument][ptk->Current_Instrument_Split] > 0 &&
+           SampleType[Current_Instrument][ptk->Current_Instrument_Split])
         {
-            Basenote[Current_Instrument][Current_Instrument_Split]--;
+            Basenote[Current_Instrument][ptk->Current_Instrument_Split]--;
             ptk->teac = 9;
             ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
         }
 
         if(zcheckMouse(ptk, 614, (Cur_Height - 116), 16, 16) &&
-           Basenote[Current_Instrument][Current_Instrument_Split] < 119 &&
-           SampleType[Current_Instrument][Current_Instrument_Split])
+           Basenote[Current_Instrument][ptk->Current_Instrument_Split] < 119 &&
+           SampleType[Current_Instrument][ptk->Current_Instrument_Split])
         {
-            Basenote[Current_Instrument][Current_Instrument_Split]++;
+            Basenote[Current_Instrument][ptk->Current_Instrument_Split]++;
             ptk->teac = 9;
             ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
         }
@@ -908,25 +908,25 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
 
         }
 
-        if(SampleType[Current_Instrument][Current_Instrument_Split])
+        if(SampleType[Current_Instrument][ptk->Current_Instrument_Split])
         {
             if(zcheckMouse(ptk, 448, (Cur_Height - 80), 60, 16))
             {
-                LoopType[Current_Instrument][Current_Instrument_Split] = SMP_LOOP_FORWARD;
+                LoopType[Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_FORWARD;
                 ptk->teac = 5;
                 ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 draw_sampled_wave = TRUE;
             }
             if(zcheckMouse(ptk, 448 + 62, (Cur_Height - 80), 58, 16))
             {
-                LoopType[Current_Instrument][Current_Instrument_Split] = SMP_LOOP_PINGPONG;
+                LoopType[Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_PINGPONG;
                 ptk->teac = 5;
                 ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 draw_sampled_wave = TRUE;
             }
             if(zcheckMouse(ptk, 448 + 62 * 2 - 2, (Cur_Height - 80), 60, 16))
             {
-                LoopType[Current_Instrument][Current_Instrument_Split] = SMP_LOOP_NONE;
+                LoopType[Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_NONE;
                 ptk->teac = 5;
                 ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 draw_sampled_wave = TRUE;
@@ -1029,31 +1029,31 @@ void Mouse_Right_Instrument_Ed(ptk_data *ptk)
                 if(SamplesSwap[Current_Instrument])
                 {
                     Gui_Draw_Button_Box(729, (Cur_Height - 116) + (18 * 4), 60, 16, "Lock / All", Allow_Global_Pushed | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
-                    outlong(729, (Cur_Height - 134) + (18 * 4), SampleLength_Packed[Current_Instrument][Current_Instrument_Split], 0);
+                    outlong(729, (Cur_Height - 134) + (18 * 4), SampleLength_Packed[Current_Instrument][ptk->Current_Instrument_Split], 0);
                 }
                 else
                 {
                     Gui_Draw_Button_Box(729, (Cur_Height - 116) + (18 * 4), 60, 16, "Lock / All", Allow_Global | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
-                    outlong(729, (Cur_Height - 134) + (18 * 4), SampleLength[Current_Instrument][Current_Instrument_Split], 0);
+                    outlong(729, (Cur_Height - 134) + (18 * 4), SampleLength[Current_Instrument][ptk->Current_Instrument_Split], 0);
                 }
                 Actualize_Instruments_Synths_List(ptk, 1);
             }
         }
 
-        if(SampleType[Current_Instrument][Current_Instrument_Split])
+        if(SampleType[Current_Instrument][ptk->Current_Instrument_Split])
         {
-            if(zcheckMouse(ptk, 570, (Cur_Height - 116), 16, 16) && Basenote[Current_Instrument][Current_Instrument_Split] > 0)
+            if(zcheckMouse(ptk, 570, (Cur_Height - 116), 16, 16) && Basenote[Current_Instrument][ptk->Current_Instrument_Split] > 0)
             {
-                if(Basenote[Current_Instrument][Current_Instrument_Split] > 11) Basenote[Current_Instrument][Current_Instrument_Split] -= 12;
-                else Basenote[Current_Instrument][Current_Instrument_Split] = 0;
+                if(Basenote[Current_Instrument][ptk->Current_Instrument_Split] > 11) Basenote[Current_Instrument][ptk->Current_Instrument_Split] -= 12;
+                else Basenote[Current_Instrument][ptk->Current_Instrument_Split] = 0;
                 ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 ptk->teac = 9;
             }
 
-            if(zcheckMouse(ptk, 614, (Cur_Height - 116), 16, 16) && Basenote[Current_Instrument][Current_Instrument_Split] < 119)
+            if(zcheckMouse(ptk, 614, (Cur_Height - 116), 16, 16) && Basenote[Current_Instrument][ptk->Current_Instrument_Split] < 119)
             {
-                if(Basenote[Current_Instrument][Current_Instrument_Split] < 107) Basenote[Current_Instrument][Current_Instrument_Split] += 12;
-                else Basenote[Current_Instrument][Current_Instrument_Split] = 119;
+                if(Basenote[Current_Instrument][ptk->Current_Instrument_Split] < 107) Basenote[Current_Instrument][ptk->Current_Instrument_Split] += 12;
+                else Basenote[Current_Instrument][ptk->Current_Instrument_Split] = 119;
                 ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
                 ptk->teac = 9;
             }
@@ -1068,10 +1068,10 @@ void Afloop(ptk_data *ptk)
     {
         for(int a = 0; a < 200; a++)
         {
-            Uint32 ose = a + LoopStart[Current_Instrument][Current_Instrument_Split];
-            if(ose < SampleLength[Current_Instrument][Current_Instrument_Split])
+            Uint32 ose = a + LoopStart[Current_Instrument][ptk->Current_Instrument_Split];
+            if(ose < SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
             {
-                int v = *(RawSamples[Current_Instrument][0][Current_Instrument_Split] + ose) / 1024;
+                int v = *(RawSamples[Current_Instrument][0][ptk->Current_Instrument_Split] + ose) / 1024;
                 DrawVLine(a + 222, (Cur_Height - 46), (Cur_Height - 78) - v, COL_VUMETER);
                 DrawVLine(a + 222, (Cur_Height - 78) - v, (Cur_Height - 110), COL_BACKGROUND);
             }
@@ -1090,11 +1090,11 @@ void Afloop(ptk_data *ptk)
     {
         for(int b = 0; b < 200; b++)
         {
-            Uint32 ose = (LoopEnd[Current_Instrument][Current_Instrument_Split] - 200) + b;
+            Uint32 ose = (LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] - 200) + b;
             iose = ose;
-            if(iose > -1 && ose < SampleLength[Current_Instrument][Current_Instrument_Split])
+            if(iose > -1 && ose < SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
             {
-                int v = *(RawSamples[Current_Instrument][0][Current_Instrument_Split] + ose) / 1024;
+                int v = *(RawSamples[Current_Instrument][0][ptk->Current_Instrument_Split] + ose) / 1024;
                 DrawVLine(b + 22, (Cur_Height - 46), (Cur_Height - 78) - v, COL_VUMETERPEAK);
                 DrawVLine(b + 22, (Cur_Height - 78) - v, (Cur_Height - 110), COL_BACKGROUND);
             }
@@ -1113,8 +1113,8 @@ void Afloop(ptk_data *ptk)
 
 void Mouse_Left_Repeat_Instrument_Ed(ptk_data *ptk)
 {
-    int32 *Cur_Loop_Start = (int32 *) &LoopStart[Current_Instrument][Current_Instrument_Split];
-    int32 *Cur_Loop_End = (int32 *) &LoopEnd[Current_Instrument][Current_Instrument_Split];
+    int32 *Cur_Loop_Start = (int32 *) &LoopStart[Current_Instrument][ptk->Current_Instrument_Split];
+    int32 *Cur_Loop_End = (int32 *) &LoopEnd[Current_Instrument][ptk->Current_Instrument_Split];
 
     if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 1)
     {
@@ -1138,7 +1138,7 @@ void Mouse_Left_Repeat_Instrument_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             ptk->teac = 5;
         }
-        if(zcheckMouse(ptk, 394, (Cur_Height - 130), 16, 16) && *Cur_Loop_End < (int32) SampleLength[Current_Instrument][Current_Instrument_Split])
+        if(zcheckMouse(ptk, 394, (Cur_Height - 130), 16, 16) && *Cur_Loop_End < (int32) SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
         {
             *Cur_Loop_End += 1;
             ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
@@ -1149,8 +1149,8 @@ void Mouse_Left_Repeat_Instrument_Ed(ptk_data *ptk)
 
 void Mouse_Sliders_Right_Instrument_Ed(ptk_data *ptk)
 {
-    int32 *Cur_Loop_Start = (int32 *) &LoopStart[Current_Instrument][Current_Instrument_Split];
-    int32 *Cur_Loop_End = (int32 *) &LoopEnd[Current_Instrument][Current_Instrument_Split];
+    int32 *Cur_Loop_Start = (int32 *) &LoopStart[Current_Instrument][ptk->Current_Instrument_Split];
+    int32 *Cur_Loop_End = (int32 *) &LoopEnd[Current_Instrument][ptk->Current_Instrument_Split];
 
     if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 1)
     {
@@ -1181,12 +1181,12 @@ void Mouse_Sliders_Right_Instrument_Ed(ptk_data *ptk)
             ptk->teac = 5;
         }
         if(zcheckMouse(ptk, 394, (Cur_Height - 130), 16, 16) && *Cur_Loop_End <
-           (int32) SampleLength[Current_Instrument][Current_Instrument_Split])
+           (int32) SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
         {
             *Cur_Loop_End += 10;
-            if(*Cur_Loop_End > (int32) SampleLength[Current_Instrument][Current_Instrument_Split])
+            if(*Cur_Loop_End > (int32) SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
             {
-                *Cur_Loop_End = SampleLength[Current_Instrument][Current_Instrument_Split];
+                *Cur_Loop_End = SampleLength[Current_Instrument][ptk->Current_Instrument_Split];
             }
             ptk->gui_action = GUI_CMD_UPDATE_LOOP_EDITOR_ED;
             ptk->teac = 5;

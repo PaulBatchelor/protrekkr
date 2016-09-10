@@ -46,5 +46,7 @@ typedef struct {
     char teac;
     
     int Column_Under_Caret;
+
+    char Current_Instrument_Split;
 } ptk_data;
 #endif

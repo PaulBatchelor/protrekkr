@@ -6116,8 +6116,8 @@ void KillInst(ptk_data *ptk, int inst_nbr, int all_splits)
 #if !defined(__STAND_ALONE__)
     else
     {
-        first_split = Current_Instrument_Split;
-        last_split = Current_Instrument_Split + 1;
+        first_split = ptk->Current_Instrument_Split;
+        last_split = ptk->Current_Instrument_Split + 1;
     }
 #endif
     for(int z = first_split; z < last_split; z++)

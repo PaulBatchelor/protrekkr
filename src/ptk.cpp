@@ -90,7 +90,6 @@ char Visible_Columns = 0;
 int liveparam = 0;
 int livevalue = 0;
 
-char Current_Instrument_Split = 0;
 
 int posletter = 0;
 int Track_Under_Caret = 0;
@@ -623,7 +622,7 @@ int Screen_Update(ptk_data *ptk)
 
     for(i = 0; i < Channels_Polyphony[Track_Under_Caret]; i++)
     {
-        if(sp_Stage[Track_Under_Caret][i] == PLAYING_SAMPLE && Current_Instrument == sp_channelsample[Track_Under_Caret][i] && Current_Instrument_Split == sp_split[Track_Under_Caret][i])
+        if(sp_Stage[Track_Under_Caret][i] == PLAYING_SAMPLE && Current_Instrument == sp_channelsample[Track_Under_Caret][i] && ptk->Current_Instrument_Split == sp_split[Track_Under_Caret][i])
         {
             draw_sampled_wave2 = TRUE;
             boing = TRUE;
@@ -1264,32 +1263,32 @@ int Screen_Update(ptk_data *ptk)
 
             WaveFile RF;
 
-            if(strlen(SampleName[Current_Instrument][Current_Instrument_Split]))
+            if(strlen(SampleName[Current_Instrument][ptk->Current_Instrument_Split]))
             {
-                RF.OpenForWrite(SampleName[Current_Instrument][Current_Instrument_Split],
+                RF.OpenForWrite(SampleName[Current_Instrument][ptk->Current_Instrument_Split],
                                 44100,
                                 16,
-                                SampleChannels[Current_Instrument][Current_Instrument_Split]);
+                                SampleChannels[Current_Instrument][ptk->Current_Instrument_Split]);
             }
             else
             {
                 RF.OpenForWrite("Untitled.wav",
                                 44100,
                                 16,
-                                SampleChannels[Current_Instrument][Current_Instrument_Split]);
+                                SampleChannels[Current_Instrument][ptk->Current_Instrument_Split]);
             }
 
             char t_stereo;
 
-            if(SampleChannels[Current_Instrument][Current_Instrument_Split] == 1) t_stereo = FALSE;
+            if(SampleChannels[Current_Instrument][ptk->Current_Instrument_Split] == 1) t_stereo = FALSE;
             else t_stereo = TRUE;
 
             Uint32 woff = 0;
 
-            short *eSamples = RawSamples[Current_Instrument][0][Current_Instrument_Split];
-            short *erSamples = RawSamples[Current_Instrument][1][Current_Instrument_Split];
+            short *eSamples = RawSamples[Current_Instrument][0][ptk->Current_Instrument_Split];
+            short *erSamples = RawSamples[Current_Instrument][1][ptk->Current_Instrument_Split];
 
-            while(woff < SampleLength[Current_Instrument][Current_Instrument_Split])
+            while(woff < SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
             {
                 if(t_stereo) RF.WriteStereoSample(*eSamples++, *erSamples++);
                 else RF.WriteMonoSample(*eSamples++);
@@ -1297,7 +1296,7 @@ int Screen_Update(ptk_data *ptk)
             }
 
             // Write the looping info
-            if(LoopType[Current_Instrument][Current_Instrument_Split])
+            if(LoopType[Current_Instrument][ptk->Current_Instrument_Split])
             {
                 RiffChunkHeader header;
                 WaveSmpl_ChunkData datas;
@@ -1307,8 +1306,8 @@ int Screen_Update(ptk_data *ptk)
 
                 memset(&datas, 0, sizeof(datas));
                 datas.Num_Sample_Loops = 1;
-                datas.Start = LoopStart[Current_Instrument][Current_Instrument_Split];
-                datas.End = LoopEnd[Current_Instrument][Current_Instrument_Split];
+                datas.Start = LoopStart[Current_Instrument][ptk->Current_Instrument_Split];
+                datas.End = LoopEnd[Current_Instrument][ptk->Current_Instrument_Split];
 
                 header.ckSize = Swap_32(header.ckSize);
 
@@ -1321,7 +1320,7 @@ int Screen_Update(ptk_data *ptk)
             }
 
             RF.Close();
-            if(strlen(SampleName[Current_Instrument][Current_Instrument_Split])) sprintf(buffer, "File '%s' saved.", SampleName[Current_Instrument][Current_Instrument_Split]);
+            if(strlen(SampleName[Current_Instrument][ptk->Current_Instrument_Split])) sprintf(buffer, "File '%s' saved.", SampleName[Current_Instrument][ptk->Current_Instrument_Split]);
             else sprintf(buffer, "File 'Untitled.wav' saved.");
             Status_Box(ptk, buffer);
 
@@ -1406,7 +1405,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_SET_INSTRUMENT_AMPLI)
         {
-            Sample_Amplify[Current_Instrument][Current_Instrument_Split] = float((Mouse.x - 436) / 32.0f);
+            Sample_Amplify[Current_Instrument][ptk->Current_Instrument_Split] = float((Mouse.x - 436) / 32.0f);
             Actualize_Instrument_Ed(ptk, 0, 1);
         }
 
@@ -1415,13 +1414,13 @@ int Screen_Update(ptk_data *ptk)
             FineTune_Value = ((Mouse.x - 436) - 64) * 2;
             if(FineTune_Value > 127) FineTune_Value = 127;
             if(FineTune_Value < -127) FineTune_Value = -127;
-            Finetune[Current_Instrument][Current_Instrument_Split] = FineTune_Value;
+            Finetune[Current_Instrument][ptk->Current_Instrument_Split] = FineTune_Value;
             Actualize_Instrument_Ed(ptk, 0, 2);
         }
 
         if(ptk->gui_action == GUI_CMD_SET_INSTRUMENT_DECAY)
         {
-            FDecay[Current_Instrument][Current_Instrument_Split] = float(Mouse.x - 62) / 8192.0f;
+            FDecay[Current_Instrument][ptk->Current_Instrument_Split] = float(Mouse.x - 62) / 8192.0f;
             Actualize_Instrument_Ed(ptk, 0, 3);
         }
 
@@ -2012,13 +2011,13 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
                         {
                             save_sample_vol = 1.0f;
                             if(Get_Number_Of_Splits(Freeindex)) save_sample_vol = Sample_Vol[Freeindex];
-                            sp_Position[Freeindex][Current_Instrument_Split].absolu = 0;
+                            sp_Position[Freeindex][ptk->Current_Instrument_Split].absolu = 0;
                             Stop_Current_Instrument();
                             switch(channels)
                             {
                                 case 1:
-                                    AllocateWave(Freeindex, Current_Instrument_Split, AIFF_File.NumSamples(), 1, TRUE, NULL, NULL);
-                                    csamples = RawSamples[Freeindex][0][Current_Instrument_Split];
+                                    AllocateWave(Freeindex, ptk->Current_Instrument_Split, AIFF_File.NumSamples(), 1, TRUE, NULL, NULL);
+                                    csamples = RawSamples[Freeindex][0][ptk->Current_Instrument_Split];
                                     for(i = 0; i < AIFF_File.NumSamples(); i++)
                                     {
                                         AIFF_File.ReadMonoSample(&csamples[i]);
@@ -2026,19 +2025,19 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
                                     break;
 
                                 case 2:
-                                    AllocateWave(Freeindex, Current_Instrument_Split, AIFF_File.NumSamples(), 2, TRUE, NULL, NULL);
-                                    csamples = RawSamples[Freeindex][0][Current_Instrument_Split];
-                                    csamples2 = RawSamples[Freeindex][1][Current_Instrument_Split];
+                                    AllocateWave(Freeindex, ptk->Current_Instrument_Split, AIFF_File.NumSamples(), 2, TRUE, NULL, NULL);
+                                    csamples = RawSamples[Freeindex][0][ptk->Current_Instrument_Split];
+                                    csamples2 = RawSamples[Freeindex][1][ptk->Current_Instrument_Split];
                                     for(i = 0; i < AIFF_File.NumSamples(); i++)
                                     {
                                         AIFF_File.ReadStereoSample(&csamples[i], &csamples2[i]);
                                     }
                                     break;
                             }
-                            LoopStart[Freeindex][Current_Instrument_Split] = 0;
-                            LoopEnd[Freeindex][Current_Instrument_Split] = 0;
-                            LoopType[Freeindex][Current_Instrument_Split] = SMP_LOOP_NONE;
-                            Basenote[Freeindex][Current_Instrument_Split] = DEFAULT_BASE_NOTE;
+                            LoopStart[Freeindex][ptk->Current_Instrument_Split] = 0;
+                            LoopEnd[Freeindex][ptk->Current_Instrument_Split] = 0;
+                            LoopType[Freeindex][ptk->Current_Instrument_Split] = SMP_LOOP_NONE;
+                            Basenote[Freeindex][ptk->Current_Instrument_Split] = DEFAULT_BASE_NOTE;
                             if(Get_Number_Of_Splits(Freeindex) == 1)
                             {
                                 Sample_Vol[Freeindex] = save_sample_vol;
@@ -2046,17 +2045,17 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
 
                             if(AIFF_File.BaseNote())
                             {
-                                Basenote[Freeindex][Current_Instrument_Split] = AIFF_File.BaseNote();
+                                Basenote[Freeindex][ptk->Current_Instrument_Split] = AIFF_File.BaseNote();
                             }
 
                             if(AIFF_File.LoopType())
                             {
-                                LoopType[Freeindex][Current_Instrument_Split] = AIFF_File.LoopType();
-                                LoopStart[Freeindex][Current_Instrument_Split] = AIFF_File.LoopStart();
-                                LoopEnd[Freeindex][Current_Instrument_Split] = AIFF_File.LoopEnd();
+                                LoopType[Freeindex][ptk->Current_Instrument_Split] = AIFF_File.LoopType();
+                                LoopStart[Freeindex][ptk->Current_Instrument_Split] = AIFF_File.LoopStart();
+                                LoopEnd[Freeindex][ptk->Current_Instrument_Split] = AIFF_File.LoopEnd();
                             }
 
-                            sprintf(SampleName[Freeindex][Current_Instrument_Split], "%s", FileName);
+                            sprintf(SampleName[Freeindex][ptk->Current_Instrument_Split], "%s", FileName);
                             Actualize_Patterned(ptk);
                             Actualize_Instrument_Ed(ptk, 2, 0);
                             Renew_Sample_Ed(ptk);
@@ -2120,13 +2119,13 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
                         {
                             save_sample_vol = 1.0f;
                             if(Get_Number_Of_Splits(Freeindex)) save_sample_vol = Sample_Vol[Freeindex];
-                            sp_Position[Freeindex][Current_Instrument_Split].absolu = 0;
+                            sp_Position[Freeindex][ptk->Current_Instrument_Split].absolu = 0;
                             Stop_Current_Instrument();
                             switch(channels)
                             {
                                 case 1:
-                                    AllocateWave(Freeindex, Current_Instrument_Split, Wav_File.NumSamples(), 1, TRUE, NULL, NULL);
-                                    csamples = RawSamples[Freeindex][0][Current_Instrument_Split];
+                                    AllocateWave(Freeindex, ptk->Current_Instrument_Split, Wav_File.NumSamples(), 1, TRUE, NULL, NULL);
+                                    csamples = RawSamples[Freeindex][0][ptk->Current_Instrument_Split];
                                     for(i = 0; i < Wav_File.NumSamples(); i++)
                                     {
                                         Wav_File.ReadMonoSample(&csamples[i]);
@@ -2134,19 +2133,19 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
                                     break;
 
                                 case 2:
-                                    AllocateWave(Freeindex, Current_Instrument_Split, Wav_File.NumSamples(), 2, TRUE, NULL, NULL);
-                                    csamples = RawSamples[Freeindex][0][Current_Instrument_Split];
-                                    csamples2 = RawSamples[Freeindex][1][Current_Instrument_Split];
+                                    AllocateWave(Freeindex, ptk->Current_Instrument_Split, Wav_File.NumSamples(), 2, TRUE, NULL, NULL);
+                                    csamples = RawSamples[Freeindex][0][ptk->Current_Instrument_Split];
+                                    csamples2 = RawSamples[Freeindex][1][ptk->Current_Instrument_Split];
                                     for(i = 0; i < Wav_File.NumSamples(); i++)
                                     {
                                         Wav_File.ReadStereoSample(&csamples[i], &csamples2[i]);
                                     }
                                     break;
                             }
-                            LoopStart[Freeindex][Current_Instrument_Split] = 0;
-                            LoopEnd[Freeindex][Current_Instrument_Split] = 0;
-                            LoopType[Freeindex][Current_Instrument_Split] = SMP_LOOP_NONE;
-                            Basenote[Freeindex][Current_Instrument_Split] = DEFAULT_BASE_NOTE;
+                            LoopStart[Freeindex][ptk->Current_Instrument_Split] = 0;
+                            LoopEnd[Freeindex][ptk->Current_Instrument_Split] = 0;
+                            LoopType[Freeindex][ptk->Current_Instrument_Split] = SMP_LOOP_NONE;
+                            Basenote[Freeindex][ptk->Current_Instrument_Split] = DEFAULT_BASE_NOTE;
                             if(Get_Number_Of_Splits(Freeindex) == 1)
                             {
                                 Sample_Vol[Freeindex] = save_sample_vol;
@@ -2154,12 +2153,12 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
 
                             if(Wav_File.LoopType())
                             {
-                                LoopType[Freeindex][Current_Instrument_Split] = Wav_File.LoopType();
-                                LoopStart[Freeindex][Current_Instrument_Split] = Wav_File.LoopStart();
-                                LoopEnd[Freeindex][Current_Instrument_Split] = Wav_File.LoopEnd();
+                                LoopType[Freeindex][ptk->Current_Instrument_Split] = Wav_File.LoopType();
+                                LoopStart[Freeindex][ptk->Current_Instrument_Split] = Wav_File.LoopStart();
+                                LoopEnd[Freeindex][ptk->Current_Instrument_Split] = Wav_File.LoopEnd();
                             }
 
-                            sprintf(SampleName[Freeindex][Current_Instrument_Split], "%s", FileName);
+                            sprintf(SampleName[Freeindex][ptk->Current_Instrument_Split], "%s", FileName);
                             Actualize_Patterned(ptk);
                             Actualize_Instrument_Ed(ptk, 2, 0);
                             Renew_Sample_Ed(ptk);
@@ -2727,13 +2726,13 @@ void WavRenderizer(ptk_data *ptk)
                     {
                         sprintf(buffer, "Rendering selection to instrument %d (split %d). Please wait...",
                                 Current_Instrument,
-                                Current_Instrument_Split);
+                                ptk->Current_Instrument_Split);
                     }
                     else
                     {
                         sprintf(buffer, "Rendering module to instrument %d (split %d). Please wait...",
                                 Current_Instrument,
-                                Current_Instrument_Split);
+                                ptk->Current_Instrument_Split);
                     }
                     break;
             }
@@ -2846,24 +2845,24 @@ void WavRenderizer(ptk_data *ptk)
                         save_sample_vol = 1.0f;
                         if(Get_Number_Of_Splits(Current_Instrument)) save_sample_vol = Sample_Vol[Current_Instrument];
 
-                        AllocateWave(Current_Instrument, Current_Instrument_Split,
+                        AllocateWave(Current_Instrument, ptk->Current_Instrument_Split,
                                      Pos_In_Memory, (Stereo + 1), TRUE,
                                      NULL, NULL);
 
                         // Fixup the buffer with it's real size
-                        memcpy(RawSamples[Current_Instrument][0][Current_Instrument_Split], 
+                        memcpy(RawSamples[Current_Instrument][0][ptk->Current_Instrument_Split], 
                                Sample_Buffer[0], (Pos_In_Memory * 2));
                         if(Stereo)
                         {
-                            memcpy(RawSamples[Current_Instrument][1][Current_Instrument_Split], 
+                            memcpy(RawSamples[Current_Instrument][1][ptk->Current_Instrument_Split], 
                                    Sample_Buffer[1], (Pos_In_Memory * 2));
                             free(Sample_Buffer[1]);
                         }
                         free(Sample_Buffer[0]);
-                        LoopStart[Current_Instrument][Current_Instrument_Split] = 0;
-                        LoopEnd[Current_Instrument][Current_Instrument_Split] = 0;
-                        LoopType[Current_Instrument][Current_Instrument_Split] = SMP_LOOP_NONE;
-                        Basenote[Current_Instrument][Current_Instrument_Split] = DEFAULT_BASE_NOTE;
+                        LoopStart[Current_Instrument][ptk->Current_Instrument_Split] = 0;
+                        LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] = 0;
+                        LoopType[Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_NONE;
+                        Basenote[Current_Instrument][ptk->Current_Instrument_Split] = DEFAULT_BASE_NOTE;
                         Renew_Sample_Ed(ptk);
                         if(Get_Number_Of_Splits(Current_Instrument) == 1)
                         {
@@ -3033,7 +3032,7 @@ void Stop_Current_Instrument(void)
 void RefreshSample(ptk_data *ptk)
 {
     ptk->seditor = 0;
-    Current_Instrument_Split = 0;
+    ptk->Current_Instrument_Split = 0;
     if(userscreen == USER_SCREEN_INSTRUMENT_EDIT)
     {
         Draw_Instrument_Ed(ptk);
@@ -6829,4 +6828,6 @@ void ptk_init(ptk_data *ptk)
     ptk->player_pos = -1;
     ptk->teac = 0;
     ptk->Column_Under_Caret = 0;
+
+    ptk->Current_Instrument_Split = 0;
 }
