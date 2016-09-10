@@ -52,7 +52,7 @@ void Midi_Song_Set_Volume(int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_SONG_VOLUME;
-    //    livevalue = (int) (local_mas_vol * 255.0f);
+    //    ptk->livevalue = (int) (local_mas_vol * 255.0f);
     //}
 }
 
@@ -66,7 +66,7 @@ void Midi_Song_Set_BPM(int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_SONG_BPM;
-    //    livevalue = BeatsPerMin;
+    //    ptk->livevalue = BeatsPerMin;
     //}
     //gui_bpm_action = TRUE;
 }
@@ -79,7 +79,7 @@ void Midi_303_Set_Tune(int Unit, int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_303_1_TUNE + Unit;
-    //    livevalue = Data << 1;
+    //    ptk->livevalue = Data << 1;
     //}
     //if(Unit == sl3)
     //{
@@ -101,7 +101,7 @@ void Midi_303_Set_Cutoff(int Unit, int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_303_1_CUTOFF + Unit;
-    //    livevalue = Data << 1;
+    //    ptk->livevalue = Data << 1;
     //}
     //if(Unit == sl3)
     //{
@@ -123,7 +123,7 @@ void Midi_303_Set_Resonance(int Unit, int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_303_1_RESONANCE + Unit;
-    //    livevalue = Data << 1;
+    //    ptk->livevalue = Data << 1;
     //}
     //if(Unit == sl3)
     //{
@@ -145,7 +145,7 @@ void Midi_303_Set_Envmod(int Unit, int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_303_1_ENVMOD + Unit;
-    //    livevalue = Data << 1;
+    //    ptk->livevalue = Data << 1;
     //}
     //if(Unit == sl3)
     //{
@@ -167,7 +167,7 @@ void Midi_303_Set_Decay(int Unit, int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_303_1_DECAY + Unit;
-    //    livevalue = Data << 1;
+    //    ptk->livevalue = Data << 1;
     //}
     //if(Unit == sl3)
     //{
@@ -189,7 +189,7 @@ void Midi_303_Set_Accent(int Unit, int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_303_1_ACCENT + Unit;
-    //    livevalue = Data << 1;
+    //    ptk->livevalue = Data << 1;
     //}
     //if(Unit == sl3)
     //{
@@ -211,7 +211,7 @@ void Midi_303_Set_Volume(int Unit, int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_303_1_VOLUME + Unit;
-    //    livevalue = (int) tb303engine[Unit].tbVolume * 255.0f;
+    //    ptk->livevalue = (int) tb303engine[Unit].tbVolume * 255.0f;
     //}
     //if(Unit == sl3)
     //{
@@ -242,7 +242,7 @@ void Midi_Track_Set_Panning(int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_TRACK_PANNING;
-    //    livevalue = Data;
+    //    ptk->livevalue = Data;
     //}
     //Actualize_Track_Ed(g_ptk, 9);
 }
@@ -254,7 +254,7 @@ void Midi_Track_Set_Volume(int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_TRACK_VOLUME;
-    //    livevalue = ((float) Data / 127.0f) * 64.0f;
+    //    ptk->livevalue = ((float) Data / 127.0f) * 64.0f;
     //}
 }
 
@@ -265,7 +265,7 @@ void Midi_Track_Set_LFO_Carrier(int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_TRACK_LFO_CARRIER;
-    //    livevalue = Data << 1;
+    //    ptk->livevalue = Data << 1;
     //}
 }
 
@@ -277,7 +277,7 @@ void Midi_Track_Set_Cutoff(int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_TRACK_CUTOFF;
-    //    livevalue = Data;
+    //    ptk->livevalue = Data;
     //}
     //Actualize_Track_Ed(g_ptk, 1);
 }
@@ -290,7 +290,7 @@ void Midi_Track_Set_Resonance(int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_TRACK_RESONANCE;
-    //    livevalue = Data;
+    //    ptk->livevalue = Data;
     //}
     //Actualize_Track_Ed(g_ptk, 2);
 }
@@ -303,7 +303,7 @@ void Midi_Track_Set_Reverb(int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_TRACK_REVERB_SEND;
-    //    livevalue = Data;
+    //    ptk->livevalue = Data;
     //}
     //Actualize_Track_Ed(g_ptk, 5);
 }
@@ -316,7 +316,7 @@ void Midi_Track_Set_Disto_Threshold(int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_TRACK_THRESHOLD;
-    //    livevalue = Data;
+    //    ptk->livevalue = Data;
     //}
     //Actualize_Track_Ed(g_ptk, 7);
 }
@@ -329,7 +329,7 @@ void Midi_Track_Set_Disto_Clamp(int Data)
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_TRACK_CLAMP;
-    //    livevalue = Data;
+    //    ptk->livevalue = Data;
     //}
     //Actualize_Track_Ed(g_ptk, 8);
 }

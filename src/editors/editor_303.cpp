@@ -342,7 +342,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 15;
             ptk->liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
-            livevalue = (int) (tb303engine[sl3].tbVolume * 255.0f);
+            ptk->livevalue = (int) (tb303engine[sl3].tbVolume * 255.0f);
         }
 
         // Tune Knob
@@ -353,7 +353,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 3;
             ptk->liveparam = LIVE_PARAM_303_1_TUNE + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // CutOff Knob
@@ -364,7 +364,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 4;
             ptk->liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // Reso knob
@@ -375,7 +375,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 5;
             ptk->liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // Envmod knob
@@ -386,7 +386,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 6;
             ptk->liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // Decay knob
@@ -397,7 +397,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 7;
             ptk->liveparam = LIVE_PARAM_303_1_DECAY + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // Accent knob
@@ -408,7 +408,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 8;
             ptk->liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // Scale
@@ -449,7 +449,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             tb303engine[sl3].tbVolume = breakvol;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
-            livevalue = (int) (breakvol * 255.0f);
+            ptk->livevalue = (int) (breakvol * 255.0f);
             ptk->teac = 15;
         }
 
@@ -463,7 +463,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 3;
             ptk->liveparam = LIVE_PARAM_303_1_TUNE + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // CutOff Knob
@@ -476,7 +476,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 4;
             ptk->liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // Reso knob
@@ -489,7 +489,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 5;
             ptk->liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // Envmod knob
@@ -502,7 +502,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 6;
             ptk->liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // Decay knob
@@ -515,7 +515,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 7;
             ptk->liveparam = LIVE_PARAM_303_1_DECAY + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // Accent knob
@@ -528,7 +528,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 8;
             ptk->liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
     }
 }
@@ -1046,7 +1046,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 15;
             ptk->liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
-            livevalue = (int) (breakvol * 255.0f);
+            ptk->livevalue = (int) (breakvol * 255.0f);
         }
 
         // Tune Knob
@@ -1061,7 +1061,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 3;
             ptk->liveparam = LIVE_PARAM_303_1_TUNE + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // CutOff Knob
@@ -1076,7 +1076,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 4;
             ptk->liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // Reso knob
@@ -1091,7 +1091,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 5;
             ptk->liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // Envmod knob
@@ -1106,7 +1106,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 6;
             ptk->liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // Decay knob
@@ -1121,7 +1121,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 7;
             ptk->liveparam = LIVE_PARAM_303_1_DECAY + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
 
         // Accent knob
@@ -1136,7 +1136,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 8;
             ptk->liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
-            livevalue = tempz << 1;
+            ptk->livevalue = tempz << 1;
         }
     }
 }

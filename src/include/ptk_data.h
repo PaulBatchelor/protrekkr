@@ -49,5 +49,6 @@ typedef struct {
 
     char Current_Instrument_Split;
     int liveparam;
+    int livevalue;
 } ptk_data;
 #endif
