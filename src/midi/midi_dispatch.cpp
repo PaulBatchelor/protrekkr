@@ -51,7 +51,7 @@ void Midi_Song_Set_Volume(int Data)
     //if(local_mas_vol < 0.0f) local_mas_vol = 0.0f;
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_SONG_VOLUME;
+    //    ptk->liveparam = LIVE_PARAM_SONG_VOLUME;
     //    livevalue = (int) (local_mas_vol * 255.0f);
     //}
 }
@@ -65,7 +65,7 @@ void Midi_Song_Set_BPM(int Data)
     //SamplesPerSub = SamplesPerTick / 6;
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_SONG_BPM;
+    //    ptk->liveparam = LIVE_PARAM_SONG_BPM;
     //    livevalue = BeatsPerMin;
     //}
     //gui_bpm_action = TRUE;
@@ -78,7 +78,7 @@ void Midi_303_Set_Tune(int Unit, int Data)
     //tb303[Unit].tune = Data;
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_303_1_TUNE + Unit;
+    //    ptk->liveparam = LIVE_PARAM_303_1_TUNE + Unit;
     //    livevalue = Data << 1;
     //}
     //if(Unit == sl3)
@@ -100,7 +100,7 @@ void Midi_303_Set_Cutoff(int Unit, int Data)
     //tb303[Unit].cutoff = Data;
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_303_1_CUTOFF + Unit;
+    //    ptk->liveparam = LIVE_PARAM_303_1_CUTOFF + Unit;
     //    livevalue = Data << 1;
     //}
     //if(Unit == sl3)
@@ -122,7 +122,7 @@ void Midi_303_Set_Resonance(int Unit, int Data)
     //tb303[Unit].resonance = Data;
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_303_1_RESONANCE + Unit;
+    //    ptk->liveparam = LIVE_PARAM_303_1_RESONANCE + Unit;
     //    livevalue = Data << 1;
     //}
     //if(Unit == sl3)
@@ -144,7 +144,7 @@ void Midi_303_Set_Envmod(int Unit, int Data)
     //tb303[Unit].envmod = Data;
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_303_1_ENVMOD + Unit;
+    //    ptk->liveparam = LIVE_PARAM_303_1_ENVMOD + Unit;
     //    livevalue = Data << 1;
     //}
     //if(Unit == sl3)
@@ -166,7 +166,7 @@ void Midi_303_Set_Decay(int Unit, int Data)
     //tb303[Unit].decay = Data;
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_303_1_DECAY + Unit;
+    //    ptk->liveparam = LIVE_PARAM_303_1_DECAY + Unit;
     //    livevalue = Data << 1;
     //}
     //if(Unit == sl3)
@@ -188,7 +188,7 @@ void Midi_303_Set_Accent(int Unit, int Data)
     //tb303[Unit].accent = Data;
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_303_1_ACCENT + Unit;
+    //    ptk->liveparam = LIVE_PARAM_303_1_ACCENT + Unit;
     //    livevalue = Data << 1;
     //}
     //if(Unit == sl3)
@@ -210,7 +210,7 @@ void Midi_303_Set_Volume(int Unit, int Data)
     //tb303engine[Unit].tbVolume = ((float) Data) / 127.0f;
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_303_1_VOLUME + Unit;
+    //    ptk->liveparam = LIVE_PARAM_303_1_VOLUME + Unit;
     //    livevalue = (int) tb303engine[Unit].tbVolume * 255.0f;
     //}
     //if(Unit == sl3)
@@ -241,7 +241,7 @@ void Midi_Track_Set_Panning(int Data)
     //TPan[Track_Under_Caret] = ((float) Data) / 127.0f;
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_TRACK_PANNING;
+    //    ptk->liveparam = LIVE_PARAM_TRACK_PANNING;
     //    livevalue = Data;
     //}
     //Actualize_Track_Ed(g_ptk, 9);
@@ -253,7 +253,7 @@ void Midi_Track_Set_Volume(int Data)
 {
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_TRACK_VOLUME;
+    //    ptk->liveparam = LIVE_PARAM_TRACK_VOLUME;
     //    livevalue = ((float) Data / 127.0f) * 64.0f;
     //}
 }
@@ -264,7 +264,7 @@ void Midi_Track_Set_LFO_Carrier(int Data)
 {
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_TRACK_LFO_CARRIER;
+    //    ptk->liveparam = LIVE_PARAM_TRACK_LFO_CARRIER;
     //    livevalue = Data << 1;
     //}
 }
@@ -276,7 +276,7 @@ void Midi_Track_Set_Cutoff(int Data)
     //TCut[Track_Under_Caret] = ((float) Data);
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_TRACK_CUTOFF;
+    //    ptk->liveparam = LIVE_PARAM_TRACK_CUTOFF;
     //    livevalue = Data;
     //}
     //Actualize_Track_Ed(g_ptk, 1);
@@ -289,7 +289,7 @@ void Midi_Track_Set_Resonance(int Data)
     //FRez[Track_Under_Caret] = ((float) Data);
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_TRACK_RESONANCE;
+    //    ptk->liveparam = LIVE_PARAM_TRACK_RESONANCE;
     //    livevalue = Data;
     //}
     //Actualize_Track_Ed(g_ptk, 2);
@@ -302,7 +302,7 @@ void Midi_Track_Set_Reverb(int Data)
     //DSend[Track_Under_Caret] = ((float) Data) / 127.0f;
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_TRACK_REVERB_SEND;
+    //    ptk->liveparam = LIVE_PARAM_TRACK_REVERB_SEND;
     //    livevalue = Data;
     //}
     //Actualize_Track_Ed(g_ptk, 5);
@@ -315,7 +315,7 @@ void Midi_Track_Set_Disto_Threshold(int Data)
     //DThreshold[Track_Under_Caret] = (((float) Data) / 127.0f) * 32767.0f;
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_TRACK_THRESHOLD;
+    //    ptk->liveparam = LIVE_PARAM_TRACK_THRESHOLD;
     //    livevalue = Data;
     //}
     //Actualize_Track_Ed(g_ptk, 7);
@@ -328,7 +328,7 @@ void Midi_Track_Set_Disto_Clamp(int Data)
     //DClamp[Track_Under_Caret] = (((float) Data) / 127.0f) * 32767.0f;
     //if(sr_isrecording || is_editing)
     //{
-    //    liveparam = LIVE_PARAM_TRACK_CLAMP;
+    //    ptk->liveparam = LIVE_PARAM_TRACK_CLAMP;
     //    livevalue = Data;
     //}
     //Actualize_Track_Ed(g_ptk, 8);

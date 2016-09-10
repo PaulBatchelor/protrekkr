@@ -87,7 +87,6 @@ ptk_data *g_ptk = &ptk;
 
 char Visible_Columns = 0;
 
-int liveparam = 0;
 int livevalue = 0;
 
 
@@ -1009,7 +1008,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_RECORD_303)
         {
-            StartRec();
+            StartRec(ptk);
         }
 
         if(ptk->gui_action == GUI_CMD_EDIT_MODE)
@@ -1058,7 +1057,7 @@ int Screen_Update(ptk_data *ptk)
         {
             TCut[Track_Under_Caret] = float(Mouse.x - 88);
             Actualize_Track_Ed(ptk, 1);
-            liveparam = LIVE_PARAM_TRACK_CUTOFF;
+            ptk->liveparam = LIVE_PARAM_TRACK_CUTOFF;
             livevalue = (Mouse.x - 88) * 2;
         }
 
@@ -1066,7 +1065,7 @@ int Screen_Update(ptk_data *ptk)
         {
             FRez[Track_Under_Caret] = Mouse.x - 88;
             Actualize_Track_Ed(ptk, 2);
-            liveparam = LIVE_PARAM_TRACK_RESONANCE;
+            ptk->liveparam = LIVE_PARAM_TRACK_RESONANCE;
             livevalue = (Mouse.x - 88) * 2;
         }
 
@@ -1085,7 +1084,7 @@ int Screen_Update(ptk_data *ptk)
         {
             DThreshold[Track_Under_Caret] = float((Mouse.x - 318) * 256);
             Actualize_Track_Ed(ptk, 7);
-            liveparam = LIVE_PARAM_TRACK_THRESHOLD;
+            ptk->liveparam = LIVE_PARAM_TRACK_THRESHOLD;
             livevalue = (Mouse.x - 318) * 2;
         }
 
@@ -1093,7 +1092,7 @@ int Screen_Update(ptk_data *ptk)
         {
             DClamp[Track_Under_Caret] = float((Mouse.x - 318) * 256);
             Actualize_Track_Ed(ptk, 8);
-            liveparam = LIVE_PARAM_TRACK_CLAMP;
+            ptk->liveparam = LIVE_PARAM_TRACK_CLAMP;
             livevalue = (Mouse.x - 318) * 2;
         }
 
@@ -1101,7 +1100,7 @@ int Screen_Update(ptk_data *ptk)
         {
             DSend[Track_Under_Caret] = float(((float) Mouse.x - 318) / 128.0f);
             Actualize_Track_Ed(ptk, 5);
-            liveparam = LIVE_PARAM_TRACK_REVERB_SEND;
+            ptk->liveparam = LIVE_PARAM_TRACK_REVERB_SEND;
             livevalue = (Mouse.x - 318) * 2;
         }
 
@@ -1109,7 +1108,7 @@ int Screen_Update(ptk_data *ptk)
         {
             TPan[Track_Under_Caret] = ((float) Mouse.x - 318) / 128.0f;
             Actualize_Track_Ed(ptk, 9);
-            liveparam = LIVE_PARAM_TRACK_PANNING;
+            ptk->liveparam = LIVE_PARAM_TRACK_PANNING;
             livevalue = Mouse.x - 318;
         }
 
@@ -1627,7 +1626,7 @@ int Screen_Update(ptk_data *ptk)
         
         Gui_Draw_Button_Box(8, 46, 80, 16, "\254", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
         Notify_Play(ptk);
-        StartRec();
+        StartRec(ptk);
         Notify_Edit(ptk);
 
         Gui_Draw_Button_Box(98, 24, 156, 78, "", BUTTON_NORMAL | BUTTON_DISABLED);
@@ -2231,7 +2230,7 @@ int GetFreeWave(void)
 void SongPlay(ptk_data *ptk)
 {
     Ptk_Stop(ptk);
-    liveparam = 0;
+    ptk->liveparam = 0;
     livevalue = 0;
     ptk->player_pos = -1;
 
@@ -2244,9 +2243,9 @@ void SongPlay(ptk_data *ptk)
 // ------------------------------------------------------
 // Display live recording status
 // "startrec" got it ? haha :(
-void StartRec(void)
+void StartRec(ptk_data *ptk)
 {
-    liveparam = 0;
+    ptk->liveparam = 0;
     livevalue = 0;
     if(sr_isrecording) Gui_Draw_Button_Box(8, 64, 80, 16, "Live Rec: On", BUTTON_PUSHED | BUTTON_TEXT_CENTERED);
     else Gui_Draw_Button_Box(8, 64, 80, 16, "Live Rec: Off", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
@@ -6830,4 +6829,5 @@ void ptk_init(ptk_data *ptk)
     ptk->Column_Under_Caret = 0;
 
     ptk->Current_Instrument_Split = 0;
+    ptk->liveparam = 0;
 }

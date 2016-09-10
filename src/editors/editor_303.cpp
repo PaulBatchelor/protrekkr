@@ -341,7 +341,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             tb303engine[sl3].tbVolume = 0.5f;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 15;
-            liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
             livevalue = (int) (tb303engine[sl3].tbVolume * 255.0f);
         }
 
@@ -352,7 +352,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             tb303[sl3].tune = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 3;
-            liveparam = LIVE_PARAM_303_1_TUNE + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_TUNE + sl3;
             livevalue = tempz << 1;
         }
 
@@ -363,7 +363,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             tb303[sl3].cutoff = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 4;
-            liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
             livevalue = tempz << 1;
         }
 
@@ -374,7 +374,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             tb303[sl3].resonance = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 5;
-            liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
             livevalue = tempz << 1;
         }
 
@@ -385,7 +385,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             tb303[sl3].envmod = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 6;
-            liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
             livevalue = tempz << 1;
         }
 
@@ -396,7 +396,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             tb303[sl3].decay = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 7;
-            liveparam = LIVE_PARAM_303_1_DECAY + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_DECAY + sl3;
             livevalue = tempz << 1;
         }
 
@@ -407,7 +407,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
             tb303[sl3].accent = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 8;
-            liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
             livevalue = tempz << 1;
         }
 
@@ -448,7 +448,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             if(breakvol > 1.0f) breakvol = 1.0f;
             tb303engine[sl3].tbVolume = breakvol;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
             livevalue = (int) (breakvol * 255.0f);
             ptk->teac = 15;
         }
@@ -462,7 +462,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             tb303[sl3].tune = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 3;
-            liveparam = LIVE_PARAM_303_1_TUNE + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_TUNE + sl3;
             livevalue = tempz << 1;
         }
 
@@ -475,7 +475,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             tb303[sl3].cutoff = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 4;
-            liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
             livevalue = tempz << 1;
         }
 
@@ -488,7 +488,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             tb303[sl3].resonance = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 5;
-            liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
             livevalue = tempz << 1;
         }
 
@@ -501,7 +501,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             tb303[sl3].envmod = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 6;
-            liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
             livevalue = tempz << 1;
         }
 
@@ -514,7 +514,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             tb303[sl3].decay = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 7;
-            liveparam = LIVE_PARAM_303_1_DECAY + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_DECAY + sl3;
             livevalue = tempz << 1;
         }
 
@@ -527,7 +527,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
             tb303[sl3].accent = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 8;
-            liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
             livevalue = tempz << 1;
         }
     }
@@ -1045,7 +1045,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             tb303engine[sl3].tbVolume = breakvol;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 15;
-            liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
             livevalue = (int) (breakvol * 255.0f);
         }
 
@@ -1060,7 +1060,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             tb303[sl3].tune = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 3;
-            liveparam = LIVE_PARAM_303_1_TUNE + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_TUNE + sl3;
             livevalue = tempz << 1;
         }
 
@@ -1075,7 +1075,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             tb303[sl3].cutoff = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 4;
-            liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
             livevalue = tempz << 1;
         }
 
@@ -1090,7 +1090,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             tb303[sl3].resonance = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 5;
-            liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
             livevalue = tempz << 1;
         }
 
@@ -1105,7 +1105,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             tb303[sl3].envmod = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 6;
-            liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
             livevalue = tempz << 1;
         }
 
@@ -1120,7 +1120,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             tb303[sl3].decay = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 7;
-            liveparam = LIVE_PARAM_303_1_DECAY + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_DECAY + sl3;
             livevalue = tempz << 1;
         }
 
@@ -1135,7 +1135,7 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             tb303[sl3].accent = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 8;
-            liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
             livevalue = tempz << 1;
         }
     }

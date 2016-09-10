@@ -1436,12 +1436,12 @@ void draw_pated_highlight(ptk_data *ptk, int track, int line, int petrack, int r
             // Record live events
             if(sr_isrecording)
             {
-                if(liveparam > 0 && Track_Under_Caret == cur_track && Songplaying)
+                if(ptk->liveparam > 0 && Track_Under_Caret == cur_track && Songplaying)
                 {
                     if(livevalue < 0) livevalue = 0;
                     if(livevalue > 255) livevalue = 255;
 
-                    switch(liveparam)
+                    switch(ptk->liveparam)
                     {
                         case LIVE_PARAM_SONG_VOLUME:
                             Record_Live_Fx(ptk, cur_track, pattern, line, 0x1c, livevalue, TRUE);
@@ -1518,8 +1518,8 @@ void draw_pated_highlight(ptk_data *ptk, int track, int line, int petrack, int r
                             break;
                     } // Close switch
 
-                    liveparam = 0;
-                } // Close liveparam updated
+                    ptk->liveparam = 0;
+                } // Close ptk->liveparam updated
             } // Close is recording
             // ------------------------------------------------
 

@@ -48,5 +48,6 @@ typedef struct {
     int Column_Under_Caret;
 
     char Current_Instrument_Split;
+    int liveparam;
 } ptk_data;
 #endif
