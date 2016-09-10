@@ -52,5 +52,6 @@ typedef struct {
     int livevalue;
 
     int Track_Under_Caret;
+    int gui_track;
 } ptk_data;
 #endif

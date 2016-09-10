@@ -101,7 +101,7 @@ void Init_Tracker_Context_After_ModLoad(ptk_data *ptk)
     Post_Song_Init(ptk);
 
     Draw_Scope(ptk);
-    gui_track = 0;
+    ptk->gui_track = 0;
 
     lchorus_counter = MIX_RATE;
     rchorus_counter = MIX_RATE;

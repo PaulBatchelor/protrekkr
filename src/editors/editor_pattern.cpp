@@ -288,10 +288,10 @@ void draw_pated(ptk_data *ptk, int track, int line, int petrack, int row)
 
     int tVisible_Columns = Visible_Columns;
 
-    int max_size = Get_Visible_Tracks_Size(ptk, (gui_track + Visible_Columns));
+    int max_size = Get_Visible_Tracks_Size(ptk, (ptk->gui_track + Visible_Columns));
     if(max_size < MAX_PATT_SCREEN_X)
     {
-        if((gui_track + tVisible_Columns) < Songtracks)
+        if((ptk->gui_track + tVisible_Columns) < Songtracks)
         {
             tVisible_Columns++;
         }
@@ -610,7 +610,7 @@ Go_Display:
             }
             else
             {
-                draw_pated_highlight(ptk, gui_track, line, ptk->Track_Under_Caret, ptk->Column_Under_Caret, y);
+                draw_pated_highlight(ptk, ptk->gui_track, line, ptk->Track_Under_Caret, ptk->Column_Under_Caret, y);
                 y += 8;
             }
         }
@@ -1051,10 +1051,10 @@ void draw_pated_highlight(ptk_data *ptk, int track, int line, int petrack, int r
 
     int tVisible_Columns = Visible_Columns;
 
-    int max_size = Get_Visible_Tracks_Size(ptk, (gui_track + Visible_Columns));
+    int max_size = Get_Visible_Tracks_Size(ptk, (ptk->gui_track + Visible_Columns));
     if(max_size < MAX_PATT_SCREEN_X)
     {
-        if((gui_track + tVisible_Columns) < Songtracks)
+        if((ptk->gui_track + tVisible_Columns) < Songtracks)
         {
             tVisible_Columns++;
         }
@@ -1648,7 +1648,7 @@ void Actupated(ptk_data *ptk, int modac)
             ptk->Track_Under_Caret--;
         }
         ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
-        gui_track = 0;
+        ptk->gui_track = 0;
     }
     Visible_Columns = Get_Visible_Complete_Tracks(ptk);
 
@@ -1656,58 +1656,58 @@ void Actupated(ptk_data *ptk, int modac)
     if(ptk->Track_Under_Caret < 0)
     {
         ptk->Track_Under_Caret = Songtracks - 1;
-        gui_track = Songtracks - (Visible_Columns);
-        if(gui_track < 0) gui_track = 0;
+        ptk->gui_track = Songtracks - (Visible_Columns);
+        if(ptk->gui_track < 0) ptk->gui_track = 0;
         ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
 
     if(!modac)
     {
         // Right
-        if(ptk->Track_Under_Caret >= gui_track + Visible_Columns)
+        if(ptk->Track_Under_Caret >= ptk->gui_track + Visible_Columns)
         {
-            gui_track = ptk->Track_Under_Caret - (Visible_Columns - 1);
+            ptk->gui_track = ptk->Track_Under_Caret - (Visible_Columns - 1);
         }
 
         // Left
-        if(ptk->Track_Under_Caret < gui_track)
+        if(ptk->Track_Under_Caret < ptk->gui_track)
         {
-            gui_track -= gui_track - ptk->Track_Under_Caret;
+            ptk->gui_track -= ptk->gui_track - ptk->Track_Under_Caret;
         }
     }
     else
     {
         // Right
-        if(ptk->Track_Under_Caret >= gui_track + Visible_Columns)
+        if(ptk->Track_Under_Caret >= ptk->gui_track + Visible_Columns)
         {
-            ptk->Track_Under_Caret = gui_track + (Visible_Columns - 1);
+            ptk->Track_Under_Caret = ptk->gui_track + (Visible_Columns - 1);
             ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
         }
         // Left
-        if(ptk->Track_Under_Caret < gui_track)
+        if(ptk->Track_Under_Caret < ptk->gui_track)
         {
-            ptk->Track_Under_Caret = gui_track;
+            ptk->Track_Under_Caret = ptk->gui_track;
             ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
         }
     }
 
     // ----
-    Set_Track_Slider(ptk, gui_track);
+    Set_Track_Slider(ptk, ptk->gui_track);
 
     // We need to check if the column where ptk->Track_Under_Caret is can't be displayed
     // after the correction
     if(!modac)
     {
-        if(ptk->Track_Under_Caret >= gui_track + Visible_Columns)
+        if(ptk->Track_Under_Caret >= ptk->gui_track + Visible_Columns)
         {
-            gui_track = ptk->Track_Under_Caret - (Visible_Columns - 1);
-            Set_Track_Slider(ptk, gui_track);
+            ptk->gui_track = ptk->Track_Under_Caret - (Visible_Columns - 1);
+            Set_Track_Slider(ptk, ptk->gui_track);
         }
     }
 
     Cur_Line = Get_Pattern_Line(ptk);
 
-    draw_pated(ptk, gui_track, Cur_Line, ptk->Track_Under_Caret, ptk->Column_Under_Caret);
+    draw_pated(ptk, ptk->gui_track, Cur_Line, ptk->Track_Under_Caret, ptk->Column_Under_Caret);
 
     if(Continuous_Scroll)
     {
@@ -2044,7 +2044,7 @@ int Get_Visible_Tracks_Size(ptk_data *ptk, int max_tracks)
     int size = 0;
     int column = 0;
 
-    for(i = gui_track; i < max_tracks; i++)
+    for(i = ptk->gui_track; i < max_tracks; i++)
     {
         size += Get_Track_Size(ptk, i, &column);
         if(size >= MAX_PATT_SCREEN_X) break;
@@ -2079,7 +2079,7 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
             }
             else
             {
-                under_mouse = gui_track + Visible_Columns - 1;
+                under_mouse = ptk->gui_track + Visible_Columns - 1;
                 // Scroll it
                 Pattern_Delay_Horiz_Right = 0;
                 Pattern_First_Delay_Horiz_Right = 200.0f;
@@ -2112,7 +2112,7 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
                 }
                 else
                 {
-                    under_mouse = gui_track + Visible_Columns - 1;
+                    under_mouse = ptk->gui_track + Visible_Columns - 1;
                     // Scroll it
                     Pattern_Delay_Horiz_Right_Slow = 0;
                     Pattern_First_Delay_Horiz_Right_Slow = 200.0f;
@@ -2136,16 +2136,16 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
         // From 0
         mouse_coord -= PAT_COL_NOTE;
         found_track = FALSE;
-        int max_size = Get_Visible_Tracks_Size(ptk, (gui_track + Visible_Columns));
+        int max_size = Get_Visible_Tracks_Size(ptk, (ptk->gui_track + Visible_Columns));
         int tVisible_Columns = Visible_Columns;
         if(max_size < Last_Pixel)
         {
-            if((gui_track + tVisible_Columns) < Songtracks)
+            if((ptk->gui_track + tVisible_Columns) < Songtracks)
             {
                 tVisible_Columns++;
             }
         }
-        for(i = gui_track; i < (gui_track + tVisible_Columns); i++)
+        for(i = ptk->gui_track; i < (ptk->gui_track + tVisible_Columns); i++)
         {
             track_size = Get_Track_Size(ptk, i, NULL);
             bound_right += track_size;
@@ -2169,12 +2169,12 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
         if(mouse_coord >= Last_Pixel)
         {
             mouse_coord = Last_Pixel;
-            under_mouse = gui_track + Visible_Columns - 1;
+            under_mouse = ptk->gui_track + Visible_Columns - 1;
         }
     }
 
     // Left scrolling
-    if(under_mouse < gui_track && !Left)
+    if(under_mouse < ptk->gui_track && !Left)
     {
         if(Pattern_Scrolling_Horiz_Left)
         {
@@ -2182,11 +2182,11 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
             if(Pattern_Delay_Horiz_Left < Pattern_First_Delay_Horiz_Left)
             {
                 // Wait before scrolling
-                under_mouse = gui_track;
+                under_mouse = ptk->gui_track;
             }
             else
             {
-                under_mouse = gui_track - 1;
+                under_mouse = ptk->gui_track - 1;
                 // Scroll it
                 Pattern_Delay_Horiz_Left = 0;
                 Pattern_First_Delay_Horiz_Left = 200.0f;
@@ -2198,7 +2198,7 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
             Pattern_Scrolling_Horiz_Left = TRUE;
             Pattern_Delay_Horiz_Left = 0;
             Pattern_First_Delay_Horiz_Left = 150.0f;
-            under_mouse = gui_track;
+            under_mouse = ptk->gui_track;
         }
         if(Was_Scrolling) *Was_Scrolling = TRUE;
         ptk->Column_Under_Caret = 0;
@@ -2347,8 +2347,8 @@ int Get_Last_Column_And_Track(ptk_data *ptk, int *track)
     int channel_size;
     int cur_track;
 
-    *track = gui_track;
-    for(i = gui_track; i < Songtracks; i++)
+    *track = ptk->gui_track;
+    for(i = ptk->gui_track; i < Songtracks; i++)
     {
         channel_size = Get_Track_Size(ptk, i, NULL);
         if((pixel_visible_tracks + channel_size - 1) >= MAX_PATT_SCREEN_X)
@@ -2493,7 +2493,7 @@ get_tracks_boundaries:
     tmp_track = Get_Track_Over_Mouse(ptk, mouse, Was_Scrolling, Left);
     mouse_coord = mouse - PAT_COL_NOTE;
 
-    for(i = tmp_track - 1; i >= gui_track; i--)
+    for(i = tmp_track - 1; i >= ptk->gui_track; i--)
     {
         track_size = Get_Track_Size(ptk, i, NULL);
         mouse_coord -= track_size;
@@ -2549,7 +2549,7 @@ int Get_Visible_Complete_Tracks(ptk_data *ptk)
     int i;
     int nbr_tracks = 0;
 
-    for(i = gui_track; i < Songtracks; i++)
+    for(i = ptk->gui_track; i < Songtracks; i++)
     {
         channel_size = Get_Track_Size(ptk, i, NULL);
         if((pixel_visible_tracks + channel_size - 1) >= MAX_PATT_SCREEN_X)
@@ -2567,10 +2567,10 @@ int Get_Visible_Complete_Tracks(ptk_data *ptk)
 int Get_Visible_Partial_Tracks(ptk_data *ptk)
 {
     int tracks = Visible_Columns;
-    int max_size = Get_Visible_Tracks_Size(ptk, (gui_track + Visible_Columns));
+    int max_size = Get_Visible_Tracks_Size(ptk, (ptk->gui_track + Visible_Columns));
     if(max_size < MAX_PATT_SCREEN_X)
     {
-        if((gui_track + tracks) < Songtracks)
+        if((ptk->gui_track + tracks) < Songtracks)
         {
             tracks++;
         }
@@ -2663,14 +2663,14 @@ void Mouse_Wheel_Pattern_Ed(ptk_data *ptk, int roll_amount, int allow)
     {
         Visible_Columns = Get_Visible_Complete_Tracks(ptk);
 
-        gui_track += -roll_amount;
-        if(gui_track < 0)
+        ptk->gui_track += -roll_amount;
+        if(ptk->gui_track < 0)
         {
-            gui_track = 0;
+            ptk->gui_track = 0;
         }
-        if(gui_track >= ((Songtracks - Visible_Columns)))
+        if(ptk->gui_track >= ((Songtracks - Visible_Columns)))
         {
-            gui_track = ((Songtracks - Visible_Columns));
+            ptk->gui_track = ((Songtracks - Visible_Columns));
         }
         Actupated(ptk, 1);
     }
@@ -2745,7 +2745,7 @@ void Mouse_Sliders_Pattern_Ed(ptk_data *ptk)
         Visible_Columns = Get_Visible_Complete_Tracks(ptk);
 
         Pos_Mouse = Pos_Mouse * ((Songtracks - Visible_Columns) + 1);
-        gui_track = (int) Pos_Mouse;
+        ptk->gui_track = (int) Pos_Mouse;
         Actupated(ptk, 1);
     }
 
@@ -2897,7 +2897,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     // Track mute
     start_mute_check_x = PAT_COL_NOTE + 1 + 4 + 1;
     tracks = Get_Visible_Partial_Tracks(ptk);
-    for(i = gui_track; i < gui_track + tracks; i++)
+    for(i = ptk->gui_track; i < ptk->gui_track + tracks; i++)
     {
         if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
         {
@@ -2910,7 +2910,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     // Track on/off
     start_mute_check_x = PAT_COL_NOTE + 1 + 4 + 29 + 1;
     tracks = Get_Visible_Partial_Tracks(ptk);
-    for(i = gui_track; i < gui_track + tracks; i++)
+    for(i = ptk->gui_track; i < ptk->gui_track + tracks; i++)
     {
         if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
         {
@@ -2925,7 +2925,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     // Track zoom > large
     start_mute_check_x = PAT_COL_NOTE + 1 + 4 + (29 * 2) + 1;
     tracks = Get_Visible_Partial_Tracks(ptk);
-    for(i = gui_track; i < gui_track + tracks; i++)
+    for(i = ptk->gui_track; i < ptk->gui_track + tracks; i++)
     {
         if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 16, 7))
         {
@@ -2938,7 +2938,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     // Reduce notes
     start_mute_check_x = PAT_COL_NOTE + 4 + 1;
     tracks = Get_Visible_Partial_Tracks(ptk);
-    for(i = gui_track; i < gui_track + tracks; i++)
+    for(i = ptk->gui_track; i < ptk->gui_track + tracks; i++)
     {
         if(zcheckMouse(ptk, start_mute_check_x , 183 + 8, 8, 7))
         {
@@ -2951,7 +2951,7 @@ void Mouse_Left_Pattern_Ed(ptk_data *ptk)
     // Expand notes
     start_mute_check_x = PAT_COL_NOTE + 4 + 1 + 9;
     tracks = Get_Visible_Partial_Tracks(ptk);
-    for(i = gui_track; i < gui_track + tracks; i++)
+    for(i = ptk->gui_track; i < ptk->gui_track + tracks; i++)
     {
         if(zcheckMouse(ptk, start_mute_check_x, 183 + 8, 8, 7))
         {
@@ -3009,7 +3009,7 @@ void Mouse_Right_Pattern_Ed(ptk_data *ptk)
     // Solo track
     start_mute_check_x = PAT_COL_NOTE + 1 + 4;
     tracks = Get_Visible_Partial_Tracks(ptk);
-    for(i = gui_track; i < gui_track + tracks; i++)
+    for(i = ptk->gui_track; i < ptk->gui_track + tracks; i++)
     {
         if(start_mute_check_x + Cur_Char_size[i] >= MAX_PATT_SCREEN_X) break;
         if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
@@ -3025,7 +3025,7 @@ void Mouse_Right_Pattern_Ed(ptk_data *ptk)
     // All tracks off but the selected one
     start_mute_check_x = PAT_COL_NOTE + 1 + 4 + 29;
     tracks = Get_Visible_Partial_Tracks(ptk);
-    for(i = gui_track; i < gui_track + tracks; i++)
+    for(i = ptk->gui_track; i < ptk->gui_track + tracks; i++)
     {
         if(start_mute_check_x + Cur_Char_size[i] >= MAX_PATT_SCREEN_X) break;
         if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 28, 7))
@@ -3041,7 +3041,7 @@ void Mouse_Right_Pattern_Ed(ptk_data *ptk)
     // Track zoom > small
     start_mute_check_x = PAT_COL_NOTE + 1 + 4 + (29 * 2);
     tracks = Get_Visible_Partial_Tracks(ptk);
-    for(i = gui_track; i < gui_track + tracks; i++)
+    for(i = ptk->gui_track; i < ptk->gui_track + tracks; i++)
     {
         if(start_mute_check_x + Cur_Char_size[i] >= MAX_PATT_SCREEN_X) break;
         if(zcheckMouse(ptk, start_mute_check_x + Cur_Char_size[i], 183, 16, 7)) ptk->gui_action = GUI_CMD_SWITCH_TRACK_SMALL_STATE;

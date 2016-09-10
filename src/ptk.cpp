@@ -87,8 +87,6 @@ ptk_data *g_ptk = &ptk;
 
 char Visible_Columns = 0;
 
-int Track_Under_Caret = 0;
-int gui_track = 0;
 int xoffseted;
 float gr = 0;
 float synthsignal = 0;
@@ -5538,7 +5536,7 @@ void Mouse_Handler(ptk_data *ptk)
                 Set_Track_Zoom(ptk, i, TRACK_SMALL);
             }
             Actupated(ptk, 0);
-            Set_Track_Slider(ptk, gui_track);
+            Set_Track_Slider(ptk, ptk->gui_track);
         }
         // Zoom'em normal
         if(zcheckMouse(ptk, 332 + (18 * 1), 126, 16, 16))
@@ -5548,7 +5546,7 @@ void Mouse_Handler(ptk_data *ptk)
                 Set_Track_Zoom(ptk, i, TRACK_MEDIUM);
             }
             Actupated(ptk, 0);
-            Set_Track_Slider(ptk, gui_track);
+            Set_Track_Slider(ptk, ptk->gui_track);
         }
         // Zoom'em large
         if(zcheckMouse(ptk, 332 + (18 * 2), 126, 16, 16))
@@ -5558,7 +5556,7 @@ void Mouse_Handler(ptk_data *ptk)
                 Set_Track_Zoom(ptk, i, TRACK_LARGE);
             }
             Actupated(ptk, 0);
-            Set_Track_Slider(ptk, gui_track);
+            Set_Track_Slider(ptk, ptk->gui_track);
         }
 
         // Select track
@@ -6828,4 +6826,5 @@ void ptk_init(ptk_data *ptk)
     ptk->liveparam = 0;
     ptk->livevalue = 0;
     ptk->Track_Under_Caret = 0;
+    ptk->gui_track = 0;
 }
