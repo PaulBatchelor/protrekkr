@@ -261,18 +261,18 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
                 {
                     for(k = 0; k < transpose_semitones; k++)
                     {
-                        Instrument_Semitone_Up_Sel(ptk, Cur_Position, Select_Track(ptk, Track_Under_Caret), 1, Remap_From);
+                        Instrument_Semitone_Up_Sel(ptk, Cur_Position, Select_Track(ptk, ptk->Track_Under_Caret), 1, Remap_From);
                     }
                 }
                 else
                 {
                     for(k = 0; k < -transpose_semitones; k++)
                     {
-                        Instrument_Semitone_Down_Sel(ptk, Cur_Position, Select_Track(ptk, Track_Under_Caret), 1, Remap_From);
+                        Instrument_Semitone_Down_Sel(ptk, Cur_Position, Select_Track(ptk, ptk->Track_Under_Caret), 1, Remap_From);
                     }
                 }
             }
-            Instrument_Remap_Sel(ptk, Cur_Position, Select_Track(ptk, Track_Under_Caret), Remap_From, Remap_To);
+            Instrument_Remap_Sel(ptk, Cur_Position, Select_Track(ptk, ptk->Track_Under_Caret), Remap_From, Remap_To);
         }
         // Remap Pattern
         if(zcheckMouse(ptk, 652, (Cur_Height - 76), 60, 16))

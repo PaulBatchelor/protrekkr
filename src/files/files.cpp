@@ -87,7 +87,7 @@ short *Swap_New_Sample(ptk_data *ptk, short *buffer, int sample, int bank);
 // Prepare the tracker interface once a module has been loaded
 void Init_Tracker_Context_After_ModLoad(ptk_data *ptk)
 {
-    Track_Under_Caret = 0;
+    ptk->Track_Under_Caret = 0;
     Current_Instrument = 0;
     ptk->Column_Under_Caret = 0;
 

@@ -312,7 +312,7 @@ void draw_pated(ptk_data *ptk, int track, int line, int petrack, int row)
     {
         cur_track = track + liner;
 
-        if(Track_Under_Caret == cur_track) SetColor(COL_PUSHED_MED);
+        if(ptk->Track_Under_Caret == cur_track) SetColor(COL_PUSHED_MED);
         else SetColor(COL_PATTERN_LO_BACK);
 
         if(dover + 2 >= MAX_PATT_SCREEN_X) break;
@@ -610,7 +610,7 @@ Go_Display:
             }
             else
             {
-                draw_pated_highlight(ptk, gui_track, line, Track_Under_Caret, ptk->Column_Under_Caret, y);
+                draw_pated_highlight(ptk, gui_track, line, ptk->Track_Under_Caret, ptk->Column_Under_Caret, y);
                 y += 8;
             }
         }
@@ -1436,7 +1436,7 @@ void draw_pated_highlight(ptk_data *ptk, int track, int line, int petrack, int r
             // Record live events
             if(sr_isrecording)
             {
-                if(ptk->liveparam > 0 && Track_Under_Caret == cur_track && Songplaying)
+                if(ptk->liveparam > 0 && ptk->Track_Under_Caret == cur_track && Songplaying)
                 {
                     if(ptk->livevalue < 0) ptk->livevalue = 0;
                     if(ptk->livevalue > 255) ptk->livevalue = 255;
@@ -1612,40 +1612,40 @@ void Actupated(ptk_data *ptk, int modac)
         if(Pattern_Line >= nlines) Pattern_Line = nlines - 1;
     }
 
-    int max_channel_dat = Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, Track_Under_Caret) - 1;
+    int max_channel_dat = Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, ptk->Track_Under_Caret) - 1;
     if(ptk->Column_Under_Caret > max_channel_dat)
     {
-        if(Track_Under_Caret < Songtracks - 1)
+        if(ptk->Track_Under_Caret < Songtracks - 1)
         {
             ptk->Column_Under_Caret = 0;
-            Track_Under_Caret++;
+            ptk->Track_Under_Caret++;
         }
         else
         {
             ptk->Column_Under_Caret = 0;
-            Track_Under_Caret = 0;
+            ptk->Track_Under_Caret = 0;
         }
         ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
     if(ptk->Column_Under_Caret < 0)
     {
-        Track_Under_Caret--;
-        if(Track_Under_Caret < 0)
+        ptk->Track_Under_Caret--;
+        if(ptk->Track_Under_Caret < 0)
         {
             max_channel_dat = Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, Songtracks - 1) - 1;
         }
         else
         {
-            max_channel_dat = Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, Track_Under_Caret) - 1;
+            max_channel_dat = Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, ptk->Track_Under_Caret) - 1;
         }
         ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
         ptk->Column_Under_Caret = max_channel_dat;
     }
-    if(Track_Under_Caret > Songtracks - 1)
+    if(ptk->Track_Under_Caret > Songtracks - 1)
     {
-        while(Track_Under_Caret > Songtracks - 1)
+        while(ptk->Track_Under_Caret > Songtracks - 1)
         {
-            Track_Under_Caret--;
+            ptk->Track_Under_Caret--;
         }
         ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
         gui_track = 0;
@@ -1653,9 +1653,9 @@ void Actupated(ptk_data *ptk, int modac)
     Visible_Columns = Get_Visible_Complete_Tracks(ptk);
 
     // Keep the caret in focus
-    if(Track_Under_Caret < 0)
+    if(ptk->Track_Under_Caret < 0)
     {
-        Track_Under_Caret = Songtracks - 1;
+        ptk->Track_Under_Caret = Songtracks - 1;
         gui_track = Songtracks - (Visible_Columns);
         if(gui_track < 0) gui_track = 0;
         ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
@@ -1664,29 +1664,29 @@ void Actupated(ptk_data *ptk, int modac)
     if(!modac)
     {
         // Right
-        if(Track_Under_Caret >= gui_track + Visible_Columns)
+        if(ptk->Track_Under_Caret >= gui_track + Visible_Columns)
         {
-            gui_track = Track_Under_Caret - (Visible_Columns - 1);
+            gui_track = ptk->Track_Under_Caret - (Visible_Columns - 1);
         }
 
         // Left
-        if(Track_Under_Caret < gui_track)
+        if(ptk->Track_Under_Caret < gui_track)
         {
-            gui_track -= gui_track - Track_Under_Caret;
+            gui_track -= gui_track - ptk->Track_Under_Caret;
         }
     }
     else
     {
         // Right
-        if(Track_Under_Caret >= gui_track + Visible_Columns)
+        if(ptk->Track_Under_Caret >= gui_track + Visible_Columns)
         {
-            Track_Under_Caret = gui_track + (Visible_Columns - 1);
+            ptk->Track_Under_Caret = gui_track + (Visible_Columns - 1);
             ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
         }
         // Left
-        if(Track_Under_Caret < gui_track)
+        if(ptk->Track_Under_Caret < gui_track)
         {
-            Track_Under_Caret = gui_track;
+            ptk->Track_Under_Caret = gui_track;
             ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
         }
     }
@@ -1694,20 +1694,20 @@ void Actupated(ptk_data *ptk, int modac)
     // ----
     Set_Track_Slider(ptk, gui_track);
 
-    // We need to check if the column where Track_Under_Caret is can't be displayed
+    // We need to check if the column where ptk->Track_Under_Caret is can't be displayed
     // after the correction
     if(!modac)
     {
-        if(Track_Under_Caret >= gui_track + Visible_Columns)
+        if(ptk->Track_Under_Caret >= gui_track + Visible_Columns)
         {
-            gui_track = Track_Under_Caret - (Visible_Columns - 1);
+            gui_track = ptk->Track_Under_Caret - (Visible_Columns - 1);
             Set_Track_Slider(ptk, gui_track);
         }
     }
 
     Cur_Line = Get_Pattern_Line(ptk);
 
-    draw_pated(ptk, gui_track, Cur_Line, Track_Under_Caret, ptk->Column_Under_Caret);
+    draw_pated(ptk, gui_track, Cur_Line, ptk->Track_Under_Caret, ptk->Column_Under_Caret);
 
     if(Continuous_Scroll)
     {
@@ -2608,14 +2608,14 @@ void Reset_Pattern_Scrolling_Horiz(ptk_data *ptk)
 void Set_Track_Slider(ptk_data *ptk, int pos)
 {
     Visible_Columns = Get_Visible_Complete_Tracks(ptk);
-    if(Track_Under_Caret >= pos + Visible_Columns)
+    if(ptk->Track_Under_Caret >= pos + Visible_Columns)
     {
-        Track_Under_Caret = pos + Visible_Columns;
+        ptk->Track_Under_Caret = pos + Visible_Columns;
         ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
-    if(Track_Under_Caret < pos)
+    if(ptk->Track_Under_Caret < pos)
     {
-        Track_Under_Caret = pos;
+        ptk->Track_Under_Caret = pos;
         ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
     }
     float fpos = (float) pos;
@@ -2686,7 +2686,7 @@ void Mouse_Sliders_Right_Pattern_Ed(ptk_data *ptk)
     if(zcheckMouse(ptk, 1, 183 + 15, ptk->CHANNELS_WIDTH, (Cur_Height - 371) + Patterns_Lines_Offset))
     {
         int In_Scrolling = FALSE;
-        Get_Column_Over_Mouse(ptk, &Track_Under_Caret,
+        Get_Column_Over_Mouse(ptk, &ptk->Track_Under_Caret,
                               &ptk->Column_Under_Caret,
                               FALSE,
                               &In_Scrolling,
@@ -3191,7 +3191,7 @@ void Goto_Top_Left(ptk_data *ptk)
     else
     {
         ptk->Column_Under_Caret = 0;
-        Track_Under_Caret = 0;
+        ptk->Track_Under_Caret = 0;
     }
     Actupated(ptk, 0);
     Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS | BLOCK_MARK_TRACKS);
@@ -3207,7 +3207,7 @@ void Goto_Bottom_Right(ptk_data *ptk)
     else
     {
         ptk->Column_Under_Caret = 0;
-        Track_Under_Caret = Songtracks - 1;
+        ptk->Track_Under_Caret = Songtracks - 1;
     }
     Actupated(ptk, 0);
     ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;

@@ -773,7 +773,7 @@ void Paste_Selection_From_Buffer(ptk_data *ptk, int Position, int Go_Across)
     int axbc;
     int expanded = 0;
     // Dest start
-    int start_x = Get_Track_Nibble_Start(ptk, Channels_MultiNotes, Channels_Effects, Track_Under_Caret) + ptk->Column_Under_Caret + Track_Under_Caret;
+    int start_x = Get_Track_Nibble_Start(ptk, Channels_MultiNotes, Channels_Effects, ptk->Track_Under_Caret) + ptk->Column_Under_Caret + ptk->Track_Under_Caret;
     int byte;
     COLUMN_TYPE type_src;
     COLUMN_TYPE type_dst;
@@ -991,7 +991,7 @@ SELECTION Get_Real_Selection(ptk_data *ptk, int Default)
     {
         if(!(block_end_track[Curr_Buff_Block] - block_start_track[Curr_Buff_Block]) || !(block_end[Curr_Buff_Block] - block_start[Curr_Buff_Block]))
         {
-            Cur_Sel = Select_Track(ptk, Track_Under_Caret);
+            Cur_Sel = Select_Track(ptk, ptk->Track_Under_Caret);
         }
     }
     return(Cur_Sel);
@@ -1598,10 +1598,10 @@ void Select_Track_Block(ptk_data *ptk)
 
     if(!Songplaying)
     {
-        Mark_Block_Start(ptk, 0, Track_Under_Caret, 0);
+        Mark_Block_Start(ptk, 0, ptk->Track_Under_Caret, 0);
         nlines = patternLines[pSequence[Song_Position]];
-        Mark_Block_End(ptk, Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, Track_Under_Caret) - 1,
-                       Track_Under_Caret,
+        Mark_Block_End(ptk, Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, ptk->Track_Under_Caret) - 1,
+                       ptk->Track_Under_Caret,
                        nlines,
                        BLOCK_MARK_TRACKS | BLOCK_MARK_ROWS);
     }
@@ -1617,7 +1617,7 @@ void Select_Pattern_Block(ptk_data *ptk)
     {
         Mark_Block_Start(ptk, 0, 0, 0);
         nlines = patternLines[pSequence[Song_Position]];
-        Mark_Block_End(ptk, Get_Track_Nibble_Start(ptk, Channels_MultiNotes, Channels_Effects, Track_Under_Caret) - 1,
+        Mark_Block_End(ptk, Get_Track_Nibble_Start(ptk, Channels_MultiNotes, Channels_Effects, ptk->Track_Under_Caret) - 1,
                        Songtracks,
                        nlines,
                        BLOCK_MARK_TRACKS | BLOCK_MARK_ROWS);
@@ -1654,15 +1654,15 @@ void Select_Note_Block(ptk_data *ptk)
 
     if(!Songplaying)
     {
-        for(i = 0; i < Channels_MultiNotes[Track_Under_Caret] * 3; i++)
+        for(i = 0; i < Channels_MultiNotes[ptk->Track_Under_Caret] * 3; i++)
         {
             if(ptk->Column_Under_Caret == i)
             {
                 column_to_select = Table_Select_Notes[i];
-                Mark_Block_Start(ptk, column_to_select, Track_Under_Caret, 0);
+                Mark_Block_Start(ptk, column_to_select, ptk->Track_Under_Caret, 0);
                 nlines = patternLines[pSequence[Song_Position]];
                 Mark_Block_End(ptk, column_to_select + 2,
-                               Track_Under_Caret,
+                               ptk->Track_Under_Caret,
                                nlines,
                                BLOCK_MARK_TRACKS | BLOCK_MARK_ROWS);
             }
@@ -1678,11 +1678,11 @@ void Select_All_Notes_Block(ptk_data *ptk)
 
     if(!Songplaying)
     {
-        Mark_Block_Start(ptk, 0, Track_Under_Caret, 0);
+        Mark_Block_Start(ptk, 0, ptk->Track_Under_Caret, 0);
         nlines = patternLines[pSequence[Song_Position]];
-        Mark_Block_End(ptk, Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, Track_Under_Caret) - 1 -
-                       EXTRA_NIBBLE_DAT - (Channels_Effects[Track_Under_Caret] * 4),
-                       Track_Under_Caret,
+        Mark_Block_End(ptk, Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, ptk->Track_Under_Caret) - 1 -
+                       EXTRA_NIBBLE_DAT - (Channels_Effects[ptk->Track_Under_Caret] * 4),
+                       ptk->Track_Under_Caret,
                        nlines,
                        BLOCK_MARK_TRACKS | BLOCK_MARK_ROWS);
     }
@@ -1716,8 +1716,8 @@ void Select_Block_Keyboard(ptk_data *ptk, int Type)
     {
         if(Get_LShift())
         {
-            if(block_in_selection[Curr_Buff_Block] == FALSE) Mark_Block_Start(ptk, ptk->Column_Under_Caret, Track_Under_Caret, Pattern_Line);
-            Mark_Block_End(ptk, ptk->Column_Under_Caret, Track_Under_Caret, Pattern_Line, Type);
+            if(block_in_selection[Curr_Buff_Block] == FALSE) Mark_Block_Start(ptk, ptk->Column_Under_Caret, ptk->Track_Under_Caret, Pattern_Line);
+            Mark_Block_End(ptk, ptk->Column_Under_Caret, ptk->Track_Under_Caret, Pattern_Line, Type);
         }
         else
         {
@@ -2265,7 +2265,7 @@ void Delete_Track(ptk_data *ptk)
 {
     int i;
 
-    for(i = Track_Under_Caret; i < Songtracks; i++)
+    for(i = ptk->Track_Under_Caret; i < Songtracks; i++)
     {
         Copy_Track(ptk, Song_Position, i + 1, i);
     }
@@ -2281,11 +2281,11 @@ void Insert_Track(ptk_data *ptk)
 
     if(Songtracks < 16)
     {
-        for(i = Songtracks - 1; i > Track_Under_Caret; i--)
+        for(i = Songtracks - 1; i > ptk->Track_Under_Caret; i--)
         {
             Copy_Track(ptk, Song_Position, i - 1, i);
         }
-        Reset_Track(ptk, Song_Position, Track_Under_Caret);
+        Reset_Track(ptk, Song_Position, ptk->Track_Under_Caret);
         ptk->Column_Under_Caret = 0;
     }
 }

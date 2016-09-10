@@ -87,7 +87,6 @@ ptk_data *g_ptk = &ptk;
 
 char Visible_Columns = 0;
 
-int posletter = 0;
 int Track_Under_Caret = 0;
 int gui_track = 0;
 int xoffseted;
@@ -616,9 +615,9 @@ int Screen_Update(ptk_data *ptk)
         
     }
 
-    for(i = 0; i < Channels_Polyphony[Track_Under_Caret]; i++)
+    for(i = 0; i < Channels_Polyphony[ptk->Track_Under_Caret]; i++)
     {
-        if(sp_Stage[Track_Under_Caret][i] == PLAYING_SAMPLE && Current_Instrument == sp_channelsample[Track_Under_Caret][i] && ptk->Current_Instrument_Split == sp_split[Track_Under_Caret][i])
+        if(sp_Stage[ptk->Track_Under_Caret][i] == PLAYING_SAMPLE && Current_Instrument == sp_channelsample[ptk->Track_Under_Caret][i] && ptk->Current_Instrument_Split == sp_split[ptk->Track_Under_Caret][i])
         {
             draw_sampled_wave2 = TRUE;
             boing = TRUE;
@@ -1052,7 +1051,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_SET_TRACK_CUTOFF_FREQ)
         {
-            TCut[Track_Under_Caret] = float(Mouse.x - 88);
+            TCut[ptk->Track_Under_Caret] = float(Mouse.x - 88);
             Actualize_Track_Ed(ptk, 1);
             ptk->liveparam = LIVE_PARAM_TRACK_CUTOFF;
             ptk->livevalue = (Mouse.x - 88) * 2;
@@ -1060,7 +1059,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_SET_TRACK_RESONANCE)
         {
-            FRez[Track_Under_Caret] = Mouse.x - 88;
+            FRez[ptk->Track_Under_Caret] = Mouse.x - 88;
             Actualize_Track_Ed(ptk, 2);
             ptk->liveparam = LIVE_PARAM_TRACK_RESONANCE;
             ptk->livevalue = (Mouse.x - 88) * 2;
@@ -1068,7 +1067,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_SET_TRACK_INERTIA)
         {
-            ICut[Track_Under_Caret] = (Mouse.x - 88.0f) * 0.00006103515625f;
+            ICut[ptk->Track_Under_Caret] = (Mouse.x - 88.0f) * 0.00006103515625f;
             Actualize_Track_Ed(ptk, 3);
         }
 
@@ -1079,7 +1078,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_SET_TRACK_THRESHOLD)
         {
-            DThreshold[Track_Under_Caret] = float((Mouse.x - 318) * 256);
+            DThreshold[ptk->Track_Under_Caret] = float((Mouse.x - 318) * 256);
             Actualize_Track_Ed(ptk, 7);
             ptk->liveparam = LIVE_PARAM_TRACK_THRESHOLD;
             ptk->livevalue = (Mouse.x - 318) * 2;
@@ -1087,7 +1086,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_SET_TRACK_CLAMP)
         {
-            DClamp[Track_Under_Caret] = float((Mouse.x - 318) * 256);
+            DClamp[ptk->Track_Under_Caret] = float((Mouse.x - 318) * 256);
             Actualize_Track_Ed(ptk, 8);
             ptk->liveparam = LIVE_PARAM_TRACK_CLAMP;
             ptk->livevalue = (Mouse.x - 318) * 2;
@@ -1095,7 +1094,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_SET_TRACK_REVERB_SEND)
         {
-            DSend[Track_Under_Caret] = float(((float) Mouse.x - 318) / 128.0f);
+            DSend[ptk->Track_Under_Caret] = float(((float) Mouse.x - 318) / 128.0f);
             Actualize_Track_Ed(ptk, 5);
             ptk->liveparam = LIVE_PARAM_TRACK_REVERB_SEND;
             ptk->livevalue = (Mouse.x - 318) * 2;
@@ -1103,7 +1102,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_SET_TRACK_PANNING)
         {
-            TPan[Track_Under_Caret] = ((float) Mouse.x - 318) / 128.0f;
+            TPan[ptk->Track_Under_Caret] = ((float) Mouse.x - 318) / 128.0f;
             Actualize_Track_Ed(ptk, 9);
             ptk->liveparam = LIVE_PARAM_TRACK_PANNING;
             ptk->livevalue = Mouse.x - 318;
@@ -2397,7 +2396,7 @@ void Newmod(ptk_data *ptk)
         }
 
         Song_Length = 1;
-        Track_Under_Caret = 0;
+        ptk->Track_Under_Caret = 0;
         ptk->Column_Under_Caret = 0;
         Pattern_Line = 0;
         Pattern_Line_Visual = 0;
@@ -3340,7 +3339,7 @@ void Keyboard_Handler(ptk_data *ptk)
     if(Get_LShift() && !Get_LCtrl() && Keys[SDLK_TAB])
     {
         Unselect_Selection(ptk);
-        Track_Under_Caret--;
+        ptk->Track_Under_Caret--;
         ptk->Column_Under_Caret = 0;
         Actupated(ptk, 0);
         ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK;
@@ -3350,10 +3349,10 @@ void Keyboard_Handler(ptk_data *ptk)
     if(!Get_LShift() && !Get_LCtrl() && Keys[SDLK_TAB])
     {
         Unselect_Selection(ptk);
-        Track_Under_Caret++;
-        if(Track_Under_Caret >= Songtracks)
+        ptk->Track_Under_Caret++;
+        if(ptk->Track_Under_Caret >= Songtracks)
         {
-            Track_Under_Caret = 0;
+            ptk->Track_Under_Caret = 0;
         }
         ptk->Column_Under_Caret = 0;
         Actupated(ptk, 0);
@@ -3372,7 +3371,7 @@ void Keyboard_Handler(ptk_data *ptk)
     {
         Unselect_Selection(ptk);
         ptk->Column_Under_Caret += Table_Right_Tab_Notes[ptk->Column_Under_Caret];
-        if(ptk->Column_Under_Caret >= (Channels_MultiNotes[Track_Under_Caret] * 3)) ptk->Column_Under_Caret = 0;
+        if(ptk->Column_Under_Caret >= (Channels_MultiNotes[ptk->Track_Under_Caret] * 3)) ptk->Column_Under_Caret = 0;
         Actupated(ptk, 0);
     }
 
@@ -3381,7 +3380,7 @@ void Keyboard_Handler(ptk_data *ptk)
     {
         Unselect_Selection(ptk);
         ptk->Column_Under_Caret -= Table_Left_Tab_Notes[ptk->Column_Under_Caret];
-        if(ptk->Column_Under_Caret < 0) ptk->Column_Under_Caret = (Channels_MultiNotes[Track_Under_Caret] * 3) - 3;
+        if(ptk->Column_Under_Caret < 0) ptk->Column_Under_Caret = (Channels_MultiNotes[ptk->Track_Under_Caret] * 3) - 3;
         Actupated(ptk, 0);
     }
 
@@ -3497,7 +3496,7 @@ void Keyboard_Handler(ptk_data *ptk)
             if(Get_LShift()) Insert_Pattern_Line(ptk, Cur_Position);
             else
             {
-                Insert_Selection(ptk, Track_Under_Caret, Cur_Position);
+                Insert_Selection(ptk, ptk->Track_Under_Caret, Cur_Position);
             }
         }
 
@@ -3516,7 +3515,7 @@ void Keyboard_Handler(ptk_data *ptk)
                 }
                 else
                 {
-                    Remove_Selection(ptk, Track_Under_Caret, Cur_Position);
+                    Remove_Selection(ptk, ptk->Track_Under_Caret, Cur_Position);
                 }
             }
         }
@@ -4165,7 +4164,7 @@ void Keyboard_Handler(ptk_data *ptk)
                             }
 
                             // Play it
-                            Note_Jazz(ptk, Track_Under_Caret, tmp_note, 1.0f);
+                            Note_Jazz(ptk, ptk->Track_Under_Caret, tmp_note, 1.0f);
                         }
                     }
                     else
@@ -4245,8 +4244,8 @@ void Keyboard_Handler(ptk_data *ptk)
             {
                 if(Keys[SDLK_m - UNICODE_OFFSET1])
                 {
-                    if(CHAN_MUTE_STATE[Track_Under_Caret] == 0) CHAN_MUTE_STATE[Track_Under_Caret] = 1;
-                    else CHAN_MUTE_STATE[Track_Under_Caret] = 0;
+                    if(CHAN_MUTE_STATE[ptk->Track_Under_Caret] == 0) CHAN_MUTE_STATE[ptk->Track_Under_Caret] = 1;
+                    else CHAN_MUTE_STATE[ptk->Track_Under_Caret] = 0;
                     if(userscreen == USER_SCREEN_TRACK_EDIT) Actualize_Track_Ed(ptk, 10);
                     Actupated(ptk, 0);
                 }
@@ -4318,10 +4317,10 @@ void Keyboard_Handler(ptk_data *ptk)
                     // Solo track
                     if(Keys[SDLK_m - UNICODE_OFFSET2])
                     {
-                        Solo_Track(Track_Under_Caret);
+                        Solo_Track(ptk->Track_Under_Caret);
                         // Will unmute the correct track
-                        if(CHAN_MUTE_STATE[Track_Under_Caret] == 0) CHAN_MUTE_STATE[Track_Under_Caret] = 1;
-                        else CHAN_MUTE_STATE[Track_Under_Caret] = 0;
+                        if(CHAN_MUTE_STATE[ptk->Track_Under_Caret] == 0) CHAN_MUTE_STATE[ptk->Track_Under_Caret] = 1;
+                        else CHAN_MUTE_STATE[ptk->Track_Under_Caret] = 0;
                         if(userscreen == USER_SCREEN_TRACK_EDIT) Actualize_Track_Ed(ptk, 10);
                         Actupated(ptk, 0);
                     }
@@ -4480,10 +4479,10 @@ void Keyboard_Handler(ptk_data *ptk)
             {
                 int ped_cell;
                 int i;
-                int j = (Channels_MultiNotes[Track_Under_Caret] - 1) * 3;
+                int j = (Channels_MultiNotes[ptk->Track_Under_Caret] - 1) * 3;
 
                 // Instrument
-                for(i = 0; i < Channels_MultiNotes[Track_Under_Caret]; i++)
+                for(i = 0; i < Channels_MultiNotes[ptk->Track_Under_Caret]; i++)
                 {
                     if(ptk->Column_Under_Caret == 1 + (i * 3))
                     {
@@ -4519,7 +4518,7 @@ void Keyboard_Handler(ptk_data *ptk)
                     if(ptk->Column_Under_Caret == (21 + j)) ped_cell = PATTERN_FXDATA4;     // fx 4 data
                     
                     ptk->ltretvalue = retvalue;
-                    xoffseted = (Track_Under_Caret * PATTERN_BYTES) + (Pattern_Line * PATTERN_ROW_LEN) + ped_cell;
+                    xoffseted = (ptk->Track_Under_Caret * PATTERN_BYTES) + (Pattern_Line * PATTERN_ROW_LEN) + ped_cell;
 
                     int oldval = *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted);
 
@@ -4603,7 +4602,7 @@ void Keyboard_Handler(ptk_data *ptk)
 
                 if(!Done_Value)
                 {
-                    for(i = 0; i < Channels_MultiNotes[Track_Under_Caret]; i++)
+                    for(i = 0; i < Channels_MultiNotes[ptk->Track_Under_Caret]; i++)
                     {
                         if(ptk->Column_Under_Caret == 2 +(i * 3))
                         {
@@ -4638,7 +4637,7 @@ void Keyboard_Handler(ptk_data *ptk)
                         if(ptk->Column_Under_Caret == (22 + j)) ped_cell = PATTERN_FXDATA4;
 
                         ptk->ltretvalue = retvalue;
-                        xoffseted = (Track_Under_Caret * PATTERN_BYTES) + (Pattern_Line * PATTERN_ROW_LEN) + ped_cell;
+                        xoffseted = (ptk->Track_Under_Caret * PATTERN_BYTES) + (Pattern_Line * PATTERN_ROW_LEN) + ped_cell;
                         int oldval = *(RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted);
 
                         if(retvalue < 16)
@@ -4790,7 +4789,7 @@ void Keyboard_Handler(ptk_data *ptk)
             int in_note = FALSE;
 
             // Check if this is a legal note column
-            for(i = 0; i < Channels_MultiNotes[Track_Under_Caret]; i++)
+            for(i = 0; i < Channels_MultiNotes[ptk->Track_Under_Caret]; i++)
             {
                 if(ptk->Column_Under_Caret == (i * 3))
                 {
@@ -4872,7 +4871,7 @@ void Keyboard_Handler(ptk_data *ptk)
                         // Note
                         if(retnote > -1)
                         {
-                            xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], Track_Under_Caret, line);
+                            xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], ptk->Track_Under_Caret, line);
 
                             // Select the sub channel
                             pos = i;
@@ -4880,8 +4879,8 @@ void Keyboard_Handler(ptk_data *ptk)
                             if(is_recording_2 || is_editing)
                             {
                                 // Store the note column where it was entered
-                                Sub_Channels_NoteOff[Track_Under_Caret][Nbr_Sub_NoteOff].Note = ((tmp_note + 1) << 8);
-                                Sub_Channels_NoteOff[Track_Under_Caret][Nbr_Sub_NoteOff].Channel = Track_Under_Caret;
+                                Sub_Channels_NoteOff[ptk->Track_Under_Caret][Nbr_Sub_NoteOff].Note = ((tmp_note + 1) << 8);
+                                Sub_Channels_NoteOff[ptk->Track_Under_Caret][Nbr_Sub_NoteOff].Channel = ptk->Track_Under_Caret;
                                 if(Keyboard_Notes_Bound[i])
                                 {
                                     pos = (ptk->Column_Under_Caret / 3);
@@ -4890,15 +4889,15 @@ void Keyboard_Handler(ptk_data *ptk)
                                 {
                                     pos = (ptk->Column_Under_Caret / 3) + Nbr_Sub_NoteOff;
                                 }
-                                Sub_Channels_NoteOff[Track_Under_Caret][Nbr_Sub_NoteOff].Sub_Channel = pos;
+                                Sub_Channels_NoteOff[ptk->Track_Under_Caret][Nbr_Sub_NoteOff].Sub_Channel = pos;
 
-                                if(Nbr_Sub_NoteOff < (Channels_MultiNotes[Track_Under_Caret] - 1)) Nbr_Sub_NoteOff++;
+                                if(Nbr_Sub_NoteOff < (Channels_MultiNotes[ptk->Track_Under_Caret] - 1)) Nbr_Sub_NoteOff++;
                                 else Nbr_Sub_NoteOff = 0;
                             }
 
-                            if(pos > (Channels_MultiNotes[Track_Under_Caret] - 1))
+                            if(pos > (Channels_MultiNotes[ptk->Track_Under_Caret] - 1))
                             {
-                                pos -= Channels_MultiNotes[Track_Under_Caret];
+                                pos -= Channels_MultiNotes[ptk->Track_Under_Caret];
                             }
                             xoffseted += (pos * 2);
 
@@ -4922,9 +4921,9 @@ void Keyboard_Handler(ptk_data *ptk)
                                 {
                                     xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], Channel->Channel, line);
                                     pos = Channel->Sub_Channel;
-                                    if(pos > (Channels_MultiNotes[Track_Under_Caret] - 1))
+                                    if(pos > (Channels_MultiNotes[ptk->Track_Under_Caret] - 1))
                                     {
-                                        pos -= Channels_MultiNotes[Track_Under_Caret];
+                                        pos -= Channels_MultiNotes[ptk->Track_Under_Caret];
                                     }
                                     xoffseted += (pos * 2);
                                     *(RawPatterns + xoffseted + PATTERN_NOTE1) = NOTE_OFF;
@@ -4974,7 +4973,7 @@ No_Key:;
             int i;
 
             // Check if this is a legal note column
-            for(i = 0; i < Channels_MultiNotes[Track_Under_Caret]; i++)
+            for(i = 0; i < Channels_MultiNotes[ptk->Track_Under_Caret]; i++)
             {
                 if(ptk->Column_Under_Caret == (i * 3))
                 {
@@ -4986,7 +4985,7 @@ No_Key:;
 
             if(in_note)
             {
-                xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], Track_Under_Caret, Pattern_Line);
+                xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], ptk->Track_Under_Caret, Pattern_Line);
 
                 *(RawPatterns + xoffseted + PATTERN_NOTE1 + column) = NOTE_OFF;
                 *(RawPatterns + xoffseted + PATTERN_INSTR1 + column) = NO_INSTR;
@@ -5011,7 +5010,7 @@ No_Key:;
             int i;
 
             // Check if this is a legal note column
-            for(i = 0; i < Channels_MultiNotes[Track_Under_Caret]; i++)
+            for(i = 0; i < Channels_MultiNotes[ptk->Track_Under_Caret]; i++)
             {
                 if(ptk->Column_Under_Caret == (i * 3))
                 {
@@ -5023,7 +5022,7 @@ No_Key:;
 
             if(in_note)
             {
-                xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], Track_Under_Caret, Pattern_Line);
+                xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], ptk->Track_Under_Caret, Pattern_Line);
 
                 if(!Delete_Selection(ptk, Cur_Position))
                 {
@@ -5468,7 +5467,7 @@ void Mouse_Handler(ptk_data *ptk)
             {
                 Songtracks = 1;
                 // Just clear it
-                Reset_Track(ptk, pSequence[Song_Position], Track_Under_Caret);
+                Reset_Track(ptk, pSequence[Song_Position], ptk->Track_Under_Caret);
             }
             else
             {
@@ -6783,7 +6782,7 @@ void Note_Jazz_Off(ptk_data *ptk, int note)
 #if !defined(__NO_MIDI__)
     if(Jazz_Edit || is_recording_2 || !is_editing)
     {
-        Midi_NoteOff(ptk, Track_Under_Caret, note);
+        Midi_NoteOff(ptk, ptk->Track_Under_Caret, note);
     }
 #endif
 #endif
@@ -6828,4 +6827,5 @@ void ptk_init(ptk_data *ptk)
     ptk->Current_Instrument_Split = 0;
     ptk->liveparam = 0;
     ptk->livevalue = 0;
+    ptk->Track_Under_Caret = 0;
 }

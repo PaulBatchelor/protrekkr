@@ -705,7 +705,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
                             if(!is_recording_2 && is_editing)
                             {
                                 in_note = FALSE;
-                                for(j = 0; j < Channels_MultiNotes[Track_Under_Caret]; j++)
+                                for(j = 0; j < Channels_MultiNotes[ptk->Track_Under_Caret]; j++)
                                 {
                                     if(ptk->Column_Under_Caret == (j * 3))
                                     {
@@ -759,7 +759,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
                         if(!is_recording_2 && is_editing)
                         {
                             in_note = FALSE;
-                            for(j = 0; j < Channels_MultiNotes[Track_Under_Caret]; j++)
+                            for(j = 0; j < Channels_MultiNotes[ptk->Track_Under_Caret]; j++)
                             {
                                 if(ptk->Column_Under_Caret == (j * 3))
                                 {

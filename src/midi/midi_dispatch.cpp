@@ -238,7 +238,7 @@ void Midi_303_Switch(int Data)
 // Track panning (LIVE)
 void Midi_Track_Set_Panning(int Data)
 {
-    //TPan[Track_Under_Caret] = ((float) Data) / 127.0f;
+    //TPan[ptk->Track_Under_Caret] = ((float) Data) / 127.0f;
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_TRACK_PANNING;
@@ -273,7 +273,7 @@ void Midi_Track_Set_LFO_Carrier(int Data)
 // Track cutoff (LIVE)
 void Midi_Track_Set_Cutoff(int Data)
 {
-    //TCut[Track_Under_Caret] = ((float) Data);
+    //TCut[ptk->Track_Under_Caret] = ((float) Data);
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_TRACK_CUTOFF;
@@ -286,7 +286,7 @@ void Midi_Track_Set_Cutoff(int Data)
 // Track resonance (LIVE)
 void Midi_Track_Set_Resonance(int Data)
 {
-    //FRez[Track_Under_Caret] = ((float) Data);
+    //FRez[ptk->Track_Under_Caret] = ((float) Data);
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_TRACK_RESONANCE;
@@ -299,7 +299,7 @@ void Midi_Track_Set_Resonance(int Data)
 // Track reverb amount (LIVE)
 void Midi_Track_Set_Reverb(int Data)
 {
-    //DSend[Track_Under_Caret] = ((float) Data) / 127.0f;
+    //DSend[ptk->Track_Under_Caret] = ((float) Data) / 127.0f;
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_TRACK_REVERB_SEND;
@@ -312,7 +312,7 @@ void Midi_Track_Set_Reverb(int Data)
 // Track disto threshold (LIVE)
 void Midi_Track_Set_Disto_Threshold(int Data)
 {
-    //DThreshold[Track_Under_Caret] = (((float) Data) / 127.0f) * 32767.0f;
+    //DThreshold[ptk->Track_Under_Caret] = (((float) Data) / 127.0f) * 32767.0f;
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_TRACK_THRESHOLD;
@@ -325,7 +325,7 @@ void Midi_Track_Set_Disto_Threshold(int Data)
 // Track disto clamp (LIVE)
 void Midi_Track_Set_Disto_Clamp(int Data)
 {
-    //DClamp[Track_Under_Caret] = (((float) Data) / 127.0f) * 32767.0f;
+    //DClamp[ptk->Track_Under_Caret] = (((float) Data) / 127.0f) * 32767.0f;
     //if(sr_isrecording || is_editing)
     //{
     //    ptk->liveparam = LIVE_PARAM_TRACK_CLAMP;
@@ -430,7 +430,7 @@ void Midi_Edit_Set_Track(int Data)
 {
     //float factor = ((float) Songtracks / 16.0f);
     //ptk->Column_Under_Caret = 0;
-    //Track_Under_Caret = (int) (((float) Data * factor) / 127.0f * 15.0f);
+    //ptk->Track_Under_Caret = (int) (((float) Data * factor) / 127.0f * 15.0f);
     //ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK_EXTERNAL;
 }
 
@@ -449,7 +449,7 @@ void Midi_Edit_Track_On_Off(int Data)
     ///*TODO: remove this ugly global variable */
     //ptk_data *ptk = g_ptk;
     //Ext_Pos_Switch = Get_Song_Position(ptk);
-    //Ext_Track_Switch = Track_Under_Caret;
+    //Ext_Track_Switch = ptk->Track_Under_Caret;
     //ptk->gui_action = GUI_CMD_SWITCH_TRACK_STATUS;
 }
 
@@ -457,7 +457,7 @@ void Midi_Edit_Track_On_Off(int Data)
 // Focus on previous track (EDIT/LIVE)
 void Midi_Edit_Previous_Track(int Data)
 {
-    //Track_Under_Caret--;
+    //ptk->Track_Under_Caret--;
     //ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK_EXTERNAL;
 }
 
@@ -465,7 +465,7 @@ void Midi_Edit_Previous_Track(int Data)
 // Focus on next track (EDIT/LIVE)
 void Midi_Edit_Next_Track(int Data)
 {
-    //Track_Under_Caret++;
+    //ptk->Track_Under_Caret++;
     //ptk->gui_action = GUI_CMD_SET_FOCUS_TRACK_EXTERNAL;
 }
 

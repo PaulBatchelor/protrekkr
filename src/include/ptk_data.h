@@ -50,5 +50,7 @@ typedef struct {
     char Current_Instrument_Split;
     int liveparam;
     int livevalue;
+
+    int Track_Under_Caret;
 } ptk_data;
 #endif

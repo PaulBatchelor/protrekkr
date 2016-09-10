@@ -339,11 +339,11 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
 #if !defined(__NO_MIDI__)
         if(zcheckMouse(ptk, 12, (Cur_Height - 99), 82, 16) == 1 && c_midiout != -1)
         {
-            Midi_NoteOff(ptk, Track_Under_Caret, -1);
+            Midi_NoteOff(ptk, ptk->Track_Under_Caret, -1);
             int i;
             for(i = 0; i < MAX_POLYPHONY; i++)
             {
-                Midi_Current_Notes[CHAN_MIDI_PRG[Track_Under_Caret]][i] = 0;
+                Midi_Current_Notes[CHAN_MIDI_PRG[ptk->Track_Under_Caret]][i] = 0;
             }
             ptk->gui_action = GUI_CMD_MIDI_NOTE_OFF_1_TRACK;
         }
