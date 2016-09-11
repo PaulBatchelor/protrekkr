@@ -87,6 +87,7 @@ ptk_data *g_ptk = &ptk;
 
 char Visible_Columns = 0;
 
+/*TODO: this variable xoffseted is not unique. */
 int xoffseted;
 float gr = 0;
 float synthsignal = 0;
