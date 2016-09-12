@@ -99,8 +99,7 @@ int xoffseted;
 //int ptk->resty = 0;
 
 //int LastPedRow = -1;
-char po_alt = TRUE;
-char po_alt2 = TRUE;
+//char ptk->po_alt = TRUE;
 int CHAN_MIDI_PRG[MAX_TRACKS];
 
 int sp_TickCounter = 0;
@@ -4203,21 +4202,21 @@ void Keyboard_Handler(ptk_data *ptk)
 
         if(!Keys[SDLK_RCTRL] && !ptk->po_ctrl2) ptk->po_ctrl2 = TRUE;
 
-        if(Keys[SDLK_RALT] && snamesel == INPUT_NONE && po_alt2)
+        if(Keys[SDLK_RALT] && snamesel == INPUT_NONE && ptk->po_alt2)
         {
             plx = 1;
-            po_alt2 = FALSE;
+            ptk->po_alt2 = FALSE;
             if(!Get_LShift()) Pattern_Line = 0;
             ptk->gui_action = GUI_CMD_PLAY_SONG;
         }
-        if(!Keys[SDLK_RALT] && !po_alt2) po_alt2 = TRUE;
+        if(!Keys[SDLK_RALT] && !ptk->po_alt2) ptk->po_alt2 = TRUE;
 
         // Play song
-        if(Get_LAlt() && snamesel == INPUT_NONE && !po_alt)
+        if(Get_LAlt() && snamesel == INPUT_NONE && !ptk->po_alt)
         {
-            po_alt = TRUE;
+            ptk->po_alt = TRUE;
         }
-        if(!Get_LAlt() && po_alt) po_alt = FALSE;
+        if(!Get_LAlt() && ptk->po_alt) ptk->po_alt = FALSE;
 
         if(Key_Unicode)
         {
@@ -6826,6 +6825,8 @@ void ptk_init(ptk_data *ptk)
     ptk->boing = FALSE;
     
     ptk->po_ctrl2 = TRUE;
+    ptk->po_alt = TRUE;
+    ptk->po_alt2 = TRUE;
 
     ptk->L = luaL_newstate();
 

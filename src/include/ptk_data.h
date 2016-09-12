@@ -92,6 +92,8 @@ typedef struct {
 
     char boing;
     char po_ctrl2;
+    char po_alt; 
+    char po_alt2; 
 
     lua_State *L;
 } ptk_data;
