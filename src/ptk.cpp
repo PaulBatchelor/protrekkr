@@ -102,7 +102,6 @@ int xoffseted;
 //char ptk->po_alt = TRUE;
 int CHAN_MIDI_PRG[MAX_TRACKS];
 
-int player_line = 0;
 char actuloop = 0;
 int namesize = 8;
 
@@ -1670,7 +1669,7 @@ int Screen_Update(ptk_data *ptk)
         Display_Shuffle();
     }
 
-    if(Songplaying && Pattern_Line_Visual != player_line)
+    if(Songplaying && Pattern_Line_Visual != ptk->player_line)
     {
         if(!sr_isrecording)
         {
@@ -1678,7 +1677,7 @@ int Screen_Update(ptk_data *ptk)
             Actualize_Track_Fx_Ed(ptk, 11);
         }
         Actupated(ptk, 0);
-        player_line = Pattern_Line_Visual;
+        ptk->player_line = Pattern_Line_Visual;
     }
 
     // Checking for mouse and keyboard events ------------------------------------
@@ -2373,7 +2372,7 @@ void Newmod(ptk_data *ptk)
         ptk->Column_Under_Caret = 0;
         Pattern_Line = 0;
         Pattern_Line_Visual = 0;
-        player_line = 0;
+        ptk->player_line = 0;
         Song_Position = 0;
         Song_Position_Visual = 0;
         rawrender_range = FALSE;
@@ -6829,6 +6828,7 @@ void ptk_init(ptk_data *ptk)
 
     ptk->snamesel = INPUT_NONE;
 
+    ptk->player_line = 0;
     luaL_openlibs(ptk->L);
 
     if(luaL_loadfile(ptk->L, "config.lua") || lua_pcall(ptk->L, 0, 0, 0))
