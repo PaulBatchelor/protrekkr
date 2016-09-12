@@ -915,21 +915,21 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
                 LoopType[ptk->Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_FORWARD;
                 ptk->teac = 5;
                 ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
             }
             if(zcheckMouse(ptk, 448 + 62, (Cur_Height - 80), 58, 16))
             {
                 LoopType[ptk->Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_PINGPONG;
                 ptk->teac = 5;
                 ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
             }
             if(zcheckMouse(ptk, 448 + 62 * 2 - 2, (Cur_Height - 80), 60, 16))
             {
                 LoopType[ptk->Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_NONE;
                 ptk->teac = 5;
                 ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
             }
         }
     }

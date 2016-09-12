@@ -110,7 +110,7 @@ void Draw_Sample_Ed(ptk_data *ptk)
     Gui_Draw_Button_Box(650, (Cur_Height - 78), 60, 16, "Range", BUTTON_NORMAL | BUTTON_DISABLED);
     Gui_Draw_Button_Box(712, (Cur_Height - 78), 60, 16, "View", BUTTON_NORMAL | BUTTON_DISABLED);
         
-    draw_sampled_wave = TRUE;
+    ptk->draw_sampled_wave = TRUE;
     Actualize_Sample_Ed(ptk, 0);
 }
 
@@ -137,7 +137,7 @@ void Draw_Wave_Data(ptk_data *ptk)
             sed_real_range_end = Swap_Range;
         }
 
-        if(draw_sampled_wave)
+        if(ptk->draw_sampled_wave)
         {
             // Redraw the bottom slider
             Realslider_Horiz(WAVE_LEFT + 18, (Cur_Height - 41), sed_display_start, sed_display_length,
@@ -311,13 +311,13 @@ void Draw_Wave_Data(ptk_data *ptk)
                     }
                 }
             }
-            draw_sampled_wave = FALSE;
+            ptk->draw_sampled_wave = FALSE;
         }
         Draw_Wave_PlayBack_Pos(ptk);
-        if(draw_sampled_wave3)
+        if(ptk->draw_sampled_wave3)
         {
-            draw_sampled_wave = TRUE;
-            draw_sampled_wave3 = FALSE;
+            ptk->draw_sampled_wave = TRUE;
+            ptk->draw_sampled_wave3 = FALSE;
             Draw_Wave_Data(ptk);
         }
     }
@@ -326,7 +326,7 @@ void Draw_Wave_Data(ptk_data *ptk)
 // ------------------------------------------------------
 void Renew_Sample_Ed(ptk_data *ptk)
 {
-    draw_sampled_wave = TRUE;
+    ptk->draw_sampled_wave = TRUE;
     sed_display_start = 0;
     sed_display_length = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
     sed_range_start = 0;
@@ -345,7 +345,7 @@ void Draw_Wave_PlayBack_Pos(ptk_data *ptk)
     int i;
     int64 pos_in_wav;
 
-    if(draw_sampled_wave2)
+    if(ptk->draw_sampled_wave2)
     {
         if(SampleType[ptk->Current_Instrument][ptk->Current_Instrument_Split] > 0)
         { 
@@ -443,7 +443,7 @@ void Draw_Wave_PlayBack_Pos(ptk_data *ptk)
 
         } // IF CHECK SAMPLE
 
-        draw_sampled_wave2 = FALSE;
+        ptk->draw_sampled_wave2 = FALSE;
     }
 }
 
@@ -756,7 +756,7 @@ void Mouse_Right_Sample_Ed(ptk_data *ptk)
                 sed_range_start = 0;
                 sed_range_end = 0;
                 sed_range_mode = FALSE;
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
                 ptk->teac = 4;
             }
@@ -766,7 +766,7 @@ void Mouse_Right_Sample_Ed(ptk_data *ptk)
                 sed_range_mode = TRUE;
                 sed_range_start = sed_display_start;
                 sed_range_end = sed_display_start + sed_display_length;
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
                 ptk->teac = 0;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
@@ -794,7 +794,7 @@ void Mouse_Right_Sample_Ed(ptk_data *ptk)
                 sed_display_start -= sed_display_length;
                 if((int) sed_display_start < 0) sed_display_start = 0;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
             }
         }
 
@@ -807,7 +807,7 @@ void Mouse_Right_Sample_Ed(ptk_data *ptk)
                 sed_display_start += sed_display_length;
                 if((int) sed_display_start > max_length) sed_display_start = max_length;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
             }
         }
     }
@@ -863,7 +863,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                     LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
                 }
 
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
                 switch(ptk->userscreen)
                 {
                     case USER_SCREEN_INSTRUMENT_EDIT:
@@ -908,7 +908,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                     LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] = 0;
                 }
 
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
 
                 switch(ptk->userscreen)
                 {
@@ -1070,7 +1070,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                 ptk->rs_coef = 32768;
                 sed_display_start = 0;
                 sed_display_length = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
                 ptk->teac = 3;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
@@ -1079,14 +1079,14 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 582, (Cur_Height - 78), 60, 16))
             {
                 ptk->rs_coef /= 2;
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
             }
 
             // VZoom Out
             if(zcheckMouse(ptk, 582, (Cur_Height - 60), 60, 16))
             {
                 ptk->rs_coef *= 2;
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
             }
 
             // Unselect
@@ -1095,7 +1095,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                 sed_range_mode = FALSE;
                 sed_range_start = 0;
                 sed_range_end = 0;
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
                 ptk->teac = 0;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
@@ -1106,7 +1106,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                 sed_range_mode = TRUE;
                 sed_range_start = 0;
                 sed_range_end = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
                 ptk->teac = 0;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
@@ -1117,7 +1117,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                 sed_range_mode = TRUE;
                 sed_range_start = sed_display_start;
                 sed_range_end = sed_display_start + sed_display_length;
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
                 ptk->teac = 0;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
             }
@@ -1142,7 +1142,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                     sed_display_start--;
                     if((int) sed_display_start < 0) sed_display_start = 0;
                     ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
-                    draw_sampled_wave = TRUE;
+                    ptk->draw_sampled_wave = TRUE;
                 }
             }
 
@@ -1155,7 +1155,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                     sed_display_start++;
                     if((int) sed_display_start > max_length) sed_display_start = max_length;
                     ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
-                    draw_sampled_wave = TRUE;
+                    ptk->draw_sampled_wave = TRUE;
                 }
             }
 
@@ -1180,7 +1180,7 @@ void Mouse_Wheel_Sample_Ed(ptk_data *ptk, int roll_amount)
                 sed_display_start = (max_length - sed_display_length);
             }
             ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
-            draw_sampled_wave = TRUE;
+            ptk->draw_sampled_wave = TRUE;
         }
     }
 }
@@ -1235,7 +1235,7 @@ void Mouse_Sliders_Sample_Ed(ptk_data *ptk)
                 }
 
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
                 ptk->sas = TRUE;
             } // SAMPLETYPE
         } // MOUSEBOX
@@ -1258,7 +1258,7 @@ void Mouse_Sliders_Sample_Ed(ptk_data *ptk)
                 if(s_offset < 0) s_offset = 0;
                 sed_display_start = (int32) s_offset;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
-                draw_sampled_wave = TRUE;
+                ptk->draw_sampled_wave = TRUE;
             }
         }
 
@@ -1329,7 +1329,7 @@ void Refresh_Sample(ptk_data *ptk, int clear_sel)
         sed_range_start = 0;
         sed_range_end = 0;
     }
-    draw_sampled_wave = TRUE;
+    ptk->draw_sampled_wave = TRUE;
     outlong(712, (Cur_Height - 60), sed_display_start, 10);
     outlong(712, (Cur_Height - 42), sed_display_length, 12);
     outlong(650, (Cur_Height - 60), sed_range_start, 10);
@@ -1396,7 +1396,7 @@ void Zoom_In_Sel(ptk_data *ptk)
         max_length = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split] - sed_display_length;
         if((int) sed_display_start > max_length) sed_display_start = max_length;
 
-        draw_sampled_wave = TRUE;
+        ptk->draw_sampled_wave = TRUE;
         ptk->teac = 3;
         ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
     }
@@ -1422,7 +1422,7 @@ void Zoom_Out_Sel(ptk_data *ptk)
     }
     sed_range_start = sed_display_start;
     sed_range_end = sed_display_start + sed_display_length;
-    draw_sampled_wave = TRUE;
+    ptk->draw_sampled_wave = TRUE;
     ptk->teac = 3;
     ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
 }

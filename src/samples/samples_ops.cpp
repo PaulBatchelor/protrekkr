@@ -489,7 +489,7 @@ void Sample_DC_Adjust(ptk_data *ptk, int32 range_start, int32 range_end)
         }
     }
 
-    draw_sampled_wave = TRUE;
+    ptk->draw_sampled_wave = TRUE;
     Status_Box(ptk, "DC adjust done.");
 }
 
@@ -538,7 +538,7 @@ void Sample_Maximize(ptk_data *ptk, int32 range_start, int32 range_end)
         }
     }
 
-    draw_sampled_wave = TRUE;
+    ptk->draw_sampled_wave = TRUE;
     Status_Box(ptk, "Maximize done.");
 }
 
@@ -558,7 +558,7 @@ void Sample_Zeroize(ptk_data *ptk, int32 range_start, int32 range_end)
         }
     }
 
-    draw_sampled_wave = TRUE;
+    ptk->draw_sampled_wave = TRUE;
     Status_Box(ptk, "Zero done.");
 }
 
@@ -592,7 +592,7 @@ void Sample_FadeIn(ptk_data *ptk, int32 range_start, int32 range_end)
         c_vol += coef_vol;
     }
 
-    draw_sampled_wave = TRUE;
+    ptk->draw_sampled_wave = TRUE;
     Status_Box(ptk, "Fade in done.");
 }
 
@@ -630,7 +630,7 @@ void Sample_FadeOut(ptk_data *ptk, int32 range_start, int32 range_end)
         c_vol -= coef_vol;
     }
 
-    draw_sampled_wave = TRUE;
+    ptk->draw_sampled_wave = TRUE;
     Status_Box(ptk, "Fade out done.");
 }
 
@@ -658,7 +658,7 @@ void Sample_Half(ptk_data *ptk, int32 range_start, int32 range_end)
         }
     }
 
-    draw_sampled_wave = TRUE;
+    ptk->draw_sampled_wave = TRUE;
     Status_Box(ptk, "Half done.");
 }
 

@@ -84,6 +84,10 @@ typedef struct {
     int resty;
     int fsize;
 
+    char draw_sampled_wave;
+    char draw_sampled_wave2;
+    char draw_sampled_wave3;
+
     lua_State *L;
 } ptk_data;
 #endif
