@@ -129,10 +129,9 @@ char See_Prev_Next_Pattern = FALSE;
 char cur_input_name[1024];
 
 SDL_Surface *LOGOPIC;
-int wait_title;
-int display_title = 0;
+//int wait_title;
+//int display_title = 0;
 
-int key_record_first_time;
 double key_ticks;
 int old_key_Pattern_Line;
 Uint32 Alloc_midi_Channels[MAX_TRACKS][MAX_POLYPHONY];
@@ -1002,7 +1001,7 @@ int Screen_Update(ptk_data *ptk)
             is_recording_2 = 0;
             Nbr_Sub_NoteOff = 0;
             is_editing = 0;
-            key_record_first_time = TRUE;
+            ptk->key_record_first_time = TRUE;
             Clear_Midi_Channels_Pool();
             Actupated(ptk, 0);
             Notify_Edit(ptk);
@@ -4090,7 +4089,7 @@ void Keyboard_Handler(ptk_data *ptk)
         int i;
 
         if(is_recording) { // Start the real recording
-            if(!is_recording_2 && (retnote_raw < NOTE_OFF && retnote_raw > 0) && key_record_first_time) {
+            if(!is_recording_2 && (retnote_raw < NOTE_OFF && retnote_raw > 0) && ptk->key_record_first_time) {
                 // Start recording
                 is_recording_2 = 1;
                 Nbr_Sub_NoteOff = 0;
@@ -4100,7 +4099,7 @@ void Keyboard_Handler(ptk_data *ptk)
                 R_MaxLevel = 0;
                 Switch_Cmd_Playing(FALSE);
                 Pattern_Line_Visual = Pattern_Line;
-                key_record_first_time = FALSE;
+                ptk->key_record_first_time = FALSE;
                 old_key_Pattern_Line = Pattern_Line;
                 Clear_Midi_Channels_Pool();
                 ptk->player_pos = -1;

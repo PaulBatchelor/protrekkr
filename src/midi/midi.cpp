@@ -43,7 +43,7 @@
 // ------------------------------------------------------
 // Variables
 extern int Nbr_Sub_NoteOff;
-extern int key_record_first_time;
+extern int ptk->key_record_first_time;
 extern int old_key_Pattern_Line;
 extern int pos_scope;
 extern int pos_scope_latency;
@@ -135,7 +135,7 @@ void Midi_CallBackIn(double deltatime,
 
     if(Midi_Command == 0x90 || Midi_Command == 0x80)
     {
-        if(is_recording && !is_recording_2 && key_record_first_time)
+        if(is_recording && !is_recording_2 && ptk->key_record_first_time)
         {
             // Start recording
             is_recording_2 = 1;
@@ -146,7 +146,7 @@ void Midi_CallBackIn(double deltatime,
             R_MaxLevel = 0;
             Switch_Cmd_Playing(FALSE);
             Pattern_Line_Visual = Pattern_Line;
-            key_record_first_time = FALSE;
+            ptk->key_record_first_time = FALSE;
             old_key_Pattern_Line = Pattern_Line_Visual;
             Clear_Midi_Channels_Pool();
             player_pos = -1;

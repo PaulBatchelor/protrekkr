@@ -97,6 +97,7 @@ typedef struct {
     int sp_TickCounter;
     int LVColor;
     int RVColor;
+    int key_record_first_time;
 
     lua_State *L;
 } ptk_data;
