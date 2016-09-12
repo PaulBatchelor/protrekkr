@@ -6834,11 +6834,7 @@ void ptk_init(ptk_data *ptk)
     ptk->gui_thread_action = FALSE;
     ptk->gui_bpm_action = FALSE;
 
-    luaL_openlibs(ptk->L);
-
-    if(luaL_loadfile(ptk->L, "config.lua") || lua_pcall(ptk->L, 0, 0, 0))
-        fprintf(stderr, "cannot run file %s\n", lua_tostring(ptk->L, -1));
-
+    ptk_lua_init(ptk);
 }
 
 void ptk_close(ptk_data *ptk) 
