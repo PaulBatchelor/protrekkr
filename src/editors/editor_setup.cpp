@@ -55,7 +55,6 @@ extern int metronome_magnify;
 
 extern int Nbr_Keyboards;
 extern int Keyboard_Idx;
-extern char Jazz_Edit;
 
 extern char Accidental;
 
@@ -350,7 +349,7 @@ void Actualize_Master_Ed(ptk_data *ptk, char gode)
         // Play instruments while editing
         if(gode == 0 || gode == 18)
         {
-            if(Jazz_Edit)
+            if(ptk->Jazz_Edit)
             {
                 Gui_Draw_Button_Box(258, (Cur_Height - 125), 29, 16, "On", BUTTON_PUSHED | BUTTON_TEXT_CENTERED);
                 Gui_Draw_Button_Box(258 + 31, (Cur_Height - 125), 29, 16, "Off", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
@@ -610,7 +609,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         // Play while editing
         if(zcheckMouse(ptk, 258, (Cur_Height - 125), 29, 16))
         {
-            Jazz_Edit = TRUE;
+            ptk->Jazz_Edit = TRUE;
             ptk->teac = 18;
             ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
         }
@@ -618,7 +617,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         // Play while editing
         if(zcheckMouse(ptk, 258 + 31, (Cur_Height - 125), 29, 16))
         {
-            Jazz_Edit = FALSE;
+            ptk->Jazz_Edit = FALSE;
             ptk->teac = 18;
             ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
         }

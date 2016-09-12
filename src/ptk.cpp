@@ -145,7 +145,6 @@ void Solo_Track(int track_to_solo);
 
 JAZZ_KEY Sub_Channels_Jazz[MAX_TRACKS][MAX_POLYPHONY];
 
-char Jazz_Edit = FALSE;
 
 int wait_AutoSave;
 extern char AutoSave;
@@ -6707,7 +6706,7 @@ void Note_Jazz(ptk_data *ptk, int track, int note, float volume)
     local_mas_vol = 1.0f;
     local_ramp_vol = 1.0f;
 
-    if(Jazz_Edit || is_recording_2 || !is_editing)
+    if(ptk->Jazz_Edit || is_recording_2 || !is_editing)
     {
         sp_Tvol_Mod[track] = 1.0f;
         Schedule_Instrument(ptk, track,
@@ -6732,7 +6731,7 @@ void Note_Jazz_Off(ptk_data *ptk, int note)
     LPJAZZ_KEY Channel = Get_Jazz_Key_Off(Sub_Channels_Jazz, (note + 1) << 8);
     if(Channel)
     {
-        if(Jazz_Edit || is_recording_2 || !is_editing)
+        if(ptk->Jazz_Edit || is_recording_2 || !is_editing)
         {
             Synthesizer[Channel->Channel][Channel->Sub_Channel].NoteOff();
             if(sp_Stage[Channel->Channel][Channel->Sub_Channel] == PLAYING_SAMPLE)
@@ -6749,7 +6748,7 @@ void Note_Jazz_Off(ptk_data *ptk, int note)
 
 #if !defined(__STAND_ALONE__)
 #if !defined(__NO_MIDI__)
-    if(Jazz_Edit || is_recording_2 || !is_editing)
+    if(ptk->Jazz_Edit || is_recording_2 || !is_editing)
     {
         Midi_NoteOff(ptk, ptk->Track_Under_Caret, note);
     }
@@ -6832,6 +6831,8 @@ void ptk_init(ptk_data *ptk)
     ptk->namesize = 8;
     
     ptk->MouseWheel_Multiplier = 1;
+
+    ptk->Jazz_Edit = FALSE;
 
     luaL_openlibs(ptk->L);
 

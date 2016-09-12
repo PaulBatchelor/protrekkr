@@ -111,6 +111,8 @@ typedef struct {
 
     int MouseWheel_Multiplier;
 
+    char Jazz_Edit;
+
     lua_State *L;
 } ptk_data;
 #endif

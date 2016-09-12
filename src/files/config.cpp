@@ -45,7 +45,6 @@ extern int Cur_Height;
 extern int Continuous_Scroll;
 extern char AutoSave;
 extern char AutoBackup;
-extern char Jazz_Edit;
 extern char Accidental;
 extern char Use_Shadows;
 extern char Global_Patterns_Font;
@@ -128,7 +127,7 @@ void SaveConfig(ptk_data *ptk)
         Write_Data(ptk, &ptk->Scopish_LeftRight, sizeof(char), 1, out);
  
         Write_Data(ptk, &Paste_Across, sizeof(char), 1, out);
-        Write_Data(ptk, &Jazz_Edit, sizeof(char), 1, out);
+        Write_Data(ptk, &ptk->Jazz_Edit, sizeof(char), 1, out);
         Write_Data(ptk, &Accidental, sizeof(char), 1, out);
 
         Write_Data(ptk, &Use_Shadows, sizeof(char), 1, out);
@@ -239,7 +238,7 @@ void LoadConfig(ptk_data *ptk)
             Read_Data(ptk, &ptk->Scopish_LeftRight, sizeof(char), 1, in);
 
             Read_Data(ptk, &Paste_Across, sizeof(char), 1, in);
-            Read_Data(ptk, &Jazz_Edit, sizeof(char), 1, in);
+            Read_Data(ptk, &ptk->Jazz_Edit, sizeof(char), 1, in);
             Read_Data(ptk, &Accidental, sizeof(char), 1, in);
 
             Read_Data(ptk, &Use_Shadows, sizeof(char), 1, in);
