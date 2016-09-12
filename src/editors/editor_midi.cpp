@@ -293,7 +293,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
         {
             ptk->snamesel = INPUT_MIDI_NAME;
             strcpy(cur_input_name, Midi_Name);
-            namesize = 0;
+            ptk->namesize = 0;
             sprintf(Midi_Name, "");
             ptk->teac = UPDATE_MIDI_ED_CHANGE_NAME;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_ED;

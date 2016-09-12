@@ -102,7 +102,6 @@ int xoffseted;
 //char ptk->po_alt = TRUE;
 int CHAN_MIDI_PRG[MAX_TRACKS];
 
-int namesize = 8;
 
 
 
@@ -447,7 +446,7 @@ int Init_Context(ptk_data *ptk)
     sprintf(ptk->artist, "Somebody");
     sprintf(ptk->style, "Anything goes");
 
-    namesize = 8;
+    ptk->namesize = 8;
     IniCsParNames(ptk);
 
     Clear_Files_List(ptk);
@@ -2405,7 +2404,7 @@ void Newmod(ptk_data *ptk)
         sprintf(ptk->name, "Untitled");
         sprintf(ptk->artist, "Somebody");
         sprintf(ptk->style, "Anything Goes");
-        namesize = 8;
+        ptk->namesize = 8;
         BeatsPerMin = 125;
         TicksPerBeat = 4;
         DelayType = 1;
@@ -2558,7 +2557,7 @@ void Actualize_Name(ptk_data *ptk, int *newletter, char *nam)
         return;
     }
     // Valid input
-    if(newletter[39] && namesize > 0)
+    if(newletter[39] && ptk->namesize > 0)
     {
         newletter[39] = FALSE;
         ptk->snamesel = INPUT_NONE;
@@ -2573,10 +2572,10 @@ void Actualize_Name(ptk_data *ptk, int *newletter, char *nam)
             // Backspace
             if(newletter[i])
             {
-                if(namesize > 0)
+                if(ptk->namesize > 0)
                 {
                     nam[strlen(nam) - 1] = '\0';
-                    if(namesize > 0) namesize--;
+                    if(ptk->namesize > 0) ptk->namesize--;
                 }
                 newletter[i] = FALSE;
             }
@@ -2585,12 +2584,12 @@ void Actualize_Name(ptk_data *ptk, int *newletter, char *nam)
         {
             if(newletter[i])
             {
-                if(namesize < 19)
+                if(ptk->namesize < 19)
                 {
                     if(table_newletter[i])
                     {
                         sprintf(nam, table_newletter[i], nam);
-                        namesize++;
+                        ptk->namesize++;
                     }
                 }
                 newletter[i] = FALSE;
@@ -5297,7 +5296,7 @@ void Mouse_Handler(ptk_data *ptk)
             ptk->snamesel = INPUT_INSTRUMENT_NAME;
             strcpy(cur_input_name, nameins[ptk->Current_Instrument]);
             sprintf(nameins[ptk->Current_Instrument], "");
-            namesize = 0;
+            ptk->namesize = 0;
             ptk->gui_action = GUI_CMD_UPDATE_PATTERN_ED;
         }
 
@@ -6830,6 +6829,8 @@ void ptk_init(ptk_data *ptk)
     ptk->player_line = 0;
 
     ptk->actuloop = 0;
+
+    ptk->namesize = 8;
 
     luaL_openlibs(ptk->L);
 

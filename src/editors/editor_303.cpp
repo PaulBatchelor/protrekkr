@@ -974,7 +974,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         {
             ptk->snamesel = INPUT_303_PATTERN;
             strcpy(cur_input_name, tb303[sl3].pattern_name[tb303[sl3].selectedpattern]);
-            namesize = 0;
+            ptk->namesize = 0;
             sprintf(tb303[sl3].pattern_name[tb303[sl3].selectedpattern], "");
             ptk->teac = 18;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_303_ED;

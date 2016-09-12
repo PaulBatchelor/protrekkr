@@ -393,7 +393,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         {
             strcpy(cur_input_name, ptk->name);
             sprintf(ptk->name, "");
-            namesize = 0;
+            ptk->namesize = 0;
             ptk->snamesel = INPUT_MODULE_NAME;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
@@ -403,7 +403,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         {
             strcpy(cur_input_name, ptk->artist);
             sprintf(ptk->artist, "");
-            namesize = 0;
+            ptk->namesize = 0;
             ptk->snamesel = INPUT_MODULE_ARTIST;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
@@ -413,7 +413,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         {
             strcpy(cur_input_name, ptk->style);
             sprintf(ptk->style, "");
-            namesize = 0;
+            ptk->namesize = 0;
             ptk->snamesel = INPUT_MODULE_STYLE;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }

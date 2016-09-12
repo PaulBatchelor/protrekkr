@@ -107,6 +107,8 @@ typedef struct {
 
     char actuloop;
 
+    int namesize;
+
     lua_State *L;
 } ptk_data;
 #endif

@@ -643,7 +643,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         {
             ptk->snamesel = INPUT_SELECTION_NAME;
             strcpy(cur_input_name, Selection_Name);
-            namesize = 0;
+            ptk->namesize = 0;
             sprintf(Selection_Name, "");
             ptk->teac = 3;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;

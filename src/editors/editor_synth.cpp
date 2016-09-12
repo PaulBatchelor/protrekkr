@@ -1096,7 +1096,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             {
                 ptk->snamesel = INPUT_SYNTH_NAME;
                 strcpy(cur_input_name, PARASynth[ptk->Current_Instrument].presetname);
-                namesize = 0;
+                ptk->namesize = 0;
                 sprintf(PARASynth[ptk->Current_Instrument].presetname, "");
                 ptk->teac = UPDATE_SYNTH_CHANGE_NAME;
                 ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;

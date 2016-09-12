@@ -385,7 +385,7 @@ void Mouse_Left_Reverb_Ed(ptk_data *ptk)
         {
             ptk->snamesel = INPUT_REVERB_NAME;
             strcpy(cur_input_name, Reverb_Name);
-            namesize = 0;
+            ptk->namesize = 0;
             sprintf(Reverb_Name, "");
             ptk->teac = UPDATE_REVERB_ED_CHANGE_NAME;
             ptk->gui_action = GUI_CMD_UPDATE_REVERB_ED;
