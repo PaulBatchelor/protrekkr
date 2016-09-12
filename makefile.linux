@@ -81,6 +81,7 @@ OBJS = \
 	src/editors/editor_sequencer.o \
 	src/editors/editor_setup.o \
 	src/editors/editor_fx_setup.o \
+	src/ptk_lua.o
 
 
 all: protrekkr
