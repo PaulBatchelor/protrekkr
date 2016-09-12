@@ -102,9 +102,6 @@ int xoffseted;
 //char ptk->po_alt = TRUE;
 int CHAN_MIDI_PRG[MAX_TRACKS];
 
-int sp_TickCounter = 0;
-int LVColor = 0;
-int RVColor = 0;
 int player_line = 0;
 char actuloop = 0;
 int namesize = 8;
@@ -6827,6 +6824,10 @@ void ptk_init(ptk_data *ptk)
     ptk->po_ctrl2 = TRUE;
     ptk->po_alt = TRUE;
     ptk->po_alt2 = TRUE;
+
+    ptk->sp_TickCounter = 0;
+    ptk->LVColor = 0;
+    ptk->RVColor = 0;
 
     ptk->L = luaL_newstate();
 

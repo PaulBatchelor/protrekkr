@@ -94,6 +94,9 @@ typedef struct {
     char po_ctrl2;
     char po_alt; 
     char po_alt2; 
+    int sp_TickCounter;
+    int LVColor;
+    int RVColor;
 
     lua_State *L;
 } ptk_data;
