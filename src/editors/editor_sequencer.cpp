@@ -201,7 +201,7 @@ void Actualize_Seq_Ed(ptk_data *ptk, char gode)
             char tcp[30];
             sprintf(tcp, "%s_", Selection_Name);
 
-            if(snamesel == INPUT_SELECTION_NAME)
+            if(ptk->snamesel == INPUT_SELECTION_NAME)
             {
                 Gui_Draw_Button_Box(579, (Cur_Height - 128), 164, 16, tcp, BUTTON_PUSHED | BUTTON_INPUT);
             }
@@ -639,9 +639,9 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         }
 
         // Start selection name input
-        if(zcheckMouse(ptk, 579, (Cur_Height - 128), 164, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 579, (Cur_Height - 128), 164, 16) && ptk->snamesel == INPUT_NONE)
         {
-            snamesel = INPUT_SELECTION_NAME;
+            ptk->snamesel = INPUT_SELECTION_NAME;
             strcpy(cur_input_name, Selection_Name);
             namesize = 0;
             sprintf(Selection_Name, "");

@@ -201,7 +201,7 @@ void Actualize_Midi_Ed(ptk_data *ptk, char gode)
             char tcp[30];
             sprintf(tcp, "%s_", Midi_Name);
 
-            if(snamesel == INPUT_MIDI_NAME)
+            if(ptk->snamesel == INPUT_MIDI_NAME)
             {
                 Gui_Draw_Button_Box(583, (Cur_Height - 142), 164, 16, tcp, BUTTON_PUSHED | BUTTON_INPUT);
             }
@@ -289,9 +289,9 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
         }
 
         // Start midi name input
-        if(zcheckMouse(ptk, 583, (Cur_Height - 142), 164, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 583, (Cur_Height - 142), 164, 16) && ptk->snamesel == INPUT_NONE)
         {
-            snamesel = INPUT_MIDI_NAME;
+            ptk->snamesel = INPUT_MIDI_NAME;
             strcpy(cur_input_name, Midi_Name);
             namesize = 0;
             sprintf(Midi_Name, "");
@@ -400,7 +400,7 @@ void Mod_Midi_Automation_Value(ptk_data *ptk, int Amount)
     {
         if(zcheckMouse(ptk, Pos_Midi_Automation[i].x,
                        (Cur_Height - Pos_Midi_Automation[i].y),
-                       16, 16) && snamesel == INPUT_NONE)
+                       16, 16) && ptk->snamesel == INPUT_NONE)
         {
             Midi_Dispatch_Table[i].CC -= Amount;
             if(Midi_Dispatch_Table[i].CC < 0) Midi_Dispatch_Table[i].CC = 0;
@@ -411,7 +411,7 @@ void Mod_Midi_Automation_Value(ptk_data *ptk, int Amount)
 
         if(zcheckMouse(ptk, Pos_Midi_Automation[i].x + 44,
                        (Cur_Height - Pos_Midi_Automation[i].y),
-                       16, 16) && snamesel == INPUT_NONE)
+                       16, 16) && ptk->snamesel == INPUT_NONE)
         {
             Midi_Dispatch_Table[i].CC += Amount;
             if(Midi_Dispatch_Table[i].CC > 255) Midi_Dispatch_Table[i].CC = 255;
@@ -422,7 +422,7 @@ void Mod_Midi_Automation_Value(ptk_data *ptk, int Amount)
 
         if(zcheckMouse(ptk, Pos_Midi_Automation[i].x + GAP_X_MIDI,
                        (Cur_Height - Pos_Midi_Automation[i].y),
-                       16, 16) && snamesel == INPUT_NONE)
+                       16, 16) && ptk->snamesel == INPUT_NONE)
         {
             Midi_Dispatch_Table[i].Automation = (MIDI_AUTOMATION) (Midi_Dispatch_Table[i].Automation - Amount);
             if(Midi_Dispatch_Table[i].Automation < (MIDI_AUTOMATION) 0) Midi_Dispatch_Table[i].Automation = (MIDI_AUTOMATION) 0;
@@ -433,7 +433,7 @@ void Mod_Midi_Automation_Value(ptk_data *ptk, int Amount)
 
         if(zcheckMouse(ptk, Pos_Midi_Automation[i].x + GAP_X_MIDI + (18 + 110),
                        (Cur_Height - Pos_Midi_Automation[i].y),
-                       16, 16) && snamesel == INPUT_NONE)
+                       16, 16) && ptk->snamesel == INPUT_NONE)
         {
             Midi_Dispatch_Table[i].Automation = (MIDI_AUTOMATION) (Midi_Dispatch_Table[i].Automation + Amount);
             if(Midi_Dispatch_Table[i].Automation > (MIDI_AUTOMATION) (NBR_MIDI_AUTOMATION - 1)) Midi_Dispatch_Table[i].Automation = (MIDI_AUTOMATION) (NBR_MIDI_AUTOMATION - 1);

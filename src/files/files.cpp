@@ -2154,47 +2154,47 @@ void AllocateWave(int n_index, int split, long lenfir,
 // Clear any pending input
 void Clear_Input(ptk_data *ptk)
 {
-    if(snamesel == INPUT_303_PATTERN)
+    if(ptk->snamesel == INPUT_303_PATTERN)
     {
-        snamesel = INPUT_NONE;
+        ptk->snamesel = INPUT_NONE;
         Actualize_303_Ed(ptk, 0);
     }
 
-    if(snamesel == INPUT_SYNTH_NAME)
+    if(ptk->snamesel == INPUT_SYNTH_NAME)
     {
-        snamesel = INPUT_NONE;
+        ptk->snamesel = INPUT_NONE;
         Actualize_Synth_Ed(ptk, 0);
     }
 
-    if(snamesel == INPUT_MODULE_NAME ||
-       snamesel == INPUT_MODULE_ARTIST ||
-       snamesel == INPUT_MODULE_STYLE)
+    if(ptk->snamesel == INPUT_MODULE_NAME ||
+       ptk->snamesel == INPUT_MODULE_ARTIST ||
+       ptk->snamesel == INPUT_MODULE_STYLE)
     {
-        snamesel = INPUT_NONE;
+        ptk->snamesel = INPUT_NONE;
         Actualize_DiskIO_Ed(ptk, 0);
     }
 
-    if(snamesel == INPUT_INSTRUMENT_NAME)
+    if(ptk->snamesel == INPUT_INSTRUMENT_NAME)
     {
-        snamesel = INPUT_NONE;
+        ptk->snamesel = INPUT_NONE;
         Actualize_Patterned(ptk);
     }
 
-    if(snamesel == INPUT_REVERB_NAME)
+    if(ptk->snamesel == INPUT_REVERB_NAME)
     {
-        snamesel = INPUT_NONE;
+        ptk->snamesel = INPUT_NONE;
         Actualize_Reverb_Ed(ptk, 0);
     }
 
-    if(snamesel == INPUT_MIDI_NAME)
+    if(ptk->snamesel == INPUT_MIDI_NAME)
     {
-        snamesel = INPUT_NONE;
+        ptk->snamesel = INPUT_NONE;
         Actualize_Midi_Ed(ptk, 0);
     }
 
-    if(snamesel == INPUT_SELECTION_NAME)
+    if(ptk->snamesel == INPUT_SELECTION_NAME)
     {
-        snamesel = INPUT_NONE;
+        ptk->snamesel = INPUT_NONE;
         Actualize_Seq_Ed(ptk, 0);
     }
 }

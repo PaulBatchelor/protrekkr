@@ -1796,7 +1796,7 @@ void Actualize_Patterned(ptk_data *ptk)
     char tcp[30];
     sprintf(tcp, "%s_", nameins[ptk->Current_Instrument]);
 
-    if(snamesel == INPUT_INSTRUMENT_NAME) Gui_Draw_Button_Box(90, 108, 166, 16, tcp, BUTTON_PUSHED | BUTTON_INPUT);
+    if(ptk->snamesel == INPUT_INSTRUMENT_NAME) Gui_Draw_Button_Box(90, 108, 166, 16, tcp, BUTTON_PUSHED | BUTTON_INPUT);
     else Gui_Draw_Button_Box(90, 108, 166, 16, nameins[ptk->Current_Instrument], BUTTON_NORMAL | BUTTON_INPUT);
 
     Gui_Draw_Arrows_Number_Box2(90, 126, Current_Edit_Steps, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);

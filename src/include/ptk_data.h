@@ -102,6 +102,8 @@ typedef struct {
     int Record_Keys[37];
     int Record_Keys_State[37];
 
+    int snamesel;
+
     lua_State *L;
 } ptk_data;
 #endif

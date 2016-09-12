@@ -273,7 +273,7 @@ void Actualize_Reverb_Ed(ptk_data *ptk, int gode)
             char tcp[30];
             sprintf(tcp, "%s_", Reverb_Name);
 
-            if(snamesel == INPUT_REVERB_NAME)
+            if(ptk->snamesel == INPUT_REVERB_NAME)
             {
                 Gui_Draw_Button_Box(583, (Cur_Height - 142), 164, 16, tcp, BUTTON_PUSHED | BUTTON_INPUT);
             }
@@ -381,9 +381,9 @@ void Mouse_Left_Reverb_Ed(ptk_data *ptk)
         }
 
         // Start reverb name input
-        if(zcheckMouse(ptk, 583, (Cur_Height - 142), 164, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 583, (Cur_Height - 142), 164, 16) && ptk->snamesel == INPUT_NONE)
         {
-            snamesel = INPUT_REVERB_NAME;
+            ptk->snamesel = INPUT_REVERB_NAME;
             strcpy(cur_input_name, Reverb_Name);
             namesize = 0;
             sprintf(Reverb_Name, "");

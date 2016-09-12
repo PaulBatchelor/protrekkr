@@ -364,7 +364,7 @@ void Actualize_Synth_Ed(ptk_data *ptk, char gode)
             char tcp[30];
             sprintf(tcp, "%s_", PARASynth[ptk->Current_Instrument].presetname);
 
-            if(snamesel == INPUT_SYNTH_NAME)
+            if(ptk->snamesel == INPUT_SYNTH_NAME)
             {
                 Gui_Draw_Button_Box(592, (Cur_Height - 150), 164, 16, tcp, BUTTON_PUSHED | BUTTON_INPUT);
             }
@@ -1092,9 +1092,9 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             }
 
             // Start synth name input
-            if(zcheckMouse(ptk, 592, (Cur_Height - 150), 164, 16) && snamesel == INPUT_NONE)
+            if(zcheckMouse(ptk, 592, (Cur_Height - 150), 164, 16) && ptk->snamesel == INPUT_NONE)
             {
-                snamesel = INPUT_SYNTH_NAME;
+                ptk->snamesel = INPUT_SYNTH_NAME;
                 strcpy(cur_input_name, PARASynth[ptk->Current_Instrument].presetname);
                 namesize = 0;
                 sprintf(PARASynth[ptk->Current_Instrument].presetname, "");

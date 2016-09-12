@@ -107,7 +107,6 @@ char actuloop = 0;
 int namesize = 8;
 
 
-int snamesel = INPUT_NONE;
 
 SDL_Surface *PFONT;
 SDL_Surface *FONT;
@@ -1300,7 +1299,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_SAVE_INSTRUMENT)
         {
-            if(snamesel == INPUT_NONE) SaveInst(ptk);
+            if(ptk->snamesel == INPUT_NONE) SaveInst(ptk);
         }
 
         if(ptk->gui_action == GUI_CMD_MODULE_INFOS)
@@ -1320,22 +1319,22 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_SAVE_303_PATTERN)
         {
-            if(snamesel == INPUT_NONE) Save303(ptk);
+            if(ptk->snamesel == INPUT_NONE) Save303(ptk);
         }
 
         if(ptk->gui_action == GUI_CMD_SAVE_REVERB)
         {
-            if(snamesel == INPUT_NONE) SaveReverb(ptk);
+            if(ptk->snamesel == INPUT_NONE) SaveReverb(ptk);
         }
 
         if(ptk->gui_action == GUI_CMD_SAVE_MIDICFG)
         {
-            if(snamesel == INPUT_NONE) SaveMidiCfg(ptk);
+            if(ptk->snamesel == INPUT_NONE) SaveMidiCfg(ptk);
         }
 
         if(ptk->gui_action == GUI_CMD_SAVE_PATTERN)
         {
-            if(snamesel == INPUT_NONE) SavePattern(ptk);
+            if(ptk->snamesel == INPUT_NONE) SavePattern(ptk);
         }
 
         if(ptk->gui_action == GUI_CMD_FILELIST_SCROLL)
@@ -1356,13 +1355,13 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_SAVE_MODULE)
         {
-            if(snamesel == INPUT_NONE) Pack_Module(ptk, ptk->name);
+            if(ptk->snamesel == INPUT_NONE) Pack_Module(ptk, ptk->name);
         }
 
         // Save a .ptp module
         if(ptk->gui_action == GUI_CMD_SAVE_FINAL)
         {
-            if(snamesel == INPUT_NONE) SavePtk(ptk, ptk->name, TRUE, SAVE_WRITE, NULL);
+            if(ptk->snamesel == INPUT_NONE) SavePtk(ptk, ptk->name, TRUE, SAVE_WRITE, NULL);
         }
 
         // Calculate the approximate size of a .ptp module
@@ -1520,7 +1519,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_RENDER_WAV)
         {
-            if(snamesel == INPUT_NONE) WavRenderizer(ptk);
+            if(ptk->snamesel == INPUT_NONE) WavRenderizer(ptk);
         }
 
         if(ptk->gui_action == GUI_CMD_TIMED_REFRESH_SEQUENCER)
@@ -1537,7 +1536,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_SAVE_SYNTH)
         {
-            if(snamesel == INPUT_NONE) SaveSynth(ptk);
+            if(ptk->snamesel == INPUT_NONE) SaveSynth(ptk);
         }
 
         if(ptk->gui_action == GUI_CMD_PATTERNS_POOL_EXHAUSTED)
@@ -2547,7 +2546,7 @@ char *table_newletter[71] =
 
 // ------------------------------------------------------
 // Change a letter in a string
-void Actualize_Name(int *newletter, char *nam)
+void Actualize_Name(ptk_data *ptk, int *newletter, char *nam)
 {
     int i;
 
@@ -2556,7 +2555,7 @@ void Actualize_Name(int *newletter, char *nam)
     {
         newletter[71] = FALSE;
         strcpy(nam, cur_input_name);
-        snamesel = INPUT_NONE;
+        ptk->snamesel = INPUT_NONE;
         Keyboard_Nbr_Events = 0;
         return;
     }
@@ -2564,7 +2563,7 @@ void Actualize_Name(int *newletter, char *nam)
     if(newletter[39] && namesize > 0)
     {
         newletter[39] = FALSE;
-        snamesel = INPUT_NONE;
+        ptk->snamesel = INPUT_NONE;
         Keyboard_Nbr_Events = 0;
         return;
     }
@@ -3090,63 +3089,63 @@ Uint32 Timer_CallBack(Uint32 interval, void *param)
 // Validate or cancel an user input
 void Actualize_Input(ptk_data *ptk)
 {
-    switch(snamesel)
+    switch(ptk->snamesel)
     {
         // Module name
         case INPUT_MODULE_NAME:
-            Actualize_Name(ptk->retletter, ptk->name);
+            Actualize_Name(ptk, ptk->retletter, ptk->name);
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
             break;
 
         // Instrument name
         case INPUT_INSTRUMENT_NAME:
-            Actualize_Name(ptk->retletter, nameins[ptk->Current_Instrument]);
+            Actualize_Name(ptk, ptk->retletter, nameins[ptk->Current_Instrument]);
             ptk->gui_action = GUI_CMD_UPDATE_PATTERN_ED;
             break;
 
         // Synth name
         case INPUT_SYNTH_NAME:
-            Actualize_Name(ptk->retletter, PARASynth[ptk->Current_Instrument].presetname);
+            Actualize_Name(ptk, ptk->retletter, PARASynth[ptk->Current_Instrument].presetname);
             ptk->teac = UPDATE_SYNTH_CHANGE_NAME;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             break;
 
         // Module ptk->artist
         case INPUT_MODULE_ARTIST:
-            Actualize_Name(ptk->retletter, ptk->artist);
+            Actualize_Name(ptk, ptk->retletter, ptk->artist);
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
             break;
 
         // Module ptk->style
         case INPUT_MODULE_STYLE:
-            Actualize_Name(ptk->retletter, ptk->style);
+            Actualize_Name(ptk, ptk->retletter, ptk->style);
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
             break;
 
         // 303 pattern
         case INPUT_303_PATTERN:
-            Actualize_Name(ptk->retletter, tb303[sl3].pattern_name[tb303[sl3].selectedpattern]);
+            Actualize_Name(ptk, ptk->retletter, tb303[sl3].pattern_name[tb303[sl3].selectedpattern]);
             ptk->teac = 18;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_303_ED;
             break;
 
         // Reverb
         case INPUT_REVERB_NAME:
-            Actualize_Name(ptk->retletter, Reverb_Name);
+            Actualize_Name(ptk, ptk->retletter, Reverb_Name);
             ptk->teac = UPDATE_REVERB_ED_CHANGE_NAME;
             ptk->gui_action = GUI_CMD_UPDATE_REVERB_ED;
             break;
 
         // Selection
         case INPUT_SELECTION_NAME:
-            Actualize_Name(ptk->retletter, Selection_Name);
+            Actualize_Name(ptk, ptk->retletter, Selection_Name);
             ptk->teac = 3;
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
             break;
 
         // Reverb
         case INPUT_MIDI_NAME:
-            Actualize_Name(ptk->retletter, Midi_Name);
+            Actualize_Name(ptk, ptk->retletter, Midi_Name);
             ptk->teac = UPDATE_MIDI_ED_CHANGE_NAME;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_ED;
             break;
@@ -3474,7 +3473,7 @@ void Keyboard_Handler(ptk_data *ptk)
             }
         }
 
-        if(snamesel == INPUT_NONE)
+        if(ptk->snamesel == INPUT_NONE)
         {
             if(Keys[SDLK_BACKSPACE] && is_editing)
             {
@@ -3515,7 +3514,7 @@ void Keyboard_Handler(ptk_data *ptk)
 
     // -------------------------------------------
     // Editing a name
-    if(snamesel > INPUT_NONE)
+    if(ptk->snamesel > INPUT_NONE)
     {
         if(Keys[SDLK_a])
         {
@@ -3953,7 +3952,7 @@ void Keyboard_Handler(ptk_data *ptk)
         }
     }
 
-    if(snamesel == INPUT_NONE && !reelletter)
+    if(ptk->snamesel == INPUT_NONE && !reelletter)
     {
         // Data columns
         if(Keys_Unicode[SDLK_0]) retvalue = 0;
@@ -3988,7 +3987,7 @@ void Keyboard_Handler(ptk_data *ptk)
     }
 
     // ------------------------------------------
-    if(!Keys[SDLK_MENU] && !Get_LAlt() && !Get_LCtrl() && !Get_LShift() && snamesel == INPUT_NONE && !reelletter)
+    if(!Keys[SDLK_MENU] && !Get_LAlt() && !Get_LCtrl() && !Get_LShift() && ptk->snamesel == INPUT_NONE && !reelletter)
     {
         // Key jazz release
         if(Keys_Raw_Off[0x10]) { ptk->Record_Keys[0] = (12 + 1) | 0x80;  Keys_Raw_Off[0x10] = FALSE; Keys_Raw[0x10] = FALSE; }
@@ -4164,7 +4163,7 @@ void Keyboard_Handler(ptk_data *ptk)
     }
 
     // Turn edit mode on/off
-    if(Keys[SDLK_ESCAPE] && snamesel == INPUT_NONE && ptk->pos_space == 1)
+    if(Keys[SDLK_ESCAPE] && ptk->snamesel == INPUT_NONE && ptk->pos_space == 1)
     {
         if(Get_LShift())
         {
@@ -4181,8 +4180,8 @@ void Keyboard_Handler(ptk_data *ptk)
     if(!is_recording)
     {
         // Play song
-        //if(Keys[SDLK_RCTRL] && snamesel == INPUT_NONE && ptk->po_ctrl2)
-        if(Keys[SDLK_SPACE] && snamesel == INPUT_NONE && ptk->po_ctrl2)
+        //if(Keys[SDLK_RCTRL] && ptk->snamesel == INPUT_NONE && ptk->po_ctrl2)
+        if(Keys[SDLK_SPACE] && ptk->snamesel == INPUT_NONE && ptk->po_ctrl2)
         {
             plx = 0;
             ptk->po_ctrl2 = FALSE;
@@ -4196,7 +4195,7 @@ void Keyboard_Handler(ptk_data *ptk)
 
         if(!Keys[SDLK_RCTRL] && !ptk->po_ctrl2) ptk->po_ctrl2 = TRUE;
 
-        if(Keys[SDLK_RALT] && snamesel == INPUT_NONE && ptk->po_alt2)
+        if(Keys[SDLK_RALT] && ptk->snamesel == INPUT_NONE && ptk->po_alt2)
         {
             plx = 1;
             ptk->po_alt2 = FALSE;
@@ -4206,7 +4205,7 @@ void Keyboard_Handler(ptk_data *ptk)
         if(!Keys[SDLK_RALT] && !ptk->po_alt2) ptk->po_alt2 = TRUE;
 
         // Play song
-        if(Get_LAlt() && snamesel == INPUT_NONE && !ptk->po_alt)
+        if(Get_LAlt() && ptk->snamesel == INPUT_NONE && !ptk->po_alt)
         {
             ptk->po_alt = TRUE;
         }
@@ -4696,7 +4695,7 @@ void Keyboard_Handler(ptk_data *ptk)
 
     // --------------------------------------------
     // Enter one or several notes (used for midi and record as well as simple editing)
-    if(!Get_LAlt() && !Get_LCtrl() && !Get_LShift() && snamesel == INPUT_NONE && !reelletter)
+    if(!Get_LAlt() && !Get_LCtrl() && !Get_LShift() && ptk->snamesel == INPUT_NONE && !reelletter)
     {
         int go_note = FALSE;
 
@@ -5295,9 +5294,9 @@ void Mouse_Handler(ptk_data *ptk)
         Mouse_Left_Sample_Ed(ptk);
 
         // Change current instrument name
-        if(zcheckMouse(ptk, 90, 108, 166, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 90, 108, 166, 16) && ptk->snamesel == INPUT_NONE)
         {
-            snamesel = INPUT_INSTRUMENT_NAME;
+            ptk->snamesel = INPUT_INSTRUMENT_NAME;
             strcpy(cur_input_name, nameins[ptk->Current_Instrument]);
             sprintf(nameins[ptk->Current_Instrument], "");
             namesize = 0;
@@ -6827,6 +6826,8 @@ void ptk_init(ptk_data *ptk)
     ptk->RVColor = 0;
 
     ptk->L = luaL_newstate();
+
+    ptk->snamesel = INPUT_NONE;
 
     luaL_openlibs(ptk->L);
 

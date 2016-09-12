@@ -259,7 +259,7 @@ void Actualize_DiskIO_Ed(ptk_data *ptk, int gode)
         }
 
 
-        if(snamesel == INPUT_MODULE_NAME)
+        if(ptk->snamesel == INPUT_MODULE_NAME)
         {
             sprintf(tname, "%s_", ptk->name);
             Gui_Draw_Button_Box(90, (Cur_Height - 94), 162, 16, tname, BUTTON_PUSHED | BUTTON_INPUT);
@@ -270,7 +270,7 @@ void Actualize_DiskIO_Ed(ptk_data *ptk, int gode)
             Gui_Draw_Button_Box(90, (Cur_Height - 94), 162, 16, tname, BUTTON_NORMAL | BUTTON_INPUT);
         }
 
-        if(snamesel == INPUT_MODULE_ARTIST)
+        if(ptk->snamesel == INPUT_MODULE_ARTIST)
         {
             sprintf(tname, "%s_", ptk->artist);
             Gui_Draw_Button_Box(90, (Cur_Height - 76), 162, 16, tname, BUTTON_PUSHED | BUTTON_INPUT);
@@ -281,7 +281,7 @@ void Actualize_DiskIO_Ed(ptk_data *ptk, int gode)
             Gui_Draw_Button_Box(90, (Cur_Height - 76), 162, 16, tname, BUTTON_NORMAL | BUTTON_INPUT);
         }
 
-        if(snamesel == INPUT_MODULE_STYLE)
+        if(ptk->snamesel == INPUT_MODULE_STYLE)
         {
             sprintf(tname, "%s_", ptk->style);
             Gui_Draw_Button_Box(90, (Cur_Height - 58), 162, 16, tname, BUTTON_PUSHED | BUTTON_INPUT);
@@ -389,32 +389,32 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         }
 
         // Start module name input
-        if(zcheckMouse(ptk, 90, (Cur_Height - 94), 162, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 90, (Cur_Height - 94), 162, 16) && ptk->snamesel == INPUT_NONE)
         {
             strcpy(cur_input_name, ptk->name);
             sprintf(ptk->name, "");
             namesize = 0;
-            snamesel = INPUT_MODULE_NAME;
+            ptk->snamesel = INPUT_MODULE_NAME;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
         // Start ptk->artist name input
-        if(zcheckMouse(ptk, 90, (Cur_Height - 76), 162, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 90, (Cur_Height - 76), 162, 16) && ptk->snamesel == INPUT_NONE)
         {
             strcpy(cur_input_name, ptk->artist);
             sprintf(ptk->artist, "");
             namesize = 0;
-            snamesel = INPUT_MODULE_ARTIST;
+            ptk->snamesel = INPUT_MODULE_ARTIST;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
         // Start module ptk->style input
-        if(zcheckMouse(ptk, 90, (Cur_Height - 58), 162, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 90, (Cur_Height - 58), 162, 16) && ptk->snamesel == INPUT_NONE)
         {
             strcpy(cur_input_name, ptk->style);
             sprintf(ptk->style, "");
             namesize = 0;
-            snamesel = INPUT_MODULE_STYLE;
+            ptk->snamesel = INPUT_MODULE_STYLE;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 

@@ -283,7 +283,7 @@ void Refresh_303_Unit(ptk_data *ptk, int Unit, int gode)
         {
             sprintf(tcp, "%s_", tb303[Unit].pattern_name[tb303[Unit].selectedpattern]);
 
-            if(snamesel == INPUT_303_PATTERN)
+            if(ptk->snamesel == INPUT_303_PATTERN)
             {
                 Gui_Draw_Button_Box(600, (Cur_Height - 120), 164, 16, tcp, BUTTON_PUSHED | BUTTON_INPUT);
             }
@@ -970,9 +970,9 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         }
 
         // Start name input
-        if(zcheckMouse(ptk, 600, (Cur_Height - 120), 164, 16) && snamesel == INPUT_NONE)
+        if(zcheckMouse(ptk, 600, (Cur_Height - 120), 164, 16) && ptk->snamesel == INPUT_NONE)
         {
-            snamesel = INPUT_303_PATTERN;
+            ptk->snamesel = INPUT_303_PATTERN;
             strcpy(cur_input_name, tb303[sl3].pattern_name[tb303[sl3].selectedpattern]);
             namesize = 0;
             sprintf(tb303[sl3].pattern_name[tb303[sl3].selectedpattern], "");
