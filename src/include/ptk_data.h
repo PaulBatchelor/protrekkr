@@ -77,6 +77,7 @@ typedef struct {
     char namemidicfg[260];
     char artist[20];
     char style[20];
+    char Prog_Path[260];
 
     int Current_Instrument;
 
@@ -121,6 +122,8 @@ typedef struct {
 
     /* MAX_TRACKS is 16 */
     int CHAN_MIDI_PRG[16];
+
+
 
     lua_State *L;
 } ptk_data;

@@ -159,8 +159,6 @@ int Values_AutoSave[] =
     30 * 60
 };
 
-char Prog_Path[MAX_PATH];
-
 int Table_Right_Tab_Notes[] =
 {
     3, 2, 1,
@@ -453,11 +451,11 @@ int Init_Context(ptk_data *ptk)
     Midi_InitOut(ptk);
 #endif
 
-    GETCWD(Prog_Path, MAX_PATH);
+    GETCWD(ptk->Prog_Path, MAX_PATH);
 
     Read_SMPT(ptk);
 
-    CHDIR(Prog_Path);
+    CHDIR(ptk->Prog_Path);
 
     if(!Init_Block_Work(ptk)) return(FALSE);
 
