@@ -117,6 +117,8 @@ typedef struct {
     char See_Prev_Next_Pattern;
     int wait_AutoSave;
     int gui_thread_action;
+    int gui_bpm_action;
+
 
     lua_State *L;
 } ptk_data;

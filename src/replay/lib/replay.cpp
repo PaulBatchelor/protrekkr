@@ -780,10 +780,6 @@ float xi0[2][MAX_TRACKS];
 float xi1[2][MAX_TRACKS];
 float xi2[2][MAX_TRACKS];
 
-#if !defined(__STAND_ALONE__) && !defined(__WINAMP__)
-extern int gui_bpm_action;
-#endif
-
 #if !defined(__STAND_ALONE__) || defined(__WINAMP__)
     float lchorus_feedback = 0.6f;
     float rchorus_feedback = 0.5f;
@@ -4624,7 +4620,7 @@ void Do_Effects_Tick_0(ptk_data *ptk)
                     Update_Shuffle(ptk);
 
 #if !defined(__STAND_ALONE__) && !defined(__WINAMP__)
-                    gui_bpm_action = TRUE;
+                    ptk->gui_bpm_action = TRUE;
 #endif
                     break;
 #endif
@@ -4670,7 +4666,7 @@ void Do_Effects_Tick_0(ptk_data *ptk)
                     }
 
 #if !defined(__STAND_ALONE__) && !defined(__WINAMP__)
-                    gui_bpm_action = TRUE;
+                    ptk->gui_bpm_action = TRUE;
 #endif
 
                     break;
@@ -4698,7 +4694,7 @@ void Do_Effects_Tick_0(ptk_data *ptk)
 #endif
 
 #if !defined(__STAND_ALONE__) && !defined(__WINAMP__)
-                    gui_bpm_action = TRUE;
+                    ptk->gui_bpm_action = TRUE;
 #endif
                     break;
 #endif

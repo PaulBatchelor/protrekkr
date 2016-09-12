@@ -38,7 +38,6 @@
 
 // ------------------------------------------------------
 // Variables
-extern int gui_bpm_action;
 /*TODO: remove this ugly global variable */
 extern ptk_data *g_ptk;
 
@@ -68,7 +67,7 @@ void Midi_Song_Set_BPM(int Data)
     //    ptk->liveparam = LIVE_PARAM_SONG_BPM;
     //    ptk->livevalue = BeatsPerMin;
     //}
-    //gui_bpm_action = TRUE;
+    //ptk->gui_bpm_action = TRUE;
 }
 
 // ------------------------------------------------------
