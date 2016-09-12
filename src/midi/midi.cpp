@@ -44,7 +44,7 @@
 // Variables
 extern int Nbr_Sub_NoteOff;
 extern int ptk->key_record_first_time;
-extern int old_key_Pattern_Line;
+extern int ptk->old_key_Pattern_Line;
 extern int pos_scope;
 extern int pos_scope_latency;
 
@@ -147,7 +147,7 @@ void Midi_CallBackIn(double deltatime,
             Switch_Cmd_Playing(FALSE);
             Pattern_Line_Visual = Pattern_Line;
             ptk->key_record_first_time = FALSE;
-            old_key_Pattern_Line = Pattern_Line_Visual;
+            ptk->old_key_Pattern_Line = Pattern_Line_Visual;
             Clear_Midi_Channels_Pool();
             player_pos = -1;
             metronome_rows_counter = 0;

@@ -132,8 +132,8 @@ SDL_Surface *LOGOPIC;
 //int wait_title;
 //int display_title = 0;
 
-double key_ticks;
-int old_key_Pattern_Line;
+//double key_ticks;
+//int ptk->old_key_Pattern_Line;
 Uint32 Alloc_midi_Channels[MAX_TRACKS][MAX_POLYPHONY];
 int Record_Keys[37];
 int Record_Keys_State[37];
@@ -4100,7 +4100,7 @@ void Keyboard_Handler(ptk_data *ptk)
                 Switch_Cmd_Playing(FALSE);
                 Pattern_Line_Visual = Pattern_Line;
                 ptk->key_record_first_time = FALSE;
-                old_key_Pattern_Line = Pattern_Line;
+                ptk->old_key_Pattern_Line = Pattern_Line;
                 Clear_Midi_Channels_Pool();
                 ptk->player_pos = -1;
                 metronome_rows_counter = 0;
@@ -4931,11 +4931,11 @@ No_Key:;
                 }
                 if(is_recording_2)
                 {
-                    if(old_key_Pattern_Line != Pattern_Line)
+                    if(ptk->old_key_Pattern_Line != Pattern_Line)
                     {
                         Actualize_Sequencer(ptk);
                     }
-                    old_key_Pattern_Line = Pattern_Line;
+                    ptk->old_key_Pattern_Line = Pattern_Line;
                 }
                 Actupated(ptk, 0);
             }

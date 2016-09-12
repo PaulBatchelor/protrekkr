@@ -98,6 +98,7 @@ typedef struct {
     int LVColor;
     int RVColor;
     int key_record_first_time;
+    int old_key_Pattern_Line;
 
     lua_State *L;
 } ptk_data;
