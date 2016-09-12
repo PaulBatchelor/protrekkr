@@ -910,6 +910,8 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 
     }
     SaveConfig(ptk);
+    
+    ptk_close(ptk);
 
 	if(ExePath) free(ExePath);
 

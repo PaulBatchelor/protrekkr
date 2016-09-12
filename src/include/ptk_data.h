@@ -1,5 +1,18 @@
 #ifndef _PTK_DATA
 #define _PTK_DATA
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
+
+#ifdef __cplusplus
+}
+#endif
+
 typedef struct {
     int CONSOLE_WIDTH;
     int CONSOLE_HEIGHT;
@@ -53,5 +66,7 @@ typedef struct {
 
     int Track_Under_Caret;
     int gui_track;
+
+    lua_State *L;
 } ptk_data;
 #endif

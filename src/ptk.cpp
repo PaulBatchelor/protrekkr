@@ -6828,4 +6828,16 @@ void ptk_init(ptk_data *ptk)
     ptk->livevalue = 0;
     ptk->Track_Under_Caret = 0;
     ptk->gui_track = 0;
+
+    ptk->L = luaL_newstate();
+    luaL_openlibs(ptk->L);
+
+    if(luaL_loadfile(ptk->L, "config.lua") || lua_pcall(ptk->L, 0, 0, 0))
+        fprintf(stderr, "cannot run file %s\n", lua_tostring(ptk->L, -1));
+
+}
+
+void ptk_close(ptk_data *ptk) 
+{
+    lua_close(ptk->L);
 }

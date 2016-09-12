@@ -147,5 +147,6 @@ void Note_Jazz(ptk_data *ptk, int track, int note, float volume);
 void Note_Jazz_Off(ptk_data *ptk, int note);
 void Display_Beat_Time(void);
 void ptk_init(ptk_data *ptk);
+void ptk_close(ptk_data *ptk);
 
 #endif
