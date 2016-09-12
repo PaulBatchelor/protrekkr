@@ -39,7 +39,6 @@
 
 // ------------------------------------------------------
 // Variables
-extern int redraw_everything;
 int In_Requester = FALSE;
 int Requester_Action = GUI_CMD_NOP;
 static int Size_X;

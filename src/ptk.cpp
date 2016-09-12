@@ -98,7 +98,6 @@ int xoffseted;
 //int ptk->restx = 0;
 //int ptk->resty = 0;
 
-int redraw_everything = FALSE;
 char boing = FALSE;
 int LastPedRow = -1;
 char po_ctrl2 = TRUE;
@@ -591,10 +590,10 @@ int Screen_Update(ptk_data *ptk)
     FSRef soundFileRef;
 #endif
 
-    redraw_everything = FALSE;
+    ptk->redraw_everything = FALSE;
     if(Env_Change)
     {
-        redraw_everything = TRUE;
+        ptk->redraw_everything = TRUE;
         Env_Change = FALSE;
         
     }
@@ -1574,7 +1573,7 @@ int Screen_Update(ptk_data *ptk)
     }
 
     // Draw the main windows layout
-    if(redraw_everything)
+    if(ptk->redraw_everything)
     {
         SetColor(COL_BLACK);
         Fillrect(0, 0, ptk->CONSOLE_WIDTH, ptk->CONSOLE_HEIGHT);
@@ -6824,6 +6823,7 @@ void ptk_init(ptk_data *ptk)
     ptk->draw_sampled_wave2 = FALSE;
     ptk->draw_sampled_wave3 = FALSE;
 
+    ptk->redraw_everything = FALSE;
 
     ptk->L = luaL_newstate();
 

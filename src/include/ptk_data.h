@@ -88,6 +88,8 @@ typedef struct {
     char draw_sampled_wave2;
     char draw_sampled_wave3;
 
+    int redraw_everything;
+
     lua_State *L;
 } ptk_data;
 #endif
