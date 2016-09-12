@@ -105,6 +105,8 @@ typedef struct {
     int snamesel;
     int player_line;
 
+    char actuloop;
+
     lua_State *L;
 } ptk_data;
 #endif

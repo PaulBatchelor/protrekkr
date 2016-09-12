@@ -102,7 +102,6 @@ int xoffseted;
 //char ptk->po_alt = TRUE;
 int CHAN_MIDI_PRG[MAX_TRACKS];
 
-char actuloop = 0;
 int namesize = 8;
 
 
@@ -646,7 +645,7 @@ int Screen_Update(ptk_data *ptk)
     DrawHLine(17, Rt_vu_Peak, MAX_VUMETER - 2, COL_BACKGROUND);
     DrawHLine(18, Rt_vu_Peak, MAX_VUMETER - 2, COL_BACKGROUND);
 
-    if(actuloop) Afloop(ptk);
+    if(ptk->actuloop) Afloop(ptk);
 
     if(ptk->gui_action_metronome == GUI_CMD_FLASH_METRONOME_ON)
     {
@@ -6829,6 +6828,9 @@ void ptk_init(ptk_data *ptk)
     ptk->snamesel = INPUT_NONE;
 
     ptk->player_line = 0;
+
+    ptk->actuloop = 0;
+
     luaL_openlibs(ptk->L);
 
     if(luaL_loadfile(ptk->L, "config.lua") || lua_pcall(ptk->L, 0, 0, 0))

@@ -512,13 +512,13 @@ void Actualize_Instrument_Ed(ptk_data *ptk, int typex, char gode)
                     case 0:
                         outlong(487, (Cur_Height - 130), *(RawSamples[ptk->Current_Instrument][0][ptk->Current_Instrument_Split] + LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split]), 0);
                         outlong(114, (Cur_Height - 130), LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split], 0);
-                        actuloop = 1;
+                        ptk->actuloop = 1;
                         break;
 
                     case 1:
                         outlong(487, (Cur_Height - 112), *(RawSamples[ptk->Current_Instrument][0][ptk->Current_Instrument_Split] + LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split]), 0);
                         outlong(314, (Cur_Height - 130), LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split], 0);
-                        actuloop = 2;
+                        ptk->actuloop = 2;
                         break;
 
                     case 2:
@@ -526,7 +526,7 @@ void Actualize_Instrument_Ed(ptk_data *ptk, int typex, char gode)
                         outlong(487, (Cur_Height - 112), *(RawSamples[ptk->Current_Instrument][0][ptk->Current_Instrument_Split] + LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split]), 0);
                         outlong(114, (Cur_Height - 130), LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split], 0);
                         outlong(314, (Cur_Height - 130), LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split], 0);
-                        actuloop = 3;
+                        ptk->actuloop = 3;
                         break;
                 }
 
@@ -1064,7 +1064,7 @@ void Mouse_Right_Instrument_Ed(ptk_data *ptk)
 void Afloop(ptk_data *ptk)
 {
     int iose;
-    if(actuloop == 1 || actuloop == 3)
+    if(ptk->actuloop == 1 || ptk->actuloop == 3)
     {
         for(int a = 0; a < 200; a++)
         {
@@ -1086,7 +1086,7 @@ void Afloop(ptk_data *ptk)
         DrawVLine(421, (Cur_Height - 110), (Cur_Height - 46), COL_BLACK);
     }
 
-    if(actuloop == 2 || actuloop == 3)
+    if(ptk->actuloop == 2 || ptk->actuloop == 3)
     {
         for(int b = 0; b < 200; b++)
         {
@@ -1108,7 +1108,7 @@ void Afloop(ptk_data *ptk)
         DrawVLine(22, (Cur_Height - 110), (Cur_Height - 46), COL_BLACK);
         DrawVLine(421, (Cur_Height - 110), (Cur_Height - 46), COL_BLACK);
     }
-    actuloop = 0;
+    ptk->actuloop = 0;
 }
 
 void Mouse_Left_Repeat_Instrument_Ed(ptk_data *ptk)
