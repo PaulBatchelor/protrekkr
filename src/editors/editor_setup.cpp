@@ -160,9 +160,9 @@ void Actualize_Master_Ed(ptk_data *ptk, char gode)
         // Mouse wheel
         if(gode == 0 || gode == 6)
         {
-            if(MouseWheel_Multiplier < 1) MouseWheel_Multiplier = 1;
-            if(MouseWheel_Multiplier > 16) MouseWheel_Multiplier = 16;
-            Gui_Draw_Arrows_Number_Box2(446, (Cur_Height - 125), MouseWheel_Multiplier, BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
+            if(ptk->MouseWheel_Multiplier < 1) ptk->MouseWheel_Multiplier = 1;
+            if(ptk->MouseWheel_Multiplier > 16) ptk->MouseWheel_Multiplier = 16;
+            Gui_Draw_Arrows_Number_Box2(446, (Cur_Height - 125), ptk->MouseWheel_Multiplier, BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
         }
 
         // Pattern highlight
@@ -508,7 +508,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         // Mousewheel
         if(zcheckMouse(ptk, 446, (Cur_Height - 125), 16, 16))
         {
-            MouseWheel_Multiplier--;
+            ptk->MouseWheel_Multiplier--;
             ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             ptk->teac = 6;
         }
@@ -516,7 +516,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         // Mousewheel
         if(zcheckMouse(ptk, 446 + 44, (Cur_Height - 125), 16, 16))
         {
-            MouseWheel_Multiplier++;
+            ptk->MouseWheel_Multiplier++;
             ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             ptk->teac = 6;
         }

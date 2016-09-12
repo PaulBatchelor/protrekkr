@@ -118,7 +118,6 @@ extern s_access sp_Position[MAX_TRACKS][MAX_POLYPHONY];
 extern int done;
 extern float local_curr_mas_vol;
 
-int MouseWheel_Multiplier = 1;
 char Rows_Decimal = FALSE;
 char See_Prev_Next_Pattern = FALSE;
 
@@ -5060,7 +5059,7 @@ void Mouse_Handler(ptk_data *ptk)
     if(Mouse.wheel == 1)
     {
         // Scroll the pattern
-        Mouse_Wheel_Pattern_Ed(ptk, -MouseWheel_Multiplier, !Songplaying && !is_recording);
+        Mouse_Wheel_Pattern_Ed(ptk, -ptk->MouseWheel_Multiplier, !Songplaying && !is_recording);
 
         // Scroll the files list
         switch(ptk->Scopish)
@@ -5105,16 +5104,16 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Scroll the knobs
-        Mouse_Wheel_303_Ed(ptk, MouseWheel_Multiplier);
+        Mouse_Wheel_303_Ed(ptk, ptk->MouseWheel_Multiplier);
 
-        Mouse_Wheel_Sample_Ed(ptk, MouseWheel_Multiplier);
+        Mouse_Wheel_Sample_Ed(ptk, ptk->MouseWheel_Multiplier);
     }
 
     // mouse wheel down
     if(Mouse.wheel == -1)
     {
         // Scroll the pattern
-        Mouse_Wheel_Pattern_Ed(ptk, MouseWheel_Multiplier, !Songplaying && !is_recording);
+        Mouse_Wheel_Pattern_Ed(ptk, ptk->MouseWheel_Multiplier, !Songplaying && !is_recording);
 
         switch(ptk->Scopish)
         {
@@ -5158,8 +5157,8 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Scroll the knobs
-        Mouse_Wheel_303_Ed(ptk, -MouseWheel_Multiplier);
-        Mouse_Wheel_Sample_Ed(ptk, -MouseWheel_Multiplier);
+        Mouse_Wheel_303_Ed(ptk, -ptk->MouseWheel_Multiplier);
+        Mouse_Wheel_Sample_Ed(ptk, -ptk->MouseWheel_Multiplier);
     }
 
     if(Mouse.button & MOUSE_LEFT_BUTTON)
@@ -6831,6 +6830,8 @@ void ptk_init(ptk_data *ptk)
     ptk->actuloop = 0;
 
     ptk->namesize = 8;
+    
+    ptk->MouseWheel_Multiplier = 1;
 
     luaL_openlibs(ptk->L);
 

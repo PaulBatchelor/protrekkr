@@ -95,7 +95,7 @@ void SaveConfig(ptk_data *ptk)
         Write_Data(ptk, &c_midiout, sizeof(c_midiout), 1, out);
 #endif
 
-        Write_Data_Swap(ptk, &MouseWheel_Multiplier, sizeof(MouseWheel_Multiplier), 1, out);
+        Write_Data_Swap(ptk, &ptk->MouseWheel_Multiplier, sizeof(ptk->MouseWheel_Multiplier), 1, out);
         Write_Data(ptk, &Rows_Decimal, sizeof(Rows_Decimal), 1, out);
         Write_Data(ptk, &FullScreen, sizeof(FullScreen), 1, out);
 
@@ -206,7 +206,7 @@ void LoadConfig(ptk_data *ptk)
             Read_Data(ptk, &c_midiout, sizeof(c_midiout), 1, in);
 #endif
 
-            Read_Data_Swap(ptk, &MouseWheel_Multiplier, sizeof(MouseWheel_Multiplier), 1, in);
+            Read_Data_Swap(ptk, &ptk->MouseWheel_Multiplier, sizeof(ptk->MouseWheel_Multiplier), 1, in);
             Read_Data(ptk, &Rows_Decimal, sizeof(Rows_Decimal), 1, in);
             Read_Data(ptk, &FullScreen, sizeof(FullScreen), 1, in);
 

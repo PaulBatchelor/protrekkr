@@ -109,6 +109,8 @@ typedef struct {
 
     int namesize;
 
+    int MouseWheel_Multiplier;
+
     lua_State *L;
 } ptk_data;
 #endif
