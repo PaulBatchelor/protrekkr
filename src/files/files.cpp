@@ -1640,7 +1640,7 @@ int Pack_Module(ptk_data *ptk, char *FileName)
     int Depack_Size;
 
     // Reset autosave counter
-    wait_AutoSave = 0;
+    ptk->wait_AutoSave = 0;
     
     if(!strlen(FileName))
     {

@@ -146,7 +146,6 @@ void Solo_Track(int track_to_solo);
 JAZZ_KEY Sub_Channels_Jazz[MAX_TRACKS][MAX_POLYPHONY];
 
 
-int wait_AutoSave;
 extern char AutoSave;
 int Values_AutoSave[] =
 {
@@ -3069,9 +3068,9 @@ Uint32 Timer_CallBack(Uint32 interval, void *param)
     // Don't save during a requester
     if(AutoSave && Current_Requester == NULL)
     {
-        wait_AutoSave++;
+        ptk->wait_AutoSave++;
         // Autosave module
-        if(wait_AutoSave > Values_AutoSave[AutoSave])
+        if(ptk->wait_AutoSave > Values_AutoSave[AutoSave])
         {
             Pack_Module(ptk, ptk->name);
         }

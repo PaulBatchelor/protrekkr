@@ -48,7 +48,6 @@ extern char AutoBackup;
 extern int Beveled;
 extern char Use_Shadows;
 extern int Continuous_Scroll;
-extern int wait_AutoSave;
 extern char Global_Patterns_Font;
 
 extern int metronome_magnify;
@@ -786,7 +785,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 8 + 112, (Cur_Height - 85), 16, 16))
         {
             AutoSave--;
-            wait_AutoSave = 0;
+            ptk->wait_AutoSave = 0;
             ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             ptk->teac = 15;
         }
@@ -795,7 +794,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 8 + 112 + 48 + 18, (Cur_Height - 85), 16, 16))
         {
             AutoSave++;
-            wait_AutoSave = 0;
+            ptk->wait_AutoSave = 0;
             ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             ptk->teac = 15;
         }

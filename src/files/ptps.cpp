@@ -301,7 +301,7 @@ int SavePtp(ptk_data *ptk, FILE *in, int Simulate, char *FileName)
 
     Out_constants = NULL;
     Out_FX = NULL;
-    wait_AutoSave = 0;
+    ptk->wait_AutoSave = 0;
 
     if(!Simulate)
     {

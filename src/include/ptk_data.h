@@ -115,6 +115,7 @@ typedef struct {
 
     char Rows_Decimal;
     char See_Prev_Next_Pattern;
+    int wait_AutoSave;
 
     lua_State *L;
 } ptk_data;
