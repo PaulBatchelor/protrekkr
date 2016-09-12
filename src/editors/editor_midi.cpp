@@ -343,7 +343,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
             int i;
             for(i = 0; i < MAX_POLYPHONY; i++)
             {
-                Midi_Current_Notes[CHAN_MIDI_PRG[ptk->Track_Under_Caret]][i] = 0;
+                Midi_Current_Notes[ptk->CHAN_MIDI_PRG[ptk->Track_Under_Caret]][i] = 0;
             }
             ptk->gui_action = GUI_CMD_MIDI_NOTE_OFF_1_TRACK;
         }

@@ -2123,7 +2123,7 @@ void Reset_Track(ptk_data *ptk, int Position, int Track)
     oldspawn[Track] = 0;
     roldspawn[Track] = 0;
 
-    CHAN_MIDI_PRG[Track] = Track;
+    ptk->CHAN_MIDI_PRG[Track] = Track;
 
     LFO_ON[Track] = 0;
     LFO_RATE[Track] = 0.0001f;
@@ -2216,7 +2216,7 @@ void Copy_Track(ptk_data *ptk, int Position, int Track_Src, int Track_Dst)
     oldspawn[Track_Dst] = oldspawn[Track_Src];
     roldspawn[Track_Dst] = roldspawn[Track_Src];
 
-    CHAN_MIDI_PRG[Track_Dst] = CHAN_MIDI_PRG[Track_Src];
+    ptk->CHAN_MIDI_PRG[Track_Dst] = ptk->CHAN_MIDI_PRG[Track_Src];
 
     FRez[Track_Dst] = FRez[Track_Src];
     

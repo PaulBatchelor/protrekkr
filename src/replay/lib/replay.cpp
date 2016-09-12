@@ -845,7 +845,6 @@ int delay_time;
 #if !defined(__STAND_ALONE__)
     int L_MaxLevel;
     int R_MaxLevel;
-    extern int CHAN_MIDI_PRG[MAX_TRACKS];
     float *Scope_Dats[MAX_TRACKS];
     float *Scope_Dats_LeftRight[2];
     int pos_scope;
@@ -2223,7 +2222,7 @@ void Pre_Song_Init(ptk_data *ptk)
         ResetFilters(ptk, ini);
 
 #if !defined(__STAND_ALONE__)
-        CHAN_MIDI_PRG[ini] = ini;
+        ptk->CHAN_MIDI_PRG[ini] = ini;
 #endif
 
 #if !defined(__STAND_ALONE__) || defined(__WINAMP__)
@@ -2747,12 +2746,12 @@ void Sp_Player(ptk_data *ptk)
                     {
                         if((pl_pan_row == 0x90 && pl_eff_row[i] < 128) && c_midiout != -1)
                         {
-                            Midi_Send(ptk, 176 + CHAN_MIDI_PRG[ct], pl_eff_row[i], pl_dat_row[i]);
+                            Midi_Send(ptk, 176 + ptk->CHAN_MIDI_PRG[ct], pl_eff_row[i], pl_dat_row[i]);
                         }
 
                         if((pl_eff_row[i] == 0x80 && pl_dat_row[i] < 128) && c_midiout != -1)
                         {
-                            Midi_Send(ptk, 176 + CHAN_MIDI_PRG[ct], 0, pl_dat_row[i]);
+                            Midi_Send(ptk, 176 + ptk->CHAN_MIDI_PRG[ct], 0, pl_dat_row[i]);
                         }
                     }
 #endif
@@ -2824,10 +2823,10 @@ void Sp_Player(ptk_data *ptk)
 
 #if !defined(__STAND_ALONE__)
 #if !defined(__NO_MIDI__)
-                        if(Midi_Current_Notes[CHAN_MIDI_PRG[ct]][j])
+                        if(Midi_Current_Notes[ptk->CHAN_MIDI_PRG[ct]][j])
                         {
-                            Midi_NoteOff(ptk, ct, Midi_Current_Notes[CHAN_MIDI_PRG[ct]][j]);
-                            Midi_Current_Notes[CHAN_MIDI_PRG[ct]][j] = 0;
+                            Midi_NoteOff(ptk, ct, Midi_Current_Notes[ptk->CHAN_MIDI_PRG[ct]][j]);
+                            Midi_Current_Notes[ptk->CHAN_MIDI_PRG[ct]][j] = 0;
                         }
 #endif
 #endif
@@ -2929,10 +2928,10 @@ void Sp_Player(ptk_data *ptk)
 
 #if !defined(__STAND_ALONE__)
 #if !defined(__NO_MIDI__)
-                            if(Midi_Current_Notes[CHAN_MIDI_PRG[ct]][i])
+                            if(Midi_Current_Notes[ptk->CHAN_MIDI_PRG[ct]][i])
                             {
-                                Midi_NoteOff(ptk, ct, Midi_Current_Notes[CHAN_MIDI_PRG[ct]][i]);
-                                Midi_Current_Notes[CHAN_MIDI_PRG[ct]][i] = 0;
+                                Midi_NoteOff(ptk, ct, Midi_Current_Notes[ptk->CHAN_MIDI_PRG[ct]][i]);
+                                Midi_Current_Notes[ptk->CHAN_MIDI_PRG[ct]][i] = 0;
                             }
 #endif
 #endif
@@ -4526,25 +4525,25 @@ void Play_Instrument(ptk_data *ptk, int channel, int sub_channel)
                Midiprg[associated_sample] != -1)
             {
                 // Remove the previous note
-                if(midi_sub_channel >= 1 && Midi_Current_Notes[CHAN_MIDI_PRG[channel]][midi_sub_channel - 1])
+                if(midi_sub_channel >= 1 && Midi_Current_Notes[ptk->CHAN_MIDI_PRG[channel]][midi_sub_channel - 1])
                 {
-                    Midi_NoteOff(ptk, channel, Midi_Current_Notes[CHAN_MIDI_PRG[channel]][midi_sub_channel - 1]);
-                    Midi_Current_Notes[CHAN_MIDI_PRG[channel]][midi_sub_channel - 1] = 0;
+                    Midi_NoteOff(ptk, channel, Midi_Current_Notes[ptk->CHAN_MIDI_PRG[channel]][midi_sub_channel - 1]);
+                    Midi_Current_Notes[ptk->CHAN_MIDI_PRG[channel]][midi_sub_channel - 1] = 0;
                 }
 
                 // Set the midi program if it was modified
-                if(LastProgram[CHAN_MIDI_PRG[channel]] != Midiprg[associated_sample])
+                if(LastProgram[ptk->CHAN_MIDI_PRG[channel]] != Midiprg[associated_sample])
                 {
-                    Midi_Send(ptk, 192 + CHAN_MIDI_PRG[channel], Midiprg[associated_sample], 127);
-                    LastProgram[CHAN_MIDI_PRG[channel]] = Midiprg[associated_sample];
+                    Midi_Send(ptk, 192 + ptk->CHAN_MIDI_PRG[channel], Midiprg[associated_sample], 127);
+                    LastProgram[ptk->CHAN_MIDI_PRG[channel]] = Midiprg[associated_sample];
                 }
 
                 // Send the note to the midi device
                 float veloc = vol * mas_vol * local_mas_vol * local_ramp_vol;
 
-                Midi_Send(ptk, 144 + CHAN_MIDI_PRG[channel], mnote, (int) (veloc * 127));
-                if(midi_sub_channel < 0) Midi_Current_Notes[CHAN_MIDI_PRG[channel]][(-midi_sub_channel) - 1] = mnote;
-                else Midi_Current_Notes[CHAN_MIDI_PRG[channel]][midi_sub_channel - 1] = mnote;
+                Midi_Send(ptk, 144 + ptk->CHAN_MIDI_PRG[channel], mnote, (int) (veloc * 127));
+                if(midi_sub_channel < 0) Midi_Current_Notes[ptk->CHAN_MIDI_PRG[channel]][(-midi_sub_channel) - 1] = mnote;
+                else Midi_Current_Notes[ptk->CHAN_MIDI_PRG[channel]][midi_sub_channel - 1] = mnote;
             }
 #endif // __NO_MIDI
 #endif // __STAND_ALONE__
@@ -4856,10 +4855,10 @@ void Do_Effects_Ticks_X(ptk_data *ptk)
 
 #if !defined(__STAND_ALONE__)
 #if !defined(__NO_MIDI__)
-                        if(Midi_Current_Notes[CHAN_MIDI_PRG[trackef]][i])
+                        if(Midi_Current_Notes[ptk->CHAN_MIDI_PRG[trackef]][i])
                         {
-                            Midi_NoteOff(ptk, trackef, Midi_Current_Notes[CHAN_MIDI_PRG[trackef]][i]);
-                            Midi_Current_Notes[CHAN_MIDI_PRG[trackef]][i] = 0;
+                            Midi_NoteOff(ptk, trackef, Midi_Current_Notes[ptk->CHAN_MIDI_PRG[trackef]][i]);
+                            Midi_Current_Notes[ptk->CHAN_MIDI_PRG[trackef]][i] = 0;
                         }
 #endif
 #endif
@@ -5137,10 +5136,10 @@ void Do_Effects_Ticks_X(ptk_data *ptk)
 
 #if !defined(__STAND_ALONE__)
 #if !defined(__NO_MIDI__)
-                                if(Midi_Current_Notes[CHAN_MIDI_PRG[trackef]][j])
+                                if(Midi_Current_Notes[ptk->CHAN_MIDI_PRG[trackef]][j])
                                 {
-                                    Midi_NoteOff(ptk, trackef, Midi_Current_Notes[CHAN_MIDI_PRG[trackef]][j]);
-                                    Midi_Current_Notes[CHAN_MIDI_PRG[trackef]][j] = 0;
+                                    Midi_NoteOff(ptk, trackef, Midi_Current_Notes[ptk->CHAN_MIDI_PRG[trackef]][j]);
+                                    Midi_Current_Notes[ptk->CHAN_MIDI_PRG[trackef]][j] = 0;
                                 }
 #endif
 #endif

@@ -119,6 +119,8 @@ typedef struct {
     int gui_thread_action;
     int gui_bpm_action;
 
+    /* MAX_TRACKS is 16 */
+    int CHAN_MIDI_PRG[16];
 
     lua_State *L;
 } ptk_data;

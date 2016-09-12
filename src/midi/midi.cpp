@@ -295,15 +295,15 @@ void Midi_NoteOff(ptk_data *ptk, int channel, int note)
     if(c_midiout != -1)
     {
         note++;
-        _Midi_Send(ptk, 176 + CHAN_MIDI_PRG[channel], 0x40, 0);
+        _Midi_Send(ptk, 176 + ptk->CHAN_MIDI_PRG[channel], 0x40, 0);
         if(note)
         {
             for(i = 0; i < 256; i++)
             {
-                if(Midi_Notes_History[CHAN_MIDI_PRG[channel]][i] == note)
+                if(Midi_Notes_History[ptk->CHAN_MIDI_PRG[channel]][i] == note)
                 {
-                    _Midi_Send(ptk, 0x80 + CHAN_MIDI_PRG[channel], (note - 1), 127);
-                    Midi_Notes_History[CHAN_MIDI_PRG[channel]][i] = 0;
+                    _Midi_Send(ptk, 0x80 + ptk->CHAN_MIDI_PRG[channel], (note - 1), 127);
+                    Midi_Notes_History[ptk->CHAN_MIDI_PRG[channel]][i] = 0;
                     break;
                 }
             }
@@ -312,8 +312,8 @@ void Midi_NoteOff(ptk_data *ptk, int channel, int note)
         {
             for(i = 0; i < 256; i++)
             {
-                _Midi_Send(ptk, 0x80 + CHAN_MIDI_PRG[channel], (Midi_Notes_History[CHAN_MIDI_PRG[channel]][i] - 1), 127);
-                Midi_Notes_History[CHAN_MIDI_PRG[channel]][i] = 0;
+                _Midi_Send(ptk, 0x80 + ptk->CHAN_MIDI_PRG[channel], (Midi_Notes_History[ptk->CHAN_MIDI_PRG[channel]][i] - 1), 127);
+                Midi_Notes_History[ptk->CHAN_MIDI_PRG[channel]][i] = 0;
             }
             Midi_Notes_History_Amount = 0;
         }

@@ -251,15 +251,15 @@ void Actualize_Track_Ed(ptk_data *ptk, char gode)
 
         if(gode == 0 || gode == 11 || gode == 15)
         {
-            if(CHAN_MIDI_PRG[ptk->Track_Under_Caret] > 15)
+            if(ptk->CHAN_MIDI_PRG[ptk->Track_Under_Caret] > 15)
             {
-                CHAN_MIDI_PRG[ptk->Track_Under_Caret] = 0;
+                ptk->CHAN_MIDI_PRG[ptk->Track_Under_Caret] = 0;
             }
-            if(CHAN_MIDI_PRG[ptk->Track_Under_Caret] < 0)
+            if(ptk->CHAN_MIDI_PRG[ptk->Track_Under_Caret] < 0)
             {
-                CHAN_MIDI_PRG[ptk->Track_Under_Caret] = 15;
+                ptk->CHAN_MIDI_PRG[ptk->Track_Under_Caret] = 15;
             }
-            Gui_Draw_Arrows_Number_Box2(570, (Cur_Height - 70), CHAN_MIDI_PRG[ptk->Track_Under_Caret] + 1, BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
+            Gui_Draw_Arrows_Number_Box2(570, (Cur_Height - 70), ptk->CHAN_MIDI_PRG[ptk->Track_Under_Caret] + 1, BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
         }
 
         if(gode == 0 || gode == 12 || gode == 15)
@@ -410,13 +410,13 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
         // Midi channel
         if(zcheckMouse(ptk, 570, (Cur_Height - 70), 16, 16))
         {
-            CHAN_MIDI_PRG[ptk->Track_Under_Caret]--;
+            ptk->CHAN_MIDI_PRG[ptk->Track_Under_Caret]--;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_ED;
             ptk->teac = 11;
         }
         if(zcheckMouse(ptk, 614, (Cur_Height - 70), 16, 16))
         {
-            CHAN_MIDI_PRG[ptk->Track_Under_Caret]++;
+            ptk->CHAN_MIDI_PRG[ptk->Track_Under_Caret]++;
             ptk->gui_action = GUI_CMD_UPDATE_TRACK_ED;
             ptk->teac = 11;
         }

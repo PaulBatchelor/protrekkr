@@ -607,7 +607,7 @@ Read_Mod_File:
 
         for(twrite = 0; twrite < Songtracks; twrite++)
         {
-            Read_Mod_Data_Swap(ptk, &CHAN_MIDI_PRG[twrite], sizeof(int), 1, in);
+            Read_Mod_Data_Swap(ptk, &ptk->CHAN_MIDI_PRG[twrite], sizeof(int), 1, in);
         }
 
         for(twrite = 0; twrite < Songtracks; twrite++)
@@ -1413,7 +1413,7 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
 
             for(twrite = 0; twrite < MAX_TRACKS; twrite++)
             {
-                Write_Mod_Data_Swap(ptk, &CHAN_MIDI_PRG[twrite], sizeof(int), 1, in);
+                Write_Mod_Data_Swap(ptk, &ptk->CHAN_MIDI_PRG[twrite], sizeof(int), 1, in);
             }
 
             for(twrite = 0; twrite < MAX_TRACKS; twrite++)

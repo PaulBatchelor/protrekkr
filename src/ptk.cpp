@@ -85,6 +85,7 @@ ptk_data ptk;
 /*TODO: remove need for global pointer */
 ptk_data *g_ptk = &ptk;
 
+/*TODO: this variable conflicts with tVisible_Columns somewhere */
 char Visible_Columns = 0;
 
 /*TODO: this variable xoffseted is not unique. */
@@ -100,7 +101,6 @@ int xoffseted;
 
 //int LastPedRow = -1;
 //char ptk->po_alt = TRUE;
-int CHAN_MIDI_PRG[MAX_TRACKS];
 
 
 
@@ -5971,15 +5971,15 @@ int Next_Line_Pattern_Auto(ptk_data *ptk, int *position, int lines, int *line)
 // Return the track associated with the midi channel
 int Get_Midi_Channel(int midi_channel)
 {
-    int i;
+    //int i;
 
-    for(i = 0; i < MAX_TRACKS; i++)
-    {
-        if(midi_channel == CHAN_MIDI_PRG[i])
-        {
-            return(i);
-        }
-    }
+    //for(i = 0; i < MAX_TRACKS; i++)
+    //{
+    //    if(midi_channel == ptk->CHAN_MIDI_PRG[i])
+    //    {
+    //        return(i);
+    //    }
+    //}
     return(-1);
 }
 
