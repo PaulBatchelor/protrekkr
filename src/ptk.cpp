@@ -118,8 +118,8 @@ extern s_access sp_Position[MAX_TRACKS][MAX_POLYPHONY];
 extern int done;
 extern float local_curr_mas_vol;
 
-char Rows_Decimal = FALSE;
-char See_Prev_Next_Pattern = FALSE;
+//char ptk->Rows_Decimal = FALSE;
+//char ptk->See_Prev_Next_Pattern = FALSE;
 
 char cur_input_name[1024];
 
@@ -6833,6 +6833,8 @@ void ptk_init(ptk_data *ptk)
     ptk->MouseWheel_Multiplier = 1;
 
     ptk->Jazz_Edit = FALSE;
+    ptk->Rows_Decimal = FALSE;
+    ptk->See_Prev_Next_Pattern = FALSE;
 
     luaL_openlibs(ptk->L);
 

@@ -521,7 +521,7 @@ Skip_Header2:
         rel = liner + line;
         In_Prev_Next = In_Prev_Next2;
 
-        if(See_Prev_Next_Pattern)
+        if(ptk->See_Prev_Next_Pattern)
         {
             // Can't see past the first & last positions
             if(Cur_Position2)
@@ -949,7 +949,7 @@ void Display_Patt_Line(ptk_data *ptk, int In_Prev_Next, int Shadow_Pattern,
     ptr_table_decimal = table_decimal + (rel * 3);
 
     // Display the row index
-    if(Rows_Decimal)
+    if(ptk->Rows_Decimal)
     {
         Letter(1, y, ptr_table_decimal[0], high_color, high_color + 7);
         Letter(9, y, ptr_table_decimal[1], high_color, high_color + 7);
@@ -1529,7 +1529,7 @@ void draw_pated_highlight(ptk_data *ptk, int track, int line, int petrack, int r
 
         // Row number
         ptr_table_decimal = table_decimal + (line * 3);
-        if(Rows_Decimal)
+        if(ptk->Rows_Decimal)
         {
             Letter(1, ypos, ptr_table_decimal[0], 16, 16 + 15);
             Letter(9, ypos, ptr_table_decimal[1], 16, 16 + 15);

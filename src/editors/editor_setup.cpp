@@ -177,7 +177,7 @@ void Actualize_Master_Ed(ptk_data *ptk, char gode)
             }
             else
             {
-                if(Rows_Decimal)
+                if(ptk->Rows_Decimal)
                 {
                     Gui_Draw_Arrows_Number_Box2(446, (Cur_Height - 105), patt_highlight, BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
                 }
@@ -192,7 +192,7 @@ void Actualize_Master_Ed(ptk_data *ptk, char gode)
         // Use decimal numbering for rows
         if(gode == 0 || gode == 8)
         {
-            if(Rows_Decimal)
+            if(ptk->Rows_Decimal)
             {
                 Gui_Draw_Button_Box(446, (Cur_Height - 85), 29, 16, "On", BUTTON_PUSHED | BUTTON_TEXT_CENTERED);
                 Gui_Draw_Button_Box(446 + 31, (Cur_Height - 85), 29, 16, "Off", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
@@ -207,7 +207,7 @@ void Actualize_Master_Ed(ptk_data *ptk, char gode)
         // Show Prev. next pattern
         if(gode == 0 || gode == 13)
         {
-            if(See_Prev_Next_Pattern)
+            if(ptk->See_Prev_Next_Pattern)
             {
                 Gui_Draw_Button_Box(446, (Cur_Height - 65), 29, 16, "On", BUTTON_PUSHED | BUTTON_TEXT_CENTERED);
                 Gui_Draw_Button_Box(446 + 31, (Cur_Height - 65), 29, 16, "Off", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
@@ -539,7 +539,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         // Rows decimal on
         if(zcheckMouse(ptk, 446, (Cur_Height - 85), 29, 16))
         {
-            Rows_Decimal = TRUE;
+            ptk->Rows_Decimal = TRUE;
             ptk->teac = 0;
             ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             Actualize_Sequencer(ptk);
@@ -549,7 +549,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         // Rows decimal off
         if(zcheckMouse(ptk, 446 + 31, (Cur_Height - 85), 29, 16))
         {
-            Rows_Decimal = FALSE;
+            ptk->Rows_Decimal = FALSE;
             ptk->teac = 0;
             ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             Actualize_Sequencer(ptk);
@@ -559,7 +559,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         // See prev/next pattern
         if(zcheckMouse(ptk, 446, (Cur_Height - 65), 29, 16))
         {
-            See_Prev_Next_Pattern = TRUE;
+            ptk->See_Prev_Next_Pattern = TRUE;
             ptk->teac = 13;
             ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             Actupated(ptk, 0);
@@ -568,7 +568,7 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         // See prev/next pattern
         if(zcheckMouse(ptk, 446 + 31, (Cur_Height - 65), 29, 16))
         {
-            See_Prev_Next_Pattern = FALSE;
+            ptk->See_Prev_Next_Pattern = FALSE;
             ptk->teac = 13;
             ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             Actupated(ptk, 0);

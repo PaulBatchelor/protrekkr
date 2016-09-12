@@ -113,6 +113,9 @@ typedef struct {
 
     char Jazz_Edit;
 
+    char Rows_Decimal;
+    char See_Prev_Next_Pattern;
+
     lua_State *L;
 } ptk_data;
 #endif

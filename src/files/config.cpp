@@ -95,7 +95,7 @@ void SaveConfig(ptk_data *ptk)
 #endif
 
         Write_Data_Swap(ptk, &ptk->MouseWheel_Multiplier, sizeof(ptk->MouseWheel_Multiplier), 1, out);
-        Write_Data(ptk, &Rows_Decimal, sizeof(Rows_Decimal), 1, out);
+        Write_Data(ptk, &ptk->Rows_Decimal, sizeof(ptk->Rows_Decimal), 1, out);
         Write_Data(ptk, &FullScreen, sizeof(FullScreen), 1, out);
 
         for(i = 0; i < NUMBER_COLORS; i++)
@@ -105,7 +105,7 @@ void SaveConfig(ptk_data *ptk)
             Write_Data(ptk, &Ptk_Palette[Real_Palette_Idx].g, sizeof(char), 1, out);
             Write_Data(ptk, &Ptk_Palette[Real_Palette_Idx].b, sizeof(char), 1, out);
         }
-        Write_Data(ptk, &See_Prev_Next_Pattern, sizeof(See_Prev_Next_Pattern), 1, out);
+        Write_Data(ptk, &ptk->See_Prev_Next_Pattern, sizeof(ptk->See_Prev_Next_Pattern), 1, out);
         Write_Data_Swap(ptk, &Beveled, sizeof(Beveled), 1, out);
         Write_Data_Swap(ptk, &Continuous_Scroll, sizeof(Continuous_Scroll), 1, out);
         Write_Data(ptk, &AutoSave, sizeof(AutoSave), 1, out);
@@ -206,7 +206,7 @@ void LoadConfig(ptk_data *ptk)
 #endif
 
             Read_Data_Swap(ptk, &ptk->MouseWheel_Multiplier, sizeof(ptk->MouseWheel_Multiplier), 1, in);
-            Read_Data(ptk, &Rows_Decimal, sizeof(Rows_Decimal), 1, in);
+            Read_Data(ptk, &ptk->Rows_Decimal, sizeof(ptk->Rows_Decimal), 1, in);
             Read_Data(ptk, &FullScreen, sizeof(FullScreen), 1, in);
 
             for(i = 0; i < NUMBER_COLORS; i++)
@@ -217,7 +217,7 @@ void LoadConfig(ptk_data *ptk)
                 Read_Data(ptk, &Ptk_Palette[Real_Palette_Idx].b, sizeof(char), 1, in);
                 Ptk_Palette[Real_Palette_Idx].unused = 0;
             }
-            Read_Data(ptk, &See_Prev_Next_Pattern, sizeof(See_Prev_Next_Pattern), 1, in);
+            Read_Data(ptk, &ptk->See_Prev_Next_Pattern, sizeof(ptk->See_Prev_Next_Pattern), 1, in);
             Read_Data_Swap(ptk, &Beveled, sizeof(Beveled), 1, in);
             Read_Data_Swap(ptk, &Continuous_Scroll, sizeof(Continuous_Scroll), 1, in);
             Read_Data(ptk, &AutoSave, sizeof(AutoSave), 1, in);

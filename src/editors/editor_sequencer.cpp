@@ -844,7 +844,7 @@ void Actualize_Sequencer(ptk_data *ptk)
     Gui_Draw_Arrows_Number_Box(188, 28, Cur_Position, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     Gui_Draw_Arrows_Number_Box(188, 46, pSequence[Cur_Position], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     Anat(Cur_Position);
-    if(Rows_Decimal) Gui_Draw_Arrows_Number_Box(188, 82, patternLines[pSequence[Cur_Position]], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
+    if(ptk->Rows_Decimal) Gui_Draw_Arrows_Number_Box(188, 82, patternLines[pSequence[Cur_Position]], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     else value_box(188, 82, patternLines[pSequence[Cur_Position]], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     Gui_Draw_Arrows_Number_Box(188, 64, Song_Length, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     if(ptk->userscreen == USER_SCREEN_SEQUENCER) Actualize_Seq_Ed(ptk, 0);
