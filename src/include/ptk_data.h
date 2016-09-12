@@ -70,6 +70,13 @@ typedef struct {
     char userscreen;
     /* MAX_PATH is 260 */
     char name[260];
+    char synthname[260];
+    char instrname[260];
+    char name303[260];
+    char namerev[260];
+    char namemidicfg[260];
+    char artist[20];
+    char style[20];
 
     lua_State *L;
 } ptk_data;

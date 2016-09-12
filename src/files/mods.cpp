@@ -521,7 +521,7 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
             Seek_Mod(0, SEEK_SET);
 
             // Read the title
-            sprintf(style, "Converted");
+            sprintf(ptk->style, "Converted");
             if(!digibooster)
             {
                 memset(Name, 0, 21);

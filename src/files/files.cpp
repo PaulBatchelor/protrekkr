@@ -651,8 +651,8 @@ Read_Mod_File:
 
         if(!Ntk_Beta)       // Nothing like that in ntk beta
         {
-            Read_Mod_Data(ptk, artist, sizeof(char), 20, in);
-            Read_Mod_Data(ptk, style, sizeof(char), 20, in);
+            Read_Mod_Data(ptk, ptk->artist, sizeof(char), 20, in);
+            Read_Mod_Data(ptk, ptk->style, sizeof(char), 20, in);
 
             if(!Portable) Read_Mod_Data(ptk, &Ye_Old_Phony_Value, sizeof(char), 1, in);
 
@@ -1448,10 +1448,10 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
                 Write_Mod_Data(ptk, &Disclap[tps_trk], sizeof(char), 1, in);
             }
 
-            rtrim_string(ptk, artist, 20);
-            Write_Mod_Data(ptk, artist, sizeof(char), 20, in);
-            rtrim_string(ptk, style, 20);
-            Write_Mod_Data(ptk, style, sizeof(char), 20, in);
+            rtrim_string(ptk, ptk->artist, 20);
+            Write_Mod_Data(ptk, ptk->artist, sizeof(char), 20, in);
+            rtrim_string(ptk, ptk->style, 20);
+            Write_Mod_Data(ptk, ptk->style, sizeof(char), 20, in);
 
             Write_Mod_Data(ptk, beatsync, sizeof(char), 128, in);
 

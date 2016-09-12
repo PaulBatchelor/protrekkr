@@ -272,23 +272,23 @@ void Actualize_DiskIO_Ed(ptk_data *ptk, int gode)
 
         if(snamesel == INPUT_MODULE_ARTIST)
         {
-            sprintf(tname, "%s_", artist);
+            sprintf(tname, "%s_", ptk->artist);
             Gui_Draw_Button_Box(90, (Cur_Height - 76), 162, 16, tname, BUTTON_PUSHED | BUTTON_INPUT);
         }
         else
         {
-            sprintf(tname, "%s", artist);
+            sprintf(tname, "%s", ptk->artist);
             Gui_Draw_Button_Box(90, (Cur_Height - 76), 162, 16, tname, BUTTON_NORMAL | BUTTON_INPUT);
         }
 
         if(snamesel == INPUT_MODULE_STYLE)
         {
-            sprintf(tname, "%s_", style);
+            sprintf(tname, "%s_", ptk->style);
             Gui_Draw_Button_Box(90, (Cur_Height - 58), 162, 16, tname, BUTTON_PUSHED | BUTTON_INPUT);
         }
         else
         {
-            sprintf(tname, "%s", style);
+            sprintf(tname, "%s", ptk->style);
             Gui_Draw_Button_Box(90, (Cur_Height - 58), 162, 16, tname, BUTTON_NORMAL | BUTTON_INPUT);
         }
     }
@@ -398,21 +398,21 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
-        // Start artist name input
+        // Start ptk->artist name input
         if(zcheckMouse(ptk, 90, (Cur_Height - 76), 162, 16) && snamesel == INPUT_NONE)
         {
-            strcpy(cur_input_name, artist);
-            sprintf(artist, "");
+            strcpy(cur_input_name, ptk->artist);
+            sprintf(ptk->artist, "");
             namesize = 0;
             snamesel = INPUT_MODULE_ARTIST;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
         }
 
-        // Start module style input
+        // Start module ptk->style input
         if(zcheckMouse(ptk, 90, (Cur_Height - 58), 162, 16) && snamesel == INPUT_NONE)
         {
-            strcpy(cur_input_name, style);
-            sprintf(style, "");
+            strcpy(cur_input_name, ptk->style);
+            sprintf(ptk->style, "");
             namesize = 0;
             snamesel = INPUT_MODULE_STYLE;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;

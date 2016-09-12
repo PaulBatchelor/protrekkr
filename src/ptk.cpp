@@ -95,14 +95,6 @@ int xoffseted;
 //int c_r_release = 0;
 //int c_l_release = 0;
 
-char synthname[MAX_PATH];
-char instrname[MAX_PATH];
-char name303[MAX_PATH];
-char namerev[MAX_PATH];
-char namemidicfg[MAX_PATH];
-char artist[20];
-char style[20];
-
 int Current_Instrument = 0;
 int restx = 0;
 int resty = 0;
@@ -470,8 +462,8 @@ int Init_Context(ptk_data *ptk)
     sprintf(Reverb_Name, "Untitled");
     sprintf(Midi_Name, "Untitled");
     sprintf(ptk->name, "Untitled");
-    sprintf(artist, "Somebody");
-    sprintf(style, "Anything goes");
+    sprintf(ptk->artist, "Somebody");
+    sprintf(ptk->style, "Anything goes");
 
     namesize = 8;
     IniCsParNames(ptk);
@@ -1901,9 +1893,9 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
            strcmp(extension, "TWNNINS8") == 0 ||
            strcmp(extension, "TWNNINS9") == 0)
         {
-            sprintf(instrname, "%s", FileName);
+            sprintf(ptk->instrname, "%s", FileName);
             Stop_Current_Instrument();
-            LoadInst(ptk, instrname);
+            LoadInst(ptk, ptk->instrname);
             Renew_Sample_Ed(ptk);
         }
         else if(strcmp(extension, "TWNNSNG1") == 0 ||   // For salvage purpose
@@ -1944,32 +1936,32 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
                 strcmp(extension, "TWNNSYN3") == 0 ||
                 strcmp(extension, "TWNNSYN4") == 0)
         {
-            sprintf(synthname, "%s", FileName);
+            sprintf(ptk->synthname, "%s", FileName);
             Stop_Current_Instrument();
-            LoadSynth(ptk, synthname);
+            LoadSynth(ptk, ptk->synthname);
         }
         else if(strcmp(extension, "TWNN3030") == 0 ||
                 strcmp(extension, "TWNN3031") == 0)
         {
-            sprintf(name303, "%s", FileName);
-            Load303(ptk, name303);
+            sprintf(ptk->name303, "%s", FileName);
+            Load303(ptk, ptk->name303);
         }
         else if(strcmp(extension, "TWNNREV1") == 0)
         {
-            sprintf(namerev, "%s", FileName);
-            LoadReverb(ptk, namerev);
+            sprintf(ptk->namerev, "%s", FileName);
+            LoadReverb(ptk, ptk->namerev);
         }
         else if(strcmp(extension, "PROTMID1") == 0)
         {
-            sprintf(namemidicfg, "%s", FileName);
-            LoadMidiCfg(ptk, namemidicfg);
+            sprintf(ptk->namemidicfg, "%s", FileName);
+            LoadMidiCfg(ptk, ptk->namemidicfg);
         }
         else if((strcmp(extension, "TWNNBLK1") == 0) ||
                 (strcmp(extension, "PROTBLK2") == 0)
                )
         {
-            sprintf(namerev, "%s", FileName);
-            LoadPattern(ptk, namerev);
+            sprintf(ptk->namerev, "%s", FileName);
+            LoadPattern(ptk, ptk->namerev);
         }
         else
         {
@@ -2429,8 +2421,8 @@ void Newmod(ptk_data *ptk)
         sprintf(Reverb_Name, "Untitled");
         sprintf(Midi_Name, "Untitled");
         sprintf(ptk->name, "Untitled");
-        sprintf(artist, "Somebody");
-        sprintf(style, "Anything Goes");
+        sprintf(ptk->artist, "Somebody");
+        sprintf(ptk->style, "Anything Goes");
         namesize = 8;
         BeatsPerMin = 125;
         TicksPerBeat = 4;
@@ -3134,15 +3126,15 @@ void Actualize_Input(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             break;
 
-        // Module artist
+        // Module ptk->artist
         case INPUT_MODULE_ARTIST:
-            Actualize_Name(ptk->retletter, artist);
+            Actualize_Name(ptk->retletter, ptk->artist);
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
             break;
 
-        // Module style
+        // Module ptk->style
         case INPUT_MODULE_STYLE:
-            Actualize_Name(ptk->retletter, style);
+            Actualize_Name(ptk->retletter, ptk->style);
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
             break;
 

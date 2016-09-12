@@ -1215,7 +1215,7 @@ const char* TiXmlElement::ReadValue( const char* p, TiXmlParsingData* data, TiXm
 		{
 			// We hit a '<'
 			// Have we hit a new element or an end tag? This could also be
-			// a TiXmlText in the "CDATA" style.
+			// a TiXmlText in the "CDATA" ptk->style.
 			if ( StringEqual( p, "</", false, encoding ) )
 			{
 				return p;

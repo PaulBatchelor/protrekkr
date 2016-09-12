@@ -2195,8 +2195,8 @@ void Pre_Song_Init(ptk_data *ptk)
     glide = 0;
 
 #if !defined(__STAND_ALONE__)
-    sprintf(artist, "Somebody");
-    sprintf(style, "Anything Goes");
+    sprintf(ptk->artist, "Somebody");
+    sprintf(ptk->style, "Anything Goes");
 #endif
 
     shuffle = 0;
