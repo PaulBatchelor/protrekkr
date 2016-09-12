@@ -80,6 +80,9 @@ typedef struct {
 
     int Current_Instrument;
 
+    int restx;
+    int resty;
+
     lua_State *L;
 } ptk_data;
 #endif

@@ -95,8 +95,8 @@ int xoffseted;
 //int c_r_release = 0;
 //int c_l_release = 0;
 
-int restx = 0;
-int resty = 0;
+//int ptk->restx = 0;
+//int ptk->resty = 0;
 int fsize = 0;
 char draw_sampled_wave = FALSE;
 char draw_sampled_wave2 = FALSE;
@@ -6820,6 +6820,8 @@ void ptk_init(ptk_data *ptk)
 
     ptk->Current_Instrument = 0;
     ptk->userscreen = USER_SCREEN_DISKIO_EDIT;
+    ptk->restx = 0;
+    ptk->resty = 0;
 
 
     ptk->L = luaL_newstate();

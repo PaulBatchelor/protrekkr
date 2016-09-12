@@ -966,10 +966,10 @@ int Switch_FullScreen(ptk_data *ptk, int Width, int Height)
     ptk->CONSOLE_HEIGHT2 = Cur_Height;
     MAX_PATT_SCREEN_X = Cur_Width - 19;
     Set_Pattern_Size(ptk);
-    restx = ptk->CONSOLE_WIDTH - 640;
-    resty = ptk->CONSOLE_HEIGHT - 492;
+    ptk->restx = ptk->CONSOLE_WIDTH - 640;
+    ptk->resty = ptk->CONSOLE_HEIGHT - 492;
     ptk->CONSOLE_HEIGHT2 = ptk->CONSOLE_HEIGHT - 42;
-    fsize = 638 + restx;
+    fsize = 638 + ptk->restx;
     Visible_Columns = ptk->CONSOLE_WIDTH / 128;
 
     // Flush any pending rects
