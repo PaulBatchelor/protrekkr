@@ -2625,11 +2625,12 @@ void Sp_Player(ptk_data *ptk)
     delay_left_final = 0.0f;
     delay_right_final = 0.0f;
 #endif
-
+    ptk->tick =0;
     if(Songplaying)
     {
         if(PosInTick == 0)
         {
+            ptk->tick = 1;
 
 #if defined(PTK_FX_TICK0)
             Do_Effects_Tick_0(ptk);
