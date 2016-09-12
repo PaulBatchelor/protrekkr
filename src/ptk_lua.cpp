@@ -3,7 +3,9 @@
 
 static int foo(lua_State *L)
 {
-    fprintf(stderr, "this is something...\n");
+    lua_getglobal(L, "ptk");
+    ptk_data *ptk = (ptk_data *)lua_touserdata(L, -1);
+    fprintf(stderr, "this is something... %d\n", ptk->Current_Instrument);
     return 0;
 }
 

@@ -6793,7 +6793,7 @@ void ptk_init(ptk_data *ptk)
     ptk->Track_Under_Caret = 0;
     ptk->gui_track = 0;
 
-    ptk->Current_Instrument = 0;
+    ptk->Current_Instrument = 4;
     ptk->userscreen = USER_SCREEN_DISKIO_EDIT;
     ptk->restx = 0;
     ptk->resty = 0;
