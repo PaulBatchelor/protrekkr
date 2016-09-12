@@ -1843,7 +1843,7 @@ void bjbox(int x, int y, int sx, int sy)
 // Display a status message at the bottom of the screen
 void Status_Box(ptk_data *ptk, char const *str)
 {
-    Gui_Draw_Button_Box(0, ptk->CONSOLE_HEIGHT - 21, fsize, 18, str, BUTTON_NORMAL | BUTTON_DISABLED);
+    Gui_Draw_Button_Box(0, ptk->CONSOLE_HEIGHT - 21, ptk->fsize, 18, str, BUTTON_NORMAL | BUTTON_DISABLED);
     fprintf(stderr, str);
     fprintf(stderr, "\n");
 }

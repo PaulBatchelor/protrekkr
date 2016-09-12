@@ -120,12 +120,12 @@ int ToGSM(short *Source, short *Dest, int Size)
     acmStreamOpen(&Pack_Stream, NULL, (LPWAVEFORMATEX) &Wave_Format, (LPWAVEFORMATEX) &GSM_Format, NULL, 0, 0, ACM_STREAMOPENF_NONREALTIME);
 
     Src_size = Size;
-    unsigned long rawbufsize = 0;
-    acmStreamSize(Pack_Stream, Src_size, &rawbufsize, ACM_STREAMSIZEF_SOURCE);
+    unsigned long rawbuptk->fsize = 0;
+    acmStreamSize(Pack_Stream, Src_size, &rawbuptk->fsize, ACM_STREAMSIZEF_SOURCE);
     Uint8 *Pack_Buf = (Uint8 *) malloc(Src_size + 8);
     memset(Pack_Buf, 0, Src_size + 8);
-    Uint8 *rawbuf = (Uint8 *) malloc(rawbufsize + 8);
-    memset(rawbuf, 0, rawbufsize + 8);
+    Uint8 *rawbuf = (Uint8 *) malloc(rawbuptk->fsize + 8);
+    memset(rawbuf, 0, rawbuptk->fsize + 8);
 
     ACMSTREAMHEADER Pack_Stream_Head;
     ZeroMemory(&Pack_Stream_Head, sizeof(ACMSTREAMHEADER));
@@ -133,7 +133,7 @@ int ToGSM(short *Source, short *Dest, int Size)
     Pack_Stream_Head.pbSrc = (Uint8 *) Pack_Buf;
     Pack_Stream_Head.cbSrcLength = Src_size;
     Pack_Stream_Head.pbDst = rawbuf;
-    Pack_Stream_Head.cbDstLength = rawbufsize;
+    Pack_Stream_Head.cbDstLength = rawbuptk->fsize;
     acmStreamPrepareHeader(Pack_Stream, &Pack_Stream_Head, 0);
 
     memcpy(Pack_Buf, Source, Src_size);
@@ -214,12 +214,12 @@ int ToAT3(short *Source, short *Dest, int Size, int BitRate)
     Size *= 2;
 
     Src_size = Size;
-    unsigned long rawbufsize = 0;
-    acmStreamSize(Pack_Stream, Src_size, &rawbufsize, ACM_STREAMSIZEF_SOURCE);
+    unsigned long rawbuptk->fsize = 0;
+    acmStreamSize(Pack_Stream, Src_size, &rawbuptk->fsize, ACM_STREAMSIZEF_SOURCE);
     Uint8 *Pack_Buf = (Uint8 *) malloc(Src_size + 8);
     memset(Pack_Buf, 0, Src_size + 8);
-    Uint8 *rawbuf = (Uint8 *) malloc(rawbufsize + 8);
-    memset(rawbuf, 0, rawbufsize + 8);
+    Uint8 *rawbuf = (Uint8 *) malloc(rawbuptk->fsize + 8);
+    memset(rawbuf, 0, rawbuptk->fsize + 8);
 
     ACMSTREAMHEADER Pack_Stream_Head;
     ZeroMemory(&Pack_Stream_Head, sizeof(ACMSTREAMHEADER));
@@ -227,7 +227,7 @@ int ToAT3(short *Source, short *Dest, int Size, int BitRate)
     Pack_Stream_Head.pbSrc = (Uint8 *) Pack_Buf;
     Pack_Stream_Head.cbSrcLength = Src_size;
     Pack_Stream_Head.pbDst = rawbuf;
-    Pack_Stream_Head.cbDstLength = rawbufsize;
+    Pack_Stream_Head.cbDstLength = rawbuptk->fsize;
     acmStreamPrepareHeader(Pack_Stream, &Pack_Stream_Head, 0);
 
     memcpy(Pack_Buf, Source, Src_size);
@@ -285,13 +285,13 @@ int ToMP3(short *Source, short *Dest, int Size, int BitRate)
     acmStreamOpen(&Pack_Stream, NULL, (LPWAVEFORMATEX) &Wave_Format, (LPWAVEFORMATEX) &MP3_Format, NULL, 0, 0, 0);
 
     Src_size = Size;
-    unsigned long rawbufsize = 0;
-    acmStreamSize(Pack_Stream, Src_size, &rawbufsize, ACM_STREAMSIZEF_SOURCE);
-    rawbufsize += MP3_FRAMES_LAG * 2;
+    unsigned long rawbuptk->fsize = 0;
+    acmStreamSize(Pack_Stream, Src_size, &rawbuptk->fsize, ACM_STREAMSIZEF_SOURCE);
+    rawbuptk->fsize += MP3_FRAMES_LAG * 2;
     Uint8 *Pack_Buf = (Uint8 *) malloc(Src_size + (MP3_FRAMES_LAG * 4) + 8);
     memset(Pack_Buf, 0, Src_size + (MP3_FRAMES_LAG * 4) + 8);
-    Uint8 *rawbuf = (Uint8 *) malloc(rawbufsize + (MP3_FRAMES_LAG * 4) + 8);
-    memset(rawbuf, 0, rawbufsize + (MP3_FRAMES_LAG * 4) + 8);
+    Uint8 *rawbuf = (Uint8 *) malloc(rawbuptk->fsize + (MP3_FRAMES_LAG * 4) + 8);
+    memset(rawbuf, 0, rawbuptk->fsize + (MP3_FRAMES_LAG * 4) + 8);
 
     ACMSTREAMHEADER Pack_Stream_Head;
     ZeroMemory(&Pack_Stream_Head, sizeof(ACMSTREAMHEADER));
@@ -299,7 +299,7 @@ int ToMP3(short *Source, short *Dest, int Size, int BitRate)
     Pack_Stream_Head.pbSrc = (Uint8 *) Pack_Buf;
     Pack_Stream_Head.cbSrcLength = Src_size + (MP3_FRAMES_LAG * 2);
     Pack_Stream_Head.pbDst = rawbuf;
-    Pack_Stream_Head.cbDstLength = rawbufsize;
+    Pack_Stream_Head.cbDstLength = rawbuptk->fsize;
     acmStreamPrepareHeader(Pack_Stream, &Pack_Stream_Head, 0);
 
     memcpy(Pack_Buf, Source, Src_size);
@@ -345,12 +345,12 @@ int ToTrueSpeech(short *Source, short *Dest, int Size)
     acmStreamOpen(&Pack_Stream, NULL, (LPWAVEFORMATEX) &Wave_Format, (LPWAVEFORMATEX) &TrueSpeech_Format, NULL, 0, 0, ACM_STREAMOPENF_NONREALTIME);
 
     Src_size = Size;
-    unsigned long rawbufsize = 0;
-    acmStreamSize(Pack_Stream, Src_size, &rawbufsize, ACM_STREAMSIZEF_SOURCE);
+    unsigned long rawbuptk->fsize = 0;
+    acmStreamSize(Pack_Stream, Src_size, &rawbuptk->fsize, ACM_STREAMSIZEF_SOURCE);
     Uint8 *Pack_Buf = (Uint8 *) malloc(Src_size + 8);
     memset(Pack_Buf, 0, Src_size + 8);
-    Uint8 *rawbuf = (Uint8 *) malloc(rawbufsize + 8);
-    memset(rawbuf, 0, rawbufsize + 8);
+    Uint8 *rawbuf = (Uint8 *) malloc(rawbuptk->fsize + 8);
+    memset(rawbuf, 0, rawbuptk->fsize + 8);
 
     ACMSTREAMHEADER Pack_Stream_Head;
     ZeroMemory(&Pack_Stream_Head, sizeof(ACMSTREAMHEADER));
@@ -358,7 +358,7 @@ int ToTrueSpeech(short *Source, short *Dest, int Size)
     Pack_Stream_Head.pbSrc = (Uint8 *) Pack_Buf;
     Pack_Stream_Head.cbSrcLength = Src_size;
     Pack_Stream_Head.pbDst = rawbuf;
-    Pack_Stream_Head.cbDstLength = rawbufsize;
+    Pack_Stream_Head.cbDstLength = rawbuptk->fsize;
     acmStreamPrepareHeader(Pack_Stream, &Pack_Stream_Head, 0);
 
     memcpy(Pack_Buf, Source, Src_size);
@@ -404,12 +404,12 @@ int ToADPCM(short *Source, short *Dest, int Size)
     acmStreamOpen(&Pack_Stream, NULL, (LPWAVEFORMATEX) &Wave_Format, (LPWAVEFORMATEX) &ADPCM_Format, NULL, 0, 0, ACM_STREAMOPENF_NONREALTIME);
 
     Src_size = Size;
-    unsigned long rawbufsize = 0;
-    acmStreamSize(Pack_Stream, Src_size, &rawbufsize, ACM_STREAMSIZEF_SOURCE);
+    unsigned long rawbuptk->fsize = 0;
+    acmStreamSize(Pack_Stream, Src_size, &rawbuptk->fsize, ACM_STREAMSIZEF_SOURCE);
     Uint8 *Pack_Buf = (Uint8 *) malloc(Src_size + 8);
     memset(Pack_Buf, 0, Src_size + 8);
-    Uint8 *rawbuf = (Uint8 *) malloc(rawbufsize + 8);
-    memset(rawbuf, 0, rawbufsize + 8);
+    Uint8 *rawbuf = (Uint8 *) malloc(rawbuptk->fsize + 8);
+    memset(rawbuf, 0, rawbuptk->fsize + 8);
 
     ACMSTREAMHEADER Pack_Stream_Head;
     ZeroMemory(&Pack_Stream_Head, sizeof(ACMSTREAMHEADER));
@@ -417,7 +417,7 @@ int ToADPCM(short *Source, short *Dest, int Size)
     Pack_Stream_Head.pbSrc = (Uint8 *) Pack_Buf;
     Pack_Stream_Head.cbSrcLength = Src_size;
     Pack_Stream_Head.pbDst = rawbuf;
-    Pack_Stream_Head.cbDstLength = rawbufsize;
+    Pack_Stream_Head.cbDstLength = rawbuptk->fsize;
     acmStreamPrepareHeader(Pack_Stream, &Pack_Stream_Head, 0);
 
     memcpy(Pack_Buf, Source, Src_size);

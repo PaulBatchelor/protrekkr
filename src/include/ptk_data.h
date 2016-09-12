@@ -82,6 +82,7 @@ typedef struct {
 
     int restx;
     int resty;
+    int fsize;
 
     lua_State *L;
 } ptk_data;

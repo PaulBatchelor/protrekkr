@@ -97,7 +97,6 @@ int xoffseted;
 
 //int ptk->restx = 0;
 //int ptk->resty = 0;
-int fsize = 0;
 char draw_sampled_wave = FALSE;
 char draw_sampled_wave2 = FALSE;
 char draw_sampled_wave3 = FALSE;
@@ -1604,7 +1603,7 @@ int Screen_Update(ptk_data *ptk)
 
         Gui_Draw_Button_Box(0, 6, 16, 16, "\011", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
 
-        Gui_Draw_Button_Box(0, 180, fsize, 2, "", BUTTON_NORMAL | BUTTON_DISABLED);
+        Gui_Draw_Button_Box(0, 180, ptk->fsize, 2, "", BUTTON_NORMAL | BUTTON_DISABLED);
 
         Gui_Draw_Button_Box(0, 24, 96, 78, "", BUTTON_NORMAL | BUTTON_DISABLED);
         
@@ -6822,6 +6821,7 @@ void ptk_init(ptk_data *ptk)
     ptk->userscreen = USER_SCREEN_DISKIO_EDIT;
     ptk->restx = 0;
     ptk->resty = 0;
+    ptk->fsize = 0;
 
 
     ptk->L = luaL_newstate();

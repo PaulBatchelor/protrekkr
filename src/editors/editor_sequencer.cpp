@@ -93,7 +93,7 @@ void Draw_Sequencer_Ed(ptk_data *ptk)
 {
     Draw_Editors_Bar(ptk, USER_SCREEN_SEQUENCER);
 
-    Gui_Draw_Button_Box(0, (Cur_Height - 153), fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
+    Gui_Draw_Button_Box(0, (Cur_Height - 153), ptk->fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
     Gui_Draw_Flat_Box("Sequencer");
 
     Gui_Draw_Button_Box(4, (Cur_Height - 134), 80, 16, "Clear All", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);

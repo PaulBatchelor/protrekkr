@@ -64,7 +64,7 @@ void Draw_303_Ed(ptk_data *ptk)
 {
     Draw_Editors_Bar(ptk, USER_SCREEN_TB303_EDIT);
 
-    Gui_Draw_Button_Box(0, (Cur_Height - 153), fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
+    Gui_Draw_Button_Box(0, (Cur_Height - 153), ptk->fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
     Gui_Draw_Flat_Box("303 Units");
 
     Gui_Draw_Button_Box(8, (Cur_Height - 134), 64, 16, "Reset Patt.", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);

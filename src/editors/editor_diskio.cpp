@@ -113,7 +113,7 @@ void Draw_DiskIO_Ed(ptk_data *ptk)
 {
     Draw_Editors_Bar(ptk, USER_SCREEN_DISKIO_EDIT);
 
-    Gui_Draw_Button_Box(0, (Cur_Height - 153), fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
+    Gui_Draw_Button_Box(0, (Cur_Height - 153), ptk->fsize, 130, "", BUTTON_NORMAL | BUTTON_DISABLED);
     Gui_Draw_Flat_Box("Disk Operations / Module Credits");
 
     Gui_Draw_Button_Box(254, (Cur_Height - 112), 80, 16, "Calc .ptp Size", BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
