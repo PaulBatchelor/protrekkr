@@ -98,8 +98,7 @@ int xoffseted;
 //int ptk->restx = 0;
 //int ptk->resty = 0;
 
-int LastPedRow = -1;
-char po_ctrl2 = TRUE;
+//int LastPedRow = -1;
 char po_alt = TRUE;
 char po_alt2 = TRUE;
 int CHAN_MIDI_PRG[MAX_TRACKS];
@@ -4189,11 +4188,11 @@ void Keyboard_Handler(ptk_data *ptk)
     if(!is_recording)
     {
         // Play song
-        //if(Keys[SDLK_RCTRL] && snamesel == INPUT_NONE && po_ctrl2)
-        if(Keys[SDLK_SPACE] && snamesel == INPUT_NONE && po_ctrl2)
+        //if(Keys[SDLK_RCTRL] && snamesel == INPUT_NONE && ptk->po_ctrl2)
+        if(Keys[SDLK_SPACE] && snamesel == INPUT_NONE && ptk->po_ctrl2)
         {
             plx = 0;
-            po_ctrl2 = FALSE;
+            ptk->po_ctrl2 = FALSE;
             if(!Get_LShift()) Pattern_Line = 0;
             if(Songplaying == TRUE) {
                 ptk->gui_action = GUI_CMD_STOP_SONG;
@@ -4202,7 +4201,7 @@ void Keyboard_Handler(ptk_data *ptk)
             }
         }
 
-        if(!Keys[SDLK_RCTRL] && !po_ctrl2) po_ctrl2 = TRUE;
+        if(!Keys[SDLK_RCTRL] && !ptk->po_ctrl2) ptk->po_ctrl2 = TRUE;
 
         if(Keys[SDLK_RALT] && snamesel == INPUT_NONE && po_alt2)
         {
@@ -6826,6 +6825,8 @@ void ptk_init(ptk_data *ptk)
 
     ptk->boing = FALSE;
     
+    ptk->po_ctrl2 = TRUE;
+
     ptk->L = luaL_newstate();
 
     luaL_openlibs(ptk->L);

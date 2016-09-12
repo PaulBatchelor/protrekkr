@@ -91,6 +91,7 @@ typedef struct {
     int redraw_everything;
 
     char boing;
+    char po_ctrl2;
 
     lua_State *L;
 } ptk_data;
