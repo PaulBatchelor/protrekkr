@@ -1790,18 +1790,18 @@ void Actualize_Patterned(ptk_data *ptk)
     if(Current_Edit_Steps > 16) Current_Edit_Steps = 0;
     if(Current_Octave < 0) Current_Octave = 0;
     if(Current_Octave > 8) Current_Octave = 8;
-    if(Current_Instrument < 0) Current_Instrument = 127;
-    if(Current_Instrument > 127) Current_Instrument = 0;
+    if(ptk->Current_Instrument < 0) ptk->Current_Instrument = 127;
+    if(ptk->Current_Instrument > 127) ptk->Current_Instrument = 0;
 
     char tcp[30];
-    sprintf(tcp, "%s_", nameins[Current_Instrument]);
+    sprintf(tcp, "%s_", nameins[ptk->Current_Instrument]);
 
     if(snamesel == INPUT_INSTRUMENT_NAME) Gui_Draw_Button_Box(90, 108, 166, 16, tcp, BUTTON_PUSHED | BUTTON_INPUT);
-    else Gui_Draw_Button_Box(90, 108, 166, 16, nameins[Current_Instrument], BUTTON_NORMAL | BUTTON_INPUT);
+    else Gui_Draw_Button_Box(90, 108, 166, 16, nameins[ptk->Current_Instrument], BUTTON_NORMAL | BUTTON_INPUT);
 
     Gui_Draw_Arrows_Number_Box2(90, 126, Current_Edit_Steps, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     value_box(258, 126, Current_Octave, BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
-    value_box(258, 108, Current_Instrument, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
+    value_box(258, 108, ptk->Current_Instrument, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     Actualize_Instruments_Synths_List(ptk, 2);
 }
 

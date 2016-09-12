@@ -1387,7 +1387,7 @@ void Octave_Down_Block(ptk_data *ptk, int Position)
 // Transpose a block to 1 semitone higher for the current instrument
 void Instrument_Semitone_Up_Block(ptk_data *ptk, int Position)
 {
-    Instrument_Semitone_Up_Sel(ptk, Position, Get_Real_Selection(ptk, TRUE), 1, Current_Instrument);
+    Instrument_Semitone_Up_Sel(ptk, Position, Get_Real_Selection(ptk, TRUE), 1, ptk->Current_Instrument);
     Actupated(ptk, 0);
 }
 
@@ -1431,7 +1431,7 @@ void Instrument_Semitone_Up_Sel(ptk_data *ptk, int Position, SELECTION Sel, int 
 // Transpose a block to 1 semitone lower for the current instrument
 void Instrument_Semitone_Down_Block(ptk_data *ptk, int Position)
 {
-    Instrument_Semitone_Down_Sel(ptk, Position, Get_Real_Selection(ptk, TRUE), 1, Current_Instrument);
+    Instrument_Semitone_Down_Sel(ptk, Position, Get_Real_Selection(ptk, TRUE), 1, ptk->Current_Instrument);
     Actupated(ptk, 0);
 }
 
@@ -1492,7 +1492,7 @@ void Instrument_Octave_Up_Block(ptk_data *ptk, int Position)
                 {
                     instrument = Read_Pattern_Column(ptk, Position, xbc + 1, ybc);
                     instrument |= Read_Pattern_Column(ptk, Position, xbc + 2, ybc);
-                    if(instrument == Current_Instrument)
+                    if(instrument == ptk->Current_Instrument)
                     {
                         note = Read_Pattern_Column(ptk, Position, xbc, ybc);
                         if(note < 120)
@@ -1530,7 +1530,7 @@ void Instrument_Octave_Down_Block(ptk_data *ptk, int Position)
                 {
                     instrument = Read_Pattern_Column(ptk, Position, xbc + 1, ybc);
                     instrument |= Read_Pattern_Column(ptk, Position, xbc + 2, ybc);
-                    if(instrument == Current_Instrument)
+                    if(instrument == ptk->Current_Instrument)
                     {
                         note = Read_Pattern_Column(ptk, Position, xbc, ybc);
                         if(note < 120)

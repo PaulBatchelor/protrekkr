@@ -141,7 +141,7 @@ void Draw_Wave_Data(ptk_data *ptk)
         {
             // Redraw the bottom slider
             Realslider_Horiz(WAVE_LEFT + 18, (Cur_Height - 41), sed_display_start, sed_display_length,
-                             SampleLength[Current_Instrument][ptk->Current_Instrument_Split],
+                             SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split],
                              LARGE_SMP_VIEW + 2 - (18 * 2), TRUE);
 
             // Layout around the waveform
@@ -152,10 +152,10 @@ void Draw_Wave_Data(ptk_data *ptk)
             DrawVLine(LARGE_SMP_VIEW + WAVE_LEFT + 1, (Cur_Height - 150), (Cur_Height - 150) + SAMPLE_HEIGHT - 1, COL_BLACK);
             DrawVLine(WAVE_LEFT, (Cur_Height - 150), (Cur_Height - 150) + SAMPLE_HEIGHT - 1, COL_BLACK);
 
-            if(SampleType[Current_Instrument][ptk->Current_Instrument_Split] > 0)
+            if(SampleType[ptk->Current_Instrument][ptk->Current_Instrument_Split] > 0)
             {   
                 // Any Sample Out There?
-                int strober = SampleChannels[Current_Instrument][ptk->Current_Instrument_Split] * 2;
+                int strober = SampleChannels[ptk->Current_Instrument][ptk->Current_Instrument_Split] * 2;
                 int s_ey;
                 int s_ey2;
                 int s_size = 0;
@@ -209,7 +209,7 @@ void Draw_Wave_Data(ptk_data *ptk)
                 }
 
                 // Now draw the sample data
-                switch(SampleChannels[Current_Instrument][ptk->Current_Instrument_Split])
+                switch(SampleChannels[ptk->Current_Instrument][ptk->Current_Instrument_Split])
                 {
                     case 1:
                         // Mono sample
@@ -217,7 +217,7 @@ void Draw_Wave_Data(ptk_data *ptk)
                         {
                             pos_in_wav = ((int64) s_ex * (int64) sed_display_length);
                             s_offset = (int) (pos_in_wav / LARGE_SMP_VIEW) + sed_display_start;
-                            int h = *(RawSamples[Current_Instrument][0][ptk->Current_Instrument_Split] + s_offset) / ptk->rs_coef;
+                            int h = *(RawSamples[ptk->Current_Instrument][0][ptk->Current_Instrument_Split] + s_offset) / ptk->rs_coef;
                             if(h > s_size) h = s_size;
                             if(h < -s_size) h = -s_size;
 
@@ -248,8 +248,8 @@ void Draw_Wave_Data(ptk_data *ptk)
                         {
                             pos_in_wav = ((int64) s_ex * (int64) sed_display_length);
                             s_offset = (int) (pos_in_wav / LARGE_SMP_VIEW) + sed_display_start;
-                            int h = *(RawSamples[Current_Instrument][0][ptk->Current_Instrument_Split] + s_offset) / ptk->rs_coef;
-                            int h2 = *(RawSamples[Current_Instrument][1][ptk->Current_Instrument_Split] + s_offset) / ptk->rs_coef;
+                            int h = *(RawSamples[ptk->Current_Instrument][0][ptk->Current_Instrument_Split] + s_offset) / ptk->rs_coef;
+                            int h2 = *(RawSamples[ptk->Current_Instrument][1][ptk->Current_Instrument_Split] + s_offset) / ptk->rs_coef;
                             if(h > s_size) h = s_size;
                             if(h < -s_size) h = -s_size;
                             if(h2 > s_size) h2 = s_size;
@@ -282,11 +282,11 @@ void Draw_Wave_Data(ptk_data *ptk)
                 }
 
                 // Display the loop infos bars
-                if(LoopType[Current_Instrument][ptk->Current_Instrument_Split])
+                if(LoopType[ptk->Current_Instrument][ptk->Current_Instrument_Split])
                 {
-                    int64 LSX64 = ((int64) (LoopStart[Current_Instrument][ptk->Current_Instrument_Split] - sed_display_start)) * LARGE_SMP_VIEW;
+                    int64 LSX64 = ((int64) (LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split] - sed_display_start)) * LARGE_SMP_VIEW;
                     int32 LSX = (int32) ((int64) LSX64 / (int64) sed_display_length);
-                    int64 LEX64 = ((int64) (LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] - sed_display_start)) * LARGE_SMP_VIEW;
+                    int64 LEX64 = ((int64) (LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] - sed_display_start)) * LARGE_SMP_VIEW;
                     int32 LEX = (int32) ((int64) LEX64 / (int64) sed_display_length);
 
                     if(LSX >= 0 && LSX <= LARGE_SMP_VIEW)
@@ -328,7 +328,7 @@ void Renew_Sample_Ed(ptk_data *ptk)
 {
     draw_sampled_wave = TRUE;
     sed_display_start = 0;
-    sed_display_length = SampleLength[Current_Instrument][ptk->Current_Instrument_Split];
+    sed_display_length = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
     sed_range_start = 0;
     sed_range_end = 0;
     sed_range_mode = FALSE;
@@ -347,10 +347,10 @@ void Draw_Wave_PlayBack_Pos(ptk_data *ptk)
 
     if(draw_sampled_wave2)
     {
-        if(SampleType[Current_Instrument][ptk->Current_Instrument_Split] > 0)
+        if(SampleType[ptk->Current_Instrument][ptk->Current_Instrument_Split] > 0)
         { 
             // Any Sample Out There ?
-            int strober = SampleChannels[Current_Instrument][ptk->Current_Instrument_Split] * 2;
+            int strober = SampleChannels[ptk->Current_Instrument][ptk->Current_Instrument_Split] * 2;
             int s_ey = (Cur_Height - 150) + 1 + (SAMPLE_LINES_HEIGHT / strober);
             int s_ey2 = s_ey + ((SAMPLE_LINES_HEIGHT / strober) * 2);
             int rcolor3;
@@ -378,7 +378,7 @@ void Draw_Wave_PlayBack_Pos(ptk_data *ptk)
                 sed_real_range_end = Swap_Range;
             }
 
-            if(SampleChannels[Current_Instrument][ptk->Current_Instrument_Split] == 1)
+            if(SampleChannels[ptk->Current_Instrument][ptk->Current_Instrument_Split] == 1)
             {
                 for(int32 s_ex = 0; s_ex < LARGE_SMP_VIEW; s_ex++)
                 {
@@ -407,7 +407,7 @@ void Draw_Wave_PlayBack_Pos(ptk_data *ptk)
             } // If
 
             // STEREO DISPLAY
-            if(SampleChannels[Current_Instrument][ptk->Current_Instrument_Split] == 2)
+            if(SampleChannels[ptk->Current_Instrument][ptk->Current_Instrument_Split] == 2)
             {
                 for(int32 s_ex = 0; s_ex < LARGE_SMP_VIEW; s_ex++)
                 {
@@ -460,9 +460,9 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
     if(ptk->userscreen == USER_SCREEN_SAMPLE_EDIT)
     {
         Allow = 0;
-        if(!SampleType[Current_Instrument][ptk->Current_Instrument_Split]) Allow = BUTTON_DISABLED;
+        if(!SampleType[ptk->Current_Instrument][ptk->Current_Instrument_Split]) Allow = BUTTON_DISABLED;
 
-        if(SamplesSwap[Current_Instrument]) ReadOnly = BUTTON_DISABLED;
+        if(SamplesSwap[ptk->Current_Instrument]) ReadOnly = BUTTON_DISABLED;
         else
         {
             ReadOnly = 0;
@@ -528,19 +528,19 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
 
         if(gode == 5 || gode == 0)
         {
-            if(LoopType[Current_Instrument][ptk->Current_Instrument_Split] == SMP_LOOP_NONE)
+            if(LoopType[ptk->Current_Instrument][ptk->Current_Instrument_Split] == SMP_LOOP_NONE)
             {
                 Gui_Draw_Button_Box(520, (Cur_Height - 42), 60, 16, "S: -", BUTTON_NORMAL | BUTTON_DISABLED);
                 Gui_Draw_Button_Box(582, (Cur_Height - 42), 60, 16, "E: -", BUTTON_NORMAL | BUTTON_DISABLED);
             }
             else
             {
-                outlong(520, (Cur_Height - 42), LoopStart[Current_Instrument][ptk->Current_Instrument_Split], 11);
-                outlong(582, (Cur_Height - 42), LoopEnd[Current_Instrument][ptk->Current_Instrument_Split], 12);
+                outlong(520, (Cur_Height - 42), LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split], 11);
+                outlong(582, (Cur_Height - 42), LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split], 12);
             }
         }
 
-        if(SampleType[Current_Instrument][ptk->Current_Instrument_Split])
+        if(SampleType[ptk->Current_Instrument][ptk->Current_Instrument_Split])
         {
             if(gode == 3 || gode == 0)
             {
@@ -744,7 +744,7 @@ void Mouse_Right_Sample_Ed(ptk_data *ptk)
 {
     int Allow = TRUE;
 
-    if(SamplesSwap[Current_Instrument]) Allow = FALSE;
+    if(SamplesSwap[ptk->Current_Instrument]) Allow = FALSE;
 
     if(ptk->userscreen == USER_SCREEN_SAMPLE_EDIT)
     {
@@ -789,7 +789,7 @@ void Mouse_Right_Sample_Ed(ptk_data *ptk)
         // Bottom arrow left
         if(zcheckMouse(ptk, WAVE_LEFT, (Cur_Height - 41), 16, 16))
         {
-            if(SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
+            if(SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split])
             {
                 sed_display_start -= sed_display_length;
                 if((int) sed_display_start < 0) sed_display_start = 0;
@@ -801,9 +801,9 @@ void Mouse_Right_Sample_Ed(ptk_data *ptk)
         // Bottom arrow right
         if(zcheckMouse(ptk, WAVE_LEFT + LARGE_SMP_VIEW - (18 * 1) + 3, (Cur_Height - 41), 16, 16))
         {
-            if(SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
+            if(SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split])
             {
-                int max_length = SampleLength[Current_Instrument][ptk->Current_Instrument_Split] - sed_display_length;
+                int max_length = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split] - sed_display_length;
                 sed_display_start += sed_display_length;
                 if((int) sed_display_start > max_length) sed_display_start = max_length;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
@@ -833,34 +833,34 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
 {
     int Allow = TRUE;
 
-    if(SamplesSwap[Current_Instrument]) Allow = FALSE;
+    if(SamplesSwap[ptk->Current_Instrument]) Allow = FALSE;
 
     if(ptk->userscreen == USER_SCREEN_SAMPLE_EDIT)
     {
-        if(SampleType[Current_Instrument][ptk->Current_Instrument_Split])
+        if(SampleType[ptk->Current_Instrument][ptk->Current_Instrument_Split])
         {
             // Set Loop Start
             if(zcheckMouse(ptk, 712, (Cur_Height - 114), 60, 16) && sed_range_mode)
             {
                 if(sed_range_start > sed_range_end)
                 {
-                    LoopStart[Current_Instrument][ptk->Current_Instrument_Split] = sed_range_end;
+                    LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split] = sed_range_end;
                 }
                 else
                 {
-                    LoopStart[Current_Instrument][ptk->Current_Instrument_Split] = sed_range_start;
+                    LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split] = sed_range_start;
                 }
 
-                if(LoopStart[Current_Instrument][ptk->Current_Instrument_Split] > LoopEnd[Current_Instrument][ptk->Current_Instrument_Split])
+                if(LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split] > LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split])
                 {
-                    LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] = LoopStart[Current_Instrument][ptk->Current_Instrument_Split];
+                    LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] = LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split];
                 }
 
                 // Initialize a new loop
-                if(LoopType[Current_Instrument][ptk->Current_Instrument_Split] == SMP_LOOP_NONE)
+                if(LoopType[ptk->Current_Instrument][ptk->Current_Instrument_Split] == SMP_LOOP_NONE)
                 {
-                    LoopType[Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_FORWARD;
-                    LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] = SampleLength[Current_Instrument][ptk->Current_Instrument_Split];
+                    LoopType[ptk->Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_FORWARD;
+                    LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
                 }
 
                 draw_sampled_wave = TRUE;
@@ -883,29 +883,29 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
             {
                 if(sed_range_start > sed_range_end)
                 {
-                    LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] = sed_range_start;
+                    LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] = sed_range_start;
                 }
                 else
                 {
-                    LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] = sed_range_end;
+                    LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] = sed_range_end;
                 }
 
-                if(LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] < LoopStart[Current_Instrument][ptk->Current_Instrument_Split])
+                if(LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] < LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split])
                 {
-                    LoopStart[Current_Instrument][ptk->Current_Instrument_Split] = LoopEnd[Current_Instrument][ptk->Current_Instrument_Split];
+                    LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split] = LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split];
                 }
 
-                if(LoopType[Current_Instrument][ptk->Current_Instrument_Split] == SMP_LOOP_NONE)
+                if(LoopType[ptk->Current_Instrument][ptk->Current_Instrument_Split] == SMP_LOOP_NONE)
                 {
-                    LoopType[Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_FORWARD;
-                    LoopStart[Current_Instrument][ptk->Current_Instrument_Split] = 0;
+                    LoopType[ptk->Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_FORWARD;
+                    LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split] = 0;
                 }
 
-                if(LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] == LoopStart[Current_Instrument][ptk->Current_Instrument_Split])
+                if(LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] == LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split])
                 {
-                    LoopType[Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_NONE;
-                    LoopStart[Current_Instrument][ptk->Current_Instrument_Split] = 0;
-                    LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] = 0;
+                    LoopType[ptk->Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_NONE;
+                    LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split] = 0;
+                    LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] = 0;
                 }
 
                 draw_sampled_wave = TRUE;
@@ -1069,7 +1069,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
             {
                 ptk->rs_coef = 32768;
                 sed_display_start = 0;
-                sed_display_length = SampleLength[Current_Instrument][ptk->Current_Instrument_Split];
+                sed_display_length = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
                 draw_sampled_wave = TRUE;
                 ptk->teac = 3;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
@@ -1105,7 +1105,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
             {
                 sed_range_mode = TRUE;
                 sed_range_start = 0;
-                sed_range_end = SampleLength[Current_Instrument][ptk->Current_Instrument_Split];
+                sed_range_end = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
                 draw_sampled_wave = TRUE;
                 ptk->teac = 0;
                 ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
@@ -1137,7 +1137,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
             // Bottom arrow left
             if(zcheckMouse(ptk, WAVE_LEFT, (Cur_Height - 41), 16, 16))
             {
-                if(SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
+                if(SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split])
                 {
                     sed_display_start--;
                     if((int) sed_display_start < 0) sed_display_start = 0;
@@ -1149,9 +1149,9 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
             // Bottom arrow right
             if(zcheckMouse(ptk, WAVE_LEFT + LARGE_SMP_VIEW - (18 * 1) + 3, (Cur_Height - 41), 16, 16))
             {
-                if(SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
+                if(SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split])
                 {
-                    int max_length = SampleLength[Current_Instrument][ptk->Current_Instrument_Split] - sed_display_length;
+                    int max_length = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split] - sed_display_length;
                     sed_display_start++;
                     if((int) sed_display_start > max_length) sed_display_start = max_length;
                     ptk->gui_action = GUI_CMD_REFRESH_SAMPLE_ED;
@@ -1171,7 +1171,7 @@ void Mouse_Wheel_Sample_Ed(ptk_data *ptk, int roll_amount)
     {
         if(zcheckMouse(ptk, WAVE_LEFT + 1, (Cur_Height - 150), LARGE_SMP_VIEW, 109 + 16))
         {
-            int max_length = SampleLength[Current_Instrument][ptk->Current_Instrument_Split];
+            int max_length = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
             sed_display_start += roll_amount * (sed_display_length / 16);
 
             if(sed_display_start < 0) sed_display_start = 0;
@@ -1193,19 +1193,19 @@ void Mouse_Sliders_Sample_Ed(ptk_data *ptk)
     double test;
     int Allow = TRUE;
 
-    if(SamplesSwap[Current_Instrument]) Allow = FALSE;
+    if(SamplesSwap[ptk->Current_Instrument]) Allow = FALSE;
 
     if(ptk->userscreen == USER_SCREEN_SAMPLE_EDIT)
     {
         if(zcheckMouse(ptk, WAVE_LEFT, (Cur_Height - 150), LARGE_SMP_VIEW + 1, 109))
         {
             // Move within the sample
-            if(SampleType[Current_Instrument][ptk->Current_Instrument_Split])
+            if(SampleType[ptk->Current_Instrument][ptk->Current_Instrument_Split])
             {
                 Mouse_Pos = (Mouse.x - WAVE_LEFT) - 1;
                 if(Mouse_Pos < 0) Mouse_Pos = 0;
                 if(Mouse_Pos > LARGE_SMP_VIEW) Mouse_Pos = LARGE_SMP_VIEW;
-                axswave = SampleLength[Current_Instrument][ptk->Current_Instrument_Split];
+                axswave = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
                 sed_range_mode = TRUE;
                 test = (double) (((int64) Mouse_Pos * (int64) sed_display_length)) / LARGE_SMP_VIEW;
                 sed_range_end = sed_display_start + (int32) test;
@@ -1243,9 +1243,9 @@ void Mouse_Sliders_Sample_Ed(ptk_data *ptk)
         // Bottom slider
         if(zcheckMouse(ptk, WAVE_LEFT + 18, (Cur_Height - 41), LARGE_SMP_VIEW + 2 - (18 * 2), 16))
         {
-            if(SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
+            if(SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split])
             {
-                int max_length = SampleLength[Current_Instrument][ptk->Current_Instrument_Split];
+                int max_length = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
                 int Center = Slider_Get_Center(sed_display_length, max_length, LARGE_SMP_VIEW + 2 - (18 * 2));
                 float Pos_Mouse = ((float) ((Mouse.x - (WAVE_LEFT + 18)) - (Center / 2))) / (float) (LARGE_SMP_VIEW + 2 - (18 * 2));
                 if(Pos_Mouse > 1.0f) Pos_Mouse = 1.0f;
@@ -1283,20 +1283,20 @@ void Mouse_Sliders_Sample_Ed(ptk_data *ptk)
 // Make sure the loop infos are sane
 void Check_Loops(ptk_data *ptk)
 {
-    if(LoopStart[Current_Instrument][ptk->Current_Instrument_Split] < 0) LoopStart[Current_Instrument][ptk->Current_Instrument_Split] = 0;
-    if(LoopStart[Current_Instrument][ptk->Current_Instrument_Split] > SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
+    if(LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split] < 0) LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split] = 0;
+    if(LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split] > SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split])
     {
-        LoopStart[Current_Instrument][ptk->Current_Instrument_Split] = SampleLength[Current_Instrument][ptk->Current_Instrument_Split];
+        LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split] = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
     }
-    if(LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] < 0) LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] = 0;
-    if(LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] > SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
+    if(LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] < 0) LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] = 0;
+    if(LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] > SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split])
     {
-        LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] = SampleLength[Current_Instrument][ptk->Current_Instrument_Split];
+        LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
     }
-    if(LoopStart[Current_Instrument][ptk->Current_Instrument_Split] == LoopEnd[Current_Instrument][ptk->Current_Instrument_Split])
+    if(LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split] == LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split])
     {
-        LoopStart[Current_Instrument][ptk->Current_Instrument_Split] = 0;
-        LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] = SampleLength[Current_Instrument][ptk->Current_Instrument_Split];
+        LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split] = 0;
+        LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
     }
 }
 
@@ -1306,22 +1306,22 @@ void Refresh_Sample(ptk_data *ptk, int clear_sel)
 {
     int ReadOnly;
     int Allow = 0;
-    if(!SampleType[Current_Instrument][ptk->Current_Instrument_Split]) Allow = BUTTON_DISABLED;
+    if(!SampleType[ptk->Current_Instrument][ptk->Current_Instrument_Split]) Allow = BUTTON_DISABLED;
 
-    if(SamplesSwap[Current_Instrument]) ReadOnly = BUTTON_DISABLED;
+    if(SamplesSwap[ptk->Current_Instrument]) ReadOnly = BUTTON_DISABLED;
     else
     {
         ReadOnly = 0;
     }
 
     // Adjust after the cut
-    if(sed_display_length > (int32) SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
+    if(sed_display_length > (int32) SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split])
     {
-        sed_display_length = SampleLength[Current_Instrument][ptk->Current_Instrument_Split];
+        sed_display_length = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
     }
-    if(sed_display_length + sed_display_start > (int32) SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
+    if(sed_display_length + sed_display_start > (int32) SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split])
     {
-        sed_display_start = SampleLength[Current_Instrument][ptk->Current_Instrument_Split] - sed_display_length;
+        sed_display_start = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split] - sed_display_length;
     }
     if(clear_sel)
     {
@@ -1393,7 +1393,7 @@ void Zoom_In_Sel(ptk_data *ptk)
         }
         sed_display_length = (sed_range_end - sed_range_start);
         sed_display_start = sed_range_start;
-        max_length = SampleLength[Current_Instrument][ptk->Current_Instrument_Split] - sed_display_length;
+        max_length = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split] - sed_display_length;
         if((int) sed_display_start > max_length) sed_display_start = max_length;
 
         draw_sampled_wave = TRUE;
@@ -1412,13 +1412,13 @@ void Zoom_Out_Sel(ptk_data *ptk)
     if(start_test < 0) sed_display_start = 0;
     sed_display_length *= 3;
 
-    if(sed_display_length > (int32) SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
+    if(sed_display_length > (int32) SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split])
     {
-        sed_display_length = SampleLength[Current_Instrument][ptk->Current_Instrument_Split];
+        sed_display_length = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split];
     }
-    if(sed_display_length + sed_display_start > (int32) SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
+    if(sed_display_length + sed_display_start > (int32) SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split])
     {
-        sed_display_start = SampleLength[Current_Instrument][ptk->Current_Instrument_Split] - sed_display_length;
+        sed_display_start = SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split] - sed_display_length;
     }
     sed_range_start = sed_display_start;
     sed_range_end = sed_display_start + sed_display_length;

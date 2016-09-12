@@ -78,6 +78,8 @@ typedef struct {
     char artist[20];
     char style[20];
 
+    int Current_Instrument;
+
     lua_State *L;
 } ptk_data;
 #endif

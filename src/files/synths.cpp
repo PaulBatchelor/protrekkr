@@ -418,30 +418,30 @@ void LoadSynth(ptk_data *ptk, char *FileName)
         }
 
         Status_Box(ptk, "Loading Synthesizer -> structure...");
-        ResetSynthParameters(ptk, &PARASynth[Current_Instrument]);
+        ResetSynthParameters(ptk, &PARASynth[ptk->Current_Instrument]);
 
-        PARASynth[Current_Instrument].disto = 0;
+        PARASynth[ptk->Current_Instrument].disto = 0;
 
-        PARASynth[Current_Instrument].lfo1_attack = 0;
-        PARASynth[Current_Instrument].lfo1_decay = 0;
-        PARASynth[Current_Instrument].lfo1_sustain = 128;
-        PARASynth[Current_Instrument].lfo1_release = 0x10000;
+        PARASynth[ptk->Current_Instrument].lfo1_attack = 0;
+        PARASynth[ptk->Current_Instrument].lfo1_decay = 0;
+        PARASynth[ptk->Current_Instrument].lfo1_sustain = 128;
+        PARASynth[ptk->Current_Instrument].lfo1_release = 0x10000;
 
-        PARASynth[Current_Instrument].lfo2_attack = 0;
-        PARASynth[Current_Instrument].lfo2_decay = 0;
-        PARASynth[Current_Instrument].lfo2_sustain = 128;
-        PARASynth[Current_Instrument].lfo2_release = 0x10000;
+        PARASynth[ptk->Current_Instrument].lfo2_attack = 0;
+        PARASynth[ptk->Current_Instrument].lfo2_decay = 0;
+        PARASynth[ptk->Current_Instrument].lfo2_sustain = 128;
+        PARASynth[ptk->Current_Instrument].lfo2_release = 0x10000;
 
-        Read_Synth_Params(ptk, Read_Data, Read_Data_Swap, in, Current_Instrument,
+        Read_Synth_Params(ptk, Read_Data, Read_Data_Swap, in, ptk->Current_Instrument,
                           TRUE, TRUE, new_version,
                           Env_Modulation, New_Env, FALSE, Combine);
 
         // Fix some old Ntk bugs
-        if(PARASynth[Current_Instrument].lfo1_period > 128) PARASynth[Current_Instrument].lfo1_period = 128;
-        if(PARASynth[Current_Instrument].lfo2_period > 128) PARASynth[Current_Instrument].lfo2_period = 128;
+        if(PARASynth[ptk->Current_Instrument].lfo1_period > 128) PARASynth[ptk->Current_Instrument].lfo1_period = 128;
+        if(PARASynth[ptk->Current_Instrument].lfo2_period > 128) PARASynth[ptk->Current_Instrument].lfo2_period = 128;
 
-        Synthprg[Current_Instrument] = SYNTH_WAVE_CURRENT;
-        sprintf(nameins[Current_Instrument],PARASynth[Current_Instrument].presetname);
+        Synthprg[ptk->Current_Instrument] = SYNTH_WAVE_CURRENT;
+        sprintf(nameins[ptk->Current_Instrument],PARASynth[ptk->Current_Instrument].presetname);
         Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_ALL);
 
         Actualize_Instrument_Ed(ptk, 0, 0);
@@ -465,16 +465,16 @@ void SaveSynth(ptk_data *ptk)
     char extension[10];
 
     sprintf(extension, "TWNNSYN4");
-    sprintf (Temph, "Saving '%s.pts' synthesizer program in presets directory...", PARASynth[Current_Instrument].presetname);
+    sprintf (Temph, "Saving '%s.pts' synthesizer program in presets directory...", PARASynth[ptk->Current_Instrument].presetname);
     Status_Box(ptk, Temph);
 
-    sprintf(Temph, "%s"SLASH"%s.pts", Dir_Presets, PARASynth[Current_Instrument].presetname);
+    sprintf(Temph, "%s"SLASH"%s.pts", Dir_Presets, PARASynth[ptk->Current_Instrument].presetname);
 
     in = fopen(Temph, "wb");
     if(in != NULL)
     {
         Write_Data(ptk, extension, sizeof(char), 9, in);
-        Write_Synth_Params(ptk, Write_Data, Write_Data_Swap, in, Current_Instrument);
+        Write_Synth_Params(ptk, Write_Data, Write_Data_Swap, in, ptk->Current_Instrument);
         fclose(in);
 
         Read_SMPT(ptk);

@@ -449,7 +449,7 @@ void out_decchar(int x, int y, int number, char smith);
 void out_nibble(int x, int y, int color, int number);
 void SongPlay(ptk_data *ptk);
 void SongStop(ptk_data *ptk);
-void Stop_Current_Instrument(void);
+void Stop_Current_Instrument(ptk_data *ptk);
 void DeleteInstrument(ptk_data *ptk);
 void StartRec(ptk_data *ptk);
 void Notify_Edit(ptk_data *ptk);

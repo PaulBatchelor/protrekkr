@@ -82,14 +82,14 @@ void LoadInst(ptk_data *ptk, char *FileName)
                 break;
         }
 
-        KillInst(ptk, Current_Instrument, TRUE);
+        KillInst(ptk, ptk->Current_Instrument, TRUE);
         Status_Box(ptk, "Loading Instrument -> Header..."); 
-        Read_Data(ptk, &nameins[Current_Instrument], sizeof(char), 20, in);
+        Read_Data(ptk, &nameins[ptk->Current_Instrument], sizeof(char), 20, in);
 
         // Reading sample data
         Status_Box(ptk, "Loading Instrument -> Sample data...");
 
-        int swrite = Current_Instrument;
+        int swrite = ptk->Current_Instrument;
 
         Read_Data(ptk, &Midiprg[swrite], sizeof(char), 1, in);
         Read_Data(ptk, &Synthprg[swrite], sizeof(char), 1, in);
@@ -205,21 +205,21 @@ void SaveInst(ptk_data *ptk)
     int synth_save;
 
     sprintf(extension, "TWNNINS9");
-    if(!strlen(nameins[Current_Instrument])) sprintf(nameins[Current_Instrument], "Untitled");
-    sprintf (Temph, "Saving '%s.pti' instrument in instruments directory...", nameins[Current_Instrument]);
+    if(!strlen(nameins[ptk->Current_Instrument])) sprintf(nameins[ptk->Current_Instrument], "Untitled");
+    sprintf (Temph, "Saving '%s.pti' instrument in instruments directory...", nameins[ptk->Current_Instrument]);
     Status_Box(ptk, Temph);
-    sprintf(Temph, "%s"SLASH"%s.pti", Dir_Instrs, nameins[Current_Instrument]);
+    sprintf(Temph, "%s"SLASH"%s.pti", Dir_Instrs, nameins[ptk->Current_Instrument]);
 
     in = fopen(Temph, "wb");
     if(in != NULL)
     {
         // Writing header & name...
         Write_Data(ptk, extension, sizeof(char), 9, in);
-        rtrim_string(ptk, nameins[Current_Instrument], 20);
-        Write_Data(ptk, nameins[Current_Instrument], sizeof(char), 20, in);
+        rtrim_string(ptk, nameins[ptk->Current_Instrument], 20);
+        Write_Data(ptk, nameins[ptk->Current_Instrument], sizeof(char), 20, in);
 
         // Writing sample data
-        int swrite = Current_Instrument;
+        int swrite = ptk->Current_Instrument;
 
         Write_Data(ptk, &Midiprg[swrite], sizeof(char), 1, in);
         switch(Synthprg[swrite])

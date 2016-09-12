@@ -88,7 +88,7 @@ short *Swap_New_Sample(ptk_data *ptk, short *buffer, int sample, int bank);
 void Init_Tracker_Context_After_ModLoad(ptk_data *ptk)
 {
     ptk->Track_Under_Caret = 0;
-    Current_Instrument = 0;
+    ptk->Current_Instrument = 0;
     ptk->Column_Under_Caret = 0;
 
     Pattern_Line = 0;

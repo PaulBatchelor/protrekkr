@@ -95,7 +95,6 @@ int xoffseted;
 //int c_r_release = 0;
 //int c_l_release = 0;
 
-int Current_Instrument = 0;
 int restx = 0;
 int resty = 0;
 int fsize = 0;
@@ -606,7 +605,7 @@ int Screen_Update(ptk_data *ptk)
 
     for(i = 0; i < Channels_Polyphony[ptk->Track_Under_Caret]; i++)
     {
-        if(sp_Stage[ptk->Track_Under_Caret][i] == PLAYING_SAMPLE && Current_Instrument == sp_channelsample[ptk->Track_Under_Caret][i] && ptk->Current_Instrument_Split == sp_split[ptk->Track_Under_Caret][i])
+        if(sp_Stage[ptk->Track_Under_Caret][i] == PLAYING_SAMPLE && ptk->Current_Instrument == sp_channelsample[ptk->Track_Under_Caret][i] && ptk->Current_Instrument_Split == sp_split[ptk->Track_Under_Caret][i])
         {
             draw_sampled_wave2 = TRUE;
             boing = TRUE;
@@ -705,8 +704,8 @@ int Screen_Update(ptk_data *ptk)
                         switch(Get_FileType(ptk, lt_curr[ptk->Scopish]))
                         {
                             case _A_FILE:
-                                Stop_Current_Instrument();
-                                LoadFile(ptk, Current_Instrument, Get_FileName(ptk, lt_curr[ptk->Scopish]));
+                                Stop_Current_Instrument(ptk);
+                                LoadFile(ptk, ptk->Current_Instrument, Get_FileName(ptk, lt_curr[ptk->Scopish]));
                                 break;
                             case _A_SUBDIR:
                                 Set_Current_Dir(ptk);
@@ -773,7 +772,7 @@ int Screen_Update(ptk_data *ptk)
         // Select an instrument/synth
         if(ptk->gui_action == GUI_CMD_SET_INSTR_SYNTH_LIST_SELECT)
         {
-            Current_Instrument = Instrs_index + (Mouse.y - 43) / 12;
+            ptk->Current_Instrument = Instrs_index + (Mouse.y - 43) / 12;
             Actualize_Instruments_Synths_List(ptk, 1);
             Actualize_Patterned(ptk);
             RefreshSample(ptk);
@@ -907,7 +906,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_PREV_INSTR)
         {
-            Current_Instrument--;
+            ptk->Current_Instrument--;
             Clear_Input(ptk);
             Actualize_Patterned(ptk);
             RefreshSample(ptk);
@@ -917,7 +916,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_NEXT_INSTR)
         {
-            Current_Instrument++;
+            ptk->Current_Instrument++;
             Clear_Input(ptk);
             Actualize_Patterned(ptk);
             RefreshSample(ptk);
@@ -1247,32 +1246,32 @@ int Screen_Update(ptk_data *ptk)
 
             WaveFile RF;
 
-            if(strlen(SampleName[Current_Instrument][ptk->Current_Instrument_Split]))
+            if(strlen(SampleName[ptk->Current_Instrument][ptk->Current_Instrument_Split]))
             {
-                RF.OpenForWrite(SampleName[Current_Instrument][ptk->Current_Instrument_Split],
+                RF.OpenForWrite(SampleName[ptk->Current_Instrument][ptk->Current_Instrument_Split],
                                 44100,
                                 16,
-                                SampleChannels[Current_Instrument][ptk->Current_Instrument_Split]);
+                                SampleChannels[ptk->Current_Instrument][ptk->Current_Instrument_Split]);
             }
             else
             {
                 RF.OpenForWrite("Untitled.wav",
                                 44100,
                                 16,
-                                SampleChannels[Current_Instrument][ptk->Current_Instrument_Split]);
+                                SampleChannels[ptk->Current_Instrument][ptk->Current_Instrument_Split]);
             }
 
             char t_stereo;
 
-            if(SampleChannels[Current_Instrument][ptk->Current_Instrument_Split] == 1) t_stereo = FALSE;
+            if(SampleChannels[ptk->Current_Instrument][ptk->Current_Instrument_Split] == 1) t_stereo = FALSE;
             else t_stereo = TRUE;
 
             Uint32 woff = 0;
 
-            short *eSamples = RawSamples[Current_Instrument][0][ptk->Current_Instrument_Split];
-            short *erSamples = RawSamples[Current_Instrument][1][ptk->Current_Instrument_Split];
+            short *eSamples = RawSamples[ptk->Current_Instrument][0][ptk->Current_Instrument_Split];
+            short *erSamples = RawSamples[ptk->Current_Instrument][1][ptk->Current_Instrument_Split];
 
-            while(woff < SampleLength[Current_Instrument][ptk->Current_Instrument_Split])
+            while(woff < SampleLength[ptk->Current_Instrument][ptk->Current_Instrument_Split])
             {
                 if(t_stereo) RF.WriteStereoSample(*eSamples++, *erSamples++);
                 else RF.WriteMonoSample(*eSamples++);
@@ -1280,7 +1279,7 @@ int Screen_Update(ptk_data *ptk)
             }
 
             // Write the looping info
-            if(LoopType[Current_Instrument][ptk->Current_Instrument_Split])
+            if(LoopType[ptk->Current_Instrument][ptk->Current_Instrument_Split])
             {
                 RiffChunkHeader header;
                 WaveSmpl_ChunkData datas;
@@ -1290,8 +1289,8 @@ int Screen_Update(ptk_data *ptk)
 
                 memset(&datas, 0, sizeof(datas));
                 datas.Num_Sample_Loops = 1;
-                datas.Start = LoopStart[Current_Instrument][ptk->Current_Instrument_Split];
-                datas.End = LoopEnd[Current_Instrument][ptk->Current_Instrument_Split];
+                datas.Start = LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split];
+                datas.End = LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split];
 
                 header.ckSize = Swap_32(header.ckSize);
 
@@ -1304,7 +1303,7 @@ int Screen_Update(ptk_data *ptk)
             }
 
             RF.Close();
-            if(strlen(SampleName[Current_Instrument][ptk->Current_Instrument_Split])) sprintf(buffer, "File '%s' saved.", SampleName[Current_Instrument][ptk->Current_Instrument_Split]);
+            if(strlen(SampleName[ptk->Current_Instrument][ptk->Current_Instrument_Split])) sprintf(buffer, "File '%s' saved.", SampleName[ptk->Current_Instrument][ptk->Current_Instrument_Split]);
             else sprintf(buffer, "File 'Untitled.wav' saved.");
             Status_Box(ptk, buffer);
 
@@ -1389,7 +1388,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_SET_INSTRUMENT_AMPLI)
         {
-            Sample_Amplify[Current_Instrument][ptk->Current_Instrument_Split] = float((Mouse.x - 436) / 32.0f);
+            Sample_Amplify[ptk->Current_Instrument][ptk->Current_Instrument_Split] = float((Mouse.x - 436) / 32.0f);
             Actualize_Instrument_Ed(ptk, 0, 1);
         }
 
@@ -1398,13 +1397,13 @@ int Screen_Update(ptk_data *ptk)
             FineTune_Value = ((Mouse.x - 436) - 64) * 2;
             if(FineTune_Value > 127) FineTune_Value = 127;
             if(FineTune_Value < -127) FineTune_Value = -127;
-            Finetune[Current_Instrument][ptk->Current_Instrument_Split] = FineTune_Value;
+            Finetune[ptk->Current_Instrument][ptk->Current_Instrument_Split] = FineTune_Value;
             Actualize_Instrument_Ed(ptk, 0, 2);
         }
 
         if(ptk->gui_action == GUI_CMD_SET_INSTRUMENT_DECAY)
         {
-            FDecay[Current_Instrument][ptk->Current_Instrument_Split] = float(Mouse.x - 62) / 8192.0f;
+            FDecay[ptk->Current_Instrument][ptk->Current_Instrument_Split] = float(Mouse.x - 62) / 8192.0f;
             Actualize_Instrument_Ed(ptk, 0, 3);
         }
 
@@ -1476,7 +1475,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_PREVIOUS_16_INSTR)
         {
-            Current_Instrument -= 16;
+            ptk->Current_Instrument -= 16;
             Actualize_Patterned(ptk);
             RefreshSample(ptk);
             Renew_Sample_Ed(ptk);
@@ -1485,7 +1484,7 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_NEXT_16_INSTR)
         {
-            Current_Instrument += 16;
+            ptk->Current_Instrument += 16;
             Actualize_Patterned(ptk);
             RefreshSample(ptk);
             Renew_Sample_Ed(ptk);
@@ -1894,7 +1893,7 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
            strcmp(extension, "TWNNINS9") == 0)
         {
             sprintf(ptk->instrname, "%s", FileName);
-            Stop_Current_Instrument();
+            Stop_Current_Instrument(ptk);
             LoadInst(ptk, ptk->instrname);
             Renew_Sample_Ed(ptk);
         }
@@ -1937,7 +1936,7 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
                 strcmp(extension, "TWNNSYN4") == 0)
         {
             sprintf(ptk->synthname, "%s", FileName);
-            Stop_Current_Instrument();
+            Stop_Current_Instrument(ptk);
             LoadSynth(ptk, ptk->synthname);
         }
         else if(strcmp(extension, "TWNN3030") == 0 ||
@@ -1996,7 +1995,7 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
                             save_sample_vol = 1.0f;
                             if(Get_Number_Of_Splits(Freeindex)) save_sample_vol = Sample_Vol[Freeindex];
                             sp_Position[Freeindex][ptk->Current_Instrument_Split].absolu = 0;
-                            Stop_Current_Instrument();
+                            Stop_Current_Instrument(ptk);
                             switch(channels)
                             {
                                 case 1:
@@ -2104,7 +2103,7 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
                             save_sample_vol = 1.0f;
                             if(Get_Number_Of_Splits(Freeindex)) save_sample_vol = Sample_Vol[Freeindex];
                             sp_Position[Freeindex][ptk->Current_Instrument_Split].absolu = 0;
-                            Stop_Current_Instrument();
+                            Stop_Current_Instrument(ptk);
                             switch(channels)
                             {
                                 case 1:
@@ -2317,7 +2316,7 @@ void Newmod(ptk_data *ptk)
 
     Clear_Input(ptk);
     SongStop(ptk);
-    Stop_Current_Instrument();
+    Stop_Current_Instrument(ptk);
 
 #if !defined(__NO_MIDI__)
     Midi_Reset(ptk);
@@ -2326,7 +2325,7 @@ void Newmod(ptk_data *ptk)
     if(ZzaappOMatic == ZZAAPP_ALL || ZzaappOMatic == ZZAAPP_INSTRUMENTS)
     {
         Free_Samples(ptk);
-        Current_Instrument = 0;
+        ptk->Current_Instrument = 0;
         ptk->seditor = 0;
         Final_Mod_Length = 0;
         Actualize_Master(ptk, 0);
@@ -2361,7 +2360,7 @@ void Newmod(ptk_data *ptk)
         }
         Final_Mod_Length = 0;
         Actualize_Master(ptk, 0);
-        Current_Instrument = 0;
+        ptk->Current_Instrument = 0;
     }
 
     if(ZzaappOMatic == ZZAAPP_ALL || ZzaappOMatic == ZZAAPP_PATTERNS)
@@ -2709,13 +2708,13 @@ void WavRenderizer(ptk_data *ptk)
                     if(rawrender_range)
                     {
                         sprintf(buffer, "Rendering selection to instrument %d (split %d). Please wait...",
-                                Current_Instrument,
+                                ptk->Current_Instrument,
                                 ptk->Current_Instrument_Split);
                     }
                     else
                     {
                         sprintf(buffer, "Rendering module to instrument %d (split %d). Please wait...",
-                                Current_Instrument,
+                                ptk->Current_Instrument,
                                 ptk->Current_Instrument_Split);
                     }
                     break;
@@ -2827,30 +2826,30 @@ void WavRenderizer(ptk_data *ptk)
                             Mem_Buffer_Size--;
                         }
                         save_sample_vol = 1.0f;
-                        if(Get_Number_Of_Splits(Current_Instrument)) save_sample_vol = Sample_Vol[Current_Instrument];
+                        if(Get_Number_Of_Splits(ptk->Current_Instrument)) save_sample_vol = Sample_Vol[ptk->Current_Instrument];
 
-                        AllocateWave(Current_Instrument, ptk->Current_Instrument_Split,
+                        AllocateWave(ptk->Current_Instrument, ptk->Current_Instrument_Split,
                                      Pos_In_Memory, (Stereo + 1), TRUE,
                                      NULL, NULL);
 
                         // Fixup the buffer with it's real size
-                        memcpy(RawSamples[Current_Instrument][0][ptk->Current_Instrument_Split], 
+                        memcpy(RawSamples[ptk->Current_Instrument][0][ptk->Current_Instrument_Split], 
                                Sample_Buffer[0], (Pos_In_Memory * 2));
                         if(Stereo)
                         {
-                            memcpy(RawSamples[Current_Instrument][1][ptk->Current_Instrument_Split], 
+                            memcpy(RawSamples[ptk->Current_Instrument][1][ptk->Current_Instrument_Split], 
                                    Sample_Buffer[1], (Pos_In_Memory * 2));
                             free(Sample_Buffer[1]);
                         }
                         free(Sample_Buffer[0]);
-                        LoopStart[Current_Instrument][ptk->Current_Instrument_Split] = 0;
-                        LoopEnd[Current_Instrument][ptk->Current_Instrument_Split] = 0;
-                        LoopType[Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_NONE;
-                        Basenote[Current_Instrument][ptk->Current_Instrument_Split] = DEFAULT_BASE_NOTE;
+                        LoopStart[ptk->Current_Instrument][ptk->Current_Instrument_Split] = 0;
+                        LoopEnd[ptk->Current_Instrument][ptk->Current_Instrument_Split] = 0;
+                        LoopType[ptk->Current_Instrument][ptk->Current_Instrument_Split] = SMP_LOOP_NONE;
+                        Basenote[ptk->Current_Instrument][ptk->Current_Instrument_Split] = DEFAULT_BASE_NOTE;
                         Renew_Sample_Ed(ptk);
-                        if(Get_Number_Of_Splits(Current_Instrument) == 1)
+                        if(Get_Number_Of_Splits(ptk->Current_Instrument) == 1)
                         {
-                            Sample_Vol[Current_Instrument] = save_sample_vol;
+                            Sample_Vol[ptk->Current_Instrument] = save_sample_vol;
                         }
                     }
                     break;
@@ -2928,7 +2927,7 @@ void DeleteInstrument(ptk_data *ptk)
     int i;
     int Old_Prg;
 
-    Stop_Current_Instrument();
+    Stop_Current_Instrument(ptk);
 
     if(ZzaappOMatic == ZZAAPP_ALL || ZzaappOMatic == ZZAAPP_SYNTHS)
     {
@@ -2940,8 +2939,8 @@ void DeleteInstrument(ptk_data *ptk)
             }
         }
 
-        ResetSynthParameters(ptk, &PARASynth[Current_Instrument]);
-        Synthprg[Current_Instrument] = 0;
+        ResetSynthParameters(ptk, &PARASynth[ptk->Current_Instrument]);
+        Synthprg[ptk->Current_Instrument] = 0;
         Actualize_Master(ptk, 0);
         Final_Mod_Length = 0;
         Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_ALL);
@@ -2953,13 +2952,13 @@ void DeleteInstrument(ptk_data *ptk)
         ptk->seditor = 0;
         Final_Mod_Length = 0;
         Actualize_Master(ptk, 0);
-        Old_Prg = Synthprg[Current_Instrument];
-        KillInst(ptk, Current_Instrument, FALSE);
-        Synthprg[Current_Instrument] = Old_Prg;
-        sprintf(nameins[Current_Instrument], "Untitled");
-        if((Synthprg[Current_Instrument] - 2) == Current_Instrument)
+        Old_Prg = Synthprg[ptk->Current_Instrument];
+        KillInst(ptk, ptk->Current_Instrument, FALSE);
+        Synthprg[ptk->Current_Instrument] = Old_Prg;
+        sprintf(nameins[ptk->Current_Instrument], "Untitled");
+        if((Synthprg[ptk->Current_Instrument] - 2) == ptk->Current_Instrument)
         {
-            Synthprg[Current_Instrument] = 1;
+            Synthprg[ptk->Current_Instrument] = 1;
         }
         Renew_Sample_Ed(ptk);
         Status_Box(ptk, "Instrument deleted.");
@@ -2972,13 +2971,13 @@ void DeleteInstrument(ptk_data *ptk)
         ptk->seditor = 0;
         Final_Mod_Length = 0;
         Actualize_Master(ptk, 0);
-        Old_Prg = Synthprg[Current_Instrument];
-        KillInst(ptk, Current_Instrument, TRUE);
-        Synthprg[Current_Instrument] = Old_Prg;
-        sprintf(nameins[Current_Instrument], "Untitled");
-        if((Synthprg[Current_Instrument] - 2) == Current_Instrument)
+        Old_Prg = Synthprg[ptk->Current_Instrument];
+        KillInst(ptk, ptk->Current_Instrument, TRUE);
+        Synthprg[ptk->Current_Instrument] = Old_Prg;
+        sprintf(nameins[ptk->Current_Instrument], "Untitled");
+        if((Synthprg[ptk->Current_Instrument] - 2) == ptk->Current_Instrument)
         {
-            Synthprg[Current_Instrument] = 1;
+            Synthprg[ptk->Current_Instrument] = 1;
         }
         Renew_Sample_Ed(ptk);
         Status_Box(ptk, "Instrument deleted.");
@@ -2988,7 +2987,7 @@ void DeleteInstrument(ptk_data *ptk)
     Actualize_Instruments_Synths_List(ptk, 0);
 }
 
-void Stop_Current_Instrument(void)
+void Stop_Current_Instrument(ptk_data *ptk)
 {
     int i;
 
@@ -2996,7 +2995,7 @@ void Stop_Current_Instrument(void)
     {
         for(i = 0; i < MAX_POLYPHONY; i++)
         {
-            if(sp_channelsample[u][i] == Current_Instrument)
+            if(sp_channelsample[u][i] == ptk->Current_Instrument)
             {
                 if(sp_Stage[u][i] == PLAYING_SAMPLE)
                 {
@@ -3115,13 +3114,13 @@ void Actualize_Input(ptk_data *ptk)
 
         // Instrument name
         case INPUT_INSTRUMENT_NAME:
-            Actualize_Name(ptk->retletter, nameins[Current_Instrument]);
+            Actualize_Name(ptk->retletter, nameins[ptk->Current_Instrument]);
             ptk->gui_action = GUI_CMD_UPDATE_PATTERN_ED;
             break;
 
         // Synth name
         case INPUT_SYNTH_NAME:
-            Actualize_Name(ptk->retletter, PARASynth[Current_Instrument].presetname);
+            Actualize_Name(ptk->retletter, PARASynth[ptk->Current_Instrument].presetname);
             ptk->teac = UPDATE_SYNTH_CHANGE_NAME;
             ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             break;
@@ -4893,7 +4892,7 @@ void Keyboard_Handler(ptk_data *ptk)
                             if(is_editing)
                             {
                                 *(RawPatterns + xoffseted + PATTERN_NOTE1) = tmp_note;
-                                *(RawPatterns + xoffseted + PATTERN_INSTR1) = Current_Instrument;
+                                *(RawPatterns + xoffseted + PATTERN_INSTR1) = ptk->Current_Instrument;
                             }
                         }
                         move_down = TRUE;
@@ -5313,8 +5312,8 @@ void Mouse_Handler(ptk_data *ptk)
         if(zcheckMouse(ptk, 90, 108, 166, 16) && snamesel == INPUT_NONE)
         {
             snamesel = INPUT_INSTRUMENT_NAME;
-            strcpy(cur_input_name, nameins[Current_Instrument]);
-            sprintf(nameins[Current_Instrument], "");
+            strcpy(cur_input_name, nameins[ptk->Current_Instrument]);
+            sprintf(nameins[ptk->Current_Instrument], "");
             namesize = 0;
             ptk->gui_action = GUI_CMD_UPDATE_PATTERN_ED;
         }
@@ -6733,7 +6732,7 @@ void Note_Jazz(ptk_data *ptk, int track, int note, float volume)
         Schedule_Instrument(ptk, track,
                             Sub_Channel,
                             note,
-                            Current_Instrument,
+                            ptk->Current_Instrument,
                             0,
                             0,
                             !is_recording,
@@ -6819,8 +6818,11 @@ void ptk_init(ptk_data *ptk)
     ptk->Track_Under_Caret = 0;
     ptk->gui_track = 0;
 
-    ptk->L = luaL_newstate();
+    ptk->Current_Instrument = 0;
     ptk->userscreen = USER_SCREEN_DISKIO_EDIT;
+
+
+    ptk->L = luaL_newstate();
 
     luaL_openlibs(ptk->L);
 
