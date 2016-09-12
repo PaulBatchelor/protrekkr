@@ -31,18 +31,18 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/editor_instrument.h"
-#include "include/editor_sample.h"
-#include "../samples/include/samples_pack.h"
-#include "../files/include/files_list.h"
+#include "editor_instrument.h"
+#include "editor_sample.h"
+#include "samples_pack.h"
+#include "files_list.h"
 
-#include "../replay/lib/include/samples_unpack.h"
-#include "../replay/lib/include/wavpack.h"
+#include "samples_unpack.h"
+#include "wavpack.h"
 
-#include "../replay/lib/include/endianness.h"
+#include "endianness.h"
 
-#include "../files/include/files.h"
-#include "../ui/include/requesters.h"
+#include "files.h"
+#include "requesters.h"
 
 // ------------------------------------------------------
 // Variables

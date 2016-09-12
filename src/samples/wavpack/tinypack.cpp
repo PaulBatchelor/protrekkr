@@ -28,7 +28,7 @@
 #include <stdio.h>
 
 //nclude "include/wavpack.h"
-#include "include/wplocal.h"
+#include "wplocal.h"
 
 #define CLEAR(destin) memset (&destin, 0, sizeof (destin));
 

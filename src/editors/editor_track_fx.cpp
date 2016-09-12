@@ -31,7 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/editor_track_fx.h"
+#include "editor_track_fx.h"
 
 // ------------------------------------------------------
 // Variables

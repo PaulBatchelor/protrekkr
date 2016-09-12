@@ -31,8 +31,8 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/spline.h"
-#include "include/ptk_def_properties.h"
+#include "spline.h"
+#include "ptk_def_properties.h"
 
 #if defined(PTK_USE_SPLINE)
 // ------------------------------------------------------

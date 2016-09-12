@@ -31,8 +31,8 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/tb_303.h"
-#include "include/replay.h"
+#include "tb_303.h"
+#include "replay.h"
 
 #if defined(PTK_303)
 

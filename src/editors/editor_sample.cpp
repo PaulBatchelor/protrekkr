@@ -31,9 +31,9 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/editor_sample.h"
-#include "include/editor_instrument.h"
-#include "../samples/include/samples_ops.h"
+#include "editor_sample.h"
+#include "editor_instrument.h"
+#include "samples_ops.h"
 
 #if defined(__AROS__)
 #include <stdint.h>

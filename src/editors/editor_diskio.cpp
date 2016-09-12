@@ -31,9 +31,9 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/editor_diskio.h"
-#include "../files/include/files.h"
-#include "../ui/include/requesters.h"
+#include "editor_diskio.h"
+#include "files.h"
+#include "requesters.h"
 
 #if defined(__AROS__)
 #include <string.h>

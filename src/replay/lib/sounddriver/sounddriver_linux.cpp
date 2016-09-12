@@ -31,7 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/sounddriver_linux.h"
+#include "sounddriver_linux.h"
 
 #include "jack/jack.h"
 

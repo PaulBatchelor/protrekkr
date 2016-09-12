@@ -31,7 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/editor_fx_setup.h"
+#include "editor_fx_setup.h"
 
 // ------------------------------------------------------
 // Variables

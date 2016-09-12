@@ -31,8 +31,8 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/replay.h"
-#include "include/endianness.h"
+#include "replay.h"
+#include "endianness.h"
 
 #if defined(__PSP__)
 #include <stdlib.h>
@@ -44,9 +44,9 @@
 #endif
 
 #if !defined(__STAND_ALONE__)
-#include "../../../src/midi/include/midi.h"
-#include "../../../src/include/variables.h"
-#include "../../../src/include/ptk.h"
+#include "midi.h"
+#include "variables.h"
+#include "ptk.h"
 #endif
 
 /* TODO: global yeah you get it*/

@@ -32,7 +32,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "include/wplocal.h"
+#include "wplocal.h"
 
 ///////////////////////////// local table storage ////////////////////////////
 

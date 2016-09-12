@@ -22,6 +22,10 @@ FLAGS += -Isrc/include
 FLAGS += -Isrc/samples/wav/include
 FLAGS += -Isrc/samples/aiff/include
 FLAGS += -Isrc/support/include
+FLAGS += -Isrc/extralibs/sdl_draw/include
+FLAGS += -Isrc/replay/lib/sounddriver/include
+FLAGS += -Isrc/samples/include
+FLAGS += -Isrc/samples/wavpack/include
 
 OBJS = \
 	src/ui/requesters.o \

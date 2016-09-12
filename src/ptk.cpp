@@ -31,9 +31,9 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/ptk_data.h"
-#include "include/ptk.h"
-#include "include/ptk_lua.h"
+#include "ptk_data.h"
+#include "ptk.h"
+#include "ptk_lua.h"
 
 // ------------------------------------------------------
 // Constants

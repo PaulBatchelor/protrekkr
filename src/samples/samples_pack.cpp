@@ -34,16 +34,16 @@
 #if defined(__WIN32__)
 #include <windows.h>
 #if defined(__GCC__)
-#include "../replay/lib/include/mmreg.h"
-#include "../replay/lib/include/msacm.h"
+#include "mmreg.h"
+#include "msacm.h"
 #else
 #include <mmreg.h>
 #include <msacm.h>
 #endif
 #endif
 
-#include "include/samples_pack.h"
-#include "../replay/lib/include/samples_unpack.h"
+#include "samples_pack.h"
+#include "samples_unpack.h"
 
 int pack_audio(short *Source, short *Dest, int Size);
 

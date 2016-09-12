@@ -31,8 +31,8 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/editor_track.h"
-#include "include/editor_pattern.h"
+#include "editor_track.h"
+#include "editor_pattern.h"
 
 // ------------------------------------------------------
 // Functions

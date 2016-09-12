@@ -31,7 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/gadgets.h"
+#include "gadgets.h"
 
 // ------------------------------------------------------
 // Allocate the memory array for all the gaddets

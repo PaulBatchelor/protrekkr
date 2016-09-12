@@ -31,7 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/synths.h"
+#include "synths.h"
 
 // ------------------------------------------------------
 // Load the data of a synth instrument

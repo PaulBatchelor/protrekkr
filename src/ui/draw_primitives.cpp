@@ -31,9 +31,9 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/draw_primitives.h"
-#include "../extralibs/sdl_draw/include/sdl_draw.h"
-#include "../include/ptk.h"
+#include "draw_primitives.h"
+#include "sdl_draw.h"
+#include "ptk.h"
 
 // ------------------------------------------------------
 // Variables

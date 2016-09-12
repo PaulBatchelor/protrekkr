@@ -33,8 +33,8 @@
 // SUCH DAMAGE.
 // ------------------------------------------------------
 
-#include "include/samples_unpack.h"
-#include "include/wavpack.h"
+#include "samples_unpack.h"
+#include "wavpack.h"
 
 #if defined(PTK_INTERNAL)
 

@@ -12,7 +12,7 @@
 // the entropy coding which is handled by the words? modules. For efficiency,
 // the conversion is isolated to tight loops that handle an entire buffer.
 
-#include "include/wplocal.h"
+#include "wplocal.h"
 
 #include <stdlib.h>
 #include <stdio.h>

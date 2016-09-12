@@ -31,7 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/reverbs.h"
+#include "reverbs.h"
 
 // ------------------------------------------------------
 // Load the data from a reverb file (or a module)

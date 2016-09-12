@@ -14,7 +14,7 @@
 // endian-ness, both for enhancing portability. Finally, a debug wrapper for
 // the malloc() system is provided.
 
-#include "include/wplocal.h"
+#include "wplocal.h"
 
 #include <stdlib.h>
 #include <string.h>

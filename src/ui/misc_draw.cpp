@@ -31,8 +31,8 @@
 
 // ------------------------------------------------------
 // Includes
-#include "../include/ptk.h"
-#include "include/draw_primitives.h"
+#include "ptk.h"
+#include "draw_primitives.h"
 
 // ------------------------------------------------------
 // Constants

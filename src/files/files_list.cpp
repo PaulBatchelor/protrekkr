@@ -31,8 +31,8 @@
 
 // ------------------------------------------------------
 // Includes
-#include "../include/ptk.h"
-#include "include/files_list.h"
+#include "ptk.h"
+#include "files_list.h"
 
 #if defined(__WIN32__)
 #include <shlwapi.h>

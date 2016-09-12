@@ -31,9 +31,9 @@
 
 // ------------------------------------------------------
 // Includes
-#include "../include/variables.h"
-#include "include/patterns_blocks.h"
-#include "include/editor_pattern.h"
+#include "variables.h"
+#include "patterns_blocks.h"
+#include "editor_pattern.h"
 
 #if !defined(__WINAMP__)
 

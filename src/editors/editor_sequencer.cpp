@@ -31,12 +31,12 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/editor_sequencer.h"
-#include "include/editor_pattern.h"
-#include "include/patterns_blocks.h"
+#include "editor_sequencer.h"
+#include "editor_pattern.h"
+#include "patterns_blocks.h"
 
-#include "../files/include/files.h"
-#include "../ui/include/requesters.h"
+#include "files.h"
+#include "requesters.h"
 
 // ------------------------------------------------------
 // Structures

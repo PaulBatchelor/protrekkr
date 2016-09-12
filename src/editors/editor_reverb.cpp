@@ -31,10 +31,10 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/editor_reverb.h"
-#include "../files/include/files.h"
-#include "../ui/include/requesters.h"
-#include "../ui/include/gadgets.h"
+#include "editor_reverb.h"
+#include "files.h"
+#include "requesters.h"
+#include "gadgets.h"
 
 // ------------------------------------------------------
 // Variables

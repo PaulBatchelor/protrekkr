@@ -31,7 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/samples_ops.h"
+#include "samples_ops.h"
 
 #if defined(__AROS__)
 #include <stdint.h>

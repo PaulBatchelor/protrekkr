@@ -31,12 +31,12 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/editor_pattern.h"
-#include "include/editor_diskio.h"
-#include "include/patterns_blocks.h"
-#include "../support/include/timer.h"
-#include "include/editor_instrument.h"
-#include "include/editor_sequencer.h"
+#include "editor_pattern.h"
+#include "editor_diskio.h"
+#include "patterns_blocks.h"
+#include "timer.h"
+#include "editor_instrument.h"
+#include "editor_sequencer.h"
 
 // ------------------------------------------------------
 // Constants

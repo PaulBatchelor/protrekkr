@@ -34,15 +34,15 @@
 #if defined(__WIN32__)
 #include <windows.h>
 #if defined(__GCC__)
-#include "include/mmreg.h"
-#include "include/msacm.h"
+#include "mmreg.h"
+#include "msacm.h"
 #else
 #include <mmreg.h>
 #include <msacm.h>
 #endif
 #endif
 
-#include "include/samples_unpack.h"
+#include "samples_unpack.h"
 
 // ------------------------------------------------------
 // Variables

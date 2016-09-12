@@ -32,7 +32,7 @@
 // ------------------------------------------------------
 // Includes
 #include <SDL/SDL.h>
-#include "include/timer.h"
+#include "timer.h"
 
 // ------------------------------------------------------
 // Constructor

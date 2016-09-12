@@ -36,7 +36,7 @@
 #else
 #include <SDL/SDL_stdinc.h>
 #endif
-#include "../include/ptk.h"
+#include "ptk.h"
 
 // ------------------------------------------------------
 // Variables

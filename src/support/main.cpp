@@ -31,7 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
-#include "../include/ptk.h"
+#include "ptk.h"
 #if defined(__AROS__)
 #include <cstdlib>
 #define SDL_putenv putenv
@@ -42,12 +42,12 @@
 
 #include <SDL/SDL_types.h>
 #include <string.h>
-#include "include/main.h"
-#include "include/timer.h"
-#include "include/resource.h"
+#include "main.h"
+#include "timer.h"
+#include "resource.h"
 
-#include "../files/include/files.h"
-#include "../files/include/config.h"
+#include "files.h"
+#include "config.h"
 
 #if defined(__WIN32__)
 #include <windows.h>

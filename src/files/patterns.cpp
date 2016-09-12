@@ -31,7 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/patterns.h"
+#include "patterns.h"
 
 // ------------------------------------------------------
 // Load the data from a pattern file

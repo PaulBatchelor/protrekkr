@@ -31,10 +31,10 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/editor_setup.h"
-#include "include/editor_sequencer.h"
-#include "include/editor_pattern.h"
-#include "../midi/include/midi.h"
+#include "editor_setup.h"
+#include "editor_sequencer.h"
+#include "editor_pattern.h"
+#include "midi.h"
 
 // ------------------------------------------------------
 // Variables

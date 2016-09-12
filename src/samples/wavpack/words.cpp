@@ -23,7 +23,7 @@
 // very simple encoding that is over 99% efficient with this data and
 // results in about 1.22 bits per sample.
 
-#include "include/wplocal.h"
+#include "wplocal.h"
 
 #include <stdlib.h>
 #include <string.h>
