@@ -135,8 +135,6 @@ SDL_Surface *LOGOPIC;
 //double key_ticks;
 //int ptk->old_key_Pattern_Line;
 Uint32 Alloc_midi_Channels[MAX_TRACKS][MAX_POLYPHONY];
-int Record_Keys[37];
-int Record_Keys_State[37];
 
 void Mouse_Sliders_Master_Shuffle(ptk_data *ptk);
 int Calc_Length(ptk_data *ptk);
@@ -3993,43 +3991,43 @@ void Keyboard_Handler(ptk_data *ptk)
     if(!Keys[SDLK_MENU] && !Get_LAlt() && !Get_LCtrl() && !Get_LShift() && snamesel == INPUT_NONE && !reelletter)
     {
         // Key jazz release
-        if(Keys_Raw_Off[0x10]) { Record_Keys[0] = (12 + 1) | 0x80;  Keys_Raw_Off[0x10] = FALSE; Keys_Raw[0x10] = FALSE; }
-        if(Keys_Raw_Off[3])    { Record_Keys[1] = (13 + 1) | 0x80;  Keys_Raw_Off[3] = FALSE; Keys_Raw[3] = FALSE; }
-        if(Keys_Raw_Off[0x11]) { Record_Keys[2] = (14 + 1) | 0x80;  Keys_Raw_Off[0x11] = FALSE; Keys_Raw[0x11] = FALSE; }
-        if(Keys_Raw_Off[4])    { Record_Keys[3] = (15 + 1) | 0x80;  Keys_Raw_Off[4] = FALSE; Keys_Raw[4] = FALSE; }
-        if(Keys_Raw_Off[0x12]) { Record_Keys[4] = (16 + 1) | 0x80;  Keys_Raw_Off[0x12] = FALSE; Keys_Raw[0x12] = FALSE; }
-        if(Keys_Raw_Off[0x13]) { Record_Keys[5] = (17 + 1) | 0x80;  Keys_Raw_Off[0x13] = FALSE; Keys_Raw[0x13] = FALSE; }
-        if(Keys_Raw_Off[6])    { Record_Keys[6] = (18 + 1) | 0x80;  Keys_Raw_Off[6] = FALSE; Keys_Raw[6] = FALSE; }
-        if(Keys_Raw_Off[0x14]) { Record_Keys[7] = (19 + 1) | 0x80;  Keys_Raw_Off[0x14] = FALSE; Keys_Raw[0x14] = FALSE; }
-        if(Keys_Raw_Off[7])    { Record_Keys[8] = (20 + 1) | 0x80;  Keys_Raw_Off[7] = FALSE; Keys_Raw[7] = FALSE; }
-        if(Keys_Raw_Off[0x15]) { Record_Keys[9] = (21 + 1) | 0x80;  Keys_Raw_Off[0x15] = FALSE; Keys_Raw[0x15] = FALSE; }
-        if(Keys_Raw_Off[8])    { Record_Keys[10] = (22 + 1) | 0x80; Keys_Raw_Off[8] = FALSE; Keys_Raw[8] = FALSE; }
-        if(Keys_Raw_Off[0x16]) { Record_Keys[11] = (23 + 1) | 0x80; Keys_Raw_Off[0x16] = FALSE; Keys_Raw[0x16] = FALSE; }
-        if(Keys_Raw_Off[0x17]) { Record_Keys[12] = (24 + 1) | 0x80; Keys_Raw_Off[0x17] = FALSE; Keys_Raw[0x17] = FALSE; }
-        if(Keys_Raw_Off[0xa])  { Record_Keys[13] = (25 + 1) | 0x80; Keys_Raw_Off[0xa] = FALSE; Keys_Raw[0xa] = FALSE; }
-        if(Keys_Raw_Off[0x18]) { Record_Keys[14] = (26 + 1) | 0x80; Keys_Raw_Off[0x18] = FALSE; Keys_Raw[0x18] = FALSE; }
-        if(Keys_Raw_Off[0xb])  { Record_Keys[15] = (27 + 1) | 0x80; Keys_Raw_Off[0xb] = FALSE; Keys_Raw[0xb] = FALSE; }
-        if(Keys_Raw_Off[0x19]) { Record_Keys[16] = (28 + 1) | 0x80; Keys_Raw_Off[0x19] = FALSE; Keys_Raw[0x19] = FALSE; }
-        if(Keys_Raw_Off[0x1a]) { Record_Keys[17] = (29 + 1) | 0x80; Keys_Raw_Off[0x1a] = FALSE; Keys_Raw[0x1a] = FALSE; }
-        if(Keys_Raw_Off[0xd])  { Record_Keys[18] = (30 + 1) | 0x80; Keys_Raw_Off[0xd] = FALSE; Keys_Raw[0xd] = FALSE; }
-        if(Keys_Raw_Off[0x1b]) { Record_Keys[19] = (31 + 1) | 0x80; Keys_Raw_Off[0x1b] = FALSE; Keys_Raw[0x1b] = FALSE; }
-        if(Keys_Raw_Off[0x2c]) { Record_Keys[20] = (0 + 1) | 0x80;  Keys_Raw_Off[0x2c] = FALSE; Keys_Raw[0x2c] = FALSE; }
-        if(Keys_Raw_Off[0x1f]) { Record_Keys[21] = (1 + 1) | 0x80;  Keys_Raw_Off[0x1f] = FALSE; Keys_Raw[0x1f] = FALSE; }
-        if(Keys_Raw_Off[0x2d]) { Record_Keys[22] = (2 + 1) | 0x80;  Keys_Raw_Off[0x2d] = FALSE; Keys_Raw[0x2d] = FALSE; }
-        if(Keys_Raw_Off[0x20]) { Record_Keys[23] = (3 + 1) | 0x80;  Keys_Raw_Off[0x20] = FALSE; Keys_Raw[0x20] = FALSE; }
-        if(Keys_Raw_Off[0x2e]) { Record_Keys[24] = (4 + 1) | 0x80;  Keys_Raw_Off[0x2e] = FALSE; Keys_Raw[0x2e] = FALSE; }
-        if(Keys_Raw_Off[0x2f]) { Record_Keys[25] = (5 + 1) | 0x80;  Keys_Raw_Off[0x2f] = FALSE; Keys_Raw[0x2f] = FALSE; }
-        if(Keys_Raw_Off[0x22]) { Record_Keys[26] = (6 + 1) | 0x80;  Keys_Raw_Off[0x22] = FALSE; Keys_Raw[0x22] = FALSE; }
-        if(Keys_Raw_Off[0x30]) { Record_Keys[27] = (7 + 1) | 0x80;  Keys_Raw_Off[0x30] = FALSE; Keys_Raw[0x30] = FALSE; }
-        if(Keys_Raw_Off[0x23]) { Record_Keys[28] = (8 + 1) | 0x80;  Keys_Raw_Off[0x23] = FALSE; Keys_Raw[0x23] = FALSE; }
-        if(Keys_Raw_Off[0x31]) { Record_Keys[29] = (9 + 1) | 0x80;  Keys_Raw_Off[0x31] = FALSE; Keys_Raw[0x31] = FALSE; }
-        if(Keys_Raw_Off[0x24]) { Record_Keys[30] = (10 + 1) | 0x80; Keys_Raw_Off[0x24] = FALSE; Keys_Raw[0x24] = FALSE; }
-        if(Keys_Raw_Off[0x32]) { Record_Keys[31] = (11 + 1) | 0x80; Keys_Raw_Off[0x32] = FALSE; Keys_Raw[0x32] = FALSE; }
-        if(Keys_Raw_Off[0x33]) { Record_Keys[32] = (12 + 1) | 0x80; Keys_Raw_Off[0x33] = FALSE; Keys_Raw[0x33] = FALSE; }
-        if(Keys_Raw_Off[0x26]) { Record_Keys[33] = (13 + 1) | 0x80; Keys_Raw_Off[0x26] = FALSE; Keys_Raw[0x26] = FALSE; }
-        if(Keys_Raw_Off[0x34]) { Record_Keys[34] = (14 + 1) | 0x80; Keys_Raw_Off[0x34] = FALSE; Keys_Raw[0x34] = FALSE; }
-        if(Keys_Raw_Off[0x27]) { Record_Keys[35] = (15 + 1) | 0x80; Keys_Raw_Off[0x27] = FALSE; Keys_Raw[0x27] = FALSE; }
-        if(Keys_Raw_Off[0x35]) { Record_Keys[36] = (16 + 1) | 0x80; Keys_Raw_Off[0x35] = FALSE; Keys_Raw[0x35] = FALSE; }
+        if(Keys_Raw_Off[0x10]) { ptk->Record_Keys[0] = (12 + 1) | 0x80;  Keys_Raw_Off[0x10] = FALSE; Keys_Raw[0x10] = FALSE; }
+        if(Keys_Raw_Off[3])    { ptk->Record_Keys[1] = (13 + 1) | 0x80;  Keys_Raw_Off[3] = FALSE; Keys_Raw[3] = FALSE; }
+        if(Keys_Raw_Off[0x11]) { ptk->Record_Keys[2] = (14 + 1) | 0x80;  Keys_Raw_Off[0x11] = FALSE; Keys_Raw[0x11] = FALSE; }
+        if(Keys_Raw_Off[4])    { ptk->Record_Keys[3] = (15 + 1) | 0x80;  Keys_Raw_Off[4] = FALSE; Keys_Raw[4] = FALSE; }
+        if(Keys_Raw_Off[0x12]) { ptk->Record_Keys[4] = (16 + 1) | 0x80;  Keys_Raw_Off[0x12] = FALSE; Keys_Raw[0x12] = FALSE; }
+        if(Keys_Raw_Off[0x13]) { ptk->Record_Keys[5] = (17 + 1) | 0x80;  Keys_Raw_Off[0x13] = FALSE; Keys_Raw[0x13] = FALSE; }
+        if(Keys_Raw_Off[6])    { ptk->Record_Keys[6] = (18 + 1) | 0x80;  Keys_Raw_Off[6] = FALSE; Keys_Raw[6] = FALSE; }
+        if(Keys_Raw_Off[0x14]) { ptk->Record_Keys[7] = (19 + 1) | 0x80;  Keys_Raw_Off[0x14] = FALSE; Keys_Raw[0x14] = FALSE; }
+        if(Keys_Raw_Off[7])    { ptk->Record_Keys[8] = (20 + 1) | 0x80;  Keys_Raw_Off[7] = FALSE; Keys_Raw[7] = FALSE; }
+        if(Keys_Raw_Off[0x15]) { ptk->Record_Keys[9] = (21 + 1) | 0x80;  Keys_Raw_Off[0x15] = FALSE; Keys_Raw[0x15] = FALSE; }
+        if(Keys_Raw_Off[8])    { ptk->Record_Keys[10] = (22 + 1) | 0x80; Keys_Raw_Off[8] = FALSE; Keys_Raw[8] = FALSE; }
+        if(Keys_Raw_Off[0x16]) { ptk->Record_Keys[11] = (23 + 1) | 0x80; Keys_Raw_Off[0x16] = FALSE; Keys_Raw[0x16] = FALSE; }
+        if(Keys_Raw_Off[0x17]) { ptk->Record_Keys[12] = (24 + 1) | 0x80; Keys_Raw_Off[0x17] = FALSE; Keys_Raw[0x17] = FALSE; }
+        if(Keys_Raw_Off[0xa])  { ptk->Record_Keys[13] = (25 + 1) | 0x80; Keys_Raw_Off[0xa] = FALSE; Keys_Raw[0xa] = FALSE; }
+        if(Keys_Raw_Off[0x18]) { ptk->Record_Keys[14] = (26 + 1) | 0x80; Keys_Raw_Off[0x18] = FALSE; Keys_Raw[0x18] = FALSE; }
+        if(Keys_Raw_Off[0xb])  { ptk->Record_Keys[15] = (27 + 1) | 0x80; Keys_Raw_Off[0xb] = FALSE; Keys_Raw[0xb] = FALSE; }
+        if(Keys_Raw_Off[0x19]) { ptk->Record_Keys[16] = (28 + 1) | 0x80; Keys_Raw_Off[0x19] = FALSE; Keys_Raw[0x19] = FALSE; }
+        if(Keys_Raw_Off[0x1a]) { ptk->Record_Keys[17] = (29 + 1) | 0x80; Keys_Raw_Off[0x1a] = FALSE; Keys_Raw[0x1a] = FALSE; }
+        if(Keys_Raw_Off[0xd])  { ptk->Record_Keys[18] = (30 + 1) | 0x80; Keys_Raw_Off[0xd] = FALSE; Keys_Raw[0xd] = FALSE; }
+        if(Keys_Raw_Off[0x1b]) { ptk->Record_Keys[19] = (31 + 1) | 0x80; Keys_Raw_Off[0x1b] = FALSE; Keys_Raw[0x1b] = FALSE; }
+        if(Keys_Raw_Off[0x2c]) { ptk->Record_Keys[20] = (0 + 1) | 0x80;  Keys_Raw_Off[0x2c] = FALSE; Keys_Raw[0x2c] = FALSE; }
+        if(Keys_Raw_Off[0x1f]) { ptk->Record_Keys[21] = (1 + 1) | 0x80;  Keys_Raw_Off[0x1f] = FALSE; Keys_Raw[0x1f] = FALSE; }
+        if(Keys_Raw_Off[0x2d]) { ptk->Record_Keys[22] = (2 + 1) | 0x80;  Keys_Raw_Off[0x2d] = FALSE; Keys_Raw[0x2d] = FALSE; }
+        if(Keys_Raw_Off[0x20]) { ptk->Record_Keys[23] = (3 + 1) | 0x80;  Keys_Raw_Off[0x20] = FALSE; Keys_Raw[0x20] = FALSE; }
+        if(Keys_Raw_Off[0x2e]) { ptk->Record_Keys[24] = (4 + 1) | 0x80;  Keys_Raw_Off[0x2e] = FALSE; Keys_Raw[0x2e] = FALSE; }
+        if(Keys_Raw_Off[0x2f]) { ptk->Record_Keys[25] = (5 + 1) | 0x80;  Keys_Raw_Off[0x2f] = FALSE; Keys_Raw[0x2f] = FALSE; }
+        if(Keys_Raw_Off[0x22]) { ptk->Record_Keys[26] = (6 + 1) | 0x80;  Keys_Raw_Off[0x22] = FALSE; Keys_Raw[0x22] = FALSE; }
+        if(Keys_Raw_Off[0x30]) { ptk->Record_Keys[27] = (7 + 1) | 0x80;  Keys_Raw_Off[0x30] = FALSE; Keys_Raw[0x30] = FALSE; }
+        if(Keys_Raw_Off[0x23]) { ptk->Record_Keys[28] = (8 + 1) | 0x80;  Keys_Raw_Off[0x23] = FALSE; Keys_Raw[0x23] = FALSE; }
+        if(Keys_Raw_Off[0x31]) { ptk->Record_Keys[29] = (9 + 1) | 0x80;  Keys_Raw_Off[0x31] = FALSE; Keys_Raw[0x31] = FALSE; }
+        if(Keys_Raw_Off[0x24]) { ptk->Record_Keys[30] = (10 + 1) | 0x80; Keys_Raw_Off[0x24] = FALSE; Keys_Raw[0x24] = FALSE; }
+        if(Keys_Raw_Off[0x32]) { ptk->Record_Keys[31] = (11 + 1) | 0x80; Keys_Raw_Off[0x32] = FALSE; Keys_Raw[0x32] = FALSE; }
+        if(Keys_Raw_Off[0x33]) { ptk->Record_Keys[32] = (12 + 1) | 0x80; Keys_Raw_Off[0x33] = FALSE; Keys_Raw[0x33] = FALSE; }
+        if(Keys_Raw_Off[0x26]) { ptk->Record_Keys[33] = (13 + 1) | 0x80; Keys_Raw_Off[0x26] = FALSE; Keys_Raw[0x26] = FALSE; }
+        if(Keys_Raw_Off[0x34]) { ptk->Record_Keys[34] = (14 + 1) | 0x80; Keys_Raw_Off[0x34] = FALSE; Keys_Raw[0x34] = FALSE; }
+        if(Keys_Raw_Off[0x27]) { ptk->Record_Keys[35] = (15 + 1) | 0x80; Keys_Raw_Off[0x27] = FALSE; Keys_Raw[0x27] = FALSE; }
+        if(Keys_Raw_Off[0x35]) { ptk->Record_Keys[36] = (16 + 1) | 0x80; Keys_Raw_Off[0x35] = FALSE; Keys_Raw[0x35] = FALSE; }
 
         if(Keys[SDLK_DELETE])
         {
@@ -4048,43 +4046,43 @@ void Keyboard_Handler(ptk_data *ptk)
         }
 
         // Key jazz
-        if(Keys_Raw[0x10]) { retnote_raw = 12; Record_Keys[0] = 12 + 1; }
-        if(Keys_Raw[3])    { retnote_raw = 13; Record_Keys[1] = 13 + 1; }
-        if(Keys_Raw[0x11]) { retnote_raw = 14; Record_Keys[2] = 14 + 1; }
-        if(Keys_Raw[4])    { retnote_raw = 15; Record_Keys[3] = 15 + 1; }
-        if(Keys_Raw[0x12]) { retnote_raw = 16; Record_Keys[4] = 16 + 1; }
-        if(Keys_Raw[0x13]) { retnote_raw = 17; Record_Keys[5] = 17 + 1; }
-        if(Keys_Raw[6])    { retnote_raw = 18; Record_Keys[6] = 18 + 1; }
-        if(Keys_Raw[0x14]) { retnote_raw = 19; Record_Keys[7] = 19 + 1; }
-        if(Keys_Raw[7])    { retnote_raw = 20; Record_Keys[8] = 20 + 1; }
-        if(Keys_Raw[0x15]) { retnote_raw = 21; Record_Keys[9] = 21 + 1; }
-        if(Keys_Raw[8])    { retnote_raw = 22; Record_Keys[10] = 22 + 1; }
-        if(Keys_Raw[0x16]) { retnote_raw = 23; Record_Keys[11] = 23 + 1; }
-        if(Keys_Raw[0x17]) { retnote_raw = 24; Record_Keys[12] = 24 + 1; }
-        if(Keys_Raw[0xa])  { retnote_raw = 25; Record_Keys[13] = 25 + 1; }
-        if(Keys_Raw[0x18]) { retnote_raw = 26; Record_Keys[14] = 26 + 1; }
-        if(Keys_Raw[0xb])  { retnote_raw = 27; Record_Keys[15] = 27 + 1; }
-        if(Keys_Raw[0x19]) { retnote_raw = 28; Record_Keys[16] = 28 + 1; }
-        if(Keys_Raw[0x1a]) { retnote_raw = 29; Record_Keys[17] = 29 + 1; }
-        if(Keys_Raw[0xd])  { retnote_raw = 30; Record_Keys[18] = 30 + 1; }
-        if(Keys_Raw[0x1b]) { retnote_raw = 31; Record_Keys[19] = 31 + 1; }
-        if(Keys_Raw[0x2c]) { retnote_raw = 0; Record_Keys[20] = 0 + 1; }
-        if(Keys_Raw[0x1f]) { retnote_raw = 1; Record_Keys[21] = 1 + 1; }
-        if(Keys_Raw[0x2d]) { retnote_raw = 2; Record_Keys[22] = 2 + 1; }
-        if(Keys_Raw[0x20]) { retnote_raw = 3; Record_Keys[23] = 3 + 1; }
-        if(Keys_Raw[0x2e]) { retnote_raw = 4; Record_Keys[24] = 4 + 1; }
-        if(Keys_Raw[0x2f]) { retnote_raw = 5; Record_Keys[25] = 5 + 1; }
-        if(Keys_Raw[0x22]) { retnote_raw = 6; Record_Keys[26] = 6 + 1; }
-        if(Keys_Raw[0x30]) { retnote_raw = 7; Record_Keys[27] = 7 + 1; }
-        if(Keys_Raw[0x23]) { retnote_raw = 8; Record_Keys[28] = 8 + 1; }
-        if(Keys_Raw[0x31]) { retnote_raw = 9; Record_Keys[29] = 9 + 1; }
-        if(Keys_Raw[0x24]) { retnote_raw = 10; Record_Keys[30] = 10 + 1; }
-        if(Keys_Raw[0x32]) { retnote_raw = 11; Record_Keys[31] = 11 + 1; }
-        if(Keys_Raw[0x33]) { retnote_raw = 12; Record_Keys[32] = 12 + 1; }
-        if(Keys_Raw[0x26]) { retnote_raw = 13; Record_Keys[33] = 13 + 1; }
-        if(Keys_Raw[0x34]) { retnote_raw = 14; Record_Keys[34] = 14 + 1; }
-        if(Keys_Raw[0x27]) { retnote_raw = 15; Record_Keys[35] = 15 + 1; }
-        if(Keys_Raw[0x35]) { retnote_raw = 16; Record_Keys[36] = 16 + 1; }
+        if(Keys_Raw[0x10]) { retnote_raw = 12; ptk->Record_Keys[0] = 12 + 1; }
+        if(Keys_Raw[3])    { retnote_raw = 13; ptk->Record_Keys[1] = 13 + 1; }
+        if(Keys_Raw[0x11]) { retnote_raw = 14; ptk->Record_Keys[2] = 14 + 1; }
+        if(Keys_Raw[4])    { retnote_raw = 15; ptk->Record_Keys[3] = 15 + 1; }
+        if(Keys_Raw[0x12]) { retnote_raw = 16; ptk->Record_Keys[4] = 16 + 1; }
+        if(Keys_Raw[0x13]) { retnote_raw = 17; ptk->Record_Keys[5] = 17 + 1; }
+        if(Keys_Raw[6])    { retnote_raw = 18; ptk->Record_Keys[6] = 18 + 1; }
+        if(Keys_Raw[0x14]) { retnote_raw = 19; ptk->Record_Keys[7] = 19 + 1; }
+        if(Keys_Raw[7])    { retnote_raw = 20; ptk->Record_Keys[8] = 20 + 1; }
+        if(Keys_Raw[0x15]) { retnote_raw = 21; ptk->Record_Keys[9] = 21 + 1; }
+        if(Keys_Raw[8])    { retnote_raw = 22; ptk->Record_Keys[10] = 22 + 1; }
+        if(Keys_Raw[0x16]) { retnote_raw = 23; ptk->Record_Keys[11] = 23 + 1; }
+        if(Keys_Raw[0x17]) { retnote_raw = 24; ptk->Record_Keys[12] = 24 + 1; }
+        if(Keys_Raw[0xa])  { retnote_raw = 25; ptk->Record_Keys[13] = 25 + 1; }
+        if(Keys_Raw[0x18]) { retnote_raw = 26; ptk->Record_Keys[14] = 26 + 1; }
+        if(Keys_Raw[0xb])  { retnote_raw = 27; ptk->Record_Keys[15] = 27 + 1; }
+        if(Keys_Raw[0x19]) { retnote_raw = 28; ptk->Record_Keys[16] = 28 + 1; }
+        if(Keys_Raw[0x1a]) { retnote_raw = 29; ptk->Record_Keys[17] = 29 + 1; }
+        if(Keys_Raw[0xd])  { retnote_raw = 30; ptk->Record_Keys[18] = 30 + 1; }
+        if(Keys_Raw[0x1b]) { retnote_raw = 31; ptk->Record_Keys[19] = 31 + 1; }
+        if(Keys_Raw[0x2c]) { retnote_raw = 0; ptk->Record_Keys[20] = 0 + 1; }
+        if(Keys_Raw[0x1f]) { retnote_raw = 1; ptk->Record_Keys[21] = 1 + 1; }
+        if(Keys_Raw[0x2d]) { retnote_raw = 2; ptk->Record_Keys[22] = 2 + 1; }
+        if(Keys_Raw[0x20]) { retnote_raw = 3; ptk->Record_Keys[23] = 3 + 1; }
+        if(Keys_Raw[0x2e]) { retnote_raw = 4; ptk->Record_Keys[24] = 4 + 1; }
+        if(Keys_Raw[0x2f]) { retnote_raw = 5; ptk->Record_Keys[25] = 5 + 1; }
+        if(Keys_Raw[0x22]) { retnote_raw = 6; ptk->Record_Keys[26] = 6 + 1; }
+        if(Keys_Raw[0x30]) { retnote_raw = 7; ptk->Record_Keys[27] = 7 + 1; }
+        if(Keys_Raw[0x23]) { retnote_raw = 8; ptk->Record_Keys[28] = 8 + 1; }
+        if(Keys_Raw[0x31]) { retnote_raw = 9; ptk->Record_Keys[29] = 9 + 1; }
+        if(Keys_Raw[0x24]) { retnote_raw = 10; ptk->Record_Keys[30] = 10 + 1; }
+        if(Keys_Raw[0x32]) { retnote_raw = 11; ptk->Record_Keys[31] = 11 + 1; }
+        if(Keys_Raw[0x33]) { retnote_raw = 12; ptk->Record_Keys[32] = 12 + 1; }
+        if(Keys_Raw[0x26]) { retnote_raw = 13; ptk->Record_Keys[33] = 13 + 1; }
+        if(Keys_Raw[0x34]) { retnote_raw = 14; ptk->Record_Keys[34] = 14 + 1; }
+        if(Keys_Raw[0x27]) { retnote_raw = 15; ptk->Record_Keys[35] = 15 + 1; }
+        if(Keys_Raw[0x35]) { retnote_raw = 16; ptk->Record_Keys[36] = 16 + 1; }
 
         int i;
 
@@ -4111,7 +4109,7 @@ void Keyboard_Handler(ptk_data *ptk)
 
         int Record_Key_Pressed = FALSE;
         for(i = 0; i < 37; i++) {
-            if(Record_Keys[i])
+            if(ptk->Record_Keys[i])
             {
                 Record_Key_Pressed = TRUE;
             }
@@ -4121,17 +4119,17 @@ void Keyboard_Handler(ptk_data *ptk)
         {
             for(i = 0; i < 37; i++)
             {
-                if(Record_Keys[i])
+                if(ptk->Record_Keys[i])
                 {
-                    int tmp_note = ((Record_Keys[i] & 0x7f) - 1) + Current_Octave * 12;
+                    int tmp_note = ((ptk->Record_Keys[i] & 0x7f) - 1) + Current_Octave * 12;
                     if(tmp_note > NOTE_MAX) tmp_note = NOTE_MAX;
 
-                    if(!(Record_Keys[i] & 0x80))
+                    if(!(ptk->Record_Keys[i] & 0x80))
                     {
                         // Note on
-                        if(Record_Keys_State[i] == FALSE)
+                        if(ptk->Record_Keys_State[i] == FALSE)
                         {
-                            Record_Keys_State[i] = TRUE;
+                            ptk->Record_Keys_State[i] = TRUE;
 
                             // Write it
                             if(is_recording_2)
@@ -4146,10 +4144,10 @@ void Keyboard_Handler(ptk_data *ptk)
                     else
                     {
                         // Note off
-                        if(Record_Keys_State[i] == TRUE)
+                        if(ptk->Record_Keys_State[i] == TRUE)
                         {
-                            Record_Keys_State[i] = FALSE;
-                            Record_Keys[i] = 0;
+                            ptk->Record_Keys_State[i] = FALSE;
+                            ptk->Record_Keys[i] = 0;
 
                             // Do not reach that point
                             if(is_recording_2)
