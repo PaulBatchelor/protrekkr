@@ -8,10 +8,18 @@ extern "C" {
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
+#include <soundpipe.h>
+#include <sporth.h>
 
 #ifdef __cplusplus
 }
 #endif
+
+typedef struct {
+    sp_data *sp;
+    plumber_data pd;
+    char use_sporth;
+} ptk_sporth;
 
 typedef struct {
     int CONSOLE_WIDTH;
@@ -123,8 +131,12 @@ typedef struct {
     /* MAX_TRACKS is 16 */
     int CHAN_MIDI_PRG[16];
 
-
+    float left_float;
+    float right_float;
+    float left_float_render;
+    float right_float_render;
 
     lua_State *L;
+    ptk_sporth sporth;
 } ptk_data;
 #endif

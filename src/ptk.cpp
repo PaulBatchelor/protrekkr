@@ -2738,7 +2738,7 @@ void WavRenderizer(ptk_data *ptk)
                         if(rawrender_32float)
                         {
                             // [-1.0..1.0]
-                            RF[j].WriteStereoFloatSample(left_float_render, right_float_render);
+                            RF[j].WriteStereoFloatSample(ptk->left_float_render, ptk->right_float_render);
                             filesize += 8;
                         }
                         else
@@ -2786,15 +2786,15 @@ void WavRenderizer(ptk_data *ptk)
                             GetPlayerValues(ptk);
                             if(Stereo)
                             {
-                                Sample_Buffer[0][Pos_In_Memory] = left_float_render * 32767.0f;
-                                Sample_Buffer[1][Pos_In_Memory] = right_float_render * 32767.0f;
+                                Sample_Buffer[0][Pos_In_Memory] = ptk->left_float_render * 32767.0f;
+                                Sample_Buffer[1][Pos_In_Memory] = ptk->right_float_render * 32767.0f;
                                 filesize += 4;
                             }
                             else
                             {
                                 // Mix both channels
-                                Sample_Buffer[0][Pos_In_Memory] = ((left_float_render * 0.5f) +
-                                                                   (right_float_render * 0.5f)) * 32767.0f;
+                                Sample_Buffer[0][Pos_In_Memory] = ((ptk->left_float_render * 0.5f) +
+                                                                   (ptk->right_float_render * 0.5f)) * 32767.0f;
                                 filesize += 2;
                             }
                             Pos_In_Memory++;
@@ -6793,7 +6793,7 @@ void ptk_init(ptk_data *ptk)
     ptk->Track_Under_Caret = 0;
     ptk->gui_track = 0;
 
-    ptk->Current_Instrument = 4;
+    ptk->Current_Instrument = 0;
     ptk->userscreen = USER_SCREEN_DISKIO_EDIT;
     ptk->restx = 0;
     ptk->resty = 0;
@@ -6833,11 +6833,16 @@ void ptk_init(ptk_data *ptk)
 
     ptk->gui_thread_action = FALSE;
     ptk->gui_bpm_action = FALSE;
-
+    ptk->sporth.use_sporth = FALSE;
     ptk_lua_init(ptk);
 }
 
 void ptk_close(ptk_data *ptk) 
 {
     lua_close(ptk->L);
+    if(ptk->sporth.use_sporth == TRUE) {
+        ptk_sporth *sporth = &ptk->sporth;
+        plumber_clean(&sporth->pd);
+        sp_destroy(&sporth->sp);
+    }
 }

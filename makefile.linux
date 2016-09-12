@@ -5,7 +5,7 @@ LIBS = src/extralibs/tinyxml/tinyxml.o \
        src/extralibs/tinyxml/tinystr.o \
        src/extralibs/tinyxml/tinyxmlerror.o \
        -lasound -lSDL -lsdldraw -lz -ljack -lpthread \
-	   -llua -ldl
+	   -llua -ldl -lsndfile -lsporth -lsoundpipe -lm -llo
 
 FLAGS = -g -O0 -fno-strict-aliasing -ffast-math -fno-rtti -fexceptions 
 FLAGS += -Wno-write-strings -Wno-multichar -Lsrc/extralibs/sdl_draw 
@@ -81,7 +81,8 @@ OBJS = \
 	src/editors/editor_sequencer.o \
 	src/editors/editor_setup.o \
 	src/editors/editor_fx_setup.o \
-	src/ptk_lua.o
+	src/ptk_lua.o \
+	src/ptk_sporth.o
 
 
 all: protrekkr

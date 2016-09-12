@@ -205,10 +205,10 @@ float Segue_SamplesR[MAX_TRACKS];
     unsigned char track3032;
 #endif
 
-float left_float;
-float right_float;
-float left_float_render;
-float right_float_render;
+//float ptk->left_float;
+//float ptk->right_float;
+//float ptk->left_float_render;
+//float ptk->right_float_render;
 float left_chorus;
 float right_chorus;
 float delay_left_final;
@@ -929,7 +929,7 @@ float filterhp2(int stereo, int ch, float input, float f, float q);
 float Kutoff(int v);
 float Resonance(float v);
 float Bandwidth(int v);
-void Reverb_work(void);
+void Reverb_work(ptk_data *ptk);
 
 void Initreverb(ptk_data *ptk);
 
@@ -960,8 +960,8 @@ void STDCALL MixerFloat(float *buf1, float* buf2, Uint32 Len)
 
 #if !defined(__STAND_ALONE__)
             // Gather datas for the scopes and the vumeters
-            clamp_left_value = left_float * 32767.0f;
-            clamp_right_value = right_float * 32767.0f;
+            clamp_left_value = g_ptk->left_float * 32767.0f;
+            clamp_right_value = g_ptk->right_float * 32767.0f;
 #endif
 
 #if !defined(__WINAMP__)
@@ -984,8 +984,8 @@ void STDCALL MixerFloat(float *buf1, float* buf2, Uint32 Len)
                 else
                 {
                     // ([1.0..-1.0f])
-                    left_float += (float) (Left_Dat) / 32767.0f;
-                    right_float += (float) (Right_Dat) / 32767.0f;
+                    g_ptk->left_float += (float) (Left_Dat) / 32767.0f;
+                    g_ptk->right_float += (float) (Right_Dat) / 32767.0f;
                 }
 #else
                 left_value += Left_Dat;
@@ -1003,8 +1003,8 @@ void STDCALL MixerFloat(float *buf1, float* buf2, Uint32 Len)
 #endif
 #endif
 
-            *buf1++ = left_float;
-            *buf2++ = right_float;
+            *buf1++ = g_ptk->left_float;
+            *buf2++ = g_ptk->right_float;
 
 #if !defined(__STAND_ALONE__)
             // Pre-record
@@ -1074,8 +1074,8 @@ void STDCALL Mixer(ptk_data *ptk, Uint8 *Buffer, Uint32 Len)
 
 #if !defined(__STAND_ALONE__)
             // Gather datas for the scopes and the vumeters
-            clamp_left_value = left_float * 32767.0f;
-            clamp_right_value = right_float * 32767.0f;
+            clamp_left_value = ptk->left_float * 32767.0f;
+            clamp_right_value = ptk->right_float * 32767.0f;
 #endif
 
 #if !defined(__WINAMP__)
@@ -1098,8 +1098,8 @@ void STDCALL Mixer(ptk_data *ptk, Uint8 *Buffer, Uint32 Len)
                 else
                 {
                     // ([1.0..-1.0f])
-                    left_float += (float) (Left_Dat) / 32767.0f;
-                    right_float += (float) (Right_Dat) / 32767.0f;
+                    ptk->left_float += (float) (Left_Dat) / 32767.0f;
+                    ptk->right_float += (float) (Right_Dat) / 32767.0f;
                 }
 #else
                 left_value += Left_Dat;
@@ -1125,8 +1125,8 @@ void STDCALL Mixer(ptk_data *ptk, Uint8 *Buffer, Uint32 Len)
             }
             else
             {
-                *pSamples_flt++ = left_float;
-                *pSamples_flt++ = right_float;
+                *pSamples_flt++ = ptk->left_float;
+                *pSamples_flt++ = ptk->right_float;
             }
 #else
             *pSamples++ = left_value;
@@ -2618,8 +2618,8 @@ void Sp_Player(ptk_data *ptk)
     float realcut;
 #endif
 
-    left_float = 0;
-    right_float = 0;
+    ptk->left_float = 0;
+    ptk->right_float = 0;
 
 #if defined(PTK_COMPRESSOR)
     delay_left_final = 0.0f;
@@ -3905,8 +3905,8 @@ ByPass_Wav:
 #endif
 
         // Store to global signals
-        left_float += All_Signal_L;
-        right_float += All_Signal_R;
+        ptk->left_float += All_Signal_L;
+        ptk->right_float += All_Signal_R;
 
 #if defined(PTK_COMPRESSOR)
         // Sending to delay...
@@ -5443,15 +5443,15 @@ void GetPlayerValues(ptk_data *ptk)
     if(++rchorus_counter2 > (MIX_RATE * 2)) rchorus_counter2 = MIX_RATE;
     float rchore = lbuff_chorus[lchorus_counter2];
     float lchore = rbuff_chorus[rchorus_counter2];
-    left_float += lchore;
-    right_float += rchore;
+    ptk->left_float += lchore;
+    ptk->right_float += rchore;
 
 #if defined(PTK_COMPRESSOR)
-    Reverb_work();
+    Reverb_work(ptk);
 #endif
     
-    left_float /= 32767.0f;
-    right_float /= 32767.0f;
+    ptk->left_float /= 32767.0f;
+    ptk->right_float /= 32767.0f;
 
 #if defined(PTK_LIMITER_MASTER)
 #if !defined(__STAND_ALONE__) || defined(__WINAMP__)
@@ -5461,13 +5461,13 @@ void GetPlayerValues(ptk_data *ptk)
     if(mas_ratio_Master > 0.01f)
     {
 #endif
-        left_float = Mas_Compressor_Master(ptk, left_float, &rms_sumL_Master, mas_comp_bufferL_Master, &mas_envL_Master);
-        right_float = Mas_Compressor_Master(ptk, right_float, &rms_sumR_Master, mas_comp_bufferR_Master, &mas_envR_Master);
+        ptk->left_float = Mas_Compressor_Master(ptk, ptk->left_float, &rms_sumL_Master, mas_comp_bufferL_Master, &mas_envL_Master);
+        ptk->right_float = Mas_Compressor_Master(ptk, ptk->right_float, &rms_sumR_Master, mas_comp_bufferR_Master, &mas_envR_Master);
     }
 #endif
 
-    left_float *= mas_vol;
-    right_float *= mas_vol;
+    ptk->left_float *= mas_vol;
+    ptk->right_float *= mas_vol;
 
     if(local_curr_mas_vol >= local_mas_vol)
     {
@@ -5480,8 +5480,8 @@ void GetPlayerValues(ptk_data *ptk)
         if(local_curr_mas_vol > 1.0f) local_curr_mas_vol = 1.0f;
     }
 
-    left_float *= local_curr_mas_vol;
-    right_float *= local_curr_mas_vol;
+    ptk->left_float *= local_curr_mas_vol;
+    ptk->right_float *= local_curr_mas_vol;
 
     if(local_curr_ramp_vol >= local_ramp_vol)
     {
@@ -5494,31 +5494,31 @@ void GetPlayerValues(ptk_data *ptk)
         if(local_curr_ramp_vol > 1.0f) local_curr_ramp_vol = 1.0f;
     }
 
-    left_float *= local_curr_ramp_vol;
-    right_float *= local_curr_ramp_vol;
+    ptk->left_float *= local_curr_ramp_vol;
+    ptk->right_float *= local_curr_ramp_vol;
 
-    if(left_float > 1.0f) left_float = 1.0f;
-    if(left_float < -1.0f) left_float = -1.0f;
-    if(right_float > 1.0f) right_float = 1.0f;
-    if(right_float < -1.0f) right_float = -1.0f;
+    if(ptk->left_float > 1.0f) ptk->left_float = 1.0f;
+    if(ptk->left_float < -1.0f) ptk->left_float = -1.0f;
+    if(ptk->right_float > 1.0f) ptk->right_float = 1.0f;
+    if(ptk->right_float < -1.0f) ptk->right_float = -1.0f;
+
+    if(ptk->sporth.use_sporth) {
+        plumber_compute(&ptk->sporth.pd, PLUMBER_COMPUTE);
+        ptk->right_float = sporth_stack_pop_float(&ptk->sporth.pd.sporth.stack);
+        ptk->left_float = sporth_stack_pop_float(&ptk->sporth.pd.sporth.stack);
+    }
 
 #if !defined(__STAND_ALONE__)
-    left_float_render = left_float;
-    right_float_render = right_float;
+    ptk->left_float_render = ptk->left_float;
+    ptk->right_float_render = ptk->right_float;
 #endif
 
-    // It looks like the maximum range for OSS is -8192 +8192
-    // (higher than that will produce heavily saturated signals
-    //  i don't know if it's a bug from Linux mixer/Driver or anything)
 
-    // It looks like they (hopefully) fixed their shit so this nasty hack is no longer required.
-/*    #if defined(__LINUX__) && !defined(__FREEBSD__)
-        left_value = (int) (left_float * 8192.0f);
-        right_value = (int) (right_float * 8192.0f);
-    #else*/
-        left_value = (int) (left_float * 32767.0f);
-        right_value = (int) (right_float * 32767.0f);
-//    #endif
+    
+    left_value = (int) (ptk->left_float * 32767.0f);
+    right_value = (int) (ptk->right_float * 32767.0f);
+
+
 }
 
 // ------------------------------------------------------
@@ -6331,7 +6331,7 @@ inline float allpass_filter(float *Buffer, float input, int counter)
 }
 
 // ------------------------------------------------------
-void Reverb_work(void)
+void Reverb_work(ptk_data *ptk)
 {
     int i;
 
@@ -6365,8 +6365,8 @@ void Reverb_work(void)
             r_rout = allpass_filter(allBuffer_R[i], r_rout, delayedCounter[i]);
             if(++delayedCounter[i] > 5759) delayedCounter[i] -= 5759;
         }
-        left_float += l_rout;
-        right_float += r_rout;
+        ptk->left_float += l_rout;
+        ptk->right_float += r_rout;
 
         // Updating current counters
         if(++currentCounter > 5759) currentCounter -= 5759;
