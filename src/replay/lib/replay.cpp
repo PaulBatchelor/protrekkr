@@ -781,7 +781,6 @@ float xi1[2][MAX_TRACKS];
 float xi2[2][MAX_TRACKS];
 
 #if !defined(__STAND_ALONE__) && !defined(__WINAMP__)
-extern int gui_thread_action;
 extern int gui_bpm_action;
 #endif
 
@@ -2083,7 +2082,7 @@ void Reset_Values(ptk_data *ptk)
 #endif
 
 #if !defined(__STAND_ALONE__) && !defined(__WINAMP__)
-        gui_thread_action = TRUE;
+        ptk->gui_thread_action = TRUE;
 #endif
 
     }

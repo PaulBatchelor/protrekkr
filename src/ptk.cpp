@@ -201,7 +201,6 @@ int Table_Left_Tab_Notes[] =
     3, 1, 2,
 };
 
-int gui_thread_action = FALSE;
 int gui_bpm_action = FALSE;
 
 int Keyboard_Events_Channels[256];
@@ -1651,9 +1650,9 @@ int Screen_Update(ptk_data *ptk)
         Actupated(ptk, 0);
     }
 
-    if(gui_thread_action)
+    if(ptk->gui_thread_action)
     {
-        gui_thread_action = FALSE;
+        ptk->gui_thread_action = FALSE;
         Actupated(ptk, 0);
     }
     if(gui_bpm_action)
@@ -6834,6 +6833,8 @@ void ptk_init(ptk_data *ptk)
     ptk->Jazz_Edit = FALSE;
     ptk->Rows_Decimal = FALSE;
     ptk->See_Prev_Next_Pattern = FALSE;
+
+    ptk->gui_thread_action = FALSE;
 
     luaL_openlibs(ptk->L);
 
