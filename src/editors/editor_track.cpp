@@ -70,7 +70,7 @@ void Draw_Track_Ed(ptk_data *ptk)
    
 void Actualize_Track_Ed(ptk_data *ptk, char gode)
 {
-    if(userscreen == USER_SCREEN_TRACK_EDIT)
+    if(ptk->userscreen == USER_SCREEN_TRACK_EDIT)
     {
         if(gode == 0 || gode == 15)
         {
@@ -334,7 +334,7 @@ void Actualize_Track_Ed(ptk_data *ptk, char gode)
 
 void Mouse_Left_Track_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_TRACK_EDIT)
+    if(ptk->userscreen == USER_SCREEN_TRACK_EDIT)
     {
         // Filter type
         if(zcheckMouse(ptk, 79, (Cur_Height - 80), 16, 16) && FType[ptk->Track_Under_Caret] > 0)
@@ -529,7 +529,7 @@ void Mouse_Left_Track_Ed(ptk_data *ptk)
 
 void Mouse_Right_Track_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_TRACK_EDIT)
+    if(ptk->userscreen == USER_SCREEN_TRACK_EDIT)
     {
         if(zcheckMouse(ptk, 570, (Cur_Height - 114), 16, 16) == 1)
         {
@@ -595,7 +595,7 @@ void Mouse_Right_Track_Ed(ptk_data *ptk)
 
 void Mouse_Sliders_Track_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_TRACK_EDIT)
+    if(ptk->userscreen == USER_SCREEN_TRACK_EDIT)
     {
         if(zcheckMouse(ptk, 77, (Cur_Height - 116), 148, 16) && FType[ptk->Track_Under_Caret] != 4) ptk->gui_action = GUI_CMD_SET_TRACK_CUTOFF_FREQ;
         if(zcheckMouse(ptk, 77, (Cur_Height - 98), 148, 16) && FType[ptk->Track_Under_Caret] != 4) ptk->gui_action = GUI_CMD_SET_TRACK_RESONANCE;

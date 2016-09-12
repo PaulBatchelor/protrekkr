@@ -67,6 +67,10 @@ typedef struct {
     int Track_Under_Caret;
     int gui_track;
 
+    char userscreen;
+    /* MAX_PATH is 260 */
+    char name[260];
+
     lua_State *L;
 } ptk_data;
 #endif

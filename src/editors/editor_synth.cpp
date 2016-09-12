@@ -243,7 +243,7 @@ void Draw_Synth_Ed(ptk_data *ptk)
 
 void Actualize_Synth_Ed(ptk_data *ptk, char gode)
 {
-    if(userscreen == USER_SCREEN_SYNTH_EDIT)
+    if(ptk->userscreen == USER_SCREEN_SYNTH_EDIT)
     {
         if(gode == UPDATE_SYNTH_ED_ALL ||
            gode == UPDATE_SYNTH_CHANGE_ASSOCIATED_SAMPLE ||
@@ -630,7 +630,7 @@ void Check_Slider(ptk_data *ptk, int *Value, int x, int y)
 
 void Mouse_Sliders_Synth_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_SYNTH_EDIT && Allow_All)
+    if(ptk->userscreen == USER_SCREEN_SYNTH_EDIT && Allow_All)
     {
         if(Allow_Phase_Distortion_OSC1 || Pos_Tbl_Synth_OSC1 != 0)
         {
@@ -1014,7 +1014,7 @@ void Check_Parameters_Arrows(ptk_data *ptk, int Value_Step)
 
 void Mouse_Right_Synth_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_SYNTH_EDIT)
+    if(ptk->userscreen == USER_SCREEN_SYNTH_EDIT)
     {
 
         if(zcheckMouse(ptk, 228, (Cur_Height - 150), 17, 16))
@@ -1045,7 +1045,7 @@ void Mouse_Right_Synth_Ed(ptk_data *ptk)
         }
     }
 
-    if(userscreen == USER_SCREEN_SYNTH_EDIT && Allow_All)
+    if(ptk->userscreen == USER_SCREEN_SYNTH_EDIT && Allow_All)
     {
         Check_Sliders_Arrows(ptk, 10);
         Check_Parameters_Arrows(ptk, 10);
@@ -1054,7 +1054,7 @@ void Mouse_Right_Synth_Ed(ptk_data *ptk)
 
 void Mouse_Left_Synth_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_SYNTH_EDIT)
+    if(ptk->userscreen == USER_SCREEN_SYNTH_EDIT)
     {
         if(zcheckMouse(ptk, 228, (Cur_Height - 150), 17, 16))
         {
@@ -1076,7 +1076,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
         }
         }
 
-        if(userscreen == USER_SCREEN_SYNTH_EDIT && Allow_All)
+        if(ptk->userscreen == USER_SCREEN_SYNTH_EDIT && Allow_All)
         {
             // Save the data
             if(zcheckMouse(ptk, 758, (Cur_Height - 150), 34, 16))

@@ -89,14 +89,12 @@ char Visible_Columns = 0;
 
 /*TODO: this variable xoffseted is not unique. */
 int xoffseted;
-float gr = 0;
-float synthsignal = 0;
+//float gr = 0;
+//float synthsignal = 0;
 
-char userscreen = USER_SCREEN_DISKIO_EDIT;
-int c_r_release = 0;
-int c_l_release = 0;
+//int c_r_release = 0;
+//int c_l_release = 0;
 
-char name[MAX_PATH];
 char synthname[MAX_PATH];
 char instrname[MAX_PATH];
 char name303[MAX_PATH];
@@ -170,7 +168,7 @@ extern int Continuous_Scroll;
 
 void Draw_Scope(ptk_data *ptk);
 void Draw_Scope_Files_Button(ptk_data *ptk);
-void Display_Tracks_To_Render(void);
+void Display_Tracks_To_Render(ptk_data *ptk);
 void Solo_Track(int track_to_solo);
 
 JAZZ_KEY Sub_Channels_Jazz[MAX_TRACKS][MAX_POLYPHONY];
@@ -471,7 +469,7 @@ int Init_Context(ptk_data *ptk)
     sprintf(Selection_Name, "Untitled");
     sprintf(Reverb_Name, "Untitled");
     sprintf(Midi_Name, "Untitled");
-    sprintf(name, "Untitled");
+    sprintf(ptk->name, "Untitled");
     sprintf(artist, "Somebody");
     sprintf(style, "Anything goes");
 
@@ -942,7 +940,7 @@ int Screen_Update(ptk_data *ptk)
             if(CHAN_MUTE_STATE[tmp_track] == 0) CHAN_MUTE_STATE[tmp_track] = 1;
             else CHAN_MUTE_STATE[tmp_track] = 0;
 
-            if(userscreen == USER_SCREEN_TRACK_EDIT) Actualize_Track_Ed(ptk, 10);
+            if(ptk->userscreen == USER_SCREEN_TRACK_EDIT) Actualize_Track_Ed(ptk, 10);
             Actupated(ptk, 0);
         }
 
@@ -1043,7 +1041,7 @@ int Screen_Update(ptk_data *ptk)
             Actualize_Master(ptk, ptk->teac);
             Actupated(ptk, 0);
             Draw_Scope(ptk);
-            Display_Tracks_To_Render();
+            Display_Tracks_To_Render(ptk);
             Actualize_Track_Ed(ptk, 0);
             Actualize_Track_Fx_Ed(ptk, 0);
         }
@@ -1120,7 +1118,7 @@ int Screen_Update(ptk_data *ptk)
             }
             else
             {
-                userscreen = curr_tab_highlight;
+                ptk->userscreen = curr_tab_highlight;
                 Large_Patterns = FALSE;
                 Set_Pattern_Size(ptk);
                 Draw_Pattern_Right_Stuff(ptk);
@@ -1135,7 +1133,7 @@ int Screen_Update(ptk_data *ptk)
             ptk->retletter[71] = TRUE;
             Actualize_Input(ptk);
             ptk->retletter[71] = FALSE;
-            userscreen = USER_SCREEN_DISKIO_EDIT;
+            ptk->userscreen = USER_SCREEN_DISKIO_EDIT;
             Draw_DiskIO_Ed(ptk);
             Actualize_DiskIO_Ed(ptk, 0);
         }
@@ -1145,7 +1143,7 @@ int Screen_Update(ptk_data *ptk)
             ptk->retletter[71] = TRUE;
             Actualize_Input(ptk);
             ptk->retletter[71] = FALSE;
-            userscreen = USER_SCREEN_REVERB_EDIT;
+            ptk->userscreen = USER_SCREEN_REVERB_EDIT;
             Draw_Reverb_Ed(ptk);
             Actualize_Reverb_Ed(ptk, 0);
         }
@@ -1155,7 +1153,7 @@ int Screen_Update(ptk_data *ptk)
             ptk->retletter[71] = TRUE;
             Actualize_Input(ptk);
             ptk->retletter[71] = FALSE;
-            userscreen = USER_SCREEN_TRACK_EDIT;
+            ptk->userscreen = USER_SCREEN_TRACK_EDIT;
             Draw_Track_Ed(ptk);
             Actualize_Track_Ed(ptk, 0);
         }
@@ -1165,7 +1163,7 @@ int Screen_Update(ptk_data *ptk)
             ptk->retletter[71] = TRUE;
             Actualize_Input(ptk);
             ptk->retletter[71] = FALSE;
-            userscreen = USER_SCREEN_INSTRUMENT_EDIT;
+            ptk->userscreen = USER_SCREEN_INSTRUMENT_EDIT;
             Draw_Instrument_Ed(ptk);
             Actualize_Instrument_Ed(ptk, 2, 0);
         }
@@ -1175,7 +1173,7 @@ int Screen_Update(ptk_data *ptk)
             ptk->retletter[71] = TRUE;
             Actualize_Input(ptk);
             ptk->retletter[71] = FALSE;
-            userscreen = USER_SCREEN_FX_SETUP_EDIT;
+            ptk->userscreen = USER_SCREEN_FX_SETUP_EDIT;
             Draw_Fx_Ed(ptk);
             Actualize_Fx_Ed(ptk, ptk->teac);
         }
@@ -1185,7 +1183,7 @@ int Screen_Update(ptk_data *ptk)
             ptk->retletter[71] = TRUE;
             Actualize_Input(ptk);
             ptk->retletter[71] = FALSE;
-            userscreen = USER_SCREEN_SEQUENCER;
+            ptk->userscreen = USER_SCREEN_SEQUENCER;
             Draw_Sequencer_Ed(ptk);
             Actualize_Seq_Ed(ptk, 0);
         }
@@ -1195,7 +1193,7 @@ int Screen_Update(ptk_data *ptk)
             ptk->retletter[71] = TRUE;
             Actualize_Input(ptk);
             ptk->retletter[71] = FALSE;
-            userscreen = USER_SCREEN_SETUP_EDIT;
+            ptk->userscreen = USER_SCREEN_SETUP_EDIT;
             Draw_Master_Ed(ptk);
             Actualize_Master_Ed(ptk, 0);
         }
@@ -1205,7 +1203,7 @@ int Screen_Update(ptk_data *ptk)
             //ptk->retletter[71] = TRUE;
             //Actualize_Input(ptk);
             //ptk->retletter[71] = FALSE;
-            //userscreen = USER_SCREEN_SETUP_MIDI;
+            //ptk->userscreen = USER_SCREEN_SETUP_MIDI;
             //Draw_Midi_Ed(ptk);
             //Actualize_Midi_Ed(ptk, 0);
         }
@@ -1215,7 +1213,7 @@ int Screen_Update(ptk_data *ptk)
             ptk->retletter[71] = TRUE;
             Actualize_Input(ptk);
             ptk->retletter[71] = FALSE;
-            userscreen = USER_SCREEN_SYNTH_EDIT;
+            ptk->userscreen = USER_SCREEN_SYNTH_EDIT;
             Draw_Synth_Ed(ptk);
             Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_ALL);
         }
@@ -1225,7 +1223,7 @@ int Screen_Update(ptk_data *ptk)
             ptk->retletter[71] = TRUE;
             Actualize_Input(ptk);
             ptk->retletter[71] = FALSE;
-            userscreen = USER_SCREEN_TRACK_FX_EDIT;
+            ptk->userscreen = USER_SCREEN_TRACK_FX_EDIT;
             Draw_Track_Fx_Ed(ptk);
             Actualize_Track_Fx_Ed(ptk, ptk->teac);
         }
@@ -1235,7 +1233,7 @@ int Screen_Update(ptk_data *ptk)
             ptk->retletter[71] = TRUE;
             Actualize_Input(ptk);
             ptk->retletter[71] = FALSE;
-            userscreen = USER_SCREEN_SAMPLE_EDIT;
+            ptk->userscreen = USER_SCREEN_SAMPLE_EDIT;
             Draw_Sample_Ed(ptk);
             Actualize_Sample_Ed(ptk, 0);
         }
@@ -1245,7 +1243,7 @@ int Screen_Update(ptk_data *ptk)
             ptk->retletter[71] = TRUE;
             Actualize_Input(ptk);
             ptk->retletter[71] = FALSE;
-            userscreen = USER_SCREEN_TB303_EDIT;
+            ptk->userscreen = USER_SCREEN_TB303_EDIT;
             Draw_303_Ed(ptk);
         }
 
@@ -1381,13 +1379,13 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_SAVE_MODULE)
         {
-            if(snamesel == INPUT_NONE) Pack_Module(ptk, name);
+            if(snamesel == INPUT_NONE) Pack_Module(ptk, ptk->name);
         }
 
         // Save a .ptp module
         if(ptk->gui_action == GUI_CMD_SAVE_FINAL)
         {
-            if(snamesel == INPUT_NONE) SavePtk(ptk, name, TRUE, SAVE_WRITE, NULL);
+            if(snamesel == INPUT_NONE) SavePtk(ptk, ptk->name, TRUE, SAVE_WRITE, NULL);
         }
 
         // Calculate the approximate size of a .ptp module
@@ -1876,11 +1874,11 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
         }
 
         if(found_mod) {
-            sprintf(name, "%s", FileName);
+            sprintf(ptk->name, "%s", FileName);
             // name / number of channels
             SongStop(ptk);
             AUDIO_Stop();
-            LoadAmigaMod(ptk, name, FileName, found_mod, digibooster);
+            LoadAmigaMod(ptk, ptk->name, FileName, found_mod, digibooster);
             Renew_Sample_Ed(ptk);
             fclose(in);
             ptk->gui_action = GUI_CMD_NONE;
@@ -1933,10 +1931,10 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
                 strcmp(extension, "PROTREKN") == 0 ||
                 strcmp(extension, "PROTREKO") == 0)
         {
-            sprintf(name, "%s", FileName);
+            sprintf(ptk->name, "%s", FileName);
             SongStop(ptk);
             AUDIO_Stop();
-            LoadPtk(ptk, name);
+            LoadPtk(ptk, ptk->name);
             Renew_Sample_Ed(ptk);
             AUDIO_Play();
         }
@@ -2430,7 +2428,7 @@ void Newmod(ptk_data *ptk)
         sprintf(Selection_Name, "Untitled");
         sprintf(Reverb_Name, "Untitled");
         sprintf(Midi_Name, "Untitled");
-        sprintf(name, "Untitled");
+        sprintf(ptk->name, "Untitled");
         sprintf(artist, "Somebody");
         sprintf(style, "Anything Goes");
         namesize = 8;
@@ -2688,11 +2686,11 @@ void WavRenderizer(ptk_data *ptk)
             if(do_multi)
             {
                 SongStop(ptk);
-                sprintf(buffer_name, "%s_%x.wav", name, j);
+                sprintf(buffer_name, "%s_%x.wav", ptk->name, j);
             }
             else
             {
-                sprintf(buffer_name, "%s.wav", name);
+                sprintf(buffer_name, "%s.wav", ptk->name);
             }
 
             switch(rawrender_target)
@@ -3027,7 +3025,7 @@ void RefreshSample(ptk_data *ptk)
 {
     ptk->seditor = 0;
     ptk->Current_Instrument_Split = 0;
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT)
+    if(ptk->userscreen == USER_SCREEN_INSTRUMENT_EDIT)
     {
         Draw_Instrument_Ed(ptk);
         Actualize_Instrument_Ed(ptk, 2, 0);
@@ -3104,7 +3102,7 @@ Uint32 Timer_CallBack(Uint32 interval, void *param)
         // Autosave module
         if(wait_AutoSave > Values_AutoSave[AutoSave])
         {
-            Pack_Module(ptk, name);
+            Pack_Module(ptk, ptk->name);
         }
     }
 
@@ -3119,7 +3117,7 @@ void Actualize_Input(ptk_data *ptk)
     {
         // Module name
         case INPUT_MODULE_NAME:
-            Actualize_Name(ptk->retletter, name);
+            Actualize_Name(ptk->retletter, ptk->name);
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
             break;
 
@@ -4245,7 +4243,7 @@ void Keyboard_Handler(ptk_data *ptk)
                 {
                     if(CHAN_MUTE_STATE[ptk->Track_Under_Caret] == 0) CHAN_MUTE_STATE[ptk->Track_Under_Caret] = 1;
                     else CHAN_MUTE_STATE[ptk->Track_Under_Caret] = 0;
-                    if(userscreen == USER_SCREEN_TRACK_EDIT) Actualize_Track_Ed(ptk, 10);
+                    if(ptk->userscreen == USER_SCREEN_TRACK_EDIT) Actualize_Track_Ed(ptk, 10);
                     Actupated(ptk, 0);
                 }
 
@@ -4320,7 +4318,7 @@ void Keyboard_Handler(ptk_data *ptk)
                         // Will unmute the correct track
                         if(CHAN_MUTE_STATE[ptk->Track_Under_Caret] == 0) CHAN_MUTE_STATE[ptk->Track_Under_Caret] = 1;
                         else CHAN_MUTE_STATE[ptk->Track_Under_Caret] = 0;
-                        if(userscreen == USER_SCREEN_TRACK_EDIT) Actualize_Track_Ed(ptk, 10);
+                        if(ptk->userscreen == USER_SCREEN_TRACK_EDIT) Actualize_Track_Ed(ptk, 10);
                         Actupated(ptk, 0);
                     }
                 }
@@ -4328,7 +4326,7 @@ void Keyboard_Handler(ptk_data *ptk)
                 // Save
                 if(Keys[SDLK_s - UNICODE_OFFSET2])
                 {
-                    if(File_Exist_Req(ptk, "%s"SLASH"%s.ptk", Dir_Mods, name))
+                    if(File_Exist_Req(ptk, "%s"SLASH"%s.ptk", Dir_Mods, ptk->name))
                     {
                         Display_Requester(ptk, &Overwrite_Requester, GUI_CMD_SAVE_MODULE);
                     }
@@ -5123,7 +5121,7 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Scroll the sequences
-        if(userscreen == USER_SCREEN_SEQUENCER)
+        if(ptk->userscreen == USER_SCREEN_SEQUENCER)
         {
             if(zcheckMouse(ptk, 257, (Cur_Height - 134), 26, 90) ||
                zcheckMouse(ptk, 89, (Cur_Height - 134), 26, 90) ||
@@ -5176,7 +5174,7 @@ void Mouse_Handler(ptk_data *ptk)
         }
 
         // Scroll the sequences
-        if(userscreen == USER_SCREEN_SEQUENCER)
+        if(ptk->userscreen == USER_SCREEN_SEQUENCER)
         {
             if(zcheckMouse(ptk, 257, (Cur_Height - 134), 26, 90) ||
                zcheckMouse(ptk, 89, (Cur_Height - 134), 26, 90) ||
@@ -5651,26 +5649,26 @@ void Mouse_Handler(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_EXIT;
         }
 
-        if(zcheckMouse(ptk, 20, (Cur_Height - 171) + Add_Offset, 62, 16) && (userscreen != USER_SCREEN_SEQUENCER || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_SEQUENCER;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 1), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_INSTRUMENT_EDIT || Patterns_Lines_Offset))
+        if(zcheckMouse(ptk, 20, (Cur_Height - 171) + Add_Offset, 62, 16) && (ptk->userscreen != USER_SCREEN_SEQUENCER || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_SEQUENCER;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 1), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_INSTRUMENT_EDIT || Patterns_Lines_Offset))
         {
             ptk->gui_action = GUI_CMD_SELECT_INSTRUMENT_EDIT;
             ptk->seditor = 0;
         }
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 2), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SYNTH_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_SYNTH_EDIT;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 3), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SAMPLE_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_SAMPLE_EDIT;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 4), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_TB303_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_TB303_EDIT;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 5), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_TRACK_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_TRACK_EDIT;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 6), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_TRACK_FX_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_TRACK_FX_EDIT;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 7), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_FX_SETUP_EDIT || Patterns_Lines_Offset))
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 2), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_SYNTH_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_SYNTH_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 3), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_SAMPLE_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_SAMPLE_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 4), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_TB303_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_TB303_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 5), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_TRACK_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_TRACK_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 6), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_TRACK_FX_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_TRACK_FX_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 7), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_FX_SETUP_EDIT || Patterns_Lines_Offset))
         {
             ptk->gui_action = GUI_CMD_SELECT_FX_EDIT;
             ptk->teac = 0;
         }
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 8), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_REVERB_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_REVERB_EDIT;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 9), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_DISKIO_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_DISKIO_EDIT;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 10), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SETUP_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_SCREEN_SETUP_EDIT;
-        //if(zcheckMouse(ptk, 20 + (TAB_LARG * 11), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (userscreen != USER_SCREEN_SETUP_MIDI || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_MIDI_SETUP;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 8), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_REVERB_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_REVERB_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 9), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_DISKIO_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_DISKIO_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 10), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_SETUP_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_SCREEN_SETUP_EDIT;
+        //if(zcheckMouse(ptk, 20 + (TAB_LARG * 11), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_SETUP_MIDI || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_MIDI_SETUP;
 
         Mouse_Left_Track_Fx_Ed(ptk);
         Mouse_Left_Sequencer_Ed(ptk);
@@ -6192,7 +6190,7 @@ void Actualize_Master(ptk_data *ptk, char gode)
     {
         Gui_Draw_Arrows_Number_Box2(324, 28, Songtracks, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
 
-        if(userscreen == USER_SCREEN_SEQUENCER) Actualize_Seq_Ed(ptk, 0);
+        if(ptk->userscreen == USER_SCREEN_SEQUENCER) Actualize_Seq_Ed(ptk, 0);
         Actupated(ptk, 0);
     }
 
@@ -6205,7 +6203,7 @@ void Actualize_Master(ptk_data *ptk, char gode)
         Switch_Cmd_Playing(TRUE);
     }
 
-    if(userscreen == USER_SCREEN_SETUP_EDIT) Actualize_Master_Ed(ptk, 3);
+    if(ptk->userscreen == USER_SCREEN_SETUP_EDIT) Actualize_Master_Ed(ptk, 3);
 }
 
 // ------------------------------------------------------
@@ -6830,6 +6828,8 @@ void ptk_init(ptk_data *ptk)
     ptk->gui_track = 0;
 
     ptk->L = luaL_newstate();
+    ptk->userscreen = USER_SCREEN_DISKIO_EDIT;
+
     luaL_openlibs(ptk->L);
 
     if(luaL_loadfile(ptk->L, "config.lua") || lua_pcall(ptk->L, 0, 0, 0))

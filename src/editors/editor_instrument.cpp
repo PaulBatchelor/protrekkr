@@ -141,7 +141,7 @@ void Actualize_Instrument_Ed(ptk_data *ptk, int typex, char gode)
 
     Check_Loops(ptk);
 
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT)
+    if(ptk->userscreen == USER_SCREEN_INSTRUMENT_EDIT)
     {
 
 #if defined(__GSM_CODEC__)
@@ -537,7 +537,7 @@ void Actualize_Instrument_Ed(ptk_data *ptk, int typex, char gode)
 
 void Mouse_Sliders_Instrument_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT)
+    if(ptk->userscreen == USER_SCREEN_INSTRUMENT_EDIT)
     {
         if(SampleType[Current_Instrument][ptk->Current_Instrument_Split])
         {
@@ -565,7 +565,7 @@ void Mouse_Sliders_Instrument_Ed(ptk_data *ptk)
 
 void Mouse_Left_Instrument_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 1)
+    if(ptk->userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 1)
     {
         if(zcheckMouse(ptk, 96, (Cur_Height - 130), 16, 16) &&
            LoopStart[Current_Instrument][ptk->Current_Instrument_Split] > 0 &&
@@ -607,7 +607,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
         }
     }
 
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 0)
+    if(ptk->userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 0)
     {
         if(zcheckMouse(ptk, 570, (Cur_Height - 134), 16, 16) && ptk->Current_Instrument_Split > 0)
         {
@@ -937,7 +937,7 @@ void Mouse_Left_Instrument_Ed(ptk_data *ptk)
 
 void Mouse_Right_Instrument_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 0)
+    if(ptk->userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 0)
     {
         if(Allow_Global_Sliders)
         {
@@ -1116,7 +1116,7 @@ void Mouse_Left_Repeat_Instrument_Ed(ptk_data *ptk)
     int32 *Cur_Loop_Start = (int32 *) &LoopStart[Current_Instrument][ptk->Current_Instrument_Split];
     int32 *Cur_Loop_End = (int32 *) &LoopEnd[Current_Instrument][ptk->Current_Instrument_Split];
 
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 1)
+    if(ptk->userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 1)
     {
         ptk->gui_action = GUI_CMD_NOP;
 
@@ -1152,7 +1152,7 @@ void Mouse_Sliders_Right_Instrument_Ed(ptk_data *ptk)
     int32 *Cur_Loop_Start = (int32 *) &LoopStart[Current_Instrument][ptk->Current_Instrument_Split];
     int32 *Cur_Loop_End = (int32 *) &LoopEnd[Current_Instrument][ptk->Current_Instrument_Split];
 
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 1)
+    if(ptk->userscreen == USER_SCREEN_INSTRUMENT_EDIT && ptk->seditor == 1)
     {
         ptk->gui_action = GUI_CMD_NOP;
 

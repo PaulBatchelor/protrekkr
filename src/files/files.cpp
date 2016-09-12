@@ -1612,7 +1612,7 @@ void Backup_Module(ptk_data *ptk, char *FileName)
             sprintf(backup_savename,
                     "%s"SLASH"%s_%.2d%.2d%.2d.ptk",
                     Dir_Mods,
-                    name,
+                    ptk->name,
                     timeinfo->tm_hour,
                     timeinfo->tm_min,
                     timeinfo->tm_sec);

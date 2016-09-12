@@ -90,7 +90,7 @@ void Draw_303_Ed(ptk_data *ptk)
 
 void Actualize_303_Ed(ptk_data *ptk, char gode)
 {
-    if(userscreen == USER_SCREEN_TB303_EDIT)
+    if(ptk->userscreen == USER_SCREEN_TB303_EDIT)
     {
         Refresh_303_Unit(ptk, sl3, gode);
 
@@ -105,7 +105,7 @@ void Refresh_303_Unit(ptk_data *ptk, int Unit, int gode)
 {
     char tcp[40];
 
-    if(userscreen == USER_SCREEN_TB303_EDIT)
+    if(ptk->userscreen == USER_SCREEN_TB303_EDIT)
     {
     
         if(gode == 0 ||
@@ -333,7 +333,7 @@ void knob(ptk_data *ptk, int x, int y, unsigned char number)
 
 void Mouse_Right_303_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_TB303_EDIT)
+    if(ptk->userscreen == USER_SCREEN_TB303_EDIT)
     {
         // Volume Slider
         if(zcheckMouse(ptk, 529, (Cur_Height - 115), 19, 88))
@@ -437,7 +437,7 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
 
 void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
 {
-    if(userscreen == USER_SCREEN_TB303_EDIT)
+    if(ptk->userscreen == USER_SCREEN_TB303_EDIT)
     {
         // Volume Knob
         if(zcheckMouse(ptk, 529, (Cur_Height - 115), 19, 88))
@@ -535,7 +535,7 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
 
 void Mouse_Left_303_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_TB303_EDIT)
+    if(ptk->userscreen == USER_SCREEN_TB303_EDIT)
     {
         // Step Forward
         if(zcheckMouse(ptk, 479, (Cur_Height - 50), 25, 16))
@@ -1033,7 +1033,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
 
 void Mouse_Sliders_303_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_TB303_EDIT)
+    if(ptk->userscreen == USER_SCREEN_TB303_EDIT)
     {
         // Volume Knob
         if(zcheckMouse(ptk, 529, (Cur_Height - 115), 19, 88))

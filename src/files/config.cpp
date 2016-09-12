@@ -250,13 +250,13 @@ void LoadConfig(ptk_data *ptk)
             if(Large_Patterns)
             {
                 Set_Pattern_Size(ptk);
-                userscreen = USER_SCREEN_LARGE_PATTERN;
+                ptk->userscreen = USER_SCREEN_LARGE_PATTERN;
                 curr_tab_highlight = USER_SCREEN_DISKIO_EDIT;
             }
             else
             {
                 Set_Pattern_Size(ptk);
-                userscreen = USER_SCREEN_DISKIO_EDIT;
+                ptk->userscreen = USER_SCREEN_DISKIO_EDIT;
                 curr_tab_highlight = USER_SCREEN_DISKIO_EDIT;
             }
 

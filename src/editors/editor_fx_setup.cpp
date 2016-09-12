@@ -79,7 +79,7 @@ void Draw_Fx_Ed(ptk_data *ptk)
 
 void Actualize_Fx_Ed(ptk_data *ptk, char gode)
 {
-    if(userscreen == USER_SCREEN_FX_SETUP_EDIT)
+    if(ptk->userscreen == USER_SCREEN_FX_SETUP_EDIT)
     {
         if(gode == 0 || gode == 2)
         {
@@ -227,7 +227,7 @@ void Actualize_Fx_Ed(ptk_data *ptk, char gode)
 
 void Mouse_Sliders_Fx_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_FX_SETUP_EDIT)
+    if(ptk->userscreen == USER_SCREEN_FX_SETUP_EDIT)
     {
         if(zcheckMouse(ptk, 77, (Cur_Height - 102), 148, 16) && compressor)
         {
@@ -318,12 +318,12 @@ void Mouse_Sliders_Fx_Ed(ptk_data *ptk)
             ptk->teac = 14;
         }
 */
-    } // userscreen
+    } // ptk->userscreen
 }
 
 void Mouse_Right_Fx_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_FX_SETUP_EDIT)
+    if(ptk->userscreen == USER_SCREEN_FX_SETUP_EDIT)
     {
         // Ticks synchro left
         if(zcheckMouse(ptk, 534, (Cur_Height - 120), 16, 16) == 1)
@@ -357,7 +357,7 @@ void Mouse_Right_Fx_Ed(ptk_data *ptk)
 
 void Mouse_Left_Fx_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_FX_SETUP_EDIT)
+    if(ptk->userscreen == USER_SCREEN_FX_SETUP_EDIT)
     {
         // Delay type
         if(zcheckMouse(ptk, 79, (Cur_Height - 84), 16, 16) && compressor)

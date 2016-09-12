@@ -141,7 +141,7 @@ void Draw_Sequencer_Ed(ptk_data *ptk)
 
 void Actualize_Seq_Ed(ptk_data *ptk, char gode)
 {
-    if(userscreen == USER_SCREEN_SEQUENCER)
+    if(ptk->userscreen == USER_SCREEN_SEQUENCER)
     {
         SetColor(COL_BLACK);
         bjbox(91, (Cur_Height - 132), 21, 87);
@@ -228,7 +228,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
     int k;
     int Cur_Position = Get_Song_Position(ptk);
 
-    if(userscreen == USER_SCREEN_SEQUENCER)
+    if(ptk->userscreen == USER_SCREEN_SEQUENCER)
     {
         // Remap Selection
         if(zcheckMouse(ptk, 590, (Cur_Height - 76), 60, 16))
@@ -669,7 +669,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
     int Cur_Position = Get_Song_Position(ptk);
     int i;
 
-    if(userscreen == USER_SCREEN_SEQUENCER)
+    if(ptk->userscreen == USER_SCREEN_SEQUENCER)
     {
         // From Instrument
         if(zcheckMouse(ptk, 520, (Cur_Height - 76), 16, 16) == 1)
@@ -847,7 +847,7 @@ void Actualize_Sequencer(ptk_data *ptk)
     if(Rows_Decimal) Gui_Draw_Arrows_Number_Box(188, 82, patternLines[pSequence[Cur_Position]], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     else value_box(188, 82, patternLines[pSequence[Cur_Position]], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     Gui_Draw_Arrows_Number_Box(188, 64, Song_Length, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
-    if(userscreen == USER_SCREEN_SEQUENCER) Actualize_Seq_Ed(ptk, 0);
+    if(ptk->userscreen == USER_SCREEN_SEQUENCER) Actualize_Seq_Ed(ptk, 0);
 }
 
 void SeqFill(int st, int en, char n)

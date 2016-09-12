@@ -137,7 +137,7 @@ void Actualize_Master_Ed(ptk_data *ptk, char gode)
 {
     int Real_Palette_Idx;
 
-    if(userscreen == USER_SCREEN_SETUP_EDIT)
+    if(ptk->userscreen == USER_SCREEN_SETUP_EDIT)
     {
         // Latency
         if(gode == 0 || gode == 5)
@@ -432,7 +432,7 @@ void Actualize_Master_Ed(ptk_data *ptk, char gode)
 
 void Mouse_Right_Master_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_SETUP_EDIT)
+    if(ptk->userscreen == USER_SCREEN_SETUP_EDIT)
     {
         // Previous color
         if(zcheckMouse(ptk, 520, (Cur_Height - 105), 16, 16) == 1)
@@ -481,7 +481,7 @@ void Mouse_Right_Master_Ed(ptk_data *ptk)
 
 void Mouse_Left_Master_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_SETUP_EDIT)
+    if(ptk->userscreen == USER_SCREEN_SETUP_EDIT)
     {
         // Latency
         if(zcheckMouse(ptk, 8 + 112, (Cur_Height - 105), 16, 16))
@@ -863,7 +863,7 @@ void Mouse_Sliders_Master_Ed(ptk_data *ptk)
 {
     int Real_Palette_Idx;
 
-    if(userscreen == USER_SCREEN_SETUP_EDIT)
+    if(ptk->userscreen == USER_SCREEN_SETUP_EDIT)
     {
         // Red component
         if(zcheckMouse(ptk, 518, (Cur_Height - 81), 148, 16))

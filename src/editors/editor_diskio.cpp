@@ -104,7 +104,7 @@ TRACK_POS Tracks_Position[MAX_TRACKS] =
 int Calc_Length(ptk_data *ptk);
 void Reset_Song_Length(void);
 void Display_Song_Length(ptk_data *ptk);
-void Display_Tracks_To_Render(void);
+void Display_Tracks_To_Render(ptk_data *ptk);
 void Check_Tracks_To_Render(ptk_data *ptk);
 int Is_Track_To_Render_Solo(int nbr);
 void Check_Tracks_To_Render_To_Solo(ptk_data *ptk);
@@ -132,7 +132,7 @@ void Draw_DiskIO_Ed(ptk_data *ptk)
     Gui_Draw_Button_Box(342, (Cur_Height - 130), 404, 102, "", BUTTON_NORMAL | BUTTON_DISABLED);
 
     PrintString(350, (Cur_Height - 128), USE_FONT, "Tracks To Render :");
-    Display_Tracks_To_Render();
+    Display_Tracks_To_Render(ptk);
 
     PrintString(654, (Cur_Height - 124), USE_FONT, "Render To :");
 
@@ -147,7 +147,7 @@ void Draw_DiskIO_Ed(ptk_data *ptk)
 // Refresh function
 void Actualize_DiskIO_Ed(ptk_data *ptk, int gode)
 {
-    if(userscreen == USER_SCREEN_DISKIO_EDIT)
+    if(ptk->userscreen == USER_SCREEN_DISKIO_EDIT)
     {
         char tname[32];
 
@@ -261,12 +261,12 @@ void Actualize_DiskIO_Ed(ptk_data *ptk, int gode)
 
         if(snamesel == INPUT_MODULE_NAME)
         {
-            sprintf(tname, "%s_", name);
+            sprintf(tname, "%s_", ptk->name);
             Gui_Draw_Button_Box(90, (Cur_Height - 94), 162, 16, tname, BUTTON_PUSHED | BUTTON_INPUT);
         }
         else
         {
-            sprintf(tname, "%s", name);
+            sprintf(tname, "%s", ptk->name);
             Gui_Draw_Button_Box(90, (Cur_Height - 94), 162, 16, tname, BUTTON_NORMAL | BUTTON_INPUT);
         }
 
@@ -298,7 +298,7 @@ void Actualize_DiskIO_Ed(ptk_data *ptk, int gode)
 // Handle right mouse button
 void Mouse_Right_DiskIO_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_DISKIO_EDIT)
+    if(ptk->userscreen == USER_SCREEN_DISKIO_EDIT)
     {
         Check_Tracks_To_Render_To_Solo(ptk);
 
@@ -346,12 +346,12 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
     int i;
     char WavFileName[MAX_PATH];
 
-    if(userscreen == USER_SCREEN_DISKIO_EDIT)
+    if(ptk->userscreen == USER_SCREEN_DISKIO_EDIT)
     {
         // Save song
         if(zcheckMouse(ptk, 8, (Cur_Height - 112), 80, 16))
         {
-            if(File_Exist_Req(ptk, "%s"SLASH"%s.ptk", Dir_Mods, name))
+            if(File_Exist_Req(ptk, "%s"SLASH"%s.ptk", Dir_Mods, ptk->name))
             {
                 Display_Requester(ptk, &Overwrite_Requester, GUI_CMD_SAVE_MODULE);
             }
@@ -363,7 +363,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         // Save final
         if(zcheckMouse(ptk, 254, (Cur_Height - 130), 80, 16))
         {
-            if(File_Exist_Req(ptk, "%s"SLASH"%s.ptp", Dir_Mods, name))
+            if(File_Exist_Req(ptk, "%s"SLASH"%s.ptp", Dir_Mods, ptk->name))
             {
                 Display_Requester(ptk, &Overwrite_Requester, GUI_CMD_SAVE_FINAL);
             }
@@ -391,8 +391,8 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         // Start module name input
         if(zcheckMouse(ptk, 90, (Cur_Height - 94), 162, 16) && snamesel == INPUT_NONE)
         {
-            strcpy(cur_input_name, name);
-            sprintf(name, "");
+            strcpy(cur_input_name, ptk->name);
+            sprintf(ptk->name, "");
             namesize = 0;
             snamesel = INPUT_MODULE_NAME;
             ptk->gui_action = GUI_CMD_UPDATE_DISKIO_ED;
@@ -435,7 +435,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
                     for(i = 0; i < Songtracks; i++)
                     {
                         sprintf(WavFileName, "%%s"SLASH"%%s_%x.wav", i);
-                        if(File_Exist(ptk, WavFileName, Dir_Mods, name))
+                        if(File_Exist(ptk, WavFileName, Dir_Mods, ptk->name))
                         {
                             any_file = TRUE;
                             break;
@@ -453,7 +453,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
                 }
                 else
                 {
-                    if(File_Exist_Req(ptk, "%s"SLASH"%s.wav", Dir_Mods, name))
+                    if(File_Exist_Req(ptk, "%s"SLASH"%s.wav", Dir_Mods, ptk->name))
                     {
                         Display_Requester(ptk, &Overwrite_Requester, GUI_CMD_RENDER_WAV);
                     }
@@ -585,7 +585,7 @@ void Display_Song_Length(ptk_data *ptk)
 {
     char ms[64];
 
-    if(userscreen == USER_SCREEN_DISKIO_EDIT)
+    if(ptk->userscreen == USER_SCREEN_DISKIO_EDIT)
     {
         sprintf(ms, "%.2d:%.2d:%.2d", song_Hours, song_Minutes, song_Seconds);
         Gui_Draw_Button_Box(254, (Cur_Height - 58), 80, 16, "", BUTTON_NORMAL | BUTTON_DISABLED);
@@ -643,11 +643,11 @@ void Display_1_Track_To_Render(int nbr)
 
 // ------------------------------------------------------
 // Display the list of track to render
-void Display_Tracks_To_Render(void)
+void Display_Tracks_To_Render(ptk_data *ptk)
 {
     int i;
 
-    if(userscreen == USER_SCREEN_DISKIO_EDIT)
+    if(ptk->userscreen == USER_SCREEN_DISKIO_EDIT)
     {
         for(i = 0; i < MAX_TRACKS; i++)
         {
@@ -665,7 +665,7 @@ void Reset_Tracks_To_Render(ptk_data *ptk)
     {
         Tracks_To_Render[i] = FALSE;
     }
-    Display_Tracks_To_Render();
+    Display_Tracks_To_Render(ptk);
 }
 
 // ------------------------------------------------------
@@ -696,7 +696,7 @@ void Check_Tracks_To_Render_To_Solo(ptk_data *ptk)
             }
         }
     }
-    Display_Tracks_To_Render();
+    Display_Tracks_To_Render(ptk);
 }
 
 // ------------------------------------------------------

@@ -119,7 +119,7 @@ void Draw_Midi_Ed(ptk_data *ptk)
 
 void Actualize_Midi_Ed(ptk_data *ptk, char gode)
 {
-    if(userscreen == USER_SCREEN_SETUP_MIDI)
+    if(ptk->userscreen == USER_SCREEN_SETUP_MIDI)
     {
         if(gode == UPDATE_MIDI_ED_ALL || gode == UPDATE_MIDI_ED_CC0)
         {
@@ -265,7 +265,7 @@ void Actualize_Midi_Ed(ptk_data *ptk, char gode)
 
 void Mouse_Right_Midi_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_SETUP_MIDI)
+    if(ptk->userscreen == USER_SCREEN_SETUP_MIDI)
     {
         Mod_Midi_Automation_Value(ptk, 10);
     }
@@ -273,7 +273,7 @@ void Mouse_Right_Midi_Ed(ptk_data *ptk)
 
 void Mouse_Left_Midi_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_SETUP_MIDI)
+    if(ptk->userscreen == USER_SCREEN_SETUP_MIDI)
     {
         // Save the data
         if(zcheckMouse(ptk, 749, (Cur_Height - 142), 34, 16))

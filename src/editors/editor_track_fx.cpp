@@ -85,7 +85,7 @@ void Draw_Track_Fx_Ed(ptk_data *ptk)
 
 void Actualize_Track_Fx_Ed(ptk_data *ptk, char gode)
 {
-    if(userscreen == USER_SCREEN_TRACK_FX_EDIT)
+    if(ptk->userscreen == USER_SCREEN_TRACK_FX_EDIT)
     {
         if(gode == 0 || gode == 1 || gode == 11)
         {
@@ -240,7 +240,7 @@ void Actualize_Track_Fx_Ed(ptk_data *ptk, char gode)
 
 void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_TRACK_FX_EDIT)
+    if(ptk->userscreen == USER_SCREEN_TRACK_FX_EDIT)
     {
         if(zcheckMouse(ptk, 74, (Cur_Height - 110), 148, 16) && LFO_ON[ptk->Track_Under_Caret])
         {
@@ -403,7 +403,7 @@ void Mouse_Sliders_Track_Fx_Ed(ptk_data *ptk)
 
 void Mouse_Left_Track_Fx_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_TRACK_FX_EDIT)
+    if(ptk->userscreen == USER_SCREEN_TRACK_FX_EDIT)
     {
         if(zcheckMouse(ptk, 74, (Cur_Height - 128), 20, 16) && LFO_ON[ptk->Track_Under_Caret] == FALSE)
         {

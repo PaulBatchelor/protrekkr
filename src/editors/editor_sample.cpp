@@ -125,7 +125,7 @@ void Draw_Wave_Data(ptk_data *ptk)
     int end_rect;
     int64 pos_in_wav;
 
-    if(userscreen == USER_SCREEN_SAMPLE_EDIT)
+    if(ptk->userscreen == USER_SCREEN_SAMPLE_EDIT)
     {
         sed_real_range_start = sed_range_start;
         sed_real_range_end = sed_range_end;
@@ -457,7 +457,7 @@ void Actualize_Sample_Ed(ptk_data *ptk, char gode)
     int ReadOnly;
     int Allow;
 
-    if(userscreen == USER_SCREEN_SAMPLE_EDIT)
+    if(ptk->userscreen == USER_SCREEN_SAMPLE_EDIT)
     {
         Allow = 0;
         if(!SampleType[Current_Instrument][ptk->Current_Instrument_Split]) Allow = BUTTON_DISABLED;
@@ -746,7 +746,7 @@ void Mouse_Right_Sample_Ed(ptk_data *ptk)
 
     if(SamplesSwap[Current_Instrument]) Allow = FALSE;
 
-    if(userscreen == USER_SCREEN_SAMPLE_EDIT)
+    if(ptk->userscreen == USER_SCREEN_SAMPLE_EDIT)
     {
         if(zcheckMouse(ptk, WAVE_LEFT + 1, (Cur_Height - 150), LARGE_SMP_VIEW, SAMPLE_LINES_HEIGHT))
         {
@@ -817,7 +817,7 @@ void Mouse_Right_Sample_Ed(ptk_data *ptk)
 // Middle mouse buttons events
 void Mouse_Middle_Sample_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_SAMPLE_EDIT)
+    if(ptk->userscreen == USER_SCREEN_SAMPLE_EDIT)
     {
         if(zcheckMouse(ptk, WAVE_LEFT + 1, (Cur_Height - 150), LARGE_SMP_VIEW, SAMPLE_LINES_HEIGHT))
         {
@@ -835,7 +835,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
 
     if(SamplesSwap[Current_Instrument]) Allow = FALSE;
 
-    if(userscreen == USER_SCREEN_SAMPLE_EDIT)
+    if(ptk->userscreen == USER_SCREEN_SAMPLE_EDIT)
     {
         if(SampleType[Current_Instrument][ptk->Current_Instrument_Split])
         {
@@ -864,7 +864,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
                 }
 
                 draw_sampled_wave = TRUE;
-                switch(userscreen)
+                switch(ptk->userscreen)
                 {
                     case USER_SCREEN_INSTRUMENT_EDIT:
                         ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
@@ -910,7 +910,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
 
                 draw_sampled_wave = TRUE;
 
-                switch(userscreen)
+                switch(ptk->userscreen)
                 {
                     case USER_SCREEN_INSTRUMENT_EDIT:
                         ptk->gui_action = GUI_CMD_UPDATE_INSTRUMENT_ED;
@@ -1167,7 +1167,7 @@ void Mouse_Left_Sample_Ed(ptk_data *ptk)
 // Mouse wheel events
 void Mouse_Wheel_Sample_Ed(ptk_data *ptk, int roll_amount)
 {
-    if(userscreen == USER_SCREEN_SAMPLE_EDIT)
+    if(ptk->userscreen == USER_SCREEN_SAMPLE_EDIT)
     {
         if(zcheckMouse(ptk, WAVE_LEFT + 1, (Cur_Height - 150), LARGE_SMP_VIEW, 109 + 16))
         {
@@ -1195,7 +1195,7 @@ void Mouse_Sliders_Sample_Ed(ptk_data *ptk)
 
     if(SamplesSwap[Current_Instrument]) Allow = FALSE;
 
-    if(userscreen == USER_SCREEN_SAMPLE_EDIT)
+    if(ptk->userscreen == USER_SCREEN_SAMPLE_EDIT)
     {
         if(zcheckMouse(ptk, WAVE_LEFT, (Cur_Height - 150), LARGE_SMP_VIEW + 1, 109))
         {
@@ -1335,7 +1335,7 @@ void Refresh_Sample(ptk_data *ptk, int clear_sel)
     outlong(650, (Cur_Height - 60), sed_range_start, 10);
     outlong(650, (Cur_Height - 42), sed_range_end, 11);
     Check_Loops(ptk);
-    if(userscreen == USER_SCREEN_INSTRUMENT_EDIT) Actualize_Instrument_Ed(ptk, 0, 4);
+    if(ptk->userscreen == USER_SCREEN_INSTRUMENT_EDIT) Actualize_Instrument_Ed(ptk, 0, 4);
     Display_Sample_Buffers(ptk, Allow | ReadOnly);
 }
 

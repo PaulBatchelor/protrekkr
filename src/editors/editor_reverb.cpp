@@ -146,7 +146,7 @@ void Draw_Reverb_Ed(ptk_data *ptk)
 // Redraw the elements on the screen
 void Mouse_Reverb_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_REVERB_EDIT)
+    if(ptk->userscreen == USER_SCREEN_REVERB_EDIT)
     {
       //  Gadgets_Reverb.Set_Screen_Dimensions(Cur_Width, Cur_Height);
         //Gadgets_Reverb.Process_Click(&Mouse);
@@ -157,7 +157,7 @@ void Mouse_Reverb_Ed(ptk_data *ptk)
 // Redraw the elements on the screen
 void Actualize_Reverb_Ed(ptk_data *ptk, int gode)
 {
-    if(userscreen == USER_SCREEN_REVERB_EDIT)
+    if(ptk->userscreen == USER_SCREEN_REVERB_EDIT)
     {
     //    Gadgets_Reverb.Set_Screen_Dimensions(Cur_Width, Cur_Height);
       //  Gadgets_Reverb.Display_List(&Reverb_IDs);
@@ -289,7 +289,7 @@ void Actualize_Reverb_Ed(ptk_data *ptk, int gode)
 // Handle right mouse buttons events
 void Mouse_Right_Reverb_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_REVERB_EDIT)
+    if(ptk->userscreen == USER_SCREEN_REVERB_EDIT)
     {
         if(zcheckMouse(ptk, 72, (Cur_Height - 135), 16, 16))
         {
@@ -344,7 +344,7 @@ void Mouse_Right_Reverb_Ed(ptk_data *ptk)
 // Handle left mouse buttons events
 void Mouse_Left_Reverb_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_REVERB_EDIT)
+    if(ptk->userscreen == USER_SCREEN_REVERB_EDIT)
     {
 
         // Number of echoes
@@ -437,7 +437,7 @@ void Mouse_Left_Reverb_Ed(ptk_data *ptk)
 // Handle sliders events
 void Mouse_Sliders_Reverb_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_REVERB_EDIT)
+    if(ptk->userscreen == USER_SCREEN_REVERB_EDIT)
     {
         int i;
 
@@ -493,7 +493,7 @@ void Mouse_Sliders_Reverb_Ed(ptk_data *ptk)
 // Handle right mouse button sliders events
 void Mouse_Sliders_Right_Reverb_Ed(ptk_data *ptk)
 {
-    if(userscreen == USER_SCREEN_REVERB_EDIT)
+    if(ptk->userscreen == USER_SCREEN_REVERB_EDIT)
     {
         int i;
 

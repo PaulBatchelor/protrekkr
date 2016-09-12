@@ -1586,7 +1586,7 @@ void Draw_Editors_Bar(ptk_data *ptk, int Highlight)
     }
     else
     {
-        userscreen = USER_SCREEN_LARGE_PATTERN;
+        ptk->userscreen = USER_SCREEN_LARGE_PATTERN;
         SetColor(COL_BLACK);
         bjbox(0, (Cur_Height - 172) + Patterns_Lines_Offset, Cur_Width, 19);
         Highlight_Tab[USER_SCREEN_LARGE_PATTERN] = BUTTON_PUSHED;
@@ -1625,7 +1625,7 @@ void Draw_Editors_Bar(ptk_data *ptk, int Highlight)
 // Refresh the whole interface context
 void Refresh_UI_Context(ptk_data *ptk)
 {
-    switch(userscreen)
+    switch(ptk->userscreen)
     {
         case USER_SCREEN_REVERB_EDIT:
             Draw_Reverb_Ed(ptk);

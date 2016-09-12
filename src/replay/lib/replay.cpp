@@ -4366,7 +4366,7 @@ void Play_Instrument(ptk_data *ptk, int channel, int sub_channel)
                 Uint32 Sel_End;
             
                 // Only play the selection
-                if(userscreen == USER_SCREEN_SAMPLE_EDIT &&
+                if(ptk->userscreen == USER_SCREEN_SAMPLE_EDIT &&
                    sed_range_start != sed_range_end && Play_Selection)
                 {
                     Sel_Start = sed_range_start;
@@ -4636,7 +4636,7 @@ void Do_Effects_Tick_0(ptk_data *ptk)
                     if(Reverb_Filter_Cutoff < 0.02f) Reverb_Filter_Cutoff = 0.02f;
 
 #if !defined(__STAND_ALONE__)
-                    if(userscreen == USER_SCREEN_FX_SETUP_EDIT)
+                    if(ptk->userscreen == USER_SCREEN_FX_SETUP_EDIT)
                     {
                         Display_Reverb_Cutoff();
                     }
@@ -4651,7 +4651,7 @@ void Do_Effects_Tick_0(ptk_data *ptk)
                     if(Reverb_Filter_Resonance < 0.02f) Reverb_Filter_Resonance = 0.02f;
 
 #if !defined(__STAND_ALONE__)
-                    if(userscreen == USER_SCREEN_FX_SETUP_EDIT)
+                    if(ptk->userscreen == USER_SCREEN_FX_SETUP_EDIT)
                     {
                         Display_Reverb_Resonance();
                     }
