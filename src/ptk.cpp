@@ -98,7 +98,6 @@ int xoffseted;
 //int ptk->restx = 0;
 //int ptk->resty = 0;
 
-char boing = FALSE;
 int LastPedRow = -1;
 char po_ctrl2 = TRUE;
 char po_alt = TRUE;
@@ -603,12 +602,12 @@ int Screen_Update(ptk_data *ptk)
         if(sp_Stage[ptk->Track_Under_Caret][i] == PLAYING_SAMPLE && ptk->Current_Instrument == sp_channelsample[ptk->Track_Under_Caret][i] && ptk->Current_Instrument_Split == sp_split[ptk->Track_Under_Caret][i])
         {
             ptk->draw_sampled_wave2 = TRUE;
-            boing = TRUE;
+            ptk->boing = TRUE;
             break;
         }
-        else if(boing)
+        else if(ptk->boing)
         {
-            boing = FALSE;
+            ptk->boing = FALSE;
             ptk->draw_sampled_wave3 = TRUE;
             break;
         }
@@ -6825,6 +6824,8 @@ void ptk_init(ptk_data *ptk)
 
     ptk->redraw_everything = FALSE;
 
+    ptk->boing = FALSE;
+    
     ptk->L = luaL_newstate();
 
     luaL_openlibs(ptk->L);
