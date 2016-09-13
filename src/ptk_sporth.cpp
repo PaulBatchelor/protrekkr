@@ -43,7 +43,9 @@ int ptk_sporth_init(ptk_data *ptk, char *str)
 		sl->portno = 6449;
 		sl->pd = pd;
 		sl->start = 1;
-		sporth_start_listener(sl); 
+		if(ptk->start_gui == TRUE) {
+			sporth_start_listener(sl); 
+		}
         return PLUMBER_OK;
     }
 

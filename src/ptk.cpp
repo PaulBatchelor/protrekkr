@@ -471,15 +471,17 @@ int Init_Context(ptk_data *ptk)
     }
 
     // Player initialization
+	if(ptk->start_gui == TRUE) {
 #if defined(__WIN32__)
-    if(!Ptk_InitDriver(ptk, Main_Window, AUDIO_Milliseconds))
+		if(!Ptk_InitDriver(ptk, Main_Window, AUDIO_Milliseconds))
 #else
-    if(!Ptk_InitDriver(ptk, AUDIO_Milliseconds))
+		if(!Ptk_InitDriver(ptk, AUDIO_Milliseconds))
 #endif
-    {
-        Ptk_ReleaseDriver(ptk);
-        return(FALSE);
-    }
+		{
+			Ptk_ReleaseDriver(ptk);
+			return(FALSE);
+		}
+	}
 
     Set_Default_Channels_Polyphony();
     init_sample_bank(ptk);
@@ -491,30 +493,31 @@ int Init_Context(ptk_data *ptk)
 
     Initreverb(ptk);
 
-    LOGOPIC = Load_Skin_Picture("logo");
-    if(!LOGOPIC) return(FALSE);
+	if(ptk->start_gui == TRUE) {
+		LOGOPIC = Load_Skin_Picture("logo");
+		if(!LOGOPIC) return(FALSE);
 
-    POINTER = Load_Skin_Picture("pointer");
-    if(!POINTER) return(FALSE);
-    SKIN303 = Load_Skin_Picture("303");
-    if(!SKIN303) return(FALSE);
-    PFONT = Load_Skin_Picture("pattern_font");
-    if(!PFONT) return(FALSE);
-    FONT = Load_Skin_Picture("font");
-    if(!FONT) return(FALSE);
-    FONT_LOW = Load_Skin_Picture("font");
-    if(!FONT_LOW) return(FALSE);
+		POINTER = Load_Skin_Picture("pointer");
+		if(!POINTER) return(FALSE);
+		SKIN303 = Load_Skin_Picture("303");
+		if(!SKIN303) return(FALSE);
+		PFONT = Load_Skin_Picture("pattern_font");
+		if(!PFONT) return(FALSE);
+		FONT = Load_Skin_Picture("font");
+		if(!FONT) return(FALSE);
+		FONT_LOW = Load_Skin_Picture("font");
+		if(!FONT_LOW) return(FALSE);
 
-    if(!Set_Pictures_Colors()) return(FALSE);
+		if(!Set_Pictures_Colors()) return(FALSE);
 
-    if(!Load_Font_Datas("font_datas")) return(FALSE);
+		if(!Load_Font_Datas("font_datas")) return(FALSE);
 
-    SDL_SetColorKey(FONT, SDL_SRCCOLORKEY, 0);
-    SDL_SetColorKey(FONT_LOW, SDL_SRCCOLORKEY, 0);
-    SDL_SetColorKey(POINTER, SDL_SRCCOLORKEY, 0);
+		SDL_SetColorKey(FONT, SDL_SRCCOLORKEY, 0);
+		SDL_SetColorKey(FONT_LOW, SDL_SRCCOLORKEY, 0);
+		SDL_SetColorKey(POINTER, SDL_SRCCOLORKEY, 0);
 
-    Timer = SDL_AddTimer(1000, Timer_Ptr, &ptk);
-
+		Timer = SDL_AddTimer(1000, Timer_Ptr, &ptk);
+	}
     return(TRUE);
 }
 
@@ -2273,8 +2276,10 @@ void Notify_Play(ptk_data *ptk)
 void SongStop(ptk_data *ptk)
 {
     Ptk_Stop(ptk);
-    Gui_Draw_Button_Box(8, 28, 39, 16, "\04", BUTTON_NORMAL | BUTTON_RIGHT_MOUSE | BUTTON_TEXT_CENTERED);
-    Gui_Draw_Button_Box(49, 28, 39, 16, "\253", BUTTON_NORMAL | BUTTON_RIGHT_MOUSE | BUTTON_TEXT_CENTERED);
+	if(ptk->start_gui == TRUE) {
+		Gui_Draw_Button_Box(8, 28, 39, 16, "\04", BUTTON_NORMAL | BUTTON_RIGHT_MOUSE | BUTTON_TEXT_CENTERED);
+		Gui_Draw_Button_Box(49, 28, 39, 16, "\253", BUTTON_NORMAL | BUTTON_RIGHT_MOUSE | BUTTON_TEXT_CENTERED);
+	}
     Status_Box(ptk, "Feeling groovy.");
     // Make sure the visuals stay
     Song_Position = Song_Position_Visual;
@@ -6835,14 +6840,19 @@ void ptk_init(ptk_data *ptk)
     ptk->gui_bpm_action = FALSE;
     ptk->sporth.use_sporth = FALSE;
     ptk_lua_init(ptk);
+
+	ptk->start_gui = TRUE;
+	ptk->render_mode = FALSE;
 }
 
 void ptk_close(ptk_data *ptk) 
 {
     lua_close(ptk->L);
     if(ptk->sporth.use_sporth == TRUE) {
-		ptk->sporth.sl.start = 0;
-		sleep(1);
+		if(ptk->start_gui == TRUE) {
+			ptk->sporth.sl.start = 0;
+			sleep(1);
+		}
         ptk_sporth *sporth = &ptk->sporth;
         plumber_clean(&sporth->pd);
 		sp_ftbl_destroy(&sporth->notes);

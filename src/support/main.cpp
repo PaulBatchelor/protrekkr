@@ -356,18 +356,30 @@ void Load_Keyboard_Def(char *FileName)
     }
 }
 
-char ** ptk_parse_args(ptk_data *ptk, int argc, char *argv[])
+int ptk_parse_args(ptk_data *ptk, int argc, char ***argvp)
 {
 	int i;
-	argv++;
-	for(i = 0; i < argc; i++) {
-		if(argv[0][0] != '-') {
+	char **argv = *argvp;
+	*argv++;
+	argc--;
+	printf("there are now %d args!\n");
+	while(argc--) {
+		if(argv[0][0] == '-') {
+			switch(argv[0][1]) {
+				case 'r':
+					printf("shutting it down!\n");
+					ptk->start_gui = FALSE;
+					break;
+				default:
+					break;
+			}
 			break;
 		}
-		argv++;
+		*argv++;
 	}
+	*argvp = argv;
 
-	return argv;
+	return argc;
 }
 
 extern ptk_data *g_ptk;
@@ -377,7 +389,7 @@ extern ptk_data *g_ptk;
 extern SDL_NEED int SDL_main(int argc, char *argv[])
 #else
 	#if defined(__LINUX__)
-		int main(int argc, char *argv[])
+		int main(int argc, char **argv)
 	#else
 		extern "C" int main(int argc, char *argv[])
 	#endif
@@ -405,11 +417,15 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
     Uint32 Path_Length;
 #endif
 
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_NOPARACHUTE) < 0)
-    {
-        Message_Error("Can't open SDL.");
-        exit(0);
-    }
+	argc = ptk_parse_args(ptk, argc, &argv);
+
+	if(ptk->start_gui == TRUE) {
+		if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_NOPARACHUTE) < 0)
+		{
+			Message_Error("Can't open SDL.");
+			exit(0);
+		}
+	}
     atexit(Destroy_Context);
 
     // Show the restrictions:
@@ -437,9 +453,11 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
     }
     memset(ExePath, 0, ExePath_Size + 1);
 
-    Screen_Info = SDL_GetVideoInfo();
-    Startup_Width = Screen_Info->current_w;
-    Startup_Height = Screen_Info->current_h;
+	if(ptk->start_gui == TRUE) {
+		Screen_Info = SDL_GetVideoInfo();
+		Startup_Width = Screen_Info->current_w;
+		Startup_Height = Screen_Info->current_h;
+	}
 
 #if defined(__LINUX__)
     // Note:
@@ -511,108 +529,110 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
     Nbr_Keyboards = 1;
     Cur_Keyboard = Default_Keyboard;
 
-    // Set the default palette before loading the config file
-    Restore_Default_Palette(Default_Palette1, Default_Beveled1);
-    LoadConfig(ptk);
+	Prog_End = TRUE;
 
-    if(!strlen(Keyboard_Name)) sprintf(Keyboard_Name, "%s", "kben.txt");
+	if(ptk->start_gui == TRUE) {
+		// Set the default palette before loading the config file
+		Restore_Default_Palette(Default_Palette1, Default_Beveled1);
+		LoadConfig(ptk);
+		if(!strlen(Keyboard_Name)) sprintf(Keyboard_Name, "%s", "kben.txt");
 
-    if(!XML_Init())
-    {
-        SDL_Quit();
-        exit(0);
-    }
+		if(!XML_Init())
+		{
+			SDL_Quit();
+			exit(0);
+		}
 
-    if((Keyboards = XML_get_string("files", "file", "keyboards", "value")) != NULL)
-    {
-        memset(KbFileNameToLoad, 0, sizeof(KbFileNameToLoad));
+		if((Keyboards = XML_get_string("files", "file", "keyboards", "value")) != NULL)
+		{
+			memset(KbFileNameToLoad, 0, sizeof(KbFileNameToLoad));
 
-        Nbr_Keyboards = 0;
+			Nbr_Keyboards = 0;
 
-        next_kb_offset = 0;
-        i = 0;
-        while(next_kb_offset < strlen(Keyboards))
-        {
-            sscanf(Keyboards + next_kb_offset, "%s", &KbFileName);
-            next_kb_offset += strlen(KbFileName) + 1;
+			next_kb_offset = 0;
+			i = 0;
+			while(next_kb_offset < strlen(Keyboards))
+			{
+				sscanf(Keyboards + next_kb_offset, "%s", &KbFileName);
+				next_kb_offset += strlen(KbFileName) + 1;
 
-            // Load the keyboard file
+				// Load the keyboard file
 
 #if defined(__WIN32__)
-            strcpy(KbFileNameToLoad, ExePath);
-            strcat(KbFileNameToLoad, "\\skins\\");
+				strcpy(KbFileNameToLoad, ExePath);
+				strcat(KbFileNameToLoad, "\\skins\\");
 #else
-            strcpy(KbFileNameToLoad, ExePath);
-            strcat(KbFileNameToLoad, "/skins/");
+				strcpy(KbFileNameToLoad, ExePath);
+				strcat(KbFileNameToLoad, "/skins/");
 #endif
 
-            strcat(KbFileNameToLoad, KbFileName);
+				strcat(KbFileNameToLoad, KbFileName);
 
-            // Store it
-            sprintf(Keyboard_FileNames[i], "%s", KbFileName);
-            sprintf(Keyboard_Labels[i], "%s", "");
+				// Store it
+				sprintf(Keyboard_FileNames[i], "%s", KbFileName);
+				sprintf(Keyboard_Labels[i], "%s", "");
 
-            KbFile = fopen(KbFileNameToLoad, "r");
-            if(KbFile)
-            {
-                // Get the full name
-                fscanf(KbFile, "%s", &Keyboard_Labels[i]);
-                Nbr_Keyboards++;
+				KbFile = fopen(KbFileNameToLoad, "r");
+				if(KbFile)
+				{
+					// Get the full name
+					fscanf(KbFile, "%s", &Keyboard_Labels[i]);
+					Nbr_Keyboards++;
 
-                if(SDL_strcasecmp(KbFileName, Keyboard_Name) == 0)
-                {
-                    Keyboard_Idx = i;
-                    // Parse it
-                    j = 0;
-                    Cur_Keyboard = Keyboard;
-                    while(!feof(KbFile) && j < 37)
-                    {
-                        // Retrieve the data and store it
-                        fscanf(KbFile, "%s", &KbData);
-                        if(KbData[0] == '0' && (KbData[1] == 'x' || KbData[1] == 'X'))
-                        {
-                            // Hexadecimal data
-                            Key_Value = strtol(KbData, &KbDataEnd, 16);
-                        }
-                        else
-                        {
-                            // Plain ASCII
-                            Key_Value = (unsigned char) KbData[0];
-                        }
-                        Keyboard[j].code = Key_Value;
-                        j++;
-                    }
-                }
-                fclose(KbFile);
-            }
-            i++;
-        }
-    }
+					if(SDL_strcasecmp(KbFileName, Keyboard_Name) == 0)
+					{
+						Keyboard_Idx = i;
+						// Parse it
+						j = 0;
+						Cur_Keyboard = Keyboard;
+						while(!feof(KbFile) && j < 37)
+						{
+							// Retrieve the data and store it
+							fscanf(KbFile, "%s", &KbData);
+							if(KbData[0] == '0' && (KbData[1] == 'x' || KbData[1] == 'X'))
+							{
+								// Hexadecimal data
+								Key_Value = strtol(KbData, &KbDataEnd, 16);
+							}
+							else
+							{
+								// Plain ASCII
+								Key_Value = (unsigned char) KbData[0];
+							}
+							Keyboard[j].code = Key_Value;
+							j++;
+						}
+					}
+					fclose(KbFile);
+				}
+				i++;
+			}
+		}
 
-    // Avoid a possible flash
-    int Save_R = Ptk_Palette[0].r;
-    int Save_G = Ptk_Palette[0].g;
-    int Save_B = Ptk_Palette[0].b;
+		// Avoid a possible flash
+		int Save_R = Ptk_Palette[0].r;
+		int Save_G = Ptk_Palette[0].g;
+		int Save_B = Ptk_Palette[0].b;
 
-    Ptk_Palette[0].r = 0;
-    Ptk_Palette[0].g = 0;
-    Ptk_Palette[0].b = 0;
+		Ptk_Palette[0].r = 0;
+		Ptk_Palette[0].g = 0;
+		Ptk_Palette[0].b = 0;
 
-    if(!Switch_FullScreen(ptk, Cur_Width, Cur_Height))
-    {
-        Message_Error("Can't open screen.");
-        SDL_Quit();
-        exit(0);
-    }
-    Ptk_Palette[0].r = Save_R;
-    Ptk_Palette[0].g = Save_G;
-    Ptk_Palette[0].b = Save_B;
+		if(!Switch_FullScreen(ptk, Cur_Width, Cur_Height))
+		{
+			Message_Error("Can't open screen.");
+			SDL_Quit();
+			exit(0);
+		}
+		Ptk_Palette[0].r = Save_R;
+		Ptk_Palette[0].g = Save_G;
+		Ptk_Palette[0].b = Save_B;
 
-    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-    SDL_EnableUNICODE(TRUE);
+		SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+		SDL_EnableUNICODE(TRUE);
 
-    Prog_End = FALSE;
-
+		Prog_End = FALSE;
+	}
 #if !defined(__NO_MIDI__)
     // Load midi devices infos
     Midi_GetAll(ptk);
@@ -623,10 +643,11 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
         SDL_Quit();
         exit(0);
     }
-
-    SDL_GetMouseState((int *) &Mouse.x, (int *) &Mouse.y);
-    Mouse.old_x = -16;
-    Mouse.old_y = -16;
+	if(ptk->start_gui) {
+		SDL_GetMouseState((int *) &Mouse.x, (int *) &Mouse.y);
+		Mouse.old_x = -16;
+		Mouse.old_y = -16;
+	}
 
 #if defined(__AMIGAOS4__) || defined(__AROS__)
     char *env_var;
@@ -648,12 +669,11 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
     Set_Phony_Palette();
     Refresh_Palette();
 
-    if(argc != 1)
-    {
-		argv = ptk_parse_args(ptk, argc, argv);
-		printf("loading file %s\n", argv[0]);
-        LoadFile(ptk, 0, argv[0]);
-    }
+
+	if(argc > 0) {
+		printf("loading file %s %d\n", argv[1], argc);
+		LoadFile(ptk, 0, argv[1]);
+	}
 
     while(!Prog_End)
     {
@@ -925,7 +945,8 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 #endif
 
     }
-    SaveConfig(ptk);
+
+	if(ptk->start_gui == TRUE) SaveConfig(ptk);
     
     ptk_close(ptk);
 
