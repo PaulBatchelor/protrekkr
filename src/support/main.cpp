@@ -356,6 +356,20 @@ void Load_Keyboard_Def(char *FileName)
     }
 }
 
+char ** ptk_parse_args(ptk_data *ptk, int argc, char *argv[])
+{
+	int i;
+	argv++;
+	for(i = 0; i < argc; i++) {
+		if(argv[0][0] != '-') {
+			break;
+		}
+		argv++;
+	}
+
+	return argv;
+}
+
 extern ptk_data *g_ptk;
 // ------------------------------------------------------
 // Main part of the tracker interface
@@ -636,7 +650,9 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 
     if(argc != 1)
     {
-        LoadFile(ptk, 0, argv[1]);
+		argv = ptk_parse_args(ptk, argc, argv);
+		printf("loading file %s\n", argv[0]);
+        LoadFile(ptk, 0, argv[0]);
     }
 
     while(!Prog_End)
