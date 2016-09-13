@@ -47,6 +47,7 @@
 #include "midi.h"
 #include "variables.h"
 #include "ptk.h"
+#include "ptk_sporth.h"
 #endif
 
 /* TODO: global yeah you get it*/
@@ -5504,17 +5505,23 @@ void GetPlayerValues(ptk_data *ptk)
     if(ptk->right_float < -1.0f) ptk->right_float = -1.0f;
 
     if(ptk->sporth.use_sporth) {
-        plumber_compute(&ptk->sporth.pd, PLUMBER_COMPUTE);
-        ptk->right_float = sporth_stack_pop_float(&ptk->sporth.pd.sporth.stack);
-        ptk->left_float = sporth_stack_pop_float(&ptk->sporth.pd.sporth.stack);
+		plumber_data *pd = &ptk->sporth.pd;
+		if(pd->recompile) {
+			plumber_recompile_string_v2(pd, 
+					pd->str, 
+					ptk,
+					ptk_sporth_set_vars);
+			pd->recompile = 0;
+		}
+        plumber_compute(pd, PLUMBER_COMPUTE);
+        ptk->right_float = sporth_stack_pop_float(&pd->sporth.stack);
+        ptk->left_float = sporth_stack_pop_float(&pd->sporth.stack);
     }
 
 #if !defined(__STAND_ALONE__)
     ptk->left_float_render = ptk->left_float;
     ptk->right_float_render = ptk->right_float;
 #endif
-
-
     
     left_value = (int) (ptk->left_float * 32767.0f);
     right_value = (int) (ptk->right_float * 32767.0f);

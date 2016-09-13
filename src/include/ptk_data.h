@@ -19,6 +19,7 @@ typedef struct {
     sp_data *sp;
     plumber_data pd;
     char use_sporth;
+	sporth_listener sl;
 } ptk_sporth;
 
 typedef struct {
