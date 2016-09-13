@@ -6841,8 +6841,12 @@ void ptk_close(ptk_data *ptk)
 {
     lua_close(ptk->L);
     if(ptk->sporth.use_sporth == TRUE) {
+		ptk->sporth.sl.start = 0;
+		sleep(1);
         ptk_sporth *sporth = &ptk->sporth;
         plumber_clean(&sporth->pd);
+		sp_ftbl_destroy(&sporth->notes);
+		sp_ftbl_destroy(&sporth->gates);
         sp_destroy(&sporth->sp);
     }
 }

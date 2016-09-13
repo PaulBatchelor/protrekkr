@@ -20,6 +20,10 @@ typedef struct {
     plumber_data pd;
     char use_sporth;
 	sporth_listener sl;
+    float tick; 
+	float linepos;
+	sp_ftbl *notes;
+	sp_ftbl *gates;
 } ptk_sporth;
 
 typedef struct {
@@ -136,8 +140,6 @@ typedef struct {
     float right_float;
     float left_float_render;
     float right_float_render;
-    float tick; 
-	float linepos;
 
     lua_State *L;
     ptk_sporth sporth;

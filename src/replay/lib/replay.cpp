@@ -2626,13 +2626,15 @@ void Sp_Player(ptk_data *ptk)
     delay_left_final = 0.0f;
     delay_right_final = 0.0f;
 #endif
-    ptk->tick =0;
+    ptk->sporth.tick =0;
     if(Songplaying)
     {
         if(PosInTick == 0)
         {
-            ptk->tick = 1;
-			ptk->linepos = Pattern_Line;
+			if(ptk->sporth.use_sporth == TRUE) {
+				ptk->sporth.tick = 1;
+				ptk->sporth.linepos = Pattern_Line;
+			}
 
 #if defined(PTK_FX_TICK0)
             Do_Effects_Tick_0(ptk);
@@ -2648,6 +2650,18 @@ void Sp_Player(ptk_data *ptk)
                 int efactor = Get_Pattern_Offset(ptk, pSequence[Song_Position], ct, Pattern_Line);
                 
                 // Store the notes & instruments numbers
+				if(ptk->sporth.use_sporth) {
+					if(ct < 16) {
+						int note = 
+							*(RawPatterns + efactor + PATTERN_NOTE1 + (0 * 2));
+						if(note < 120) {
+							ptk->sporth.notes->tbl[ct] = note;
+							ptk->sporth.gates->tbl[ct] = 1;
+						} else if(note == 120) {
+							ptk->sporth.gates->tbl[ct] = 0;
+						}
+					}
+				}
                 for(i = 0; i < Channels_MultiNotes[ct]; i++)
                 {
                     pl_note[i] = *(RawPatterns + efactor + PATTERN_NOTE1 + (i * 2));
@@ -5505,7 +5519,7 @@ void GetPlayerValues(ptk_data *ptk)
     if(ptk->right_float > 1.0f) ptk->right_float = 1.0f;
     if(ptk->right_float < -1.0f) ptk->right_float = -1.0f;
 
-    if(ptk->sporth.use_sporth) {
+    if(ptk->sporth.use_sporth && ptk->sporth.sl.start == 1) {
 		plumber_data *pd = &ptk->sporth.pd;
 		if(pd->recompile) {
 			plumber_recompile_string_v2(pd, 
