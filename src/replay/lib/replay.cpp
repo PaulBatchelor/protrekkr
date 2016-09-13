@@ -2632,6 +2632,7 @@ void Sp_Player(ptk_data *ptk)
         if(PosInTick == 0)
         {
             ptk->tick = 1;
+			ptk->linepos = Pattern_Line;
 
 #if defined(PTK_FX_TICK0)
             Do_Effects_Tick_0(ptk);

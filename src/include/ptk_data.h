@@ -137,6 +137,7 @@ typedef struct {
     float left_float_render;
     float right_float_render;
     float tick; 
+	float linepos;
 
     lua_State *L;
     ptk_sporth sporth;
