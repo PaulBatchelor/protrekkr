@@ -144,7 +144,7 @@ void Midi_CallBackIn(double deltatime,
             is_editing = TRUE;
             L_MaxLevel = 0;
             R_MaxLevel = 0;
-            Switch_Cmd_Playing(FALSE);
+            Switch_Cmd_Playing(ptk, FALSE);
             Pattern_Line_Visual = Pattern_Line;
             ptk->key_record_first_time = FALSE;
             ptk->old_key_Pattern_Line = Pattern_Line_Visual;

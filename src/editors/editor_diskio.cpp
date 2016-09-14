@@ -665,7 +665,7 @@ void Reset_Tracks_To_Render(ptk_data *ptk)
     {
         Tracks_To_Render[i] = FALSE;
     }
-    Display_Tracks_To_Render(ptk);
+	if(ptk->start_gui == TRUE) Display_Tracks_To_Render(ptk);
 }
 
 // ------------------------------------------------------

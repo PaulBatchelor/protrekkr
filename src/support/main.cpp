@@ -362,13 +362,12 @@ int ptk_parse_args(ptk_data *ptk, int argc, char ***argvp)
 	char **argv = *argvp;
 	*argv++;
 	argc--;
-	printf("there are now %d args!\n");
 	while(argc--) {
 		if(argv[0][0] == '-') {
 			switch(argv[0][1]) {
 				case 'r':
-					printf("shutting it down!\n");
 					ptk->start_gui = FALSE;
+					ptk->render_mode = TRUE;
 					break;
 				default:
 					break;
@@ -675,6 +674,9 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 		LoadFile(ptk, 0, argv[1]);
 	}
 
+	if(ptk->render_mode == TRUE) {
+		WavRenderizer(ptk);
+	}
     while(!Prog_End)
     {
         Mouse.wheel = 0;

@@ -126,14 +126,14 @@ void Init_Tracker_Context_After_ModLoad(ptk_data *ptk)
 
     Reset_Song_Length(ptk);
 
-    Display_Song_Length(ptk);
+	if(ptk->start_gui == TRUE) Display_Song_Length(ptk);
 
     ptk->Scopish = SCOPE_ZONE_MOD_DIR;
     //Draw_Scope_Files_Button();
 
     Reset_Tracks_To_Render(ptk);
 
-    Refresh_UI_Context(ptk);
+	if(ptk->start_gui == TRUE) Refresh_UI_Context(ptk);
     Unselect_Selection(ptk);
 
 }

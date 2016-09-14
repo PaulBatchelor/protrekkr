@@ -3947,14 +3947,16 @@ ByPass_Wav:
 
         // Store the data for the tracks scopes
 #if !defined(__STAND_ALONE__)
-        if(!CHAN_MUTE_STATE[c])
-        {
-            Scope_Dats[c][pos_scope] = (All_Signal_L + All_Signal_R) * 0.15f;
-        }
-        else
-        {
-            Scope_Dats[c][pos_scope] = 0.0f;
-        }
+		if(ptk->start_gui == TRUE) {
+			if(!CHAN_MUTE_STATE[c])
+			{
+				Scope_Dats[c][pos_scope] = (All_Signal_L + All_Signal_R) * 0.15f;
+			}
+			else
+			{
+				Scope_Dats[c][pos_scope] = 0.0f;
+			}
+		}
 #endif
     } // Songtracks
 }

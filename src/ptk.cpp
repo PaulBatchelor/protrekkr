@@ -2162,7 +2162,7 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
         Status_Box(ptk, "File loading error. (Possible cause: file not found)");
     }
     ptk->gui_action = GUI_CMD_NONE;
-    Actualize_DiskIO_Ed(ptk, 0);
+    if(ptk->start_gui == TRUE) Actualize_DiskIO_Ed(ptk, 0);
 }
 
 // ------------------------------------------------------
@@ -2198,8 +2198,7 @@ void SongPlay(ptk_data *ptk)
 
     Post_Song_Init(ptk);
     Ptk_Play(ptk);
-
-    Notify_Play(ptk);
+	if(ptk->start_gui) Notify_Play(ptk);
 }
 
 // ------------------------------------------------------
@@ -2235,12 +2234,14 @@ void Notify_Edit(ptk_data *ptk)
 
 // ------------------------------------------------------
 // Switch the command that can't be modified during playing
-void Switch_Cmd_Playing(int Enable)
+void Switch_Cmd_Playing(ptk_data *ptk, int Enable)
 {
+	if(ptk->start_gui == TRUE) {
     Gui_Draw_Button_Box(302, 28, 9, 16, I_, BUTTON_NORMAL | (Enable ? 0 : BUTTON_DISABLED) | BUTTON_TEXT_CENTERED | BUTTON_SMALL_FONT);
     Gui_Draw_Button_Box(313, 28, 9, 16, D_, BUTTON_NORMAL | (Enable ? 0 : BUTTON_DISABLED) | BUTTON_TEXT_CENTERED | BUTTON_SMALL_FONT);
     Gui_Draw_Arrows_Number_Box(324, 46, BeatsPerMin, BUTTON_NORMAL | (Enable ? 0 : BUTTON_DISABLED) | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     Gui_Draw_Arrows_Number_Box2(324, 64, TicksPerBeat, BUTTON_NORMAL | (Enable ? 0 : BUTTON_DISABLED) | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
+	}
 }
             
 // ------------------------------------------------------
@@ -2253,14 +2254,14 @@ void Notify_Play(ptk_data *ptk)
         {
             Gui_Draw_Button_Box(49, 28, 39, 16, "\253", BUTTON_NORMAL | BUTTON_RIGHT_MOUSE | BUTTON_TEXT_CENTERED);
             Gui_Draw_Button_Box(8, 28, 39, 16, "\04", BUTTON_PUSHED | BUTTON_RIGHT_MOUSE | BUTTON_TEXT_CENTERED);
-            Switch_Cmd_Playing(FALSE);
+            Switch_Cmd_Playing(ptk, FALSE);
             Status_Box(ptk, "Playing song...");
         }
         else
         {
             Gui_Draw_Button_Box(8, 28, 39, 16, "\04", BUTTON_NORMAL | BUTTON_RIGHT_MOUSE | BUTTON_TEXT_CENTERED);
             Gui_Draw_Button_Box(49, 28, 39, 16, "\253", BUTTON_PUSHED | BUTTON_RIGHT_MOUSE | BUTTON_TEXT_CENTERED);
-            Switch_Cmd_Playing(FALSE);
+            Switch_Cmd_Playing(ptk, FALSE);
             Status_Box(ptk, "Playing pattern...");
         }
     }
@@ -2889,15 +2890,15 @@ Stop_WavRender:
     Song_Position = 0;
     Song_Position_Visual = 0;
     Pattern_Line_Visual = 0;
-    Actualize_DiskIO_Ed(ptk, 0);
+	if(ptk->start_gui == TRUE) Actualize_DiskIO_Ed(ptk, 0);
     rawrender = FALSE;
 
     ptk->last_index = -1;
     Read_SMPT(ptk);
-    Actualize_Files_List(ptk, 0);
+    if(ptk->start_gui == TRUE) Actualize_Files_List(ptk, 0);
 
     Status_Box(ptk, buffer);
-    Actupated(ptk, 0);
+    if(ptk->start_gui == TRUE) Actupated(ptk, 0);
 }
 
 // ------------------------------------------------------
@@ -4089,7 +4090,7 @@ void Keyboard_Handler(ptk_data *ptk)
                 is_editing = TRUE;
                 L_MaxLevel = 0;
                 R_MaxLevel = 0;
-                Switch_Cmd_Playing(FALSE);
+                Switch_Cmd_Playing(ptk, FALSE);
                 Pattern_Line_Visual = Pattern_Line;
                 ptk->key_record_first_time = FALSE;
                 ptk->old_key_Pattern_Line = Pattern_Line;
@@ -6126,7 +6127,7 @@ void Actualize_Master(ptk_data *ptk, char gode)
     {
         if(BeatsPerMin < 20) BeatsPerMin = 20;
         if(BeatsPerMin > 255) BeatsPerMin = 255;
-        Switch_Cmd_Playing(!Songplaying);
+        Switch_Cmd_Playing(ptk, !Songplaying);
         //Gui_Draw_Arrows_Number_Box(324, 46, BeatsPerMin, (Songplaying ? BUTTON_NORMAL | BUTTON_DISABLED : BUTTON_NORMAL) |
           //                                               BUTTON_TEXT_CENTERED | (Songplaying ? 0 : BUTTON_RIGHT_MOUSE));
     }
@@ -6147,7 +6148,7 @@ void Actualize_Master(ptk_data *ptk, char gode)
             Actualize_Fx_Ed(ptk, 10);
             Actualize_Fx_Ed(ptk, 11);
         }
-        Switch_Cmd_Playing(!Songplaying);
+        Switch_Cmd_Playing(ptk, !Songplaying);
 //        Gui_Draw_Arrows_Number_Box2(324, 64, TicksPerBeat, (Songplaying ? BUTTON_NORMAL | BUTTON_DISABLED : BUTTON_NORMAL) |
   //                                                         BUTTON_TEXT_CENTERED | (Songplaying ? 0 : BUTTON_RIGHT_MOUSE));
     }
@@ -6171,7 +6172,7 @@ void Actualize_Master(ptk_data *ptk, char gode)
 
     if(gode == 5)
     {
-        Switch_Cmd_Playing(TRUE);
+        Switch_Cmd_Playing(ptk, TRUE);
     }
 
     if(ptk->userscreen == USER_SCREEN_SETUP_EDIT) Actualize_Master_Ed(ptk, 3);
