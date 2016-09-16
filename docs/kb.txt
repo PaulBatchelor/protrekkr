@@ -1,0 +1,129 @@
+== Playing ==----
+  RCTRL:                           Play song from row 0.
+  LSHIFT + RCTRL:                  Play song from current row.
+  RALT:                            Play pattern from row 0.
+  LSHIFT + RALT:                   Play pattern from current row.
+  Left mouse on '>':               Play song from row 0.
+  Right mouse on '>':              Play song from current row.
+  Left mouse on '|>':              Play pattern from row 0.
+  Right mouse on '|>':             Play pattern from current row.
+  Left mouse on 'Edit/Record':     Edit mode on/off.
+  Right mouse on 'Edit/Record':    Record mode on/off.
+
+
+== Editing ==----
+  LSHIFT + ESCAPE:                 Switch large patterns view on/off
+           TAB:                    Go to next track
+  LSHIFT + TAB:                    Go to prev. track
+   LCTRL + TAB:                    Go to next note in track
+   LCTRL + LSHIFT + TAB:           Go to prev. note in track
+  SPACE:                           Toggle Edit mode On & Off
+                                   (Also stop if the song is being played)
+  SHIFT SPACE:                     Toggle Record mode On & Off
+                                   (Wait for a key note to be pressed
+                                    or a midi in message to be received)
+  DOWN ARROW:                      1 Line down
+  UP ARROW:                        1 Line up
+  LEFT ARROW:                      1 Row left
+  RIGHT ARROW:                     1 Row right
+  PREV. PAGE:                      16 Arrows Up
+  NEXT PAGE:                       16 Arrows Down
+  HOME / END:                      Top left / Bottom right of pattern
+  LCTRL + HOME / END:              First / last track
+  F5, F6, F7, F8, F9:              Jump to 0, 1/4, 2/4, 3/4, 4/4 lines of the patterns
+
+
+   + - (Numeric keypad):           Next / Previous pattern
+   LCTRL + LEFT / RIGHT:           Next / Previous pattern
+   LCTRL + LALT + LEFT / RIGHT:    Next / Previous position
+
+
+    LALT + LEFT / RIGHT:           Next / Previous instrument
+  LSHIFT + M:                      Toggle mute state of the current channel
+   LCTRL + LSHIFT + M:             Solo the current track / Unmute all
+  LSHIFT + F1 to F11:              Select a tab/panel
+   LCTRL + 1 to 4:                 Select a copy buffer
+
+
+== Tracking ==-----
+  1st and 2nd keys rows:           Upper octave row
+  3rd and 4th keys rows:           Lower octave row
+  RSHIFT:                          Insert a note off
+  / and * (Numeric keypad)
+  or F1 F2:                        -1 or +1 octave
+  INSERT / BACKSPACE:              Insert or Delete a line in current track
+                                   or current selected block.
+  LSHIFT + INSERT / BACKSPACE:     Insert or Delete a line in current pattern
+  DELETE (NOT BACKSPACE):          Empty a column or a selected block.
+
+
+== Blocks ==----
+  (Blocks can also be selected with the mouse by holding the right button
+   and scrolling the pattern with the mouse wheel).
+
+
+  LCTRL + A:          Select entire current track
+  LCTRL + LSHIFT + A: Select entire current pattern
+   LALT + A:          Select entire column note in a track
+   LALT + LSHIFT + A: Select all notes of a track
+  LCTRL + X:          Cut the selected block and copy it into the block-buffer
+  LCTRL + C:          Copy the selected block into the block-buffer
+  LCTRL + V:          Paste the data from the block buffer into the pattern
+  LCTRL + I:          Interpolate selected data from the first
+                      to the last row of a selection
+
+
+                      example:
+                      (assuming only the 2 effects data columns are selected)
+
+
+                      C-3  04  ..  ..  09  00 ---> C-3  04  ..  ..  09  00
+                      C-3  04  ..  ..  09  00 ---> C-3  04  ..  ..  09  02
+                      C-3  04  ..  ..  09  00 ---> C-3  04  ..  ..  09  05
+                      C-3  04  ..  ..  09  00 ---> C-3  04  ..  ..  09  08
+                      C-3  04  ..  ..  09  00 ---> C-3  04  ..  ..  09  0A
+                      C-3  04  ..  ..  09  00 ---> C-3  04  ..  ..  09  0D
+                      C-3  04  ..  ..  09  10 ---> C-3  04  ..  ..  09  10
+
+
+                      Cool to make cutoff transitions, etc...
+                      (You can also switch on the Slider Rec to On,
+                      and perform parameter-live-recording, such as cutoff,
+                      resonance or panning tweaking, etc..)
+
+
+                      Note: this command (as well as the randomize one below)
+                           only works for volume/panning and fx datas columns.
+
+
+  LSHIFT + ARROWS
+           PREV. PAGE
+           NEXT PAGE: Select a block
+
+
+  LCTRL + R:          Randomize the select columns of a selection,
+                      works similar to CTRL + I, but it randomizes values
+                      instead of interpolating them.
+
+
+  LCTRL + U:          Transpose the note of a selection to 1 seminote higher
+  LCTRL + D:          Transpose the note of a selection to 1 seminote lower
+  LCTRL + LSHIFT + U: Transpose the note of a selection to 1 seminote higher
+                      (only for the current instrument)
+  LCTRL + LSHIFT + D: Transpose the note of a selection to 1 seminote lower
+                      (only for the current instrument)
+  LCTRL + H:          Transpose the note of a selection to 1 octave higher
+  LCTRL + L:          Transpose the note of a selection to 1 octave lower
+  LCTRL + LSHIFT + H: Transpose the note of a selection to 1 octave higher
+                      (only for the current instrument)
+  LCTRL + LSHIFT + L: Transpose the note of a selection to 1 octave lower
+                      (only for the current instrument)
+  LCTRL + W:          Save the current selection into a file
+
+
+== Misc. ==----
+    LALT + ENTER:     Switch between full screen / windowed mode
+    LALT + F4:        Exit program (Windows only)
+   LCTRL + S:         Save current module
+  LSHIFT + S:         Switch top right panel to synths list
+  LSHIFT + I:         Switch top right panel to instruments list

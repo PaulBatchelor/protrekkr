@@ -1,0 +1,296 @@
+== General ==----
+ Command '0000': No Effect
+
+
+ Command '01xx': Pitch Up (Disabled when using Arpeggio or Vibrato)
+                 xx = Speed
+
+
+ Command '02xx': Pitch Down (Disabled when using Arpeggio or Vibrato)
+                 xx = Speed
+
+
+ Command '03xx': Set Volume
+                 xx = Volume level
+
+
+ Command '04xx': Trance Slicer
+                 xx = Delay ticks before muting the volume (from 0 to 6)
+                 (note that the volume stays muted at the next rows)
+
+
+ Command '05xx': Glider (Disabled when using Arpeggio or Vibrato)
+                 xx = Speed
+
+
+ Command '06xx': Pattern Loop
+                 00 = Sets the loop point
+                 xx = Loops xx times
+
+
+ Command '07xx': FX Synchro
+                 xx = Any data
+
+
+ Command '08xx': Set Filter Cut Off
+                 xx = Cut Off level
+
+
+ Command '09xx': Set Sample Play Offset (256 bytes steps)
+                 xx = Offset
+
+
+ Command '0Axx': Randomize Filter Cut Off
+                 xx = Amplitude
+
+
+ Command '0Bxx': Filter Cut Off Slide Up
+                 xx = Speed
+
+
+ Command '0Cxx': Filter Cut Off Slide Down
+                 xx = Speed
+
+
+ Command '0Dxx': Jump To Next Sequencer Position (aka Pattern Break)
+                 xx = Pattern row
+
+
+ Command '0Exx': Note Retrigger
+                 xx = Tick
+
+
+ Command '0Fxx': Set Number Of Ticks Per Beat
+                 xx = Ticks
+
+
+ Command '10xx': Set Delay/Echo Send
+                 xx = Send Level
+
+
+ Command '11xx': Set Reverb Send
+                 xx = Send Level
+
+
+ Command '12xx': Set Distortion Threshold
+                 xx = Threshold Level
+
+
+ Command '13xx': Set Distortion Clamp
+                 xx = Clamp Level
+
+
+ Command '14xx': Set Filter Resonance
+                 xx = Resonance Level
+
+
+ Command '15xx': Set Filter Type
+                 xx = Filter to use
+
+
+                 00 = LoPass -12db filter
+                 01 = HiPass filter
+                 02 = BandPass filter
+                 03 = BandReject filter
+                 04 = No Filter 
+                 05 = LoPass -24db filter
+                 06 = LoPass -48db filter
+                 07 = LP-24 [Stereo] filter
+                 08 = A. Mod. [Mono] filter
+                 09 = A. Mod. [Stereo] filter
+                 0A = Single [Mono] filter
+                 0B = Single [Stereo] filter
+                 0C = ParaEq -15db filter
+                 0D = ParaEq -6db filter
+                 0E = ParaEq +6db filter
+                 0F = ParaEq +15db filter
+                 10 = Custom Delta filter
+                 11 = Comp. Distort L filter
+                 12 = Comp. Distort M filter
+                 13 = Comp. Distort H filter
+                 14 = Comp. Distort filter
+                 15 = W-HP12 [Mono] filter
+                 16 = W-HP12 [Stereo] filter
+                 17 = W-HP24 [Mono] filter
+
+
+ Command '16xx': Set Filter LFO Carrier position
+                 xx = Position
+
+
+ Command '17xx': Auto Fade In Track
+                 xx = Ticks
+
+
+                 C-7 00 .. .. 1710.... << Turn auto fading on
+                 --- .. .. .. 0000....
+                 --- .. .. .. 0000....
+                 G-6 00 .. .. 0000.... << Volume will start at instrument level
+                 --- .. .. .. 0000....    and will be faded in too
+                 --- .. .. .. 0000....
+                 --- .. .. .. 0000....
+                 --- .. .. .. 1700.... << Turn it off (volume stays at current level)
+
+
+ Command '18xx': Auto Fade Out Track
+                 xx = Ticks
+
+
+                 Same behaviour as above.
+
+
+ Command '19xx': Volume Slide Up
+                 xx = Speed
+
+
+ Command '1Axx': Volume Slide Down
+                 xx = Speed
+
+
+ Command '1Bxy': Arpeggio
+                 x = Second relative semi tone
+                 y = Third relative semi tone
+
+
+                 C-7 00 .. .. 1B37.... << Turn it on
+                 --- .. .. .. 0000....
+                 --- .. .. .. 0000....
+                 --- .. .. .. 0000....
+                 --- .. .. .. 1B38.... << Change datas
+                 --- .. .. .. 0000....
+                 --- .. .. .. 0000....
+                 --- .. .. .. 0000....
+                 --- .. .. .. 1B00.... << Turn it off
+
+
+ Command '1Cxx': Set Global Volume
+                 xx = Volume level
+
+
+ Command '1Dxy': Vibrato
+                 x = Speed
+                 y = Depth
+
+
+                 C-7 00 .. .. 1D46.... << Turn it on
+                 --- .. .. .. 0000....
+                 --- .. .. .. 0000....
+                 --- .. .. .. 0000....
+                 --- .. .. .. 1D7F.... << Change data
+                 --- .. .. .. 0000....
+                 --- .. .. .. 0000....
+                 --- .. .. .. 0000....
+                 --- .. .. .. 1D00.... << Turn it off
+
+
+ Command '1E0x': Select Instrument Playing Way
+                 0 = Play forward
+                 1 = Play backward
+
+
+ Command '1Fxx': Position Jump
+                 xx = New position
+
+
+ Command '20xx': Fine Volume Slide Up
+                 xx = Amount
+
+
+ Command '21xx': Fine Volume Slide Down
+                 xx = Amount
+
+
+ Command '22xx': Fine Pitch Up
+                 xx = Amount
+
+
+ Command '23xx': Fine Pitch Down
+                 xx = Amount
+
+
+ Command '240x': Turn flanger on/off
+                 0 = Turn it off
+                 1 = Turn it on
+
+
+ Command '25xx': Set shuffle value
+                 xx = Amount
+
+
+ Command '26xx': Set reverb filter cutoff
+                 xx = Amount
+
+
+ Command '27xx': Set reverb filter resonance
+                 xx = Amount
+
+
+ Command 'F0xx': Set BPM Speed
+                 xx = BPM
+
+
+== 303 Triggering ==-----
+ Command '31xy': Trigger 303 Bass Line (Unit 1)
+                 x = Bank (A-D)
+                 y = Pattern (1-8)
+                 '00' will trigger current selected pattern
+
+
+ Command '32xy': Trigger 303 Bass Line (Unit 2)
+                 x = Bank (A-D)
+                 y = Pattern (1-8)
+                 '00' will trigger current selected pattern
+
+
+== 303 Controllers ==----
+ Where 'xx' is a number between $00 and $FF (hex):
+
+
+ Command '33xx': Set 303 (Unit 1) Filter Cutoff
+ Command '34xx': Set 303 (Unit 2) Filter Cutoff
+ Command '35xx': Set 303 (Unit 1) Filter Resonance
+ Command '36xx': Set 303 (Unit 2) Filter Resonance
+ Command '37xx': Set 303 (Unit 1) Filter Env Mod
+ Command '38xx': Set 303 (Unit 2) Filter Env Mod
+ Command '39xx': Set 303 (Unit 1) Filter Decay
+ Command '3Axx': Set 303 (Unit 2) Filter Decay
+ Command '3Bxx': Set 303 (Unit 1) Accent
+ Command '3Cxx': Set 303 (Unit 2) Accent
+ Command '3Dxx': Set 303 (Unit 1) Tune
+ Command '3Exx': Set 303 (Unit 2) Tune
+ Command '41xx': Set 303 (Unit 1) Volume
+ Command '42xx': Set 303 (Unit 2) Volume
+
+
+== Volume column ==----
+   Command 'xx': Set Volume (00 to 40)
+
+
+   Command 'Fx': Note Cut
+                 x = row number where the note should be cut
+
+
+== Panning column ==----
+   Command 'xx': Panning (00 to 80)
+
+
+   Command '90': Send Midi message
+                 Send the command and data specified 
+                 in the fx/data columns to Midi OUT selected device.
+
+
+             ex: 90 4050
+                 Send command 0x40 with data 0x50.
+
+
+== Midi ==----
+ Command '80xx': Set Patch Bank
+                 (might not work on all midi equipments)
+                 (won't work in the replay routine)
+
+
+ Read in the [faq] how you can send midiout controller messages
+ and read the manual of your gear to learn how send RRPN ones
+ using midiout, also, you might find here the midi implementation table
+ for your hardware (or it could also be displayed on the device's LCD screen).
+

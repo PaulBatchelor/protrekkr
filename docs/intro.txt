@@ -1,0 +1,35 @@
+ProTrekkr (formerly known as NoiseTrekker by Juan Antonio Arguelles Rius
+aka Arguru) is a tracker program combining a software synthesizer
+together with a traditional samples tracker which can (mainly) be used
+to create electronic music (like psytrance, trance goa, hard acid, IDM,
+chip, techno, etc.) for small sized intros, demos or games.
+
+The tracker is available for Windows, Linux and Mac OS X.
+
+
+Main features:
+
+
+- 16 multi-notes tracks (with 256 virtual channels).
+- Samples editor (can load up to 64 bits stereo samples).
+- Patterns based tracker style sequencer.
+- Synthesizer with custom waveforms support.
+- Samples loop editor.
+- 2 303s units.
+- Cubic spline interpolation.
+- Wav files import/export.
+- 16 or 32 bits wav rendering.
+- Multi effects engine with reverb, distortion, filters, delay, EQs, flanger, etc...
+- Fully customizable 10 combs reverb.
+- Midi in/out support.
+- Protracker .mod files import.
+- Samples compressor handling Gsm/Mp3/TrueSpeech/ADPCM/8 Bit (not on Linux or Mac OS X yet).
+- Replay routine source code to be included & used inside your own programs
+(Also featuring a replay routine for the PlayStation Portable).
+- Winamp/XMPlay plugin available.
+- And maybe more...
+
+
+This is a FREEWARE tool, this means that you can use it for whatever
+you want and for free. There's NO GUARANTEE that this program will perform
+well or even run on your computer.

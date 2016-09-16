@@ -1,0 +1,26 @@
+The sequencer used in ptk is a little bit different from those usually found
+in other trackers, the user have the ability to re-use patterns with different
+tracks playing state configurations:
+
+    Tracks can be turned on/off by left clicking on their digits.
+    (Inactive tracks will be displayed with a darker font color).
+    (Right clicking will solo/unmute all tracks alternatively).
+    |
+000    |             000
+000    |             000
+000    |             000
+000 01234567         001
+001 01234567         002
+002 0123-567         003
+003 012-4-67         003 << The pattern number 3 will be played during
+|                    |     song position 3 with it's 3th and 5th tracks
+|                    |     disabled.
+|                    |
+|                    |
+|                    Click Left or right mouse button on the right digits to
+|                    increase the pattern associated with the current position
+|
+Click on the position to position the seqeucner on it.
+
+
+(The mouse wheel can also be used to scroll through positions sequence).
