@@ -48,6 +48,7 @@
 #include "variables.h"
 #include "ptk.h"
 #include "ptk_sporth.h"
+#include "ptk_lua.h"
 #endif
 
 /* TODO: global yeah you get it*/
@@ -4992,6 +4993,27 @@ void Do_Effects_Ticks_X(ptk_data *ptk)
                         LFO_ON[trackef] = (int) pltr_dat_row[k] & 1;
                         break;
 #endif
+                    case 0x60:
+                    case 0x61:
+                    case 0x62:
+                    case 0x63:
+                    case 0x64:
+                    case 0x65:
+                    case 0x66:
+                    case 0x67:
+                    case 0x68:
+                    case 0x69:
+                    case 0x6a:
+                    case 0x6b:
+                    case 0x6c:
+                    case 0x6d:
+                    case 0x6e:
+                    case 0x6f:
+                        //printf("0x6%d: the value is %d\n", 
+                        //        pltr_eff_row[k] & 0xf, pltr_dat_row[k]);
+                        ptk_lua_call(ptk, pltr_eff_row[k] & 0xf, pltr_dat_row[k]);
+                        break;
+                    default: break;
 
                 }
             }

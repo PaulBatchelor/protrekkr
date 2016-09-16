@@ -143,8 +143,9 @@ typedef struct {
 	char start_gui;
 	char render_mode;
 
-	int ntabs;
+    int ntabs;
 
+    int lref;
     lua_State *L;
     ptk_sporth sporth;
 } ptk_data;

@@ -6847,13 +6847,18 @@ void ptk_init(ptk_data *ptk)
     ptk->gui_thread_action = FALSE;
     ptk->gui_bpm_action = FALSE;
     ptk->sporth.use_sporth = FALSE;
-    ptk_lua_init(ptk);
 
 	ptk->start_gui = TRUE;
 	ptk->render_mode = FALSE;
 
 	/* number of tabs in toolbar */
 	ptk->ntabs = 11;
+
+    /* lua reference value, storing callback function */
+    ptk->lref = -1;
+
+    ptk_lua_init(ptk);
+
 }
 
 void ptk_close(ptk_data *ptk) 

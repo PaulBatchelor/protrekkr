@@ -261,7 +261,6 @@
  Command '41xx': Set 303 (Unit 1) Volume
  Command '42xx': Set 303 (Unit 2) Volume
 
-
 == Volume column ==----
    Command 'xx': Set Volume (00 to 40)
 
@@ -294,3 +293,18 @@
  using midiout, also, you might find here the midi implementation table
  for your hardware (or it could also be displayed on the device's LCD screen).
 
+
+== Free effect slots ==
+ Command '[28-2F]xx'
+ Command '3Fxx'
+ Command '[43-4F]xx'
+ Command '5*xx'
+ Command '6*xx'
+ Command '7*xx'
+ Command '9*xx'
+ Command 'A*xx'
+ Command 'B*xx'
+ Command 'C*xx'
+ Command 'D*xx'
+ Command 'E*xx'
+ Command 'F*xx'
