@@ -963,7 +963,7 @@ int Screen_Update(ptk_data *ptk)
             is_recording = 0;
             is_recording_2 = 0;
             Nbr_Sub_NoteOff = 0;
-            is_editing = 0;
+            //is_editing = 0;
             Notify_Edit(ptk);
             SongStop(ptk);
         }
@@ -5640,7 +5640,14 @@ void Mouse_Handler(ptk_data *ptk)
         if(zcheckMouse(ptk, 20 + (TAB_LARG * 8), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_REVERB_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_REVERB_EDIT;
         if(zcheckMouse(ptk, 20 + (TAB_LARG * 9), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_DISKIO_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_DISKIO_EDIT;
         if(zcheckMouse(ptk, 20 + (TAB_LARG * 10), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_SETUP_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_SCREEN_SETUP_EDIT;
-        //if(zcheckMouse(ptk, 20 + (TAB_LARG * 11), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_SETUP_MIDI || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_MIDI_SETUP;
+        if(zcheckMouse(ptk, 
+					20 + (TAB_LARG * 11), (Cur_Height - 171) + Add_Offset, 
+					TAB_LARG - 2, 16) && 
+				(ptk->userscreen != USER_SCREEN_SETUP_MIDI 
+				 || Patterns_Lines_Offset)) {
+			printf("hey you guys!\n");
+			//ptk->gui_action = GUI_CMD_SELECT_MIDI_SETUP;
+		}
 
         Mouse_Left_Track_Fx_Ed(ptk);
         Mouse_Left_Sequencer_Ed(ptk);
@@ -6844,6 +6851,9 @@ void ptk_init(ptk_data *ptk)
 
 	ptk->start_gui = TRUE;
 	ptk->render_mode = FALSE;
+
+	/* number of tabs in toolbar */
+	ptk->ntabs = 11;
 }
 
 void ptk_close(ptk_data *ptk) 

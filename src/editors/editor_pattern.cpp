@@ -42,7 +42,7 @@
 // Constants
 /*TODO: make this a little bit cleaner */
 //#define POS_HORIZ_SLIDER 716
-#define POS_HORIZ_SLIDER (20 + (TAB_LARG * 11))
+#define POS_HORIZ_SLIDER (20 + (TAB_LARG * ptk->ntabs))
 
 // ------------------------------------------------------
 // Variables
