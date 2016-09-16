@@ -5009,8 +5009,6 @@ void Do_Effects_Ticks_X(ptk_data *ptk)
                     case 0x6d:
                     case 0x6e:
                     case 0x6f:
-                        //printf("0x6%d: the value is %d\n", 
-                        //        pltr_eff_row[k] & 0xf, pltr_dat_row[k]);
                         ptk_lua_call(ptk, pltr_eff_row[k] & 0xf, pltr_dat_row[k]);
                         break;
                     default: break;
