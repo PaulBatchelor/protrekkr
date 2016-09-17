@@ -13,8 +13,10 @@ int ptk_sporth_set_vars(plumber_data *pd, void *ud)
     plumber_ftmap_add_userdata(pd, "R", &ptk->right_float);
     plumber_ftmap_add_userdata(pd, "tick", &sporth->tick);
     plumber_ftmap_add_userdata(pd, "pos", &sporth->linepos);
+    plumber_ftmap_add_userdata(pd, "play", &sporth->play);
     plumber_ftmap_add(pd, "notes", sporth->notes);
     plumber_ftmap_add(pd, "gates", sporth->gates);
+    plumber_ftmap_add(pd, "tracks", sporth->tracks);
     plumber_ftmap_delete(pd, 1);
 }
 
@@ -39,11 +41,13 @@ int ptk_sporth_init(ptk_data *ptk, char *str)
 
 	sp_ftbl_create(pd->sp, &sporth->notes, 16);
 	sp_ftbl_create(pd->sp, &sporth->gates, 16);
+	sp_ftbl_create(pd->sp, &sporth->tracks, MAX_TRACKS);
 
 	ptk_sporth_set_vars(pd, ptk);
 
 	sporth->tick = 0;
 	sporth->linepos = 0;
+	sporth->play = 0;
 
     if(plumber_parse_string(&sporth->pd, str) == PLUMBER_OK) {
         sporth->use_sporth = TRUE;
@@ -73,5 +77,6 @@ void ptk_sporth_destroy(ptk_data *ptk)
     plumber_clean(&sporth->pd);
     sp_ftbl_destroy(&sporth->notes);
     sp_ftbl_destroy(&sporth->gates);
+    sp_ftbl_destroy(&sporth->tracks);
     sp_destroy(&sporth->sp);
 }

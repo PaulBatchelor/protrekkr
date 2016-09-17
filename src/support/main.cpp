@@ -370,11 +370,10 @@ int ptk_parse_args(ptk_data *ptk, int argc, char ***argvp)
 {
 	int i;
 	char **argv = *argvp;
-	*argv++;
 	argc--;
-	while(argc--) {
-		if(argv[0][0] == '-') {
-			switch(argv[0][1]) {
+	while(argc) {
+		if(argv[1][0] == '-') {
+			switch(argv[1][1]) {
 				case 'R':
 					ptk->start_gui = FALSE;
 					ptk->render_mode = TRUE;
@@ -385,8 +384,10 @@ int ptk_parse_args(ptk_data *ptk, int argc, char ***argvp)
 				default:
 					break;
 			}
-			break;
-		}
+		} else {
+            break;
+        }
+        argc--;
 		*argv++;
 	}
 	*argvp = argv;
@@ -683,7 +684,6 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 
 
 	if(argc > 0) {
-		printf("loading file %s %d\n", argv[1], argc);
 		LoadFile(ptk, 0, argv[1]);
 	}
 

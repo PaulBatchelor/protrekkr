@@ -18,8 +18,10 @@ typedef struct {
 	sporth_listener sl;
     float tick; 
 	float linepos;
+    float play;
 	sp_ftbl *notes;
 	sp_ftbl *gates;
+    sp_ftbl *tracks;
     sp_progress *prog;
 } ptk_sporth;
 

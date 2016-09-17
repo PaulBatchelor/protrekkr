@@ -2334,6 +2334,7 @@ void Sp_Player(ptk_data *ptk)
     delay_right_final = 0.0f;
 #endif
     ptk->sporth.tick =0;
+    ptk->sporth.play = Songplaying;
     if(Songplaying)
     {
         if(PosInTick == 0)
@@ -3628,6 +3629,9 @@ ByPass_Wav:
         All_Signal_R *= Track_Volume[c];
 #endif
 
+        if(ptk->sporth.use_sporth == TRUE) {
+            ptk->sporth.tracks->tbl[c] = All_Signal_L / 32767.0f;
+        }
         // Store to global signals
         ptk->left_float += All_Signal_L;
         ptk->right_float += All_Signal_R;
