@@ -429,7 +429,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 			exit(0);
 		}
 	}
-    atexit(Destroy_Context);
+    //atexit(Destroy_Context);
 
     // Show the restrictions:
     char *NoMidi = "";
@@ -957,6 +957,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 
 	if(ptk->start_gui == TRUE) SaveConfig(ptk);
     
+    Destroy_Context(ptk);
     ptk_close(ptk);
 
 	if(ExePath) free(ExePath);

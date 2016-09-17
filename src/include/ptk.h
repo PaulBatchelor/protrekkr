@@ -134,7 +134,7 @@ extern HWND Main_Window;
 // ------------------------------------------------------
 // Functions
 int Init_Context(ptk_data *ptk);
-void Destroy_Context(void);
+void Destroy_Context(ptk_data *ptk);
 int Screen_Update(ptk_data *ptk);
 void STDCALL Mixer(ptk_data *ptk, Uint8 *Buffer, Uint32 Len);
 SDL_Surface *Load_Skin_Picture(char *name);

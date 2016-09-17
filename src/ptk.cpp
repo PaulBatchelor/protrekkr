@@ -513,9 +513,9 @@ int Init_Context(ptk_data *ptk)
 // ------------------------------------------------------
 // Release the allocated resources
 extern int volatile AUDIO_Acknowledge;
-void Destroy_Context(void)
+void Destroy_Context(ptk_data *ptk)
 {
-    ptk_data *ptk = g_ptk;
+    //ptk_data *ptk = g_ptk;
     if(Timer) SDL_RemoveTimer(Timer);
     AUDIO_Acknowledge = TRUE;
 
