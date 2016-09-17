@@ -31,6 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
+#include <stdlib.h>
 #include "replay.h"
 #include "ptk_data.h"
 #include "ptk.h"
@@ -2872,7 +2873,7 @@ Stop_WavRender:
             sprintf(buffer, "Wav rendering finished. Waveform size: %.2f Megabytes. Playback time: %d'%d''.",
                             float(filesize / 1048576.0f), minutes, seconds);
     }
-    Status_Box(ptk, buffer);
+    //Status_Box(ptk, buffer);
 
     // Return to the start as all the values will be trashed anyway.
     Pattern_Line = 0;
