@@ -43,6 +43,7 @@
 
 #include <SDL/SDL_types.h>
 #include <string.h>
+#include "version.h"
 #include "main.h"
 #include "timer.h"
 #include "resource.h"

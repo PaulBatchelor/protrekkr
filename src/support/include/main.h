@@ -37,7 +37,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_syswm.h>
 
-#include "../../include/version.h"
+//#include "../../include/version.h"
 
 // ------------------------------------------------------
 // Constants

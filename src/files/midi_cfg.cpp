@@ -31,6 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
+#include "version.h"
 #include "include/midi_cfg.h"
 #include "../midi/include/midi_dispatch.h"
 
