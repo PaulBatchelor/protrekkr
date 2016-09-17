@@ -36,6 +36,8 @@
 #else
 #include <SDL/SDL_stdinc.h>
 #endif
+#include "ptk_data.h"
+#include "variables.h"
 #include "replay.h"
 #include "ptk.h"
 

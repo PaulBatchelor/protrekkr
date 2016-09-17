@@ -31,6 +31,8 @@
 
 // ------------------------------------------------------
 // Includes
+#include "ptk_data.h"
+#include "variables.h"
 #include "replay.h"
 #include "endianness.h"
 
@@ -50,6 +52,8 @@
 #include "ptk_sporth.h"
 #include "ptk_lua.h"
 #endif
+
+#include "files.h"
 
 /* TODO: global yeah you get it*/
 extern ptk_data *g_ptk;

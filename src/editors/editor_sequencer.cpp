@@ -31,8 +31,9 @@
 
 // ------------------------------------------------------
 // Includes
-#include "replay.h"
 #include "ptk_data.h"
+#include "variables.h"
+#include "replay.h"
 #include "editor_sequencer.h"
 #include "editor_pattern.h"
 #include "patterns_blocks.h"

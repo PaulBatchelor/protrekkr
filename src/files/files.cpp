@@ -32,7 +32,8 @@
 // ------------------------------------------------------
 // Includes
 #include "../extralibs/zlib-1.2.3/zlib.h"
-
+#include "ptk_data.h"
+#include "variables.h"
 #include "replay.h"
 #include "ptk.h"
 #include "files.h"

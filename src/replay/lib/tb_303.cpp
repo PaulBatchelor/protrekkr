@@ -31,6 +31,8 @@
 
 // ------------------------------------------------------
 // Includes
+#include "ptk_data.h"
+#include "variables.h"
 #include "tb_303.h"
 #include "replay.h"
 

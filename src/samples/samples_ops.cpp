@@ -31,8 +31,9 @@
 
 // ------------------------------------------------------
 // Includes
-#include "replay.h"
 #include "ptk_data.h"
+#include "variables.h"
+#include "replay.h"
 #include "samples_ops.h"
 
 #if defined(__AROS__)

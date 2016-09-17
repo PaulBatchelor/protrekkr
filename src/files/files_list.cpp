@@ -31,8 +31,11 @@
 
 // ------------------------------------------------------
 // Includes
+#include "ptk_data.h"
+#include "variables.h"
 #include "replay.h"
 #include "ptk.h"
+#include "files.h"
 #include "files_list.h"
 
 #if defined(__WIN32__)

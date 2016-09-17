@@ -32,9 +32,9 @@
 // ------------------------------------------------------
 // Includes
 
-#include "replay.h"
 #include "ptk_data.h"
 #include "variables.h"
+#include "replay.h"
 #include "ptk.h"
 
 #include "include/midi_dispatch.h"

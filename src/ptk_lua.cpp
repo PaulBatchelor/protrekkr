@@ -1,4 +1,3 @@
-#include "replay.h"
 #include "ptk.h"
 #include "ptk_lua.h"
 #include "ptk_sporth.h"

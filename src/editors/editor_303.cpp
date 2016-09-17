@@ -31,8 +31,9 @@
 
 // ------------------------------------------------------
 // Includes
-#include "replay.h"
 #include "ptk_data.h"
+#include "variables.h"
+#include "replay.h"
 #include "include/editor_303.h"
 #include "files.h"
 #include "requesters.h"

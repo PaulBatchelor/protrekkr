@@ -31,10 +31,12 @@
 
 // ------------------------------------------------------
 // Includes
-#include "replay.h"
 #include "ptk_data.h"
+#include "variables.h"
+#include "replay.h"
 #include "version.h"
 #include "303s.h"
+#include "editor_303.h"
 
 // ------------------------------------------------------
 // Read a 303 pattern data

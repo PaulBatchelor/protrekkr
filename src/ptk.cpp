@@ -32,10 +32,19 @@
 // ------------------------------------------------------
 // Includes
 #include <stdlib.h>
-#include "replay.h"
 #include "ptk_data.h"
+#include "variables.h"
+#include "replay.h"
 #include "ptk.h"
 #include "ptk_lua.h"
+
+#include "reverbs.h"
+#include "editor_303.h"
+#include "303s.h"
+#include "midi_cfg.h"
+#include "mods.h"
+#include "patterns.h"
+#include "files.h"
 
 // ------------------------------------------------------
 // Constants
