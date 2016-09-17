@@ -39,8 +39,8 @@
 #include <SDL/SDL.h>
 
 #include "ptk_data.h"
-#include "../support/include/main.h"
-#include "../replay/lib/include/replay.h"
+#include "main.h"
+#include "replay.h"
 
 // ------------------------------------------------------
 // Constants
