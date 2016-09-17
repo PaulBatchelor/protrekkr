@@ -21,6 +21,13 @@ int ptk_sporth_init(ptk_data *ptk, char *str)
     plumber_register(&sporth->pd);
     plumber_init(&sporth->pd);
     sp_create(&sporth->sp);
+
+    if(ptk->render_mode == TRUE) {
+        sporth->sp->len = Calc_Length(ptk);
+        sp_progress_create(&sporth->prog); 
+        sp_progress_init(sporth->sp, sporth->prog); 
+        printf("the length is now %d\n", sporth->prog->len);
+    }
 	sporth_listener *sl = &sporth->sl;
 
     plumber_data *pd = &sporth->pd;

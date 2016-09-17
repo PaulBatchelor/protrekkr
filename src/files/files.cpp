@@ -1856,7 +1856,7 @@ int song_Seconds;
 int song_Minutes;
 int song_Hours;
 
-int Calc_Length(ptk_data *ptk)
+unsigned long Calc_Length(ptk_data *ptk)
 {
     int i;
     int k;
@@ -1874,6 +1874,7 @@ int Calc_Length(ptk_data *ptk)
     int shuffle_switch;
     int shuffle_stp = shuffle;
     double len;
+    unsigned long samps = 0;
     int nbr_ticks;
     int Samples;
     int ilen;
@@ -1991,6 +1992,7 @@ int Calc_Length(ptk_data *ptk)
                     shuffle_stp = (Samples * shuffle) / 200;
                 }
                 len += PosTicks - 1;
+                samps += PosTicks - 1;
 
                 nbr_ticks++;
                 PosTicks = 0;
@@ -2020,9 +2022,9 @@ int Calc_Length(ptk_data *ptk)
     song_Minutes = (ilen / 60);
     song_Hours = ilen / 60 / 24;
 
-    Display_Song_Length(ptk);
+    if(ptk->start_gui == TRUE) Display_Song_Length(ptk);
 
-    return((int) (len * 1000));
+    return samps;
 }
 
 void Reset_Song_Length(ptk_data *ptk)

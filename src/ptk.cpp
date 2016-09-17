@@ -133,7 +133,7 @@ SDL_Surface *LOGOPIC;
 Uint32 Alloc_midi_Channels[MAX_TRACKS][MAX_POLYPHONY];
 
 void Mouse_Sliders_Master_Shuffle(ptk_data *ptk);
-int Calc_Length(ptk_data *ptk);
+unsigned long Calc_Length(ptk_data *ptk);
 
 extern int Ticks_Synchro_Left;
 extern int Ticks_Synchro_Right;
@@ -6867,7 +6867,11 @@ void ptk_close(ptk_data *ptk)
 			ptk->sporth.sl.start = 0;
 			sleep(1);
 		}
+        if(ptk->render_mode == TRUE) {
+            sp_progress_destroy(&ptk->sporth.prog);
+        }
         ptk_sporth *sporth = &ptk->sporth;
+        printf("are we here?\n");
         plumber_clean(&sporth->pd);
 		sp_ftbl_destroy(&sporth->notes);
 		sp_ftbl_destroy(&sporth->gates);

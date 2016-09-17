@@ -419,8 +419,6 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 
 	argc = ptk_parse_args(ptk, argc, &argv);
 
-    ptk_lua_init(ptk);
-
 	if(ptk->start_gui == TRUE) {
 		if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_NOPARACHUTE) < 0)
 		{
@@ -677,9 +675,12 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 		LoadFile(ptk, 0, argv[1]);
 	}
 
+    ptk_lua_init(ptk);
 	if(ptk->render_mode == TRUE) {
 		WavRenderizer(ptk);
 	}
+
+
     while(!Prog_End)
     {
         Mouse.wheel = 0;

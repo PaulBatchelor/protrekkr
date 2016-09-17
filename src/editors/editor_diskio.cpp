@@ -101,7 +101,7 @@ TRACK_POS Tracks_Position[MAX_TRACKS] =
 
 // ------------------------------------------------------
 // Functions
-int Calc_Length(ptk_data *ptk);
+unsigned long Calc_Length(ptk_data *ptk);
 void Reset_Song_Length(void);
 void Display_Song_Length(ptk_data *ptk);
 void Display_Tracks_To_Render(ptk_data *ptk);

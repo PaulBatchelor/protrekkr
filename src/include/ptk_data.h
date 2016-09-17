@@ -24,6 +24,7 @@ typedef struct {
 	float linepos;
 	sp_ftbl *notes;
 	sp_ftbl *gates;
+    sp_progress *prog;
 } ptk_sporth;
 
 typedef struct {

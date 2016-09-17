@@ -5553,6 +5553,10 @@ void GetPlayerValues(ptk_data *ptk)
         plumber_compute(pd, PLUMBER_COMPUTE);
         ptk->right_float = sporth_stack_pop_float(&pd->sporth.stack);
         ptk->left_float = sporth_stack_pop_float(&pd->sporth.stack);
+        if(ptk->render_mode == TRUE) {
+            sp_progress_compute(pd->sp, ptk->sporth.prog, NULL, NULL);
+            pd->sp->pos++;
+        }
     }
 
 #if !defined(__STAND_ALONE__)

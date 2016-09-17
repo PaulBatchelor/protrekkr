@@ -94,7 +94,7 @@ void Free_Samples(ptk_data *ptk);
 Uint8 *Pack_Data(ptk_data *ptk, Uint8 *Memory, int *Len);
 Uint8 *Depack_Data(ptk_data *ptk, Uint8 *Memory, int Size, int size_out);
 int Get_File_Size(ptk_data *ptk, FILE *Handle);
-int Calc_Length(ptk_data *ptk);
+unsigned long Calc_Length(ptk_data *ptk);
 void Reset_Song_Length(ptk_data *ptk);
 void Clear_Input(ptk_data *ptk);
 int File_Exist(ptk_data *ptk, char *Format, char *Directory, char *FileName);
