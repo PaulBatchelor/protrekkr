@@ -34,16 +34,8 @@
 
 #undef __STAND_ALONE__
 
-// ------------------------------------------------------
-// Includes
 #include <SDL/SDL.h>
 
-//#include "ptk_data.h"
-//#include "main.h"
-//#include "replay.h"
-
-// ------------------------------------------------------
-// Constants
 #define MAXLOOPTYPE 1
 #define FULLYESNO 0
 
