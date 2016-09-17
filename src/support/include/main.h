@@ -56,19 +56,6 @@
 #define MAX_EVENTS 16
 
 // ------------------------------------------------------
-// Structure
-typedef struct
-{
-    int x;
-    int y;
-    int old_x;
-    int old_y;
-    int button;
-    int button_oneshot;
-    int wheel;
-} MOUSE, *LPMOUSE;
-
-// ------------------------------------------------------
 // Variables
 extern unsigned short Keys[SDLK_LAST];
 extern unsigned short Keys_Sym[SDLK_LAST];

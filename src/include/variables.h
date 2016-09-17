@@ -39,7 +39,7 @@
 #include <SDL/SDL.h>
 
 //#include "ptk_data.h"
-#include "main.h"
+//#include "main.h"
 //#include "replay.h"
 
 // ------------------------------------------------------
@@ -304,6 +304,18 @@ typedef struct
     int End_Col;
     int cStatus;
 } MARKER, *LPMARKER;
+
+typedef struct
+{
+    int x;
+    int y;
+    int old_x;
+    int old_y;
+    int button;
+    int button_oneshot;
+    int wheel;
+} MOUSE, *LPMOUSE;
+
 
 
 // ------------------------------------------------------

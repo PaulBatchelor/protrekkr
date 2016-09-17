@@ -34,6 +34,7 @@
 
 #include "replay.h"
 #include "ptk_data.h"
+#include "main.h"
 #include "variables.h"
 #include "patterns_blocks.h"
 #include "editor_pattern.h"
