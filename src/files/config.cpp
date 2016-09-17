@@ -37,7 +37,6 @@
 
 // ------------------------------------------------------
 // Variables
-extern int metronome_magnify;
 extern int patt_highlight;
 extern char FullScreen;
 extern int Cur_Left;
@@ -135,7 +134,7 @@ void SaveConfig(ptk_data *ptk)
         Write_Data(ptk, &Use_Shadows, sizeof(char), 1, out);
         Write_Data(ptk, &Global_Patterns_Font, sizeof(char), 1, out);
 
-        Write_Data(ptk, &metronome_magnify, sizeof(int), 1, out);
+        Write_Data(ptk, &ptk->metronome_magnify, sizeof(int), 1, out);
 
         // Save the compelte midi automation config
         Save_MidiCfg_Data(ptk, Write_Data, Write_Data_Swap, out);
@@ -246,7 +245,7 @@ void LoadConfig(ptk_data *ptk)
             Read_Data(ptk, &Use_Shadows, sizeof(char), 1, in);
             Read_Data(ptk, &Global_Patterns_Font, sizeof(char), 1, in);
 
-            Read_Data(ptk, &metronome_magnify, sizeof(int), 1, in);
+            Read_Data(ptk, &ptk->metronome_magnify, sizeof(int), 1, in);
 
             if(Large_Patterns)
             {

@@ -54,8 +54,8 @@
 SystemSoundActionID WavActionID;
 #endif
 
-extern int metronome_rows_counter;
-extern int metronome_magnify;
+//extern int ptk->metronome_rows_counter;
+//extern int ptk->metronome_magnify;
 
 extern int Songplaying_Pattern;
 
@@ -4085,7 +4085,7 @@ void Keyboard_Handler(ptk_data *ptk)
                 ptk->old_key_Pattern_Line = Pattern_Line;
                 Clear_Midi_Channels_Pool();
                 ptk->player_pos = -1;
-                metronome_rows_counter = 0;
+                ptk->metronome_rows_counter = 0;
                 Post_Song_Init(ptk);
                 Ptk_Play(ptk);
             }

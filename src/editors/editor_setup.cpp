@@ -53,8 +53,6 @@ extern char Use_Shadows;
 extern int Continuous_Scroll;
 extern char Global_Patterns_Font;
 
-extern int metronome_magnify;
-
 extern int Nbr_Keyboards;
 extern int Keyboard_Idx;
 
@@ -405,10 +403,10 @@ void Actualize_Master_Ed(ptk_data *ptk, char gode)
         // Milliseconds
         if(gode == 0 || gode == 22)
         {
-            if(metronome_magnify < 0) metronome_magnify = 0;
-            if(metronome_magnify > 128) metronome_magnify = 128;
-            Gui_Draw_Arrows_Number_Box(8 + 112, (Cur_Height - 125), metronome_magnify, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
-            if(!metronome_magnify)
+            if(ptk->metronome_magnify < 0) ptk->metronome_magnify = 0;
+            if(ptk->metronome_magnify > 128) ptk->metronome_magnify = 128;
+            Gui_Draw_Arrows_Number_Box(8 + 112, (Cur_Height - 125), ptk->metronome_magnify, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
+            if(!ptk->metronome_magnify)
             {
                 Gui_Draw_Button_Box(8 + 112 + 18, (Cur_Height - 125), 24, 16, "Off", BUTTON_DISABLED | BUTTON_NORMAL | BUTTON_TEXT_CENTERED);
             }
@@ -463,8 +461,8 @@ void Mouse_Right_Master_Ed(ptk_data *ptk)
         // Metronome
         if(zcheckMouse(ptk, 8 + 112, (Cur_Height - 125), 16, 16))
         {
-            metronome_magnify -= 10;
-            if(metronome_magnify < 0) metronome_magnify = 0;
+            ptk->metronome_magnify -= 10;
+            if(ptk->metronome_magnify < 0) ptk->metronome_magnify = 0;
             ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             ptk->teac = 22;
         }
@@ -472,8 +470,8 @@ void Mouse_Right_Master_Ed(ptk_data *ptk)
         // Metronome
         if(zcheckMouse(ptk, 8 + 112 + 44, (Cur_Height - 125), 16, 16))
         {
-            metronome_magnify += 10;
-            if(metronome_magnify > 128) metronome_magnify = 128;
+            ptk->metronome_magnify += 10;
+            if(ptk->metronome_magnify > 128) ptk->metronome_magnify = 128;
             ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
             ptk->teac = 22;
         }
@@ -823,9 +821,9 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         // Metronome
         if(zcheckMouse(ptk, 8 + 112, (Cur_Height - 125), 16, 16))
         {
-            if(metronome_magnify > 0)
+            if(ptk->metronome_magnify > 0)
             {
-                metronome_magnify--;
+                ptk->metronome_magnify--;
                 ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
                 ptk->teac = 22;
             }
@@ -834,9 +832,9 @@ void Mouse_Left_Master_Ed(ptk_data *ptk)
         // Metronome
         if(zcheckMouse(ptk, 8 + 112 + 44, (Cur_Height - 125), 16, 16))
         {
-            if(metronome_magnify < 128)
+            if(ptk->metronome_magnify < 128)
             {
-                metronome_magnify++;
+                ptk->metronome_magnify++;
                 ptk->gui_action = GUI_CMD_UPDATE_SETUP_ED;
                 ptk->teac = 22;
             }

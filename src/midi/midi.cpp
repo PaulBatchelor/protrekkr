@@ -49,7 +49,7 @@ extern int pos_scope;
 extern int pos_scope_latency;
 
 extern int player_pos;
-extern int metronome_rows_counter;
+extern int ptk->metronome_rows_counter;
 
 /*TODO: remove this ugly global variable */
 extern ptk_data *g_ptk;
@@ -150,7 +150,7 @@ void Midi_CallBackIn(double deltatime,
             ptk->old_key_Pattern_Line = Pattern_Line_Visual;
             Clear_Midi_Channels_Pool();
             player_pos = -1;
-            metronome_rows_counter = 0;
+            ptk->metronome_rows_counter = 0;
             Post_Song_Init(ptk);
             Ptk_Play(ptk);
         }

@@ -151,6 +151,9 @@ typedef struct {
     int Ticks_Synchro_Right;
     unsigned char sl3;
 
+    int metronome_rows_counter;
+    int metronome_magnify;
+
     int lref;
     lua_State *L;
     ptk_sporth sporth;

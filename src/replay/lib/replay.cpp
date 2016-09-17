@@ -245,8 +245,6 @@ int Songplaying_Pattern;
     int done;
     int trigger_metronome;
     int metronome_latency;
-    int metronome_rows_counter;
-    int metronome_magnify;
     int metronome_internal_counter_int;
 
 // RAW waveform used for the metronome
@@ -3024,12 +3022,12 @@ void Sp_Player(ptk_data *ptk)
             // Time to trigger the metronome
 #if !defined(__WINAMP__)
 #if !defined(__STAND_ALONE__) 
-            if(metronome_magnify && is_recording_2)
+            if(ptk->metronome_magnify && is_recording_2)
             {
-                metronome_rows_counter++;
-                if(metronome_rows_counter >= metronome_magnify)
+                ptk->metronome_rows_counter++;
+                if(ptk->metronome_rows_counter >= ptk->metronome_magnify)
                 {
-                    metronome_rows_counter = 0;
+                    ptk->metronome_rows_counter = 0;
                     metronome_internal_counter_int = 0;
                     trigger_metronome = TRUE;
                 }
