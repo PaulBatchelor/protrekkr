@@ -75,7 +75,7 @@ extern int shuffleswitch;
 extern char Use_Cubic;
 extern char Paste_Across;
 
-unsigned char sl3 = 0;
+//unsigned char sl3 = 0;
 
 extern int pos_scope;
 extern int pos_scope_latency;
@@ -120,24 +120,12 @@ extern s_access sp_Position[MAX_TRACKS][MAX_POLYPHONY];
 extern int done;
 extern float local_curr_mas_vol;
 
-//char ptk->Rows_Decimal = FALSE;
-//char ptk->See_Prev_Next_Pattern = FALSE;
-
-//char ptk->cur_input_name[1024];
-
 SDL_Surface *LOGOPIC;
-//int wait_title;
-//int display_title = 0;
-
-//double key_ticks;
-//int ptk->old_key_Pattern_Line;
 Uint32 Alloc_midi_Channels[MAX_TRACKS][MAX_POLYPHONY];
 
 void Mouse_Sliders_Master_Shuffle(ptk_data *ptk);
 unsigned long Calc_Length(ptk_data *ptk);
 
-//extern int ptk->Ticks_Synchro_Left;
-//extern int ptk->Ticks_Synchro_Right;
 extern int Continuous_Scroll;
 
 void Draw_Scope(ptk_data *ptk);
@@ -3121,7 +3109,7 @@ void Actualize_Input(ptk_data *ptk)
 
         // 303 pattern
         case INPUT_303_PATTERN:
-            Actualize_Name(ptk, ptk->retletter, tb303[sl3].pattern_name[tb303[sl3].selectedpattern]);
+            Actualize_Name(ptk, ptk->retletter, tb303[ptk->sl3].pattern_name[tb303[ptk->sl3].selectedpattern]);
             ptk->teac = 18;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_303_ED;
             break;
@@ -6860,6 +6848,7 @@ void ptk_init(ptk_data *ptk)
 
     ptk->Ticks_Synchro_Left = 1;
     ptk->Ticks_Synchro_Right = 1;
+    ptk->sl3 = 0;
 }
 
 void ptk_close(ptk_data *ptk) 

@@ -89,7 +89,7 @@ void Load303(ptk_data *ptk, char *FileName)
             // Ok, extension matched!
             Status_Box(ptk, "Loading 303 pattern...");
 
-            Load_303_Data(ptk, Read_Data, Read_Data_Swap, in, sl3, tb303[sl3].selectedpattern);
+            Load_303_Data(ptk, Read_Data, Read_Data_Swap, in, ptk->sl3, tb303[ptk->sl3].selectedpattern);
 
             Actualize_303_Ed(ptk, 0);
             Status_Box(ptk, "303 pattern loaded ok.");
@@ -116,17 +116,17 @@ void Save303(ptk_data *ptk)
 
     sprintf(extension, "TWNN3031");
     sprintf(Temph, "Saving '%s.303' pattern in patterns directory...",
-            tb303[sl3].pattern_name[tb303[sl3].selectedpattern]);
+            tb303[ptk->sl3].pattern_name[tb303[ptk->sl3].selectedpattern]);
     Status_Box(ptk, Temph);
     sprintf(Temph, "%s"SLASH"%s.303", Dir_Patterns,
-            tb303[sl3].pattern_name[tb303[sl3].selectedpattern]);
+            tb303[ptk->sl3].pattern_name[tb303[ptk->sl3].selectedpattern]);
     in = fopen(Temph, "wb");
 
     if(in != NULL)
     {
         Write_Data(ptk, extension, sizeof(char), 9, in);
 
-        Save_303_Data(ptk, Write_Data, Write_Data_Swap, in, sl3, tb303[sl3].selectedpattern);
+        Save_303_Data(ptk, Write_Data, Write_Data_Swap, in, ptk->sl3, tb303[ptk->sl3].selectedpattern);
 
         fclose(in);
         Read_SMPT(ptk);

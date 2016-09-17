@@ -149,6 +149,7 @@ typedef struct {
 
     int Ticks_Synchro_Left;
     int Ticks_Synchro_Right;
+    unsigned char sl3;
 
     int lref;
     lua_State *L;

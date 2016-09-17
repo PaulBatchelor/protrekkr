@@ -56,10 +56,10 @@ extern REQUESTER Overwrite_Requester;
 
 // ------------------------------------------------------
 // Fucntions
-void tb303_copy_pattern(void);
-void tb303_paste_pattern(void);
-void tb303_notes_up(void);
-void tb303_notes_down(void);
+void tb303_copy_pattern(ptk_data *ptk);
+void tb303_paste_pattern(ptk_data *ptk);
+void tb303_notes_up(ptk_data *ptk);
+void tb303_notes_down(ptk_data *ptk);
 void Display_Cur_copy_Buffer(void);
 
 void Draw_303_Ed(ptk_data *ptk)
@@ -94,7 +94,7 @@ void Actualize_303_Ed(ptk_data *ptk, char gode)
 {
     if(ptk->userscreen == USER_SCREEN_TB303_EDIT)
     {
-        Refresh_303_Unit(ptk, sl3, gode);
+        Refresh_303_Unit(ptk, ptk->sl3, gode);
 
         if(gode == 0 || gode == 17)
         {
@@ -340,21 +340,21 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
         // Volume Slider
         if(zcheckMouse(ptk, 529, (Cur_Height - 115), 19, 88))
         {
-            tb303engine[sl3].tbVolume = 0.5f;
+            tb303engine[ptk->sl3].tbVolume = 0.5f;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 15;
-            ptk->liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
-            ptk->livevalue = (int) (tb303engine[sl3].tbVolume * 255.0f);
+            ptk->liveparam = LIVE_PARAM_303_1_VOLUME + ptk->sl3;
+            ptk->livevalue = (int) (tb303engine[ptk->sl3].tbVolume * 255.0f);
         }
 
         // Tune Knob
         if(zcheckMouse(ptk, 229, (Cur_Height - 124), 24, 24))
         {
             int tempz = 64;
-            tb303[sl3].tune = tempz;
+            tb303[ptk->sl3].tune = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 3;
-            ptk->liveparam = LIVE_PARAM_303_1_TUNE + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_TUNE + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
@@ -362,10 +362,10 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 262, (Cur_Height - 124), 24, 24))
         {
             int tempz = 64;
-            tb303[sl3].cutoff = tempz;
+            tb303[ptk->sl3].cutoff = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 4;
-            ptk->liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_CUTOFF + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
@@ -373,10 +373,10 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 295, (Cur_Height - 124), 24, 24))
         {
             int tempz = 64;
-            tb303[sl3].resonance = tempz;
+            tb303[ptk->sl3].resonance = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 5;
-            ptk->liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_RESONANCE + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
@@ -384,10 +384,10 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 328, (Cur_Height - 124), 24, 24))
         {
             int tempz = 64;
-            tb303[sl3].envmod = tempz;
+            tb303[ptk->sl3].envmod = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 6;
-            ptk->liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_ENVMOD + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
@@ -395,10 +395,10 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 361, (Cur_Height - 124), 24, 24))
         {
             int tempz = 64;
-            tb303[sl3].decay = tempz;
+            tb303[ptk->sl3].decay = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 7;
-            ptk->liveparam = LIVE_PARAM_303_1_DECAY + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_DECAY + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
@@ -406,21 +406,21 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 394, (Cur_Height - 124), 24, 24))
         {
             int tempz = 64;
-            tb303[sl3].accent = tempz;
+            tb303[ptk->sl3].accent = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 8;
-            ptk->liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_ACCENT + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
         // Scale
         if(zcheckMouse(ptk, 670, (Cur_Height - 42), 16, 16))
         {
-            int value = tb303[sl3].scale;
+            int value = tb303[ptk->sl3].scale;
             value -= 4;
             if(value < 1) value = 1;
-            tb303[sl3].scale = value;
-            tb303engine[sl3].tbCurMultiple = tb303[sl3].scale;
+            tb303[ptk->sl3].scale = value;
+            tb303engine[ptk->sl3].tbCurMultiple = tb303[ptk->sl3].scale;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 19;
         }
@@ -428,9 +428,9 @@ void Mouse_Right_303_Ed(ptk_data *ptk)
         // Scale
         if(zcheckMouse(ptk, 670 + 44, (Cur_Height - 42), 16, 16))
         {
-            tb303[sl3].scale += 4;
-            if(tb303[sl3].scale > 16) tb303[sl3].scale = 16;
-            tb303engine[sl3].tbCurMultiple = tb303[sl3].scale;
+            tb303[ptk->sl3].scale += 4;
+            if(tb303[ptk->sl3].scale > 16) tb303[ptk->sl3].scale = 16;
+            tb303engine[ptk->sl3].tbCurMultiple = tb303[ptk->sl3].scale;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 19;
         }
@@ -445,12 +445,12 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
         if(zcheckMouse(ptk, 529, (Cur_Height - 115), 19, 88))
         {
             float froll = roll_amount / 86.0f;
-            float breakvol = tb303engine[sl3].tbVolume + froll;
+            float breakvol = tb303engine[ptk->sl3].tbVolume + froll;
             if(breakvol < 0.0f) breakvol = 0.0f;
             if(breakvol > 1.0f) breakvol = 1.0f;
-            tb303engine[sl3].tbVolume = breakvol;
+            tb303engine[ptk->sl3].tbVolume = breakvol;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
-            ptk->liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_VOLUME + ptk->sl3;
             ptk->livevalue = (int) (breakvol * 255.0f);
             ptk->teac = 15;
         }
@@ -458,78 +458,78 @@ void Mouse_Wheel_303_Ed(ptk_data *ptk, int roll_amount)
         // Tune Knob
         if(zcheckMouse(ptk, 229, (Cur_Height - 124), 24, 24))
         {
-            int tempz = tb303[sl3].tune + roll_amount;
+            int tempz = tb303[ptk->sl3].tune + roll_amount;
             if(tempz < 0) tempz = 0;
             if(tempz > 127) tempz = 127;
-            tb303[sl3].tune = tempz;
+            tb303[ptk->sl3].tune = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 3;
-            ptk->liveparam = LIVE_PARAM_303_1_TUNE + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_TUNE + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
         // CutOff Knob
         if(zcheckMouse(ptk, 262, (Cur_Height - 124), 24, 24))
         {
-            int tempz = tb303[sl3].cutoff + roll_amount;
+            int tempz = tb303[ptk->sl3].cutoff + roll_amount;
             if(tempz < 0) tempz = 0;
             if(tempz > 127) tempz = 127;
-            tb303[sl3].cutoff = tempz;
+            tb303[ptk->sl3].cutoff = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 4;
-            ptk->liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_CUTOFF + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
         // Reso knob
         if(zcheckMouse(ptk, 295, (Cur_Height - 124), 24, 24))
         {
-            int tempz = tb303[sl3].resonance + roll_amount;
+            int tempz = tb303[ptk->sl3].resonance + roll_amount;
             if(tempz < 0) tempz = 0;
             if(tempz > 127) tempz = 127;
-            tb303[sl3].resonance = tempz;
+            tb303[ptk->sl3].resonance = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 5;
-            ptk->liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_RESONANCE + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
         // Envmod knob
         if(zcheckMouse(ptk, 328, (Cur_Height - 124), 24, 24))
         {
-            int tempz = tb303[sl3].envmod + roll_amount;
+            int tempz = tb303[ptk->sl3].envmod + roll_amount;
             if(tempz < 0) tempz = 0;
             if(tempz > 127) tempz = 127;
-            tb303[sl3].envmod = tempz;
+            tb303[ptk->sl3].envmod = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 6;
-            ptk->liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_ENVMOD + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
         // Decay knob
         if(zcheckMouse(ptk, 361, (Cur_Height - 124), 24, 24))
         {
-            int tempz = tb303[sl3].decay + roll_amount;
+            int tempz = tb303[ptk->sl3].decay + roll_amount;
             if(tempz < 0) tempz = 0;
             if(tempz > 127) tempz = 127;
-            tb303[sl3].decay = tempz;
+            tb303[ptk->sl3].decay = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 7;
-            ptk->liveparam = LIVE_PARAM_303_1_DECAY + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_DECAY + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
         // Accent knob
         if(zcheckMouse(ptk, 394, (Cur_Height - 124), 24, 24))
         {
-            int tempz = tb303[sl3].accent + roll_amount;
+            int tempz = tb303[ptk->sl3].accent + roll_amount;
             if(tempz < 0) tempz = 0;
             if(tempz > 127) tempz = 127;
-            tb303[sl3].accent = tempz;
+            tb303[ptk->sl3].accent = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 8;
-            ptk->liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_ACCENT + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
     }
@@ -542,10 +542,10 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Step Forward
         if(zcheckMouse(ptk, 479, (Cur_Height - 50), 25, 16))
         {
-            editsteps[sl3][tb303[sl3].selectedpattern]++;
-            if(editsteps[sl3][tb303[sl3].selectedpattern] > tb303[sl3].patternlength[tb303[sl3].selectedpattern] - 1)
+            editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]++;
+            if(editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern] > tb303[ptk->sl3].patternlength[tb303[ptk->sl3].selectedpattern] - 1)
             {
-                editsteps[sl3][tb303[sl3].selectedpattern] = 0;
+                editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern] = 0;
             }
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
@@ -554,29 +554,29 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Step Back
         if(zcheckMouse(ptk, 484, (Cur_Height - 78), 15, 10))
         {
-            if(editsteps[sl3][tb303[sl3].selectedpattern] == 0) editsteps[sl3][tb303[sl3].selectedpattern] = tb303[sl3].patternlength[tb303[sl3].selectedpattern] - 1;
-            else editsteps[sl3][tb303[sl3].selectedpattern]--;
+            if(editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern] == 0) editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern] = tb303[ptk->sl3].patternlength[tb303[ptk->sl3].selectedpattern] - 1;
+            else editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]--;
             ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
 
         // Pattern Steps +1
         if(zcheckMouse(ptk, 135, (Cur_Height - 45), 11, 9) &&
-           tb303[sl3].patternlength[tb303[sl3].selectedpattern] < 16)
+           tb303[ptk->sl3].patternlength[tb303[ptk->sl3].selectedpattern] < 16)
         {
-            tb303[sl3].patternlength[tb303[sl3].selectedpattern]++;
+            tb303[ptk->sl3].patternlength[tb303[ptk->sl3].selectedpattern]++;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
 
         // Pattern Steps -1
         if(zcheckMouse(ptk, 135, (Cur_Height - 36), 11, 9) &&
-           tb303[sl3].patternlength[tb303[sl3].selectedpattern] > 1)
+           tb303[ptk->sl3].patternlength[tb303[ptk->sl3].selectedpattern] > 1)
         {
-            tb303[sl3].patternlength[tb303[sl3].selectedpattern]--;
-            if(editsteps[sl3][tb303[sl3].selectedpattern] > tb303[sl3].patternlength[tb303[sl3].selectedpattern] - 1)
+            tb303[ptk->sl3].patternlength[tb303[ptk->sl3].selectedpattern]--;
+            if(editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern] > tb303[ptk->sl3].patternlength[tb303[ptk->sl3].selectedpattern] - 1)
             {
-                editsteps[sl3][tb303[sl3].selectedpattern] = tb303[sl3].patternlength[tb303[sl3].selectedpattern] - 1;
+                editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern] = tb303[ptk->sl3].patternlength[tb303[ptk->sl3].selectedpattern] - 1;
             }
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
@@ -585,13 +585,13 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Pause/Note button
         if(zcheckMouse(ptk, 450, (Cur_Height - 82), 15, 10))
         {
-            if(tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].pause)
+            if(tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].pause)
             {
-                tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].pause = 0;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].pause = 0;
             }
             else
             {
-                tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].pause = 1;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].pause = 1;
             }
             ptk->teac = 10;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
@@ -600,13 +600,13 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Glide button
         if(zcheckMouse(ptk, 454, (Cur_Height - 50), 10, 15))
         {
-            if(tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].slide_flag)
+            if(tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].slide_flag)
             {
-                tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].slide_flag = 0;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].slide_flag = 0;
             }
             else
             {
-                tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].slide_flag = 1;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].slide_flag = 1;
             }
             ptk->teac = 11;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
@@ -615,13 +615,13 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Accent button
         if(zcheckMouse(ptk, 428, (Cur_Height - 50), 10, 15))
         {
-            if(tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].accent_flag)
+            if(tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].accent_flag)
             {
-                tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].accent_flag = 0;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].accent_flag = 0;
             }
             else
             {
-                tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].accent_flag = 1;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].accent_flag = 1;
             }
             ptk->teac = 12;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
@@ -630,13 +630,13 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Transpose up button
         if(zcheckMouse(ptk, 403, (Cur_Height - 50), 10, 15))
         {
-            if(tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].transposeup_flag)
+            if(tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].transposeup_flag)
             {
-                tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].transposeup_flag = 0;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].transposeup_flag = 0;
             }
             else
             {
-                tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].transposeup_flag = 1;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].transposeup_flag = 1;
             }
             ptk->teac = 13;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
@@ -645,13 +645,13 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Transpose down button
         if(zcheckMouse(ptk, 378, (Cur_Height - 50), 10, 15))
         {
-            if(tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].transposedown_flag)
+            if(tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].transposedown_flag)
             {
-                tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].transposedown_flag = 0;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].transposedown_flag = 0;
             }
             else
             {
-                tb303[sl3].flag[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]].transposedown_flag = 1;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]].transposedown_flag = 1;
             }
             ptk->teac = 14;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
@@ -660,7 +660,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Sawtooth/Square switching
         if(zcheckMouse(ptk, 177, (Cur_Height - 129), 19, 10))
         {
-            tb303[sl3].waveform ^= 1;
+            tb303[ptk->sl3].waveform ^= 1;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 2;
         }
@@ -668,80 +668,80 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // NoteOn/Off buttons
         if(zcheckMouse(ptk, 87 + 80, (Cur_Height - 50), 17, 15))
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 0;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]] = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 100 + 80, (Cur_Height - 76), 17, 15))
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 1;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]] = 1;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 113 + 80, (Cur_Height - 50), 17, 15))
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 2;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]] = 2;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 126 + 80, (Cur_Height - 76), 17, 15))
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 3;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]] = 3;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 139 + 80, (Cur_Height - 50), 17, 15))
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 4;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]] = 4;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 165 + 80, (Cur_Height - 50), 17, 15))
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 5;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]] = 5;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 178 + 80, (Cur_Height - 76), 17, 15))
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 6;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]] = 6;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 190 + 80, (Cur_Height - 50), 17, 15))
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 7;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]] = 7;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 203 + 80, (Cur_Height - 76), 17, 15))
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 8;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]] = 8;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 216 + 80, (Cur_Height - 50), 17, 15))
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 9;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]] = 9;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 9;
         }
 
         if(zcheckMouse(ptk, 229 + 80, (Cur_Height - 76), 87, 15))
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 10;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]] = 10;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 242 + 80, (Cur_Height - 50), 17, 15))
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 11;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]] = 11;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 9;
         }
         if(zcheckMouse(ptk, 268 + 80, (Cur_Height - 50), 17, 15))
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][editsteps[sl3][tb303[sl3].selectedpattern]] = 12;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][editsteps[ptk->sl3][tb303[ptk->sl3].selectedpattern]] = 12;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 9;
         }
@@ -749,57 +749,57 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Pattern selection buttons
         if(zcheckMouse(ptk, 86, (Cur_Height - 117), 16, 16))
         {
-            char gcp = (tb303[sl3].selectedpattern / 8) * 8;
-            tb303[sl3].selectedpattern = gcp;
+            char gcp = (tb303[ptk->sl3].selectedpattern / 8) * 8;
+            tb303[ptk->sl3].selectedpattern = gcp;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 100, (Cur_Height - 117), 16, 16))
         {
-            char gcp = (tb303[sl3].selectedpattern / 8) * 8;
-            tb303[sl3].selectedpattern = gcp + 1;
+            char gcp = (tb303[ptk->sl3].selectedpattern / 8) * 8;
+            tb303[ptk->sl3].selectedpattern = gcp + 1;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 114, (Cur_Height - 117), 16, 16))
         {
-            char gcp = (tb303[sl3].selectedpattern / 8) * 8;
-            tb303[sl3].selectedpattern = gcp + 2;
+            char gcp = (tb303[ptk->sl3].selectedpattern / 8) * 8;
+            tb303[ptk->sl3].selectedpattern = gcp + 2;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 130, (Cur_Height - 117), 16, 16))
         {
-            char gcp = (tb303[sl3].selectedpattern / 8) * 8;
-            tb303[sl3].selectedpattern = gcp + 3;
+            char gcp = (tb303[ptk->sl3].selectedpattern / 8) * 8;
+            tb303[ptk->sl3].selectedpattern = gcp + 3;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 86, (Cur_Height - 102), 16, 16))
         {
-            char gcp = (tb303[sl3].selectedpattern / 8) * 8;
-            tb303[sl3].selectedpattern = gcp + 4;
+            char gcp = (tb303[ptk->sl3].selectedpattern / 8) * 8;
+            tb303[ptk->sl3].selectedpattern = gcp + 4;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 100, (Cur_Height - 102), 16, 16))
         {
-            char gcp = (tb303[sl3].selectedpattern / 8) * 8;
-            tb303[sl3].selectedpattern = gcp + 5;
+            char gcp = (tb303[ptk->sl3].selectedpattern / 8) * 8;
+            tb303[ptk->sl3].selectedpattern = gcp + 5;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 114, (Cur_Height - 102), 16, 16))
         {
-            char gcp = (tb303[sl3].selectedpattern / 8) * 8;
-            tb303[sl3].selectedpattern = gcp + 6;
+            char gcp = (tb303[ptk->sl3].selectedpattern / 8) * 8;
+            tb303[ptk->sl3].selectedpattern = gcp + 6;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 130, (Cur_Height - 102), 16, 16))
         {
-            char gcp = (tb303[sl3].selectedpattern / 8) * 8;
-            tb303[sl3].selectedpattern = gcp + 7;
+            char gcp = (tb303[ptk->sl3].selectedpattern / 8) * 8;
+            tb303[ptk->sl3].selectedpattern = gcp + 7;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
@@ -807,25 +807,25 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Bank selection buttons
         if(zcheckMouse(ptk, 86, (Cur_Height - 75), 16, 16))
         {
-            tb303[sl3].selectedpattern = (tb303[sl3].selectedpattern - (tb303[sl3].selectedpattern / 8) * 8);
+            tb303[ptk->sl3].selectedpattern = (tb303[ptk->sl3].selectedpattern - (tb303[ptk->sl3].selectedpattern / 8) * 8);
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 100, (Cur_Height - 75), 16, 16))
         {
-            tb303[sl3].selectedpattern = ((tb303[sl3].selectedpattern - (tb303[sl3].selectedpattern / 8) * 8)) + 8;
+            tb303[ptk->sl3].selectedpattern = ((tb303[ptk->sl3].selectedpattern - (tb303[ptk->sl3].selectedpattern / 8) * 8)) + 8;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 114, (Cur_Height - 75), 16, 16))
         {
-            tb303[sl3].selectedpattern = ((tb303[sl3].selectedpattern - (tb303[sl3].selectedpattern / 8) * 8)) + 16;
+            tb303[ptk->sl3].selectedpattern = ((tb303[ptk->sl3].selectedpattern - (tb303[ptk->sl3].selectedpattern / 8) * 8)) + 16;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
         if(zcheckMouse(ptk, 130, (Cur_Height - 75), 16, 16))
         {
-            tb303[sl3].selectedpattern = ((tb303[sl3].selectedpattern - (tb303[sl3].selectedpattern / 8) * 8)) + 24;
+            tb303[ptk->sl3].selectedpattern = ((tb303[ptk->sl3].selectedpattern - (tb303[ptk->sl3].selectedpattern / 8) * 8)) + 24;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
@@ -833,14 +833,14 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // 303 #1
         if(zcheckMouse(ptk, 553, (Cur_Height - 71), 15, 12))
         {
-            sl3 = 0;
+            ptk->sl3 = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
         // 303 #2
         if(zcheckMouse(ptk, 573, (Cur_Height - 71), 15, 12))
         {
-            sl3 = 1;
+            ptk->sl3 = 1;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 0;
         }
@@ -850,7 +850,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         {
             for(char alter = 0; alter < 16; alter++)
             {
-                tb303[sl3].tone[tb303[sl3].selectedpattern][alter] = (rand() % 13);
+                tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][alter] = (rand() % 13);
             }
             ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
@@ -861,10 +861,10 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         {
             for(char alter = 0; alter < 16; alter++)
             {
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].slide_flag = rand() % 2;
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].transposeup_flag = rand() % 2;
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].transposedown_flag = rand() % 2;
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].accent_flag = rand() % 2;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].slide_flag = rand() % 2;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].transposeup_flag = rand() % 2;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].transposedown_flag = rand() % 2;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].accent_flag = rand() % 2;
             }
             ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
@@ -875,7 +875,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         {
             for(char alter = 0; alter < 16; alter++)
             {
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].pause = rand() % 2;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].pause = rand() % 2;
             }
             ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
@@ -886,12 +886,12 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         {
             for(char alter = 0; alter < 16; alter++)
             {
-                tb303[sl3].tone[tb303[sl3].selectedpattern][alter] = 0;
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].pause = 0;
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].slide_flag = 0;
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].transposeup_flag = 0;
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].transposedown_flag = 0;
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].accent_flag = 0;
+                tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][alter] = 0;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].pause = 0;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].slide_flag = 0;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].transposeup_flag = 0;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].transposedown_flag = 0;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].accent_flag = 0;
             }
             ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
@@ -902,12 +902,12 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         {
             for(char alter = 0; alter < 16; alter++)
             {
-                tb303[sl3].tone[tb303[sl3].selectedpattern][alter] = 0;
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].pause = 1;
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].slide_flag = 0;
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].transposeup_flag = 0;
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].transposedown_flag = 0;
-                tb303[sl3].flag[tb303[sl3].selectedpattern][alter].accent_flag = 0;
+                tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][alter] = 0;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].pause = 1;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].slide_flag = 0;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].transposeup_flag = 0;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].transposedown_flag = 0;
+                tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].accent_flag = 0;
             }
             ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
@@ -916,7 +916,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // All notes up
         if(zcheckMouse(ptk, 600, (Cur_Height - 98), 64, 16))
         {
-            tb303_notes_up();
+            tb303_notes_up(ptk);
             ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
@@ -924,7 +924,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // All notes down
         if(zcheckMouse(ptk, 668, (Cur_Height - 98), 64, 16))
         {
-            tb303_notes_down();
+            tb303_notes_down(ptk);
             ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
@@ -932,7 +932,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Copy pattern
         if(zcheckMouse(ptk, 600, (Cur_Height - 78), 64, 16))
         {
-            tb303_copy_pattern();
+            tb303_copy_pattern(ptk);
             ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
@@ -940,7 +940,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Paste pattern
         if(zcheckMouse(ptk, 600, (Cur_Height - 60), 64, 16))
         {
-            tb303_paste_pattern();
+            tb303_paste_pattern(ptk);
             ptk->teac = 0;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
         }
@@ -975,9 +975,9 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 600, (Cur_Height - 120), 164, 16) && ptk->snamesel == INPUT_NONE)
         {
             ptk->snamesel = INPUT_303_PATTERN;
-            strcpy(ptk->cur_input_name, tb303[sl3].pattern_name[tb303[sl3].selectedpattern]);
+            strcpy(ptk->cur_input_name, tb303[ptk->sl3].pattern_name[tb303[ptk->sl3].selectedpattern]);
             ptk->namesize = 0;
-            sprintf(tb303[sl3].pattern_name[tb303[sl3].selectedpattern], "");
+            sprintf(tb303[ptk->sl3].pattern_name[tb303[ptk->sl3].selectedpattern], "");
             ptk->teac = 18;
             ptk->gui_action = GUI_CMD_UPDATE_MIDI_303_ED;
         }
@@ -985,7 +985,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Save the data
         if(zcheckMouse(ptk, 658, (Cur_Height - 138), 34, 16))
         {
-            if(File_Exist_Req(ptk, "%s"SLASH"%s.303", Dir_Patterns, tb303[sl3].pattern_name[tb303[sl3].selectedpattern]))
+            if(File_Exist_Req(ptk, "%s"SLASH"%s.303", Dir_Patterns, tb303[ptk->sl3].pattern_name[tb303[ptk->sl3].selectedpattern]))
             {
                 Display_Requester(ptk, &Overwrite_Requester, GUI_CMD_SAVE_303_PATTERN);
             }
@@ -998,7 +998,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Tune to the other unit
         if(zcheckMouse(ptk, 668, (Cur_Height - 78), 64, 16))
         {
-            if(sl3)
+            if(ptk->sl3)
             {
                 tb303[1].tune = tb303[0].tune;
             }
@@ -1013,9 +1013,9 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Scale
         if(zcheckMouse(ptk, 670, (Cur_Height - 42), 16, 16))
         {
-            tb303[sl3].scale--;
-            if(tb303[sl3].scale < 1) tb303[sl3].scale = 1;
-            tb303engine[sl3].tbCurMultiple = tb303[sl3].scale;
+            tb303[ptk->sl3].scale--;
+            if(tb303[ptk->sl3].scale < 1) tb303[ptk->sl3].scale = 1;
+            tb303engine[ptk->sl3].tbCurMultiple = tb303[ptk->sl3].scale;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 19;
         }
@@ -1023,9 +1023,9 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         // Scale
         if(zcheckMouse(ptk, 670 + 44, (Cur_Height - 42), 16, 16))
         {
-            tb303[sl3].scale++;
-            if(tb303[sl3].scale > 16) tb303[sl3].scale = 16;
-            tb303engine[sl3].tbCurMultiple = tb303[sl3].scale;
+            tb303[ptk->sl3].scale++;
+            if(tb303[ptk->sl3].scale > 16) tb303[ptk->sl3].scale = 16;
+            tb303engine[ptk->sl3].tbCurMultiple = tb303[ptk->sl3].scale;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 19;
         }
@@ -1044,100 +1044,100 @@ void Mouse_Sliders_303_Ed(ptk_data *ptk)
             breakvol /= 72.0f;
             if(breakvol < 0.0f) breakvol = 0.0f;
             if(breakvol > 1.0f) breakvol = 1.0f;
-            tb303engine[sl3].tbVolume = breakvol;
+            tb303engine[ptk->sl3].tbVolume = breakvol;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 15;
-            ptk->liveparam = LIVE_PARAM_303_1_VOLUME + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_VOLUME + ptk->sl3;
             ptk->livevalue = (int) (breakvol * 255.0f);
         }
 
         // Tune Knob
         if(zcheckMouse(ptk, 229, (Cur_Height - 124), 24, 24))
         {
-            if(ptk->fluzy == -1) ptk->fluzy = (Mouse.y * 3) + tb303[sl3].tune;
+            if(ptk->fluzy == -1) ptk->fluzy = (Mouse.y * 3) + tb303[ptk->sl3].tune;
 
             int tempz = ptk->fluzy - (Mouse.y * 3);
             if(tempz < 0) tempz = 0;
             if(tempz > 127) tempz = 127;
-            tb303[sl3].tune = tempz;
+            tb303[ptk->sl3].tune = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 3;
-            ptk->liveparam = LIVE_PARAM_303_1_TUNE + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_TUNE + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
         // CutOff Knob
         if(zcheckMouse(ptk, 262, (Cur_Height - 124), 24, 24))
         {
-            if(ptk->fluzy == -1) ptk->fluzy = (Mouse.y * 3) + tb303[sl3].cutoff;
+            if(ptk->fluzy == -1) ptk->fluzy = (Mouse.y * 3) + tb303[ptk->sl3].cutoff;
 
             int tempz = ptk->fluzy - (Mouse.y * 3);
             if(tempz < 0) tempz = 0;
             if(tempz > 127) tempz = 127;
-            tb303[sl3].cutoff = tempz;
+            tb303[ptk->sl3].cutoff = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 4;
-            ptk->liveparam = LIVE_PARAM_303_1_CUTOFF + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_CUTOFF + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
         // Reso knob
         if(zcheckMouse(ptk, 295, (Cur_Height - 124), 24, 24))
         {
-            if(ptk->fluzy == -1) ptk->fluzy = (Mouse.y * 3) + tb303[sl3].resonance;
+            if(ptk->fluzy == -1) ptk->fluzy = (Mouse.y * 3) + tb303[ptk->sl3].resonance;
 
             int tempz = ptk->fluzy - (Mouse.y * 3);
             if(tempz < 0) tempz = 0;
             if(tempz > 127) tempz = 127;
-            tb303[sl3].resonance = tempz;
+            tb303[ptk->sl3].resonance = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 5;
-            ptk->liveparam = LIVE_PARAM_303_1_RESONANCE + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_RESONANCE + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
         // Envmod knob
         if(zcheckMouse(ptk, 328, (Cur_Height - 124), 24, 24))
         {
-            if(ptk->fluzy == -1) ptk->fluzy = (Mouse.y * 3) + tb303[sl3].envmod;
+            if(ptk->fluzy == -1) ptk->fluzy = (Mouse.y * 3) + tb303[ptk->sl3].envmod;
 
             int tempz = ptk->fluzy - (Mouse.y * 3);
             if(tempz < 0) tempz = 0;
             if(tempz > 127) tempz = 127;
-            tb303[sl3].envmod = tempz;
+            tb303[ptk->sl3].envmod = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 6;
-            ptk->liveparam = LIVE_PARAM_303_1_ENVMOD + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_ENVMOD + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
         // Decay knob
         if(zcheckMouse(ptk, 361, (Cur_Height - 124), 24, 24))
         {
-            if(ptk->fluzy == -1) ptk->fluzy = (Mouse.y * 3) + tb303[sl3].decay;
+            if(ptk->fluzy == -1) ptk->fluzy = (Mouse.y * 3) + tb303[ptk->sl3].decay;
 
             int tempz = ptk->fluzy - (Mouse.y * 3);
             if(tempz < 0) tempz = 0;
             if(tempz > 127) tempz = 127;
-            tb303[sl3].decay = tempz;
+            tb303[ptk->sl3].decay = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 7;
-            ptk->liveparam = LIVE_PARAM_303_1_DECAY + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_DECAY + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
 
         // Accent knob
         if(zcheckMouse(ptk, 394, (Cur_Height - 124), 24, 24))
         {
-            if(ptk->fluzy == -1) ptk->fluzy = (Mouse.y * 3) + tb303[sl3].accent;
+            if(ptk->fluzy == -1) ptk->fluzy = (Mouse.y * 3) + tb303[ptk->sl3].accent;
 
             int tempz = ptk->fluzy - (Mouse.y * 3);
             if(tempz < 0) tempz = 0;
             if(tempz > 127) tempz = 127;
-            tb303[sl3].accent = tempz;
+            tb303[ptk->sl3].accent = tempz;
             ptk->gui_action = GUI_CMD_REFRESH_TB303_PARAMS;
             ptk->teac = 8;
-            ptk->liveparam = LIVE_PARAM_303_1_ACCENT + sl3;
+            ptk->liveparam = LIVE_PARAM_303_1_ACCENT + ptk->sl3;
             ptk->livevalue = tempz << 1;
         }
     }
@@ -1148,56 +1148,56 @@ void Skincopy(ptk_data *ptk, int xd, int yd, int xs, int ys, int w, int h)
     Copy(SKIN303, xd, yd, xs, ys, xs + w, ys + h);
 }
 
-void tb303_copy_pattern(void)
+void tb303_copy_pattern(ptk_data *ptk)
 {
     tb303_pattern_buffer_full[Current_copy_buffer] = TRUE;
     for(char alter = 0; alter < 16; alter++)
     {
-        tb303_buffer_tone[Current_copy_buffer][alter] = tb303[sl3].tone[tb303[sl3].selectedpattern][alter];
-        tb303_pattern_buffer[Current_copy_buffer][alter].pause = tb303[sl3].flag[tb303[sl3].selectedpattern][alter].pause;
-        tb303_pattern_buffer[Current_copy_buffer][alter].slide_flag = tb303[sl3].flag[tb303[sl3].selectedpattern][alter].slide_flag;
-        tb303_pattern_buffer[Current_copy_buffer][alter].transposeup_flag = tb303[sl3].flag[tb303[sl3].selectedpattern][alter].transposeup_flag;
-        tb303_pattern_buffer[Current_copy_buffer][alter].transposedown_flag = tb303[sl3].flag[tb303[sl3].selectedpattern][alter].transposedown_flag;
-        tb303_pattern_buffer[Current_copy_buffer][alter].accent_flag = tb303[sl3].flag[tb303[sl3].selectedpattern][alter].accent_flag;
+        tb303_buffer_tone[Current_copy_buffer][alter] = tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][alter];
+        tb303_pattern_buffer[Current_copy_buffer][alter].pause = tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].pause;
+        tb303_pattern_buffer[Current_copy_buffer][alter].slide_flag = tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].slide_flag;
+        tb303_pattern_buffer[Current_copy_buffer][alter].transposeup_flag = tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].transposeup_flag;
+        tb303_pattern_buffer[Current_copy_buffer][alter].transposedown_flag = tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].transposedown_flag;
+        tb303_pattern_buffer[Current_copy_buffer][alter].accent_flag = tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].accent_flag;
     }
     Copied_Buffer[Current_copy_buffer] = TRUE;
     Display_Cur_copy_Buffer();
 }
 
-void tb303_paste_pattern(void)
+void tb303_paste_pattern(ptk_data *ptk)
 {
     if(Copied_Buffer[Current_copy_buffer])
     {
         for(char alter = 0; alter < 16; alter++)
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][alter] = tb303_buffer_tone[Current_copy_buffer][alter];
-            tb303[sl3].flag[tb303[sl3].selectedpattern][alter].pause = tb303_pattern_buffer[Current_copy_buffer][alter].pause;
-            tb303[sl3].flag[tb303[sl3].selectedpattern][alter].slide_flag = tb303_pattern_buffer[Current_copy_buffer][alter].slide_flag;
-            tb303[sl3].flag[tb303[sl3].selectedpattern][alter].transposeup_flag = tb303_pattern_buffer[Current_copy_buffer][alter].transposeup_flag;
-            tb303[sl3].flag[tb303[sl3].selectedpattern][alter].transposedown_flag = tb303_pattern_buffer[Current_copy_buffer][alter].transposedown_flag;
-            tb303[sl3].flag[tb303[sl3].selectedpattern][alter].accent_flag = tb303_pattern_buffer[Current_copy_buffer][alter].accent_flag;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][alter] = tb303_buffer_tone[Current_copy_buffer][alter];
+            tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].pause = tb303_pattern_buffer[Current_copy_buffer][alter].pause;
+            tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].slide_flag = tb303_pattern_buffer[Current_copy_buffer][alter].slide_flag;
+            tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].transposeup_flag = tb303_pattern_buffer[Current_copy_buffer][alter].transposeup_flag;
+            tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].transposedown_flag = tb303_pattern_buffer[Current_copy_buffer][alter].transposedown_flag;
+            tb303[ptk->sl3].flag[tb303[ptk->sl3].selectedpattern][alter].accent_flag = tb303_pattern_buffer[Current_copy_buffer][alter].accent_flag;
         }
     }
 }
 
-void tb303_notes_up(void)
+void tb303_notes_up(ptk_data *ptk)
 {
     for(char alter = 0; alter < 16; alter++)
     {
-        if(tb303[sl3].tone[tb303[sl3].selectedpattern][alter] != 12)
+        if(tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][alter] != 12)
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][alter]++;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][alter]++;
         }
     }
 }
 
-void tb303_notes_down(void)
+void tb303_notes_down(ptk_data *ptk)
 {
     for(char alter = 0; alter < 16; alter++)
     {
-        if(tb303[sl3].tone[tb303[sl3].selectedpattern][alter])
+        if(tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][alter])
         {
-            tb303[sl3].tone[tb303[sl3].selectedpattern][alter]--;
+            tb303[ptk->sl3].tone[tb303[ptk->sl3].selectedpattern][alter]--;
         }
     }
 }

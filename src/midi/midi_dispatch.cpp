@@ -93,7 +93,7 @@ void Midi_303_Set_Tune(int Unit, int Data)
 
 void Midi_303_Set_1_Tune(int Data) { Midi_303_Set_Tune(0, Data); }
 void Midi_303_Set_2_Tune(int Data) { Midi_303_Set_Tune(1, Data); }
-void Midi_303_Set_Cur_Tune(int Data) { Midi_303_Set_Tune(sl3, Data); }
+void Midi_303_Set_Cur_Tune(int Data) { /*Midi_303_Set_Tune(sl3, Data);*/ }
 
 // ------------------------------------------------------
 // 303: set cutoff (LIVE)
@@ -115,7 +115,7 @@ void Midi_303_Set_Cutoff(int Unit, int Data)
 
 void Midi_303_Set_1_Cutoff(int Data) { Midi_303_Set_Cutoff(0, Data); }
 void Midi_303_Set_2_Cutoff(int Data) { Midi_303_Set_Cutoff(1, Data); }
-void Midi_303_Set_Cur_Cutoff(int Data) { Midi_303_Set_Cutoff(sl3, Data); }
+void Midi_303_Set_Cur_Cutoff(int Data) { /*Midi_303_Set_Cutoff(sl3, Data);*/ }
 
 // ------------------------------------------------------
 // 303: set resonance (LIVE)
@@ -137,7 +137,7 @@ void Midi_303_Set_Resonance(int Unit, int Data)
 
 void Midi_303_Set_1_Resonance(int Data) { Midi_303_Set_Resonance(0, Data); }
 void Midi_303_Set_2_Resonance(int Data) { Midi_303_Set_Resonance(1, Data); }
-void Midi_303_Set_Cur_Resonance(int Data) { Midi_303_Set_Resonance(sl3, Data); }
+void Midi_303_Set_Cur_Resonance(int Data) { /*Midi_303_Set_Resonance(sl3, Data);*/ }
 
 // ------------------------------------------------------
 // 303: set env mod (LIVE)
@@ -159,7 +159,7 @@ void Midi_303_Set_Envmod(int Unit, int Data)
 
 void Midi_303_Set_1_Envmod(int Data) { Midi_303_Set_Envmod(0, Data); }
 void Midi_303_Set_2_Envmod(int Data) { Midi_303_Set_Envmod(1, Data); }
-void Midi_303_Set_Cur_Envmod(int Data) { Midi_303_Set_Envmod(sl3, Data); }
+void Midi_303_Set_Cur_Envmod(int Data) { /*Midi_303_Set_Envmod(sl3, Data);*/ }
 
 // ------------------------------------------------------
 // 303: set decay (LIVE)
@@ -181,7 +181,7 @@ void Midi_303_Set_Decay(int Unit, int Data)
 
 void Midi_303_Set_1_Decay(int Data) { Midi_303_Set_Decay(0, Data); }
 void Midi_303_Set_2_Decay(int Data) { Midi_303_Set_Decay(1, Data); }
-void Midi_303_Set_Cur_Decay(int Data) { Midi_303_Set_Decay(sl3, Data); }
+void Midi_303_Set_Cur_Decay(int Data) { /* Midi_303_Set_Decay(sl3, Data); */ }
 
 // ------------------------------------------------------
 // 303: set accent (LIVE)
@@ -203,7 +203,7 @@ void Midi_303_Set_Accent(int Unit, int Data)
 
 void Midi_303_Set_1_Accent(int Data) { Midi_303_Set_Accent(0, Data); }
 void Midi_303_Set_2_Accent(int Data) { Midi_303_Set_Accent(1, Data); }
-void Midi_303_Set_Cur_Accent(int Data) { Midi_303_Set_Accent(sl3, Data); }
+void Midi_303_Set_Cur_Accent(int Data) { /*Midi_303_Set_Accent(sl3, Data);*/ }
 
 // ------------------------------------------------------
 // 303: set volume (LIVE)
@@ -225,7 +225,7 @@ void Midi_303_Set_Volume(int Unit, int Data)
 
 void Midi_303_Set_1_Volume(int Data) { Midi_303_Set_Volume(0, Data); }
 void Midi_303_Set_2_Volume(int Data) { Midi_303_Set_Volume(1, Data); }
-void Midi_303_Set_Cur_Volume(int Data) { Midi_303_Set_Volume(sl3, Data); }
+void Midi_303_Set_Cur_Volume(int Data) { /* Midi_303_Set_Volume(sl3, Data); */ }
 
 // ------------------------------------------------------
 // 303: Select unit
