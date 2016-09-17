@@ -308,17 +308,17 @@ typedef struct
 
 // ------------------------------------------------------
 // Variables
-extern int SamplesPerTick;
+//extern int SamplesPerTick;
 
 extern char cur_input_name[1024];
 
-extern char artist[20];
-extern char style[20];
+//extern char artist[20];
+//extern char style[20];
 
-extern int Track_Under_Caret;
+//extern int Track_Under_Caret;
 
-extern int Current_Instrument;
-extern int Column_Under_Caret;
+//extern int Current_Instrument;
+//extern int Column_Under_Caret;
 
 extern int Pattern_Line;
 extern int Pattern_Line_Visual;
