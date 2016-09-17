@@ -32,32 +32,56 @@
 // ------------------------------------------------------
 // Includes
 #include <SDL/SDL.h>
+#include "ptk.h"
 #include "timer.h"
 
-// ------------------------------------------------------
-// Constructor
-PtkTimer::PtkTimer()
+//// ------------------------------------------------------
+//// Constructor
+//PtkTimer::PtkTimer()
+//{
+//    Set_Frames_Counter();
+//}
+//
+//// ------------------------------------------------------
+//// Init the frames counter
+//void PtkTimer::Set_Frames_Counter(void)
+//{
+//    if(!SDL_WasInit(SDL_INIT_TIMER)) SDL_Init(SDL_INIT_TIMER);
+//
+//    Ref_Ticks = ((float) SDL_GetTicks());
+//}
+//
+//// ------------------------------------------------------
+//// Amount of milliseconds between 2 frames
+//float PtkTimer::Get_Frames_Delay(void)
+//{
+//    float Delay;
+//    float Cur_Ticks = ((float) SDL_GetTicks());
+//
+//    Delay = (float) (Cur_Ticks - Ref_Ticks);
+//    Ref_Ticks = Cur_Ticks;
+//    return(Delay);
+//}
+
+void ptk_timer_init(ptk_data *ptk)
 {
-    Set_Frames_Counter();
+
 }
 
-// ------------------------------------------------------
-// Init the frames counter
-void PtkTimer::Set_Frames_Counter(void)
+void ptk_timer_set_frames_counter(ptk_data *ptk, float *ref_ticks)
 {
+    if(ptk->start_gui == FALSE) return;
     if(!SDL_WasInit(SDL_INIT_TIMER)) SDL_Init(SDL_INIT_TIMER);
-
-    Ref_Ticks = ((float) SDL_GetTicks());
+    *ref_ticks = ((float) SDL_GetTicks());
 }
 
-// ------------------------------------------------------
-// Amount of milliseconds between 2 frames
-float PtkTimer::Get_Frames_Delay(void)
+float ptk_timer_get_frames_delay(ptk_data *ptk, float *ref_ticks)
 {
-    float Delay;
-    float Cur_Ticks = ((float) SDL_GetTicks());
+    float delay;
+    float cur_ticks = ((float) SDL_GetTicks());
 
-    Delay = (float) (Cur_Ticks - Ref_Ticks);
-    Ref_Ticks = Cur_Ticks;
-    return(Delay);
+    delay = (float) (cur_ticks - *ref_ticks);
+    *ref_ticks = cur_ticks;
+    return delay;
 }
+

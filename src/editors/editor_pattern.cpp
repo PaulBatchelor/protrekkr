@@ -232,10 +232,16 @@ int Cur_Char_size[MAX_TRACKS];
 
 LETTER_FUNCTION Cur_Char_Function[MAX_TRACKS];
 NOTE_FUNCTION Cur_Note_Function[MAX_TRACKS];
-
+/*
 PtkTimer Pattern_Timer_Horiz_Left;
 PtkTimer Pattern_Timer_Horiz_Right;
 PtkTimer Pattern_Timer_Horiz_Right_Slow;
+*/
+
+float pattern_timer_horiz_left = 0;
+float pattern_timer_horiz_right = 0;
+float pattern_timer_horiz_right_slow;
+
 int Pattern_Scrolling_Horiz_Left;
 int Pattern_Scrolling_Horiz_Right;
 int Pattern_Scrolling_Horiz_Right_Slow;
@@ -246,7 +252,8 @@ float Pattern_Delay_Horiz_Left;
 float Pattern_Delay_Horiz_Right;
 float Pattern_Delay_Horiz_Right_Slow;
 
-PtkTimer Pattern_Timer_Vert;
+/* PtkTimer Pattern_Timer_Vert; */
+float pattern_timer_vert = 0;
 int Pattern_Scrolling_Vert;
 float Pattern_First_Delay_Vert;
 float Pattern_Delay_Vert;
@@ -2071,7 +2078,9 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
         // Right scrolling
         if(Pattern_Scrolling_Horiz_Right)
         {
-            Pattern_Delay_Horiz_Right += Pattern_Timer_Horiz_Right.Get_Frames_Delay();
+            //Pattern_Delay_Horiz_Right += Pattern_Timer_Horiz_Right.Get_Frames_Delay();
+            Pattern_Delay_Horiz_Right += 
+                ptk_timer_get_frames_delay(ptk, &pattern_timer_horiz_right);
             if(Pattern_Delay_Horiz_Right < Pattern_First_Delay_Horiz_Right)
             {
                 // Wait before scrolling
@@ -2090,7 +2099,8 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
         }
         else
         {
-            Pattern_Timer_Horiz_Right.Set_Frames_Counter();
+            //Pattern_Timer_Horiz_Right.Set_Frames_Counter();
+            ptk_timer_set_frames_counter(ptk, &pattern_timer_horiz_right);
             Pattern_Scrolling_Horiz_Right = TRUE;
             Pattern_Delay_Horiz_Right = 0;
             Pattern_First_Delay_Horiz_Right = 150.0f;
@@ -2104,7 +2114,9 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
             // Right scrolling
             if(Pattern_Scrolling_Horiz_Right_Slow)
             {
-                Pattern_Delay_Horiz_Right_Slow += Pattern_Timer_Horiz_Right_Slow.Get_Frames_Delay();
+                //Pattern_Delay_Horiz_Right_Slow += Pattern_Timer_Horiz_Right_Slow.Get_Frames_Delay();
+                Pattern_Delay_Horiz_Right_Slow += 
+                    ptk_timer_get_frames_delay(ptk, &pattern_timer_horiz_right_slow);
                 if(Pattern_Delay_Horiz_Right_Slow < Pattern_First_Delay_Horiz_Right_Slow)
                 {
                     // Wait before scrolling
@@ -2123,7 +2135,8 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
             }
             else
             {
-                Pattern_Timer_Horiz_Right_Slow.Set_Frames_Counter();
+                //Pattern_Timer_Horiz_Right_Slow.Set_Frames_Counter();
+                ptk_timer_set_frames_counter(ptk, &pattern_timer_horiz_right_slow);
                 Pattern_Scrolling_Horiz_Right_Slow = TRUE;
                 Pattern_Delay_Horiz_Right_Slow = 0;
                 Pattern_First_Delay_Horiz_Right_Slow = 150.0f;
@@ -2178,7 +2191,9 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
     {
         if(Pattern_Scrolling_Horiz_Left)
         {
-            Pattern_Delay_Horiz_Left += Pattern_Timer_Horiz_Left.Get_Frames_Delay();
+            //Pattern_Delay_Horiz_Left += Pattern_Timer_Horiz_Left.Get_Frames_Delay();
+            Pattern_Delay_Horiz_Left += 
+                ptk_timer_get_frames_delay(ptk, &pattern_timer_horiz_left);
             if(Pattern_Delay_Horiz_Left < Pattern_First_Delay_Horiz_Left)
             {
                 // Wait before scrolling
@@ -2194,7 +2209,8 @@ int Get_Track_Over_Mouse(ptk_data *ptk, int Mouse, int *Was_Scrolling, int Left)
         }
         else
         {
-            Pattern_Timer_Horiz_Left.Set_Frames_Counter();
+            //Pattern_Timer_Horiz_Left.Set_Frames_Counter();
+            ptk_timer_set_frames_counter(ptk, &pattern_timer_horiz_left);
             Pattern_Scrolling_Horiz_Left = TRUE;
             Pattern_Delay_Horiz_Left = 0;
             Pattern_First_Delay_Horiz_Left = 150.0f;
@@ -2706,7 +2722,10 @@ void Mouse_Sliders_Right_Pattern_Ed(ptk_data *ptk)
 
                 if(Pattern_Scrolling_Vert)
                 {
-                    Pattern_Delay_Vert += Pattern_Timer_Vert.Get_Frames_Delay();
+                    //Pattern_Delay_Vert += Pattern_Timer_Vert.Get_Frames_Delay();
+                    Pattern_Delay_Vert += 
+                        ptk_timer_get_frames_delay(ptk, &pattern_timer_vert);
+                        //Pattern_Timer_Vert.Get_Frames_Delay();
                     if(Pattern_Delay_Vert >= Pattern_First_Delay_Vert)
                     {
                         // Scroll it
@@ -2717,7 +2736,8 @@ void Mouse_Sliders_Right_Pattern_Ed(ptk_data *ptk)
                 }
                 else
                 {
-                    Pattern_Timer_Vert.Set_Frames_Counter();
+                    //Pattern_Timer_Vert.Set_Frames_Counter();
+                    ptk_timer_set_frames_counter(ptk, &pattern_timer_vert);
                     Pattern_Scrolling_Vert = TRUE;
                     Pattern_Delay_Vert = 0;
                     Pattern_First_Delay_Vert = 250.0f;

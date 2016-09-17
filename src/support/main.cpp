@@ -32,6 +32,7 @@
 // ------------------------------------------------------
 // Includes
 #include "ptk.h"
+#include "ptk_lua.h"
 #if defined(__AROS__)
 #include <cstdlib>
 #define SDL_putenv putenv
@@ -365,7 +366,7 @@ int ptk_parse_args(ptk_data *ptk, int argc, char ***argvp)
 	while(argc--) {
 		if(argv[0][0] == '-') {
 			switch(argv[0][1]) {
-				case 'r':
+				case 'R':
 					ptk->start_gui = FALSE;
 					ptk->render_mode = TRUE;
 					break;
@@ -417,6 +418,8 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 #endif
 
 	argc = ptk_parse_args(ptk, argc, &argv);
+
+    ptk_lua_init(ptk);
 
 	if(ptk->start_gui == TRUE) {
 		if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_NOPARACHUTE) < 0)

@@ -6857,8 +6857,6 @@ void ptk_init(ptk_data *ptk)
     /* lua reference value, storing callback function */
     ptk->lref = -1;
 
-    ptk_lua_init(ptk);
-
 }
 
 void ptk_close(ptk_data *ptk) 

@@ -34,17 +34,20 @@
 
 // ------------------------------------------------------
 // Class
-class PtkTimer
-{
-    public:
+//class PtkTimer
+//{
+//    public:
+//
+//        PtkTimer();
+//
+//        void Set_Frames_Counter(void);
+//        float Get_Frames_Delay(void);
+//    
+//    private:
+//        float Ref_Ticks;
+//};
 
-        PtkTimer();
-
-        void Set_Frames_Counter(void);
-        float Get_Frames_Delay(void);
-    
-    private:
-        float Ref_Ticks;
-};
-
+void ptk_timer_init(ptk_data *ptk);
+void ptk_timer_set_frames_counter(ptk_data *ptk, float *ref_ticks);
+float ptk_timer_get_frames_delay(ptk_data *ptk, float *ref_ticks);
 #endif
