@@ -57,23 +57,23 @@ SystemSoundActionID WavActionID;
 //extern int ptk->metronome_rows_counter;
 //extern int ptk->metronome_magnify;
 
-extern int Songplaying_Pattern;
+//extern int Songplaying_Pattern;
 
 extern short *Player_WL[MAX_TRACKS][MAX_POLYPHONY];
 extern short *Player_WR[MAX_TRACKS][MAX_POLYPHONY];
 
-extern VISUAL_DELAY_DAT Delays_Pos_Sound_Buffer[256];
-extern int Delay_Sound_Buffer;
-extern int Cur_Delay_Sound_Buffer;
-extern int Subicounter;
+//extern VISUAL_DELAY_DAT Delays_Pos_Sound_Buffer[256];
+//extern int Delay_Sound_Buffer;
+//extern int Cur_Delay_Sound_Buffer;
+//extern int Subicounter;
 
 #if defined(PTK_SHUFFLE)
 extern int shufflestep;
 extern int shuffleswitch;
 #endif
 
-extern char Use_Cubic;
-extern char Paste_Across;
+//extern char Use_Cubic;
+//extern char Paste_Across;
 
 //unsigned char sl3 = 0;
 
