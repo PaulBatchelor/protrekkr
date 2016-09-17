@@ -32,6 +32,7 @@
 // ------------------------------------------------------
 // Includes
 
+#include "replay.h"
 #include "ptk_data.h"
 #include "version.h"
 #include "include/midi_cfg.h"

@@ -31,6 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
+#include "replay.h"
 #include "ptk_data.h"
 #include "samples_ops.h"
 

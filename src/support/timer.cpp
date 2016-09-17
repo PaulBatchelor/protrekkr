@@ -32,6 +32,7 @@
 // ------------------------------------------------------
 // Includes
 #include <SDL/SDL.h>
+#include "replay.h"
 #include "ptk.h"
 #include "timer.h"
 

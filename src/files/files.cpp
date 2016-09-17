@@ -33,6 +33,7 @@
 // Includes
 #include "../extralibs/zlib-1.2.3/zlib.h"
 
+#include "replay.h"
 #include "ptk.h"
 #include "files.h"
 #include "mods.h"

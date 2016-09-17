@@ -31,6 +31,8 @@
 
 // ------------------------------------------------------
 // Includes
+
+#include "replay.h"
 #include "ptk_data.h"
 #include "editor_diskio.h"
 #include "files.h"

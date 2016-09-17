@@ -31,10 +31,11 @@
 
 // ------------------------------------------------------
 // Includes
+#include "replay.h"
 #include "ptk_data.h"
 #include "include/editor_303.h"
-#include "../files/include/files.h"
-#include "../ui/include/requesters.h"
+#include "files.h"
+#include "requesters.h"
 
 // ------------------------------------------------------
 // Variables

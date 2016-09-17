@@ -31,6 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
+#include "replay.h"
 #include "ptk.h"
 #include "ptk_lua.h"
 #if defined(__AROS__)
@@ -59,6 +60,7 @@
 #if defined(__MACOSX__)
 #include <mach-o/dyld.h>
 #endif
+
 
 #if defined(__AMIGAOS4__) || defined(__AROS__)
 const char *AMIGA_VERSION = "\0$VER: " TITLE " " VER_VER "." VER_REV "." VER_REVSMALL "\0";

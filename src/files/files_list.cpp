@@ -31,6 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
+#include "replay.h"
 #include "ptk.h"
 #include "files_list.h"
 
