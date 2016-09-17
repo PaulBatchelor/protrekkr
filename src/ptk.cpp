@@ -1815,7 +1815,7 @@ void LoadFile(ptk_data *ptk, int Freeindex, const char *str)
         int extension_AIFF[3];
         char extension_digi[21];
         unsigned extension_New;
-        int modext;
+        int modext = 0;
         char found_mod;
         int i;
         //char rebext[5];
