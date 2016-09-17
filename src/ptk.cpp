@@ -137,7 +137,7 @@ void Mouse_Sliders_Master_Shuffle(ptk_data *ptk);
 unsigned long Calc_Length(ptk_data *ptk);
 
 //extern int ptk->Ticks_Synchro_Left;
-extern int Ticks_Synchro_Right;
+//extern int ptk->Ticks_Synchro_Right;
 extern int Continuous_Scroll;
 
 void Draw_Scope(ptk_data *ptk);
@@ -6150,9 +6150,9 @@ void Actualize_Master(ptk_data *ptk, char gode)
             Actualize_Fx_Ed(ptk, 10);
             Actualize_Fx_Ed(ptk, 11);
         }
-        if((TicksPerBeat + 1) < Ticks_Synchro_Right)
+        if((TicksPerBeat + 1) < ptk->Ticks_Synchro_Right)
         {
-            Ticks_Synchro_Right = TicksPerBeat + 1;
+            ptk->Ticks_Synchro_Right = TicksPerBeat + 1;
             Actualize_Fx_Ed(ptk, 10);
             Actualize_Fx_Ed(ptk, 11);
         }
@@ -6859,6 +6859,7 @@ void ptk_init(ptk_data *ptk)
     ptk->lref = -1;
 
     ptk->Ticks_Synchro_Left = 1;
+    ptk->Ticks_Synchro_Right = 1;
 }
 
 void ptk_close(ptk_data *ptk) 

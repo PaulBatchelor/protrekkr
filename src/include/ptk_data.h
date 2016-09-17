@@ -148,6 +148,7 @@ typedef struct {
     char cur_input_name[1024];
 
     int Ticks_Synchro_Left;
+    int Ticks_Synchro_Right;
 
     int lref;
     lua_State *L;
