@@ -31,6 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
+#include "ptk_data.h"
 #include "editor_reverb.h"
 #include "files.h"
 #include "requesters.h"

@@ -31,6 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
+#include "ptk_data.h"
 #include "include/editor_303.h"
 #include "../files/include/files.h"
 #include "../ui/include/requesters.h"

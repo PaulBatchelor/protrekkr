@@ -31,6 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
+#include "ptk_data.h"
 #include "samples_ops.h"
 
 #if defined(__AROS__)

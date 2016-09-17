@@ -31,6 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
+#include "ptk_data.h"
 #include "editor_synth.h"
 #include "editor_instrument.h"
 #include "timer.h"

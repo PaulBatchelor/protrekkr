@@ -31,14 +31,15 @@
 
 // ------------------------------------------------------
 // Includes
-#include "include/editor_setup.h"
-#include "include/editor_sequencer.h"
-#include "include/editor_pattern.h"
-#include "include/editor_midi.h"
-#include "../midi/include/midi.h"
-#include "../midi/include/midi_dispatch.h"
-#include "../files/include/files.h"
-#include "../ui/include/requesters.h"
+#include "ptk_data.h"
+#include "editor_setup.h"
+#include "editor_sequencer.h"
+#include "editor_pattern.h"
+#include "editor_midi.h"
+#include "midi.h"
+#include "midi_dispatch.h"
+#include "files.h"
+#include "requesters.h"
 
 #define POS_X_MIDI1 100
 #define POS_X_MIDI2 335

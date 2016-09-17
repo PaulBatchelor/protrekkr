@@ -31,8 +31,10 @@
 
 // ------------------------------------------------------
 // Includes
-#include "../include/variables.h"
-#include "../include/ptk.h"
+
+#include "ptk_data.h"
+#include "variables.h"
+#include "ptk.h"
 
 #include "include/midi_dispatch.h"
 

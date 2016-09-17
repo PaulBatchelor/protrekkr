@@ -31,6 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
+#include "ptk_data.h"
 #include "variables.h"
 #include "patterns_blocks.h"
 #include "editor_pattern.h"

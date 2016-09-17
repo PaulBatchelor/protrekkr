@@ -31,6 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
+#include "ptk_data.h"
 #include "editor_pattern.h"
 #include "editor_diskio.h"
 #include "patterns_blocks.h"

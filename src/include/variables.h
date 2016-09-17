@@ -38,7 +38,7 @@
 // Includes
 #include <SDL/SDL.h>
 
-#include "ptk_data.h"
+//#include "ptk_data.h"
 #include "main.h"
 #include "replay.h"
 

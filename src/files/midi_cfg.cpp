@@ -31,9 +31,11 @@
 
 // ------------------------------------------------------
 // Includes
+
+#include "ptk_data.h"
 #include "version.h"
 #include "include/midi_cfg.h"
-#include "../midi/include/midi_dispatch.h"
+#include "midi_dispatch.h"
 
 #if !defined(__WINAMP__)
 // ------------------------------------------------------

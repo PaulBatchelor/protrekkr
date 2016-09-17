@@ -31,6 +31,7 @@
 
 // ------------------------------------------------------
 // Includes
+#include "ptk_data.h"
 #include "editor_diskio.h"
 #include "files.h"
 #include "requesters.h"
