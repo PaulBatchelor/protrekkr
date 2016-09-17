@@ -39,8 +39,8 @@
 //#include "ptk_data.h"
 //#include "main.h"
 
-#include "riff.h"
-#include "aiff.h"
+//#include "riff.h"
+//#include "aiff.h"
 //#include "variables.h"
 
 #include "misc_draw.h"

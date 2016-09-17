@@ -47,6 +47,7 @@
 #include "files.h"
 #include "xml.h"
 #include "main.h"
+#include "aiff.h"
 
 // ------------------------------------------------------
 // Constants
