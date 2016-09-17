@@ -53,6 +53,7 @@
 
 #include "files.h"
 #include "config.h"
+#include "xml.h"
 
 #if defined(__WIN32__)
 #include <windows.h>

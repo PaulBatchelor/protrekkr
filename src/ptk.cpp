@@ -45,6 +45,7 @@
 #include "mods.h"
 #include "patterns.h"
 #include "files.h"
+#include "xml.h"
 
 // ------------------------------------------------------
 // Constants

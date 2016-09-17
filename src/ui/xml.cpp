@@ -40,6 +40,7 @@
 #include "variables.h"
 #include "replay.h"
 #include "ptk.h"
+#include "xml.h"
 
 // ------------------------------------------------------
 // Variables
