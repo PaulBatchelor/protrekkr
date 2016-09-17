@@ -43,8 +43,8 @@
 //#include "aiff.h"
 //#include "variables.h"
 
-#include "misc_draw.h"
-#include "requesters.h"
+//#include "misc_draw.h"
+//#include "requesters.h"
 
 //#include "files.h"
 #include "files_list.h"
@@ -91,7 +91,7 @@ class skin_file
 
 extern list <skin_file> skin_files;
 extern SDL_Surface *POINTER;
-extern REQUESTER Exit_Requester;
+//extern REQUESTER Exit_Requester;
 
 // ------------------------------------------------------
 // Structures

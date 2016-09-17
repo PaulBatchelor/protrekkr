@@ -54,6 +54,7 @@
 #include "files.h"
 #include "config.h"
 #include "xml.h"
+#include "requesters.h"
 
 #if defined(__WIN32__)
 #include <windows.h>
@@ -87,6 +88,7 @@ HWND Main_Window;
 #define SDL_NEED
 #endif
 
+extern REQUESTER Exit_Requester;
 REQUESTER Title_Requester =
 {
     "",

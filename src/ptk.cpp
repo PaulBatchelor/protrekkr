@@ -48,6 +48,7 @@
 #include "xml.h"
 #include "main.h"
 #include "aiff.h"
+#include "requesters.h"
 
 // ------------------------------------------------------
 // Constants

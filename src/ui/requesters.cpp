@@ -36,6 +36,7 @@
 #include "replay.h"
 #include "ptk.h"
 #include "main.h"
+#include "requesters.h"
 
 // ------------------------------------------------------
 // Constants

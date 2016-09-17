@@ -58,6 +58,7 @@
 #include "editor_track_fx.h"
 #include "editor_track.h"
 #include "editor_pattern.h"
+#include "requesters.h"
 
 #include "endianness.h"
 
