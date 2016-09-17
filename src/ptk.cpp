@@ -37,6 +37,7 @@
 #include "replay.h"
 #include "ptk.h"
 #include "ptk_lua.h"
+#include "ptk_sporth.h"
 
 #include "reverbs.h"
 #include "editor_303.h"
@@ -469,7 +470,7 @@ int Init_Context(ptk_data *ptk)
 
     CHDIR(ptk->Prog_Path);
 
-    if(!Init_Block_Work(ptk)) return(FALSE);
+    if(ptk->start_gui == TRUE) if(!Init_Block_Work(ptk)) return(FALSE);
 
 #if !defined(__NO_MIDI__)
     Midi_Reset(ptk);
@@ -537,7 +538,6 @@ int Init_Context(ptk_data *ptk)
 extern int volatile AUDIO_Acknowledge;
 void Destroy_Context(ptk_data *ptk)
 {
-    //ptk_data *ptk = g_ptk;
     if(Timer) SDL_RemoveTimer(Timer);
     AUDIO_Acknowledge = TRUE;
 
@@ -6876,19 +6876,5 @@ void ptk_init(ptk_data *ptk)
 void ptk_close(ptk_data *ptk) 
 {
     lua_close(ptk->L);
-    if(ptk->sporth.use_sporth == TRUE) {
-		if(ptk->start_gui == TRUE) {
-			ptk->sporth.sl.start = 0;
-			sleep(1);
-		}
-        if(ptk->render_mode == TRUE) {
-            sp_progress_destroy(&ptk->sporth.prog);
-        }
-        ptk_sporth *sporth = &ptk->sporth;
-        printf("are we here?\n");
-        plumber_clean(&sporth->pd);
-		sp_ftbl_destroy(&sporth->notes);
-		sp_ftbl_destroy(&sporth->gates);
-        sp_destroy(&sporth->sp);
-    }
+    if(ptk->sporth.use_sporth == TRUE) ptk_sporth_destroy(ptk);
 }

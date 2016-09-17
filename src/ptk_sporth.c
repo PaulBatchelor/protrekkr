@@ -21,9 +21,9 @@ int ptk_sporth_set_vars(plumber_data *pd, void *ud)
 int ptk_sporth_init(ptk_data *ptk, char *str)
 {
     ptk_sporth *sporth = &ptk->sporth;
+    sp_create(&sporth->sp);
     plumber_register(&sporth->pd);
     plumber_init(&sporth->pd);
-    sp_create(&sporth->sp);
 
     if(ptk->render_mode == TRUE) {
         sporth->sp->len = Calc_Length(ptk);
@@ -35,8 +35,6 @@ int ptk_sporth_init(ptk_data *ptk, char *str)
 
     plumber_data *pd = &sporth->pd;
 
-    plumber_register(&sporth->pd);
-    plumber_init(&sporth->pd);
     sporth->pd.sp = sporth->sp;
 
 	sp_ftbl_create(pd->sp, &sporth->notes, 16);
@@ -60,4 +58,20 @@ int ptk_sporth_init(ptk_data *ptk, char *str)
     }
 
     return PLUMBER_NOTOK;
+}
+
+void ptk_sporth_destroy(ptk_data *ptk)
+{
+    if(ptk->start_gui == TRUE) {
+        ptk->sporth.sl.start = 0;
+        sleep(1);
+    }
+    if(ptk->render_mode == TRUE) {
+        sp_progress_destroy(&ptk->sporth.prog);
+    }
+    ptk_sporth *sporth = &ptk->sporth;
+    plumber_clean(&sporth->pd);
+    sp_ftbl_destroy(&sporth->notes);
+    sp_ftbl_destroy(&sporth->gates);
+    sp_destroy(&sporth->sp);
 }

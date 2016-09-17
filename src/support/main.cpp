@@ -36,6 +36,7 @@
 #include "replay.h"
 #include "ptk.h"
 #include "ptk_lua.h"
+#include "ptk_sporth.h"
 #if defined(__AROS__)
 #include <cstdlib>
 #define SDL_putenv putenv
@@ -378,6 +379,9 @@ int ptk_parse_args(ptk_data *ptk, int argc, char ***argvp)
 					ptk->start_gui = FALSE;
 					ptk->render_mode = TRUE;
 					break;
+				case 'n':
+					ptk->start_gui = FALSE;
+					break;
 				default:
 					break;
 			}
@@ -424,7 +428,6 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 #if defined(__MACOSX__)
     Uint32 Path_Length;
 #endif
-
 	argc = ptk_parse_args(ptk, argc, &argv);
 
 	if(ptk->start_gui == TRUE) {
@@ -538,6 +541,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
     Cur_Keyboard = Default_Keyboard;
 
 	Prog_End = TRUE;
+
 
 	if(ptk->start_gui == TRUE) {
 		// Set the default palette before loading the config file

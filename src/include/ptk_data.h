@@ -11,10 +11,6 @@ extern "C" {
 #include <soundpipe.h>
 #include <sporth.h>
 
-#ifdef __cplusplus
-}
-#endif
-
 typedef struct {
     sp_data *sp;
     plumber_data pd;
@@ -158,4 +154,9 @@ typedef struct {
     lua_State *L;
     ptk_sporth sporth;
 } ptk_data;
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif
