@@ -309,8 +309,6 @@ typedef struct
 } MOUSE, *LPMOUSE;
 
 
-extern char cur_input_name[1024];
-
 extern int Pattern_Line;
 extern int Pattern_Line_Visual;
 extern int Song_Position;

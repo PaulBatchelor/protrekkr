@@ -644,7 +644,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 579, (Cur_Height - 128), 164, 16) && ptk->snamesel == INPUT_NONE)
         {
             ptk->snamesel = INPUT_SELECTION_NAME;
-            strcpy(cur_input_name, Selection_Name);
+            strcpy(ptk->cur_input_name, Selection_Name);
             ptk->namesize = 0;
             sprintf(Selection_Name, "");
             ptk->teac = 3;

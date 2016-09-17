@@ -386,7 +386,7 @@ void Mouse_Left_Reverb_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 583, (Cur_Height - 142), 164, 16) && ptk->snamesel == INPUT_NONE)
         {
             ptk->snamesel = INPUT_REVERB_NAME;
-            strcpy(cur_input_name, Reverb_Name);
+            strcpy(ptk->cur_input_name, Reverb_Name);
             ptk->namesize = 0;
             sprintf(Reverb_Name, "");
             ptk->teac = UPDATE_REVERB_ED_CHANGE_NAME;

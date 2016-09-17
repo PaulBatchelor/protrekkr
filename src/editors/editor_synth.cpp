@@ -1097,7 +1097,7 @@ void Mouse_Left_Synth_Ed(ptk_data *ptk)
             if(zcheckMouse(ptk, 592, (Cur_Height - 150), 164, 16) && ptk->snamesel == INPUT_NONE)
             {
                 ptk->snamesel = INPUT_SYNTH_NAME;
-                strcpy(cur_input_name, PARASynth[ptk->Current_Instrument].presetname);
+                strcpy(ptk->cur_input_name, PARASynth[ptk->Current_Instrument].presetname);
                 ptk->namesize = 0;
                 sprintf(PARASynth[ptk->Current_Instrument].presetname, "");
                 ptk->teac = UPDATE_SYNTH_CHANGE_NAME;

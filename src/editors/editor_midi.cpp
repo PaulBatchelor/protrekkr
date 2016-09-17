@@ -294,7 +294,7 @@ void Mouse_Left_Midi_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 583, (Cur_Height - 142), 164, 16) && ptk->snamesel == INPUT_NONE)
         {
             ptk->snamesel = INPUT_MIDI_NAME;
-            strcpy(cur_input_name, Midi_Name);
+            strcpy(ptk->cur_input_name, Midi_Name);
             ptk->namesize = 0;
             sprintf(Midi_Name, "");
             ptk->teac = UPDATE_MIDI_ED_CHANGE_NAME;

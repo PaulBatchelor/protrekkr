@@ -123,7 +123,7 @@ extern float local_curr_mas_vol;
 //char ptk->Rows_Decimal = FALSE;
 //char ptk->See_Prev_Next_Pattern = FALSE;
 
-char cur_input_name[1024];
+//char ptk->cur_input_name[1024];
 
 SDL_Surface *LOGOPIC;
 //int wait_title;
@@ -2551,7 +2551,7 @@ void Actualize_Name(ptk_data *ptk, int *newletter, char *nam)
     if(newletter[71])
     {
         newletter[71] = FALSE;
-        strcpy(nam, cur_input_name);
+        strcpy(nam, ptk->cur_input_name);
         ptk->snamesel = INPUT_NONE;
         Keyboard_Nbr_Events = 0;
         return;
@@ -5294,7 +5294,7 @@ void Mouse_Handler(ptk_data *ptk)
         if(zcheckMouse(ptk, 90, 108, 166, 16) && ptk->snamesel == INPUT_NONE)
         {
             ptk->snamesel = INPUT_INSTRUMENT_NAME;
-            strcpy(cur_input_name, nameins[ptk->Current_Instrument]);
+            strcpy(ptk->cur_input_name, nameins[ptk->Current_Instrument]);
             sprintf(nameins[ptk->Current_Instrument], "");
             ptk->namesize = 0;
             ptk->gui_action = GUI_CMD_UPDATE_PATTERN_ED;

@@ -975,7 +975,7 @@ void Mouse_Left_303_Ed(ptk_data *ptk)
         if(zcheckMouse(ptk, 600, (Cur_Height - 120), 164, 16) && ptk->snamesel == INPUT_NONE)
         {
             ptk->snamesel = INPUT_303_PATTERN;
-            strcpy(cur_input_name, tb303[sl3].pattern_name[tb303[sl3].selectedpattern]);
+            strcpy(ptk->cur_input_name, tb303[sl3].pattern_name[tb303[sl3].selectedpattern]);
             ptk->namesize = 0;
             sprintf(tb303[sl3].pattern_name[tb303[sl3].selectedpattern], "");
             ptk->teac = 18;

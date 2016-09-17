@@ -145,6 +145,8 @@ typedef struct {
 	char render_mode;
 
     int ntabs;
+    char cur_input_name[1024];
+
 
     int lref;
     lua_State *L;

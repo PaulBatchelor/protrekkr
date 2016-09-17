@@ -394,7 +394,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         // Start module name input
         if(zcheckMouse(ptk, 90, (Cur_Height - 94), 162, 16) && ptk->snamesel == INPUT_NONE)
         {
-            strcpy(cur_input_name, ptk->name);
+            strcpy(ptk->cur_input_name, ptk->name);
             sprintf(ptk->name, "");
             ptk->namesize = 0;
             ptk->snamesel = INPUT_MODULE_NAME;
@@ -404,7 +404,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         // Start ptk->artist name input
         if(zcheckMouse(ptk, 90, (Cur_Height - 76), 162, 16) && ptk->snamesel == INPUT_NONE)
         {
-            strcpy(cur_input_name, ptk->artist);
+            strcpy(ptk->cur_input_name, ptk->artist);
             sprintf(ptk->artist, "");
             ptk->namesize = 0;
             ptk->snamesel = INPUT_MODULE_ARTIST;
@@ -414,7 +414,7 @@ void Mouse_Left_DiskIO_Ed(ptk_data *ptk)
         // Start module ptk->style input
         if(zcheckMouse(ptk, 90, (Cur_Height - 58), 162, 16) && ptk->snamesel == INPUT_NONE)
         {
-            strcpy(cur_input_name, ptk->style);
+            strcpy(ptk->cur_input_name, ptk->style);
             sprintf(ptk->style, "");
             ptk->namesize = 0;
             ptk->snamesel = INPUT_MODULE_STYLE;
