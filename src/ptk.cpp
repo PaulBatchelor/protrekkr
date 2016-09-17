@@ -49,6 +49,7 @@
 #include "main.h"
 #include "aiff.h"
 #include "requesters.h"
+#include "editor_setup.h"
 
 // ------------------------------------------------------
 // Constants

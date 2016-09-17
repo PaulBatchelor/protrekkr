@@ -54,7 +54,7 @@
 //#include "midi_cfg.h"
 //#include "patterns.h"
 
-#include "editor_setup.h"
+//#include "editor_setup.h"
 #include "editor_midi.h"
 //#include "editor_303.h"
 #include "editor_fx_setup.h"

@@ -37,6 +37,7 @@
 #include "ptk.h"
 #include "draw_primitives.h"
 #include "editor_303.h"
+#include "editor_setup.h"
 
 // ------------------------------------------------------
 // Constants
