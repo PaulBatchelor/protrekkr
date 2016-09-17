@@ -1,6 +1,6 @@
-#include "replay.h"
 #include "ptk.h"
 #include "ptk_sporth.h"
+#include "files.h"
 
 int ptk_sporth_set_vars(plumber_data *pd, void *ud)
 {
