@@ -41,7 +41,7 @@
 
 #include "riff.h"
 #include "aiff.h"
-#include "variables.h"
+//#include "variables.h"
 
 #include "misc_draw.h"
 #include "requesters.h"
