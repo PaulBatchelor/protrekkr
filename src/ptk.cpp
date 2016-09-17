@@ -46,6 +46,7 @@
 #include "patterns.h"
 #include "files.h"
 #include "xml.h"
+#include "main.h"
 
 // ------------------------------------------------------
 // Constants

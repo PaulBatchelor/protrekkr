@@ -37,7 +37,7 @@
 //#include "xml.h"
 /*TODO main.h is troublesome for ptk_data...*/
 //#include "ptk_data.h"
-#include "main.h"
+//#include "main.h"
 
 #include "riff.h"
 #include "aiff.h"

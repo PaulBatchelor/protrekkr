@@ -41,19 +41,6 @@
 
 // ------------------------------------------------------
 // Constants
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
-#define SCREEN_BPP 8
-
-#define MOUSE_LEFT_BUTTON 1
-#define MOUSE_MIDDLE_BUTTON 2
-#define MOUSE_RIGHT_BUTTON 4
-
-#define SDL_MOUSE_LEFT_BUTTON 1
-#define SDL_MOUSE_MIDDLE_BUTTON 2
-#define SDL_MOUSE_RIGHT_BUTTON 3
-
-#define MAX_EVENTS 16
 
 // ------------------------------------------------------
 // Variables

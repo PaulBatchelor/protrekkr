@@ -36,6 +36,7 @@
 #include "replay.h"
 #include "config.h"
 #include "midi_cfg.h"
+#include "main.h"
 
 // ------------------------------------------------------
 // Variables
