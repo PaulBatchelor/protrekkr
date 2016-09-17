@@ -342,6 +342,22 @@ REQUESTER Delete_Requester =
     NULL, 0
 };
 
+static int mt_tags[16] =
+{
+    'NHC1', 'NHC2', 'NHC3', '.K.M',
+    'NHC5', 'NHC6', 'NHC7', 'NHC8',
+    'NHC9', 'HC01', 'HC11', 'HC21',
+    'HC31', 'HC41', 'HC51', 'HC61'
+};
+
+static char mt_channels[16] =
+{
+     1,  2,  3,  4,
+     5,  6,  7,  8,
+     9, 10, 11, 12,
+    13, 14, 15, 16
+};
+
 char OverWrite_Name[1024];
 
 int ZzaappOMatic;
