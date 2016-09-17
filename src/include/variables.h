@@ -317,31 +317,14 @@ typedef struct
 } MOUSE, *LPMOUSE;
 
 
-
-// ------------------------------------------------------
-// Variables
-//extern int SamplesPerTick;
-
 extern char cur_input_name[1024];
-
-//extern char artist[20];
-//extern char style[20];
-
-//extern int Track_Under_Caret;
-
-//extern int Current_Instrument;
-//extern int Column_Under_Caret;
 
 extern int Pattern_Line;
 extern int Pattern_Line_Visual;
 extern int Song_Position;
 extern int Song_Position_Visual;
 
-//extern int gui_track;
-
 extern char userscreen;
-
-//extern int snamesel;
 
 extern int last_index;
 
@@ -443,8 +426,6 @@ extern char Channels_Polyphony[MAX_TRACKS];
 extern char Channels_MultiNotes[MAX_TRACKS];
 extern char Channels_Effects[MAX_TRACKS];
 
-// ------------------------------------------------------
-// Functions
 void WavRenderizer(ptk_data *ptk);
 void Newmod(ptk_data *ptk);
 void Initreverb(ptk_data *ptk);
