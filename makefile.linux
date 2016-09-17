@@ -1,4 +1,5 @@
 CXX = g++
+CC = gcc
 
 LIBS = src/extralibs/tinyxml/tinyxml.o \
        src/extralibs/tinyxml/tinyxmlparser.o \
@@ -67,8 +68,6 @@ OBJS = \
 	src/samples/samples_ops.o \
 	src/samples/wav/riff.o \
 	src/midi/midi_dispatch.o \
-	src/midi/midi.o \
-	src/midi/RtMidi.o \
 	src/editors/editor_diskio.o \
 	src/editors/editor_synth.o \
 	src/editors/editor_track.o \
@@ -103,7 +102,7 @@ bin/protrekkr: $(OBJS)
 	(cd src/extralibs/sdl_draw; make -f makefile.linux)
 	(cd src/extralibs/tinyxml; make)
 	(cd src/extralibs/zlib-1.2.3; make)
-	$(CXX) -o $@ -L./ $(FLAGS) $(OBJS) $(LIBS)
+	$(CC) -o $@ -L./ $(FLAGS) -lstdc++ $(OBJS) $(LIBS)
 	#strip -s -x $@
 
 %.o: %.cpp
