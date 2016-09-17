@@ -37,6 +37,7 @@
 #include "draw_primitives.h"
 #include "sdl_draw.h"
 #include "ptk.h"
+#include "editor_sample.h"
 
 // ------------------------------------------------------
 // Variables

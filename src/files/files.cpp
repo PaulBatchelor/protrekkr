@@ -1859,6 +1859,8 @@ int song_Seconds;
 int song_Minutes;
 int song_Hours;
 
+/*TODO: Calc_Length should eventually find its way into a C file */
+extern "C" {
 unsigned long Calc_Length(ptk_data *ptk)
 {
     int i;
@@ -2029,6 +2031,7 @@ unsigned long Calc_Length(ptk_data *ptk)
 
     return samps;
 }
+} /* extern C */
 
 void Reset_Song_Length(ptk_data *ptk)
 {

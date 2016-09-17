@@ -51,6 +51,8 @@ extern EQSTATE EqDat[MAX_TRACKS];
 INSTR_ORDER Used_Instr[MAX_INSTRS];
 INSTR_ORDER Used_Instr2[MAX_INSTRS];
 INSTR_ORDER Used_Instr3[MAX_INSTRS];
+extern gear303 tb303engine[2];
+extern para303 tb303[2];
 
 // ------------------------------------------------------
 // Save a constant into a properties include file

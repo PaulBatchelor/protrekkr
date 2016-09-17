@@ -54,6 +54,7 @@
 #endif
 
 #include "files.h"
+#include "editor_fx_setup.h"
 
 /* TODO: global yeah you get it*/
 extern ptk_data *g_ptk;

@@ -35,6 +35,8 @@
 #include "variables.h"
 #include "replay.h"
 #include "insts.h"
+#include "editor_synth.h"
+#include "editor_instrument.h"
 
 // ------------------------------------------------------
 // Load an instrument

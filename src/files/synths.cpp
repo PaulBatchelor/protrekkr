@@ -35,6 +35,9 @@
 #include "variables.h"
 #include "replay.h"
 #include "synths.h"
+#include "editor_synth.h"
+#include "editor_diskio.h"
+#include "editor_instrument.h"
 
 // ------------------------------------------------------
 // Load the data of a synth instrument

@@ -73,8 +73,8 @@ extern char Dir_Samples[MAX_PATH];
 extern char Use_Cubic;
 extern char Paste_Across;
 extern int wait_AutoSave;
-extern gear303 tb303engine[2];
-extern para303 tb303[2];
+//extern gear303 tb303engine[2];
+//extern para303 tb303[2];
 
 // ------------------------------------------------------
 // Functions
@@ -94,7 +94,6 @@ void Free_Samples(ptk_data *ptk);
 Uint8 *Pack_Data(ptk_data *ptk, Uint8 *Memory, int *Len);
 Uint8 *Depack_Data(ptk_data *ptk, Uint8 *Memory, int Size, int size_out);
 int Get_File_Size(ptk_data *ptk, FILE *Handle);
-unsigned long Calc_Length(ptk_data *ptk);
 void Reset_Song_Length(ptk_data *ptk);
 void Clear_Input(ptk_data *ptk);
 int File_Exist(ptk_data *ptk, char *Format, char *Directory, char *FileName);
@@ -113,5 +112,13 @@ int Write_Mod_Data_Swap(ptk_data *ptk, void *Datas, int Unit, int Length, FILE *
 short *Get_WaveForm(ptk_data *ptk, int Instr_Nbr, int Channel, int Split);
 void Pack_Sample(ptk_data *ptk, FILE *FileHandle, short *Sample, int Size, char Pack_Type, int BitRate);
 int Fix_Codec(ptk_data *ptk, int Scheme);
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+unsigned long Calc_Length(ptk_data *ptk);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

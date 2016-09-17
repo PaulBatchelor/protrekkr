@@ -44,4 +44,11 @@ const char *XML_get_string(char *section, char *key, char *name, char *value);
 int XML_get_integer(char *section, char *key, char *name, char *value, int *dest);
 const char *XML_get_value(char *tag, char *essemble, char *name, char *attr);
 
+class skin_file
+{
+    public:
+        const char *name;
+};
+extern list <skin_file> skin_files;
+
 #endif

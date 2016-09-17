@@ -50,6 +50,13 @@
 #include "aiff.h"
 #include "requesters.h"
 #include "editor_setup.h"
+#include "editor_fx_setup.h"
+#include "editor_synth.h"
+#include "editor_track_fx.h"
+#include "editor_diskio.h"
+#include "editor_track.h"
+#include "editor_instrument.h"
+#include "editor_sample.h"
 
 // ------------------------------------------------------
 // Constants

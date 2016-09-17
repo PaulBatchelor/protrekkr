@@ -55,45 +55,38 @@
 //#include "patterns.h"
 
 //#include "editor_setup.h"
-#include "editor_midi.h"
+//#include "editor_midi.h"
 //#include "editor_303.h"
-#include "editor_fx_setup.h"
-#include "editor_synth.h"
-#include "editor_track_fx.h"
-#include "editor_diskio.h"
-#include "editor_reverb.h"
-#include "editor_sequencer.h"
-#include "editor_track.h"
-#include "editor_instrument.h"
-#include "editor_pattern.h"
-#include "editor_sample.h"
-#include "patterns_blocks.h"
+//#include "editor_fx_setup.h"
+//#include "editor_synth.h"
+//#include "editor_track_fx.h"
+//#include "editor_diskio.h"
+//#include "editor_reverb.h"
+//#include "editor_sequencer.h"
+//#include "editor_track.h"
+//#include "editor_instrument.h"
+//#include "editor_pattern.h"
+//#include "editor_sample.h"
+//#include "patterns_blocks.h"
 
-#include "timer.h"
+//#include "timer.h"
 
-#include "midi.h"
+//#include "midi.h"
 
-#include "endianness.h"
-#include "replay.h"
+//#include "endianness.h"
+//#include "replay.h"
+
+#ifdef __cplusplus
 
 #include <string>
 #include <list>
 #include <sstream>
-#include <time.h>
-
 using namespace std;
 
-class skin_file
-{
-    public:
-        const char *name;
-};
+#endif
 
-extern list <skin_file> skin_files;
 extern SDL_Surface *POINTER;
 
-// ------------------------------------------------------
-// Structures
 typedef struct
 {
     int Channel;
@@ -101,8 +94,6 @@ typedef struct
     int Note;
 } JAZZ_KEY, *LPJAZZ_KEY;
 
-// ------------------------------------------------------
-// Variables
 extern SDL_Surface *Main_Screen;
 extern MOUSE Mouse;
 

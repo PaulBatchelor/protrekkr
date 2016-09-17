@@ -37,6 +37,8 @@
 #include "ptk.h"
 #include "files.h"
 #include "files_list.h"
+#include "editor_instrument.h"
+#include "editor_pattern.h"
 
 #if defined(__WIN32__)
 #include <shlwapi.h>

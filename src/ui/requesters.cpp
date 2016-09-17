@@ -37,6 +37,7 @@
 #include "ptk.h"
 #include "main.h"
 #include "requesters.h"
+#include "editor_sample.h"
 
 // ------------------------------------------------------
 // Constants

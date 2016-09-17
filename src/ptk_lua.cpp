@@ -1,4 +1,5 @@
 #include "ptk_data.h"
+#include "variables.h"
 #include "ptk.h"
 #include "ptk_lua.h"
 #include "ptk_sporth.h"

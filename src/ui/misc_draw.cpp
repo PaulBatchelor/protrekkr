@@ -38,6 +38,16 @@
 #include "draw_primitives.h"
 #include "editor_303.h"
 #include "editor_setup.h"
+#include "editor_fx_setup.h"
+#include "editor_synth.h"
+#include "editor_track_fx.h"
+#include "editor_diskio.h"
+#include "editor_reverb.h"
+#include "editor_sequencer.h"
+#include "editor_track.h"
+#include "editor_instrument.h"
+#include "editor_pattern.h"
+#include "editor_sample.h"
 
 // ------------------------------------------------------
 // Constants
