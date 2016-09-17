@@ -47,7 +47,7 @@
 //#include "requesters.h"
 
 //#include "files.h"
-#include "files_list.h"
+//#include "files_list.h"
 //#include "mods.h"
 //#include "303s.h"
 //#include "reverbs.h"
@@ -91,7 +91,6 @@ class skin_file
 
 extern list <skin_file> skin_files;
 extern SDL_Surface *POINTER;
-//extern REQUESTER Exit_Requester;
 
 // ------------------------------------------------------
 // Structures
