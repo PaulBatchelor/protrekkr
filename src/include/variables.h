@@ -325,11 +325,11 @@ extern int Pattern_Line_Visual;
 extern int Song_Position;
 extern int Song_Position_Visual;
 
-extern int gui_track;
+//extern int gui_track;
 
 extern char userscreen;
 
-extern int snamesel;
+//extern int snamesel;
 
 extern int last_index;
 
