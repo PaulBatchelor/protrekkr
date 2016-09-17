@@ -136,7 +136,7 @@ Uint32 Alloc_midi_Channels[MAX_TRACKS][MAX_POLYPHONY];
 void Mouse_Sliders_Master_Shuffle(ptk_data *ptk);
 unsigned long Calc_Length(ptk_data *ptk);
 
-extern int Ticks_Synchro_Left;
+//extern int ptk->Ticks_Synchro_Left;
 extern int Ticks_Synchro_Right;
 extern int Continuous_Scroll;
 
@@ -6144,9 +6144,9 @@ void Actualize_Master(ptk_data *ptk, char gode)
     {
         if(TicksPerBeat < 1) TicksPerBeat = 1;
         if(TicksPerBeat > 32) TicksPerBeat = 32;
-        if((TicksPerBeat + 1) < Ticks_Synchro_Left)
+        if((TicksPerBeat + 1) < ptk->Ticks_Synchro_Left)
         {
-            Ticks_Synchro_Left = TicksPerBeat + 1;
+            ptk->Ticks_Synchro_Left = TicksPerBeat + 1;
             Actualize_Fx_Ed(ptk, 10);
             Actualize_Fx_Ed(ptk, 11);
         }
@@ -6858,6 +6858,7 @@ void ptk_init(ptk_data *ptk)
     /* lua reference value, storing callback function */
     ptk->lref = -1;
 
+    ptk->Ticks_Synchro_Left = 1;
 }
 
 void ptk_close(ptk_data *ptk) 

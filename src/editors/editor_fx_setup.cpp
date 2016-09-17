@@ -37,7 +37,7 @@
 
 // ------------------------------------------------------
 // Variables
-int Ticks_Synchro_Left = 1;
+//int ptk->Ticks_Synchro_Left = 1;
 int Ticks_Synchro_Right = 1;
 extern char Use_Cubic;
 extern float mas_attack;
@@ -161,12 +161,12 @@ void Actualize_Fx_Ed(ptk_data *ptk, char gode)
 
         if(gode == 0 || gode == 10)
         {
-            if(Ticks_Synchro_Left < 1) Ticks_Synchro_Left = 1;
-            while((SamplesPerTick * Ticks_Synchro_Left) > 22100)
+            if(ptk->Ticks_Synchro_Left < 1) ptk->Ticks_Synchro_Left = 1;
+            while((SamplesPerTick * ptk->Ticks_Synchro_Left) > 22100)
             {
-                Ticks_Synchro_Left--;
+                ptk->Ticks_Synchro_Left--;
             }
-            Gui_Draw_Arrows_Number_Box2(534, (Cur_Height - 120), Ticks_Synchro_Left, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
+            Gui_Draw_Arrows_Number_Box2(534, (Cur_Height - 120), ptk->Ticks_Synchro_Left, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
         }
         if(gode == 0 || gode == 11)
         {
@@ -330,13 +330,13 @@ void Mouse_Right_Fx_Ed(ptk_data *ptk)
         // Ticks synchro left
         if(zcheckMouse(ptk, 534, (Cur_Height - 120), 16, 16) == 1)
         {
-            Ticks_Synchro_Left -= 10;
+            ptk->Ticks_Synchro_Left -= 10;
             ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             ptk->teac = 10;
         }
         if(zcheckMouse(ptk, 578, (Cur_Height - 120), 16, 16) == 1)
         {
-            Ticks_Synchro_Left += 10;
+            ptk->Ticks_Synchro_Left += 10;
             ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             ptk->teac = 10;
         }
@@ -379,13 +379,13 @@ void Mouse_Left_Fx_Ed(ptk_data *ptk)
         // Ticks synchro left
         if(zcheckMouse(ptk, 534, (Cur_Height - 120), 16, 16))
         {
-            Ticks_Synchro_Left--;
+            ptk->Ticks_Synchro_Left--;
             ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             ptk->teac = 10;
         }
         if(zcheckMouse(ptk, 578, (Cur_Height - 120), 16, 16))
         {
-            Ticks_Synchro_Left++;
+            ptk->Ticks_Synchro_Left++;
             ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             ptk->teac = 10;
         }
@@ -406,7 +406,7 @@ void Mouse_Left_Fx_Ed(ptk_data *ptk)
 
         if(zcheckMouse(ptk, 596, (Cur_Height - 120), 32, 16))
         {
-            lchorus_delay = SamplesPerTick * Ticks_Synchro_Left;
+            lchorus_delay = SamplesPerTick * ptk->Ticks_Synchro_Left;
             ptk->gui_action = GUI_CMD_UPDATE_FX_ED;
             ptk->teac = 3;
         }
