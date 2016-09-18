@@ -155,6 +155,8 @@ typedef struct {
     int pos_scope;
     int pos_scope_latency;
 
+    int done;
+
     int lref;
     lua_State *L;
     ptk_sporth sporth;
