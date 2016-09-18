@@ -32,50 +32,6 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
-// ------------------------------------------------------
-// Includes
-//#include "xml.h"
-/*TODO main.h is troublesome for ptk_data...*/
-//#include "ptk_data.h"
-//#include "main.h"
-
-//#include "riff.h"
-//#include "aiff.h"
-//#include "variables.h"
-
-//#include "misc_draw.h"
-//#include "requesters.h"
-
-//#include "files.h"
-//#include "files_list.h"
-//#include "mods.h"
-//#include "303s.h"
-//#include "reverbs.h"
-//#include "midi_cfg.h"
-//#include "patterns.h"
-
-//#include "editor_setup.h"
-//#include "editor_midi.h"
-//#include "editor_303.h"
-//#include "editor_fx_setup.h"
-//#include "editor_synth.h"
-//#include "editor_track_fx.h"
-//#include "editor_diskio.h"
-//#include "editor_reverb.h"
-//#include "editor_sequencer.h"
-//#include "editor_track.h"
-//#include "editor_instrument.h"
-//#include "editor_pattern.h"
-//#include "editor_sample.h"
-//#include "patterns_blocks.h"
-
-//#include "timer.h"
-
-//#include "midi.h"
-
-//#include "endianness.h"
-//#include "replay.h"
-
 #ifdef __cplusplus
 
 #include <string>
@@ -93,13 +49,6 @@ typedef struct
     int Sub_Channel;
     int Note;
 } JAZZ_KEY, *LPJAZZ_KEY;
-
-extern SDL_Surface *Main_Screen;
-extern MOUSE Mouse;
-
-#if defined(__WIN32__)
-extern HWND Main_Window;
-#endif
 
 #if defined(__WIN32__)
 #define STDCALL __stdcall
