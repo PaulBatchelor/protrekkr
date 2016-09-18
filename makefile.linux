@@ -105,6 +105,11 @@ bin/protrekkr: $(OBJS)
 	$(CC) -o $@ -L./ $(FLAGS) -lstdc++ $(OBJS) $(LIBS)
 	#strip -s -x $@
 
+install: protrekkr
+	install bin/protrekkr /usr/local/bin
+	mkdir -p /usr/local/share/protrekkr
+	cp -r bin/skins /usr/local/share/protrekkr
+
 %.o: %.cpp
 	$(CXX) -c -o $(@) $(FLAGS) $<
 	
