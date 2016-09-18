@@ -31,8 +31,8 @@
 
 // ------------------------------------------------------
 // Includes
+#include "ptk_data.h"
 #include "sounddriver_linux.h"
-
 #include "jack/jack.h"
 
 // ------------------------------------------------------
@@ -59,7 +59,7 @@ void AUDIO_Stop_Sound_Buffer(void) {}
 // ------------------------------------------------------
 // Functions
 void (STDCALL *AUDIO_Mixer)(Uint8 *, Uint32) = NULL;
-void (STDCALL *AUDIO_MixerFloat)(float*, float*, Uint32) = NULL;
+void (STDCALL *AUDIO_MixerFloat)(ptk_data *ptk, float*, float*, Uint32) = NULL;
 
 static int jaudio_bufsize_callback(jack_nframes_t newBufferSize, void*)
 {
@@ -67,8 +67,9 @@ static int jaudio_bufsize_callback(jack_nframes_t newBufferSize, void*)
     return 0;
 }
 
-static int jaudio_process_callback(jack_nframes_t nframes, void*)
+static int jaudio_process_callback(jack_nframes_t nframes, void* data)
 {
+    ptk_data *ptk = (ptk_data *)data;
     float* audioBuf1 = (float*)jack_port_get_buffer(jaudio_port1, nframes);
     float* audioBuf2 = (float*)jack_port_get_buffer(jaudio_port2, nframes);
 
@@ -81,7 +82,7 @@ static int jaudio_process_callback(jack_nframes_t nframes, void*)
     {
         if (AUDIO_MixerFloat)
         {
-            AUDIO_MixerFloat(audioBuf1, audioBuf2, nframes);
+            AUDIO_MixerFloat(ptk, audioBuf1, audioBuf2, nframes);
         }
         else
         {
@@ -117,7 +118,7 @@ static void jaudio_shutdown_callback(void* arg)
 // ------------------------------------------------------
 // Name: AUDIO_Init_Driver()
 // Desc: Init the audio driver
-int _init_JACK()
+int _init_JACK(ptk_data *ptk)
 {
     jaudio_client = jack_client_open("protrekkr", JackNullOption, NULL);
 
@@ -129,7 +130,7 @@ int _init_JACK()
     jaudio_port2 = jack_port_register(jaudio_client, "out2", JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
 
     jack_set_buffer_size_callback(jaudio_client, jaudio_bufsize_callback, NULL);
-    jack_set_process_callback(jaudio_client, jaudio_process_callback, NULL);
+    jack_set_process_callback(jaudio_client, jaudio_process_callback, ptk);
     jack_on_shutdown(jaudio_client, jaudio_shutdown_callback, NULL);
 
     AUDIO_Latency = jack_get_buffer_size(jaudio_client);
@@ -163,18 +164,18 @@ int _init_JACK()
     return TRUE;
 }
 
-int AUDIO_Init_Driver(void (*Mixer)(Uint8 *, Uint32))
+int AUDIO_Init_Driver(ptk_data *ptk, void (*Mixer)(Uint8 *, Uint32))
 {
     AUDIO_Mixer = Mixer;
 
-    return _init_JACK();
+    return _init_JACK(ptk);
 }
 
-int AUDIO_Init_DriverFloat(void (*MixerFloat)(float*, float*, Uint32))
+int AUDIO_Init_DriverFloat(ptk_data *ptk, void (*MixerFloat)(ptk_data *ptk, float*, float*, Uint32))
 {
     AUDIO_MixerFloat = MixerFloat;
 
-    return _init_JACK();
+    return _init_JACK(ptk);
 }
 
 // ------------------------------------------------------

@@ -556,8 +556,6 @@ int delay_time;
     int R_MaxLevel;
     float *Scope_Dats[MAX_TRACKS];
     float *Scope_Dats_LeftRight[2];
-    int pos_scope;
-    int pos_scope_latency;
     extern signed char c_midiin;
     extern signed char c_midiout;
     int plx;
@@ -652,7 +650,7 @@ void Reset_Values(ptk_data *ptk);
 
 // ------------------------------------------------------
 // Audio mixer, float version
-void STDCALL MixerFloat(float *buf1, float* buf2, Uint32 Len)
+void STDCALL MixerFloat(ptk_data *ptk, float *buf1, float* buf2, Uint32 Len)
 {
 #if !defined(__STAND_ALONE__)
     float clamp_left_value;
@@ -717,11 +715,11 @@ void STDCALL MixerFloat(float *buf1, float* buf2, Uint32 Len)
 
 #if !defined(__STAND_ALONE__)
             // Pre-record
-            Scope_Dats_LeftRight[0][pos_scope] = clamp_left_value;
-            Scope_Dats_LeftRight[1][pos_scope] = clamp_right_value;
+            Scope_Dats_LeftRight[0][ptk->pos_scope] = clamp_left_value;
+            Scope_Dats_LeftRight[1][ptk->pos_scope] = clamp_right_value;
 
-            clamp_left_value = fabsf(Scope_Dats_LeftRight[0][pos_scope_latency]);
-            clamp_right_value = fabsf(Scope_Dats_LeftRight[1][pos_scope_latency]);
+            clamp_left_value = fabsf(Scope_Dats_LeftRight[0][ptk->pos_scope_latency]);
+            clamp_right_value = fabsf(Scope_Dats_LeftRight[1][ptk->pos_scope_latency]);
             if(clamp_left_value > L_MaxLevel) L_MaxLevel = (int) clamp_left_value;
             if(clamp_right_value > R_MaxLevel) R_MaxLevel = (int) clamp_right_value;
             wait_level++;
@@ -734,10 +732,10 @@ void STDCALL MixerFloat(float *buf1, float* buf2, Uint32 Len)
                 if(R_MaxLevel < 0) R_MaxLevel = 0;
             }
 
-            pos_scope++;
-            if(pos_scope >= (AUDIO_Latency / 2)) pos_scope = 0;
-            pos_scope_latency = pos_scope - (AUDIO_Latency / 4);
-            if(pos_scope_latency < 0) pos_scope_latency = (AUDIO_Latency / 2) + pos_scope_latency;
+            ptk->pos_scope++;
+            if(ptk->pos_scope >= (AUDIO_Latency / 2)) ptk->pos_scope = 0;
+            ptk->pos_scope_latency = ptk->pos_scope - (AUDIO_Latency / 4);
+            if(ptk->pos_scope_latency < 0) ptk->pos_scope_latency = (AUDIO_Latency / 2) + ptk->pos_scope_latency;
 #endif
         }
 
@@ -844,11 +842,11 @@ void STDCALL Mixer(ptk_data *ptk, Uint8 *Buffer, Uint32 Len)
 #if !defined(__STAND_ALONE__)
 
             // Pre-record
-            Scope_Dats_LeftRight[0][pos_scope] = clamp_left_value;
-            Scope_Dats_LeftRight[1][pos_scope] = clamp_right_value;
+            Scope_Dats_LeftRight[0][ptk->pos_scope] = clamp_left_value;
+            Scope_Dats_LeftRight[1][ptk->pos_scope] = clamp_right_value;
 
-            clamp_left_value = fabsf(Scope_Dats_LeftRight[0][pos_scope_latency]);
-            clamp_right_value = fabsf(Scope_Dats_LeftRight[1][pos_scope_latency]);
+            clamp_left_value = fabsf(Scope_Dats_LeftRight[0][ptk->pos_scope_latency]);
+            clamp_right_value = fabsf(Scope_Dats_LeftRight[1][ptk->pos_scope_latency]);
             if(clamp_left_value > L_MaxLevel) L_MaxLevel = (int) clamp_left_value;
             if(clamp_right_value > R_MaxLevel) R_MaxLevel = (int) clamp_right_value;
             wait_level++;
@@ -861,10 +859,10 @@ void STDCALL Mixer(ptk_data *ptk, Uint8 *Buffer, Uint32 Len)
                 if(R_MaxLevel < 0) R_MaxLevel = 0;
             }
 
-            pos_scope++;
-            if(pos_scope >= (AUDIO_Latency / 2)) pos_scope = 0;
-            pos_scope_latency = pos_scope - (AUDIO_Latency / 4);
-            if(pos_scope_latency < 0) pos_scope_latency = (AUDIO_Latency / 2) + pos_scope_latency;
+            ptk->pos_scope++;
+            if(ptk->pos_scope >= (AUDIO_Latency / 2)) ptk->pos_scope = 0;
+            ptk->pos_scope_latency = ptk->pos_scope - (AUDIO_Latency / 4);
+            if(ptk->pos_scope_latency < 0) ptk->pos_scope_latency = (AUDIO_Latency / 2) + ptk->pos_scope_latency;
 #endif
 
         }
@@ -1013,7 +1011,7 @@ int STDCALL Ptk_InitDriver(ptk, void)
 #if defined(__WIN32__)
     if(!AUDIO_Init_Driver(hWnd, &Mixer))
 #elif defined(__LINUX__)
-    if(!AUDIO_Init_DriverFloat(&MixerFloat))
+    if(!AUDIO_Init_DriverFloat(ptk, &MixerFloat))
 #else
     if(!AUDIO_Init_Driver(&Mixer))
 #endif
@@ -1022,7 +1020,7 @@ int STDCALL Ptk_InitDriver(ptk, void)
     }
 
 #if !defined(__STAND_ALONE__)
-    if(!Init_Scopes_Buffers()) return(FALSE);
+    if(!Init_Scopes_Buffers(ptk)) return(FALSE);
 #endif
 
     AUDIO_Play();
@@ -3661,11 +3659,11 @@ ByPass_Wav:
 		if(ptk->start_gui == TRUE) {
 			if(!CHAN_MUTE_STATE[c])
 			{
-				Scope_Dats[c][pos_scope] = (All_Signal_L + All_Signal_R) * 0.15f;
+				Scope_Dats[c][ptk->pos_scope] = (All_Signal_L + All_Signal_R) * 0.15f;
 			}
 			else
 			{
-				Scope_Dats[c][pos_scope] = 0.0f;
+				Scope_Dats[c][ptk->pos_scope] = 0.0f;
 			}
 		}
 #endif

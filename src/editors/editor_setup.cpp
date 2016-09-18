@@ -153,7 +153,7 @@ void Actualize_Master_Ed(ptk_data *ptk, char gode)
             SongStop(ptk);
             AUDIO_Stop_Sound_Buffer();
             AUDIO_Create_Sound_Buffer(AUDIO_Milliseconds);
-            Init_Scopes_Buffers();
+            Init_Scopes_Buffers(ptk);
             AUDIO_Play();
         }
 

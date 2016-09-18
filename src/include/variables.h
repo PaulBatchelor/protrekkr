@@ -475,7 +475,7 @@ void Display_Master_Volume(void);
 void Display_Shuffle(void);
 void Actualize_Input(ptk_data *ptk);
 void Draw_Scope(ptk_data *ptk);
-int Init_Scopes_Buffers(void);
+int Init_Scopes_Buffers(ptk_data *ptk);
 
 void Switch_Cmd_Playing(int Enable);
 

@@ -100,8 +100,8 @@ extern int shuffleswitch;
 
 //unsigned char sl3 = 0;
 
-extern int pos_scope;
-extern int pos_scope_latency;
+//extern int ptk->pos_scope;
+//extern int ptk->pos_scope_latency;
 
 extern float sp_Tvol_Mod[MAX_TRACKS];
 
@@ -6465,7 +6465,7 @@ void Draw_Scope(ptk_data *ptk)
     float datas;
     int x_max;
     int nibble_pos;
-    int offset_scope = pos_scope_latency;
+    int offset_scope = ptk->pos_scope_latency;
     LPDAT_POS_SCOPE ptrTbl_Dat;
     int scope_pos = Get_Song_Position(ptk);
     int active_channel;
@@ -6566,12 +6566,12 @@ void Draw_Scope(ptk_data *ptk)
     }
 }
 
-int Init_Scopes_Buffers(void)
+int Init_Scopes_Buffers(ptk_data *ptk)
 {
     int i;
 
-    pos_scope = 0;
-    pos_scope_latency = 0;
+    ptk->pos_scope = 0;
+    ptk->pos_scope_latency = 0;
     for(i = 0; i < MAX_TRACKS; i++)
     {  
         if(Scope_Dats[i]) free(Scope_Dats[i]);

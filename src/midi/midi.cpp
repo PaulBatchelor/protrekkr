@@ -45,8 +45,8 @@
 extern int Nbr_Sub_NoteOff;
 extern int ptk->key_record_first_time;
 extern int ptk->old_key_Pattern_Line;
-extern int pos_scope;
-extern int pos_scope_latency;
+extern int ptk->pos_scope;
+extern int ptk->pos_scope_latency;
 
 extern int player_pos;
 extern int ptk->metronome_rows_counter;

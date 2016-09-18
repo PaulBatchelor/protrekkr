@@ -77,8 +77,8 @@ extern int AUDIO_Milliseconds;
 void Message_Error(char *Message);
 #endif
 
-int AUDIO_Init_Driver(void (STDCALL *Mixer)(Uint8 *, Uint32));
-int AUDIO_Init_DriverFloat(void (STDCALL *Mixer)(float*, float*, Uint32));
+int AUDIO_Init_Driver(ptk_data *ptk, void (STDCALL *Mixer)(Uint8 *, Uint32));
+int AUDIO_Init_DriverFloat(ptk_data *ptk, void (STDCALL *Mixer)(ptk_data *ptk, float*, float*, Uint32));
 int AUDIO_Create_Sound_Buffer(int milliseconds);
 void AUDIO_Stop_Sound_Buffer(void);
 void AUDIO_Stop_Driver(void);

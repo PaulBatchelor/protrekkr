@@ -152,6 +152,9 @@ typedef struct {
     int metronome_rows_counter;
     int metronome_magnify;
 
+    int pos_scope;
+    int pos_scope_latency;
+
     int lref;
     lua_State *L;
     ptk_sporth sporth;
