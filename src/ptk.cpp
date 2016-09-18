@@ -105,10 +105,7 @@ extern int shuffleswitch;
 
 extern float sp_Tvol_Mod[MAX_TRACKS];
 
-
 ptk_data ptk;
-/*TODO: remove need for global pointer */
-ptk_data *g_ptk = &ptk;
 
 /*TODO: this variable conflicts with tVisible_Columns somewhere */
 char Visible_Columns = 0;

@@ -92,7 +92,7 @@ char Dir_Samples[MAX_PATH];
 char *cur_dir;
 
 /* TODO: remove global variable hack */
-extern ptk_data *g_ptk;
+ptk_data *g_ptk = NULL;
 
 // ------------------------------------------------------
 // Functions
@@ -561,6 +561,7 @@ void Read_SMPT(ptk_data *ptk)
 #else
 
     // Enum them
+    g_ptk = ptk;
     nftw(Dir_Act, &list_file, FTW_PHYS, 0);
 
     if(sort_files)

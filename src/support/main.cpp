@@ -395,7 +395,6 @@ int ptk_parse_args(ptk_data *ptk, int argc, char ***argvp)
 	return argc;
 }
 
-extern ptk_data *g_ptk;
 // ------------------------------------------------------
 // Main part of the tracker interface
 #if defined(__WIN32__)
@@ -423,8 +422,8 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
     int in_note;
     char Win_Coords[64];
     Uint32 ExePath_Size = MAX_PATH;
-    /*TODO: No more global struct */
-    ptk_data *ptk = g_ptk;
+    ptk_data ptk_d;
+    ptk_data *ptk = &ptk_d;
     ptk_init(ptk);
 #if defined(__MACOSX__)
     Uint32 Path_Length;

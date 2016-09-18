@@ -56,9 +56,6 @@
 #include "files.h"
 #include "editor_fx_setup.h"
 
-/* TODO: global yeah you get it*/
-extern ptk_data *g_ptk;
-
 // ------------------------------------------------------
 // Variables
 int SamplesPerTick;
@@ -663,12 +660,12 @@ void STDCALL MixerFloat(ptk_data *ptk, float *buf1, float* buf2, Uint32 Len)
 #endif
         for(Uint32 i = 0; i < Len; ++i)
         {
-            GetPlayerValues(g_ptk);
+            GetPlayerValues(ptk);
 
 #if !defined(__STAND_ALONE__)
             // Gather datas for the scopes and the vumeters
-            clamp_left_value = g_ptk->left_float * 32767.0f;
-            clamp_right_value = g_ptk->right_float * 32767.0f;
+            clamp_left_value = ptk->left_float * 32767.0f;
+            clamp_right_value = ptk->right_float * 32767.0f;
 #endif
 
 #if !defined(__WINAMP__)
@@ -691,8 +688,8 @@ void STDCALL MixerFloat(ptk_data *ptk, float *buf1, float* buf2, Uint32 Len)
                 else
                 {
                     // ([1.0..-1.0f])
-                    g_ptk->left_float += (float) (Left_Dat) / 32767.0f;
-                    g_ptk->right_float += (float) (Right_Dat) / 32767.0f;
+                    ptk->left_float += (float) (Left_Dat) / 32767.0f;
+                    ptk->right_float += (float) (Right_Dat) / 32767.0f;
                 }
 #else
                 left_value += Left_Dat;
@@ -710,8 +707,8 @@ void STDCALL MixerFloat(ptk_data *ptk, float *buf1, float* buf2, Uint32 Len)
 #endif
 #endif
 
-            *buf1++ = g_ptk->left_float;
-            *buf2++ = g_ptk->right_float;
+            *buf1++ = ptk->left_float;
+            *buf2++ = ptk->right_float;
 
 #if !defined(__STAND_ALONE__)
             // Pre-record
@@ -741,7 +738,7 @@ void STDCALL MixerFloat(ptk_data *ptk, float *buf1, float* buf2, Uint32 Len)
 
         if(local_curr_ramp_vol <= 0.0f)
         {
-            Reset_Values(g_ptk);
+            Reset_Values(ptk);
         }
 
 #if !defined(__STAND_ALONE__)
