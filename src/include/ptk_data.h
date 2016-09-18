@@ -157,6 +157,10 @@ typedef struct {
 
     int done;
 
+    char AutoSave; 
+
+    int Nbr_Sub_NoteOff;
+
     int lref;
     lua_State *L;
     ptk_sporth sporth;

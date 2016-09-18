@@ -42,7 +42,7 @@
 
 // ------------------------------------------------------
 // Variables
-extern int Nbr_Sub_NoteOff;
+extern int ptk->Nbr_Sub_NoteOff;
 extern int ptk->key_record_first_time;
 extern int ptk->old_key_Pattern_Line;
 extern int ptk->pos_scope;
@@ -139,7 +139,7 @@ void Midi_CallBackIn(double deltatime,
         {
             // Start recording
             is_recording_2 = 1;
-            Nbr_Sub_NoteOff = 0;
+            ptk->Nbr_Sub_NoteOff = 0;
             is_record_key = FALSE;
             is_editing = TRUE;
             L_MaxLevel = 0;

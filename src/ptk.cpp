@@ -141,7 +141,7 @@ Uint32 (*Timer_Ptr)(Uint32 interval, void *param) = &Timer_CallBack;
 extern s_access sp_Position[MAX_TRACKS][MAX_POLYPHONY];
 
 //extern int done;
-extern float local_curr_mas_vol;
+//extern float local_curr_mas_vol;
 
 SDL_Surface *LOGOPIC;
 Uint32 Alloc_midi_Channels[MAX_TRACKS][MAX_POLYPHONY];
@@ -149,7 +149,7 @@ Uint32 Alloc_midi_Channels[MAX_TRACKS][MAX_POLYPHONY];
 void Mouse_Sliders_Master_Shuffle(ptk_data *ptk);
 unsigned long Calc_Length(ptk_data *ptk);
 
-extern int Continuous_Scroll;
+//extern int Continuous_Scroll;
 
 void Draw_Scope(ptk_data *ptk);
 void Draw_Scope_Files_Button(ptk_data *ptk);
@@ -158,9 +158,7 @@ void Solo_Track(int track_to_solo);
 
 JAZZ_KEY Sub_Channels_Jazz[MAX_TRACKS][MAX_POLYPHONY];
 
-
-extern char AutoSave;
-int Values_AutoSave[] =
+static int Values_AutoSave[] =
 {
     0,
     1 * 60,
@@ -172,7 +170,7 @@ int Values_AutoSave[] =
     30 * 60
 };
 
-int Table_Right_Tab_Notes[] =
+static int Table_Right_Tab_Notes[] =
 {
     3, 2, 1,
     3, 2, 1,
@@ -192,7 +190,7 @@ int Table_Right_Tab_Notes[] =
     3, 2, 1,
 };
 
-int Table_Left_Tab_Notes[] =
+static int Table_Left_Tab_Notes[] =
 {
     3, 1, 2,
     3, 1, 2,
@@ -212,9 +210,8 @@ int Table_Left_Tab_Notes[] =
     3, 1, 2,
 };
 
-int Keyboard_Events_Channels[256];
+//int Keyboard_Events_Channels[256];
 JAZZ_KEY Sub_Channels_NoteOff[MAX_TRACKS][MAX_POLYPHONY];
-int Nbr_Sub_NoteOff;
 
 REQUESTER_BUTTON Requester_Btn_Cancel =
 {
@@ -989,7 +986,7 @@ int Screen_Update(ptk_data *ptk)
         {
             is_recording = 0;
             is_recording_2 = 0;
-            Nbr_Sub_NoteOff = 0;
+            ptk->Nbr_Sub_NoteOff = 0;
             //is_editing = 0;
             Notify_Edit(ptk);
             SongStop(ptk);
@@ -1005,7 +1002,7 @@ int Screen_Update(ptk_data *ptk)
             is_recording = 0;
             is_editing ^= 1;
             is_recording_2 = 0;
-            Nbr_Sub_NoteOff = 0;
+            ptk->Nbr_Sub_NoteOff = 0;
             SongStop(ptk);
             Actupated(ptk, 0);
             Notify_Edit(ptk);
@@ -1016,7 +1013,7 @@ int Screen_Update(ptk_data *ptk)
             SongStop(ptk);
             is_recording ^= 1;
             is_recording_2 = 0;
-            Nbr_Sub_NoteOff = 0;
+            ptk->Nbr_Sub_NoteOff = 0;
             is_editing = 0;
             ptk->key_record_first_time = TRUE;
             Clear_Midi_Channels_Pool();
@@ -3095,11 +3092,11 @@ Uint32 Timer_CallBack(Uint32 interval, void *param)
     }
 
     // Don't save during a requester
-    if(AutoSave && Current_Requester == NULL)
+    if(ptk->AutoSave && Current_Requester == NULL)
     {
         ptk->wait_AutoSave++;
         // Autosave module
-        if(ptk->wait_AutoSave > Values_AutoSave[AutoSave])
+        if(ptk->wait_AutoSave > Values_AutoSave[ptk->AutoSave])
         {
             Pack_Module(ptk, ptk->name);
         }
@@ -4112,7 +4109,7 @@ void Keyboard_Handler(ptk_data *ptk)
             if(!is_recording_2 && (retnote_raw < NOTE_OFF && retnote_raw > 0) && ptk->key_record_first_time) {
                 // Start recording
                 is_recording_2 = 1;
-                Nbr_Sub_NoteOff = 0;
+                ptk->Nbr_Sub_NoteOff = 0;
                 is_record_key = FALSE;
                 is_editing = TRUE;
                 L_MaxLevel = 0;
@@ -4875,20 +4872,20 @@ void Keyboard_Handler(ptk_data *ptk)
                             if(is_recording_2 || is_editing)
                             {
                                 // Store the note column where it was entered
-                                Sub_Channels_NoteOff[ptk->Track_Under_Caret][Nbr_Sub_NoteOff].Note = ((tmp_note + 1) << 8);
-                                Sub_Channels_NoteOff[ptk->Track_Under_Caret][Nbr_Sub_NoteOff].Channel = ptk->Track_Under_Caret;
+                                Sub_Channels_NoteOff[ptk->Track_Under_Caret][ptk->Nbr_Sub_NoteOff].Note = ((tmp_note + 1) << 8);
+                                Sub_Channels_NoteOff[ptk->Track_Under_Caret][ptk->Nbr_Sub_NoteOff].Channel = ptk->Track_Under_Caret;
                                 if(Keyboard_Notes_Bound[i])
                                 {
                                     pos = (ptk->Column_Under_Caret / 3);
                                 }
                                 else
                                 {
-                                    pos = (ptk->Column_Under_Caret / 3) + Nbr_Sub_NoteOff;
+                                    pos = (ptk->Column_Under_Caret / 3) + ptk->Nbr_Sub_NoteOff;
                                 }
-                                Sub_Channels_NoteOff[ptk->Track_Under_Caret][Nbr_Sub_NoteOff].Sub_Channel = pos;
+                                Sub_Channels_NoteOff[ptk->Track_Under_Caret][ptk->Nbr_Sub_NoteOff].Sub_Channel = pos;
 
-                                if(Nbr_Sub_NoteOff < (Channels_MultiNotes[ptk->Track_Under_Caret] - 1)) Nbr_Sub_NoteOff++;
-                                else Nbr_Sub_NoteOff = 0;
+                                if(ptk->Nbr_Sub_NoteOff < (Channels_MultiNotes[ptk->Track_Under_Caret] - 1)) ptk->Nbr_Sub_NoteOff++;
+                                else ptk->Nbr_Sub_NoteOff = 0;
                             }
 
                             if(pos > (Channels_MultiNotes[ptk->Track_Under_Caret] - 1))
@@ -4926,8 +4923,8 @@ void Keyboard_Handler(ptk_data *ptk)
                                     *(RawPatterns + xoffseted + PATTERN_INSTR1) = NO_INSTR;
                                 }
                                 // Now discard any remaining note off for that channel/sub channel
-                                Nbr_Sub_NoteOff -= Discard_Key_Note_Off(Sub_Channels_NoteOff, Channel->Channel, Channel->Sub_Channel);
-                                if(Nbr_Sub_NoteOff < 0) Nbr_Sub_NoteOff = 0;
+                                ptk->Nbr_Sub_NoteOff -= Discard_Key_Note_Off(Sub_Channels_NoteOff, Channel->Channel, Channel->Sub_Channel);
+                                if(ptk->Nbr_Sub_NoteOff < 0) ptk->Nbr_Sub_NoteOff = 0;
                             }
                         }
                         if(is_recording_2) move_down = TRUE;
