@@ -355,8 +355,6 @@ static char mt_channels[16] =
     13, 14, 15, 16
 };
 
-int ZzaappOMatic;
-
 // ------------------------------------------------------
 // Load a skin picture according to the xml script
 SDL_Surface *Load_Skin_Picture(char *name)
@@ -1728,27 +1726,27 @@ int Screen_Update(ptk_data *ptk)
     {
         case 1:
             // All
-            ZzaappOMatic = ZZAAPP_ALL;
+            ptk->ZzaappOMatic = ZZAAPP_ALL;
             break;
 
         case 2:
             // Patterns
-            ZzaappOMatic = ZZAAPP_PATTERNS;
+            ptk->ZzaappOMatic = ZZAAPP_PATTERNS;
             break;
 
         case 3:
             // Instruments
-            ZzaappOMatic = ZZAAPP_INSTRUMENTS;
+            ptk->ZzaappOMatic = ZZAAPP_INSTRUMENTS;
             break;
 
         case 4:
             // Synths
-            ZzaappOMatic = ZZAAPP_SYNTHS;
+            ptk->ZzaappOMatic = ZZAAPP_SYNTHS;
             break;
 
         case 5:
             // 303
-            ZzaappOMatic = ZZAAPP_303;
+            ptk->ZzaappOMatic = ZZAAPP_303;
             break;
 
         case 6:
@@ -1762,22 +1760,22 @@ int Screen_Update(ptk_data *ptk)
     {
         case 1:
             // All
-            ZzaappOMatic = ZZAAPP_ALL;
+            ptk->ZzaappOMatic = ZZAAPP_ALL;
             break;
 
         case 2:
             // Instrument
-            ZzaappOMatic = ZZAAPP_INSTRUMENTS;
+            ptk->ZzaappOMatic = ZZAAPP_INSTRUMENTS;
             break;
 
         case 3:
             // Split
-            ZzaappOMatic = ZZAAPP_SPLIT;
+            ptk->ZzaappOMatic = ZZAAPP_SPLIT;
             break;
 
         case 4:
             // Synth
-            ZzaappOMatic = ZZAAPP_SYNTHS;
+            ptk->ZzaappOMatic = ZZAAPP_SYNTHS;
             break;
 
         case 5:
@@ -2325,7 +2323,7 @@ void Newmod(ptk_data *ptk)
     Midi_Reset(ptk);
 #endif
 
-    if(ZzaappOMatic == ZZAAPP_ALL || ZzaappOMatic == ZZAAPP_INSTRUMENTS)
+    if(ptk->ZzaappOMatic == ZZAAPP_ALL || ptk->ZzaappOMatic == ZZAAPP_INSTRUMENTS)
     {
         Free_Samples(ptk);
         ptk->Current_Instrument = 0;
@@ -2346,7 +2344,7 @@ void Newmod(ptk_data *ptk)
         Renew_Sample_Ed(ptk);
     }
 
-    if(ZzaappOMatic == ZZAAPP_ALL || ZzaappOMatic == ZZAAPP_SYNTHS)
+    if(ptk->ZzaappOMatic == ZZAAPP_ALL || ptk->ZzaappOMatic == ZZAAPP_SYNTHS)
     {
         for(int ini = 0; ini < MAX_TRACKS; ini++)
         {
@@ -2366,7 +2364,7 @@ void Newmod(ptk_data *ptk)
         ptk->Current_Instrument = 0;
     }
 
-    if(ZzaappOMatic == ZZAAPP_ALL || ZzaappOMatic == ZZAAPP_PATTERNS)
+    if(ptk->ZzaappOMatic == ZZAAPP_ALL || ptk->ZzaappOMatic == ZZAAPP_PATTERNS)
     {
         Songtracks = 6;
         for(int api = 0; api < MAX_ROWS; api++)
@@ -2406,7 +2404,7 @@ void Newmod(ptk_data *ptk)
         Reset_Tracks_To_Render(ptk);
     }
 
-    if(ZzaappOMatic == ZZAAPP_ALL || ZzaappOMatic == ZZAAPP_303)
+    if(ptk->ZzaappOMatic == ZZAAPP_ALL || ptk->ZzaappOMatic == ZZAAPP_303)
     {
         Reset_303_Parameters(&tb303[0]);
         Reset_303_Parameters(&tb303[1]);
@@ -2416,7 +2414,7 @@ void Newmod(ptk_data *ptk)
         track3032 = 255;
     }
 
-    if(ZzaappOMatic == ZZAAPP_ALL)
+    if(ptk->ZzaappOMatic == ZZAAPP_ALL)
     {
         Use_Cubic = CUBIC_INT;
         sprintf(Selection_Name, "Untitled");
@@ -2932,7 +2930,7 @@ void DeleteInstrument(ptk_data *ptk)
 
     Stop_Current_Instrument(ptk);
 
-    if(ZzaappOMatic == ZZAAPP_ALL || ZzaappOMatic == ZZAAPP_SYNTHS)
+    if(ptk->ZzaappOMatic == ZZAAPP_ALL || ptk->ZzaappOMatic == ZZAAPP_SYNTHS)
     {
         for(int ini = 0; ini < MAX_TRACKS; ini++)
         {
@@ -2950,7 +2948,7 @@ void DeleteInstrument(ptk_data *ptk)
         Status_Box(ptk, "Synth deleted.");
     }
 
-    if(ZzaappOMatic == ZZAAPP_SPLIT)
+    if(ptk->ZzaappOMatic == ZZAAPP_SPLIT)
     {
         ptk->seditor = 0;
         Final_Mod_Length = 0;
@@ -2969,7 +2967,7 @@ void DeleteInstrument(ptk_data *ptk)
         Actualize_Master(ptk, 0);
     }
 
-    if(ZzaappOMatic == ZZAAPP_ALL || ZzaappOMatic == ZZAAPP_INSTRUMENTS)
+    if(ptk->ZzaappOMatic == ZZAAPP_ALL || ptk->ZzaappOMatic == ZZAAPP_INSTRUMENTS)
     {
         ptk->seditor = 0;
         Final_Mod_Length = 0;

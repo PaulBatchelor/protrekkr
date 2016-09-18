@@ -163,6 +163,8 @@ typedef struct {
 
     char OverWrite_Name[1024];
 
+    int ZzaappOMatic;
+
     int lref;
     lua_State *L;
     ptk_sporth sporth;
