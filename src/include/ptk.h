@@ -70,8 +70,6 @@ typedef struct
 #define _A_FILE 0
 #define _A_SEP -1
 
-// ------------------------------------------------------
-// Functions
 int Init_Context(ptk_data *ptk);
 void Destroy_Context(ptk_data *ptk);
 int Screen_Update(ptk_data *ptk);
