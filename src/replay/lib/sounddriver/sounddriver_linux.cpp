@@ -49,7 +49,6 @@ jack_port_t* jaudio_port2 = NULL;
 
 // ------------------------------------------------------
 // Variables (external helpers, not really used here)
-int volatile AUDIO_Acknowledge = 0;
 int AUDIO_Latency = 0;
 int AUDIO_Milliseconds = 20;
 
@@ -76,7 +75,7 @@ static int jaudio_process_callback(jack_nframes_t nframes, void* data)
     memset(audioBuf1, 0, sizeof(float)*nframes);
     memset(audioBuf2, 0, sizeof(float)*nframes);
 
-    AUDIO_Acknowledge = FALSE;
+    ptk->AUDIO_Acknowledge = FALSE;
 
     if (AUDIO_Play_Flag && (AUDIO_MixerFloat || AUDIO_Mixer))
     {
@@ -101,7 +100,7 @@ static int jaudio_process_callback(jack_nframes_t nframes, void* data)
         //for (jack_nframes_t i=0; i < nframes; ++i)
         //    *audioBuf1++ = *audioBuf2++ = 0.0f;
 
-        AUDIO_Acknowledge = TRUE;
+        ptk->AUDIO_Acknowledge = TRUE;
     }
 
     return 0;

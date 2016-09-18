@@ -544,11 +544,10 @@ int Init_Context(ptk_data *ptk)
 
 // ------------------------------------------------------
 // Release the allocated resources
-extern int volatile AUDIO_Acknowledge;
 void Destroy_Context(ptk_data *ptk)
 {
     if(Timer) SDL_RemoveTimer(Timer);
-    AUDIO_Acknowledge = TRUE;
+    ptk->AUDIO_Acknowledge = TRUE;
 
     Ptk_ReleaseDriver(ptk);
 

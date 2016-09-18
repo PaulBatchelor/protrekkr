@@ -40,7 +40,7 @@ int AUDIO_Samples;
 int AUDIO_Play_Flag;
 float AUDIO_Timer;
 
-int volatile AUDIO_Acknowledge;
+int volatile ptk->AUDIO_Acknowledge;
 
 struct MsgPort *AHImp;
 struct AHIRequest *AHIio;
@@ -79,7 +79,7 @@ void *AUDIO_Thread(void *arg)
             struct AHIRequest *io = AHIio;
             short *buf = AHIbuf;
     
-            AUDIO_Acknowledge = FALSE;
+            ptk->AUDIO_Acknowledge = FALSE;
             if(AUDIO_Play_Flag)
             {
                 AUDIO_Mixer(ptk, (Uint8 *) buf, AUDIO_SoundBuffer_Size);
@@ -92,7 +92,7 @@ void *AUDIO_Thread(void *arg)
                 {
                     pSamples[i] = 0;
                 }
-                AUDIO_Acknowledge = TRUE;
+                ptk->AUDIO_Acknowledge = TRUE;
             }    
 
             io->ahir_Std.io_Message.mn_Node.ln_Pri = 0;
@@ -235,7 +235,7 @@ void AUDIO_Wait_For_Thread(void)
     {
         if(AUDIO_Play_Flag)
         {
-            while(AUDIO_Acknowledge)
+            while(ptk->AUDIO_Acknowledge)
             {
                 usleep(10);
             };
@@ -244,7 +244,7 @@ void AUDIO_Wait_For_Thread(void)
         {
             if(hThread)
             {
-                while(!AUDIO_Acknowledge)
+                while(!ptk->AUDIO_Acknowledge)
                 {
                     usleep(10);
                 };

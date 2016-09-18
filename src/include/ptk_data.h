@@ -165,6 +165,8 @@ typedef struct {
 
     int ZzaappOMatic;
 
+    int volatile AUDIO_Acknowledge;
+
     int lref;
     lua_State *L;
     ptk_sporth sporth;

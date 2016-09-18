@@ -40,7 +40,7 @@ int AUDIO_Samples;
 int AUDIO_Play_Flag;
 float AUDIO_Timer;
 
-int volatile AUDIO_Acknowledge;
+int volatile ptk->AUDIO_Acknowledge;
 AudioDeviceID AUDIO_Device;
 UInt32 Amount;
 AudioStreamBasicDescription	Desc;

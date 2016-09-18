@@ -40,7 +40,7 @@ int AUDIO_Samples __attribute__((aligned(64)));
 int AUDIO_Play_Flag __attribute__((aligned(64)));
 float AUDIO_Timer __attribute__((aligned(64)));
 
-int volatile AUDIO_Acknowledge;
+int volatile ptk->AUDIO_Acknowledge;
 
 SceUID AUDIO_thid;
 int AUDIO_HWChannel;

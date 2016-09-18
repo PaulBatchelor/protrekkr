@@ -47,7 +47,7 @@ int AUDIO_Samples;
 int AUDIO_Play_Flag;
 float AUDIO_Timer;
 
-int volatile AUDIO_Acknowledge;
+int volatile ptk->AUDIO_Acknowledge;
 
 int AUDIO_SoundBuffer_Size;
 
@@ -88,7 +88,7 @@ DWORD WINAPI AUDIO_Thread(LPVOID lpParameter)
     {
         if(AUDIO_Sound_Buffer)
         {
-            AUDIO_Acknowledge = FALSE;
+            ptk->AUDIO_Acknowledge = FALSE;
 
             AUDIO_Sound_Buffer->GetCurrentPosition(&AUDIO_Buffer_Pos, NULL);
             Bytes_To_Lock = AUDIO_Buffer_Pos - AUDIO_Old_Buffer_Pos;
@@ -114,7 +114,7 @@ DWORD WINAPI AUDIO_Thread(LPVOID lpParameter)
                 {
                     pSamples[i] = 0;
                 }
-                AUDIO_Acknowledge = TRUE;
+                ptk->AUDIO_Acknowledge = TRUE;
             }
 
             AUDIO_Sound_Buffer->Unlock(AUDIO_Audio_Ptr1, AUDIO_Audio_Bytes1, AUDIO_Audio_Ptr2, AUDIO_Audio_Bytes2);
@@ -212,14 +212,14 @@ void AUDIO_Wait_For_Thread(void)
     {
         if(AUDIO_Play_Flag)
         {
-            while(AUDIO_Acknowledge)
+            while(ptk->AUDIO_Acknowledge)
             {
                 Sleep(10);
             };
         }
         else
         {
-            while(!AUDIO_Acknowledge)
+            while(!ptk->AUDIO_Acknowledge)
             {
                 Sleep(10);
             };
