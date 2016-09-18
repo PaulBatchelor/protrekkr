@@ -161,6 +161,8 @@ typedef struct {
 
     int Nbr_Sub_NoteOff;
 
+    char OverWrite_Name[1024];
+
     int lref;
     lua_State *L;
     ptk_sporth sporth;

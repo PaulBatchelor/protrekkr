@@ -355,8 +355,6 @@ static char mt_channels[16] =
     13, 14, 15, 16
 };
 
-char OverWrite_Name[1024];
-
 int ZzaappOMatic;
 
 // ------------------------------------------------------

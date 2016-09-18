@@ -65,7 +65,6 @@
 // ------------------------------------------------------
 // Variables
 extern REQUESTER Overwrite_Requester;
-extern char OverWrite_Name[1024];
 
 extern SynthParameters PARASynth[128];
 
@@ -1084,8 +1083,8 @@ int File_Exist_Req(ptk_data *ptk, char *Format, char *Directory, char *FileName)
 
     if(File_Exist(ptk, Format, Directory, FileName))
     {
-        sprintf(OverWrite_Name, "File '%s' already exists, overwrite ?", Temph);
-        Overwrite_Requester.Text = OverWrite_Name;
+        sprintf(ptk->OverWrite_Name, "File '%s' already exists, overwrite ?", Temph);
+        Overwrite_Requester.Text = ptk->OverWrite_Name;
         return(TRUE);
     }
     return(FALSE);
