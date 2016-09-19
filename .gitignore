@@ -3,4 +3,4 @@
 release/distrib/ptk.cfg
 release/distrib/ptk_linux
 src/extralibs/tinyxml/xmltest
-
+*.so
