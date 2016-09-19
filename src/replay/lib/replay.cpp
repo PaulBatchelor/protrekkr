@@ -2361,8 +2361,11 @@ void Sp_Player(ptk_data *ptk)
 							ptk->sporth.notes->tbl[ct] = note;
 							ptk->sporth.gates->tbl[ct] = 1;
 						} else if(note == 120) {
+							ptk->sporth.notes->tbl[ct] = 0;
 							ptk->sporth.gates->tbl[ct] = 0;
-						}
+						} else if(note == 121) {
+                            ptk->sporth.notes->tbl[ct] = -1;
+                        }
 					}
 				}
                 for(i = 0; i < Channels_MultiNotes[ct]; i++)
@@ -3587,6 +3590,13 @@ ByPass_Wav:
         }
 #endif
 
+
+        /* save and scale track signal before applying panning */
+        if(ptk->sporth.use_sporth == TRUE) 
+        {
+            ptk->sporth.tracks->tbl[c] = All_Signal_L / 32767.0f;
+        }
+
         All_Signal_L *= LVol[c];
         All_Signal_R *= RVol[c];
 
@@ -3623,10 +3633,6 @@ ByPass_Wav:
         All_Signal_L *= Track_Volume[c];
         All_Signal_R *= Track_Volume[c];
 #endif
-
-        if(ptk->sporth.use_sporth == TRUE) {
-            ptk->sporth.tracks->tbl[c] = All_Signal_L / 32767.0f;
-        }
         // Store to global signals
         ptk->left_float += All_Signal_L;
         ptk->right_float += All_Signal_R;
