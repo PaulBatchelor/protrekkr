@@ -603,7 +603,7 @@ typedef struct  {
 void ptk_synth_change_parameters(ptk_synth *synth, SynthParameters TSP);
 void ptk_synth_reset(ptk_synth *synth);
         
-float ptk_synth_get_sample(ptk_data *ptk_synth,
+float ptk_synth_get_sample(ptk_synth *synth,
                         short *Left_Samples,
                         short *Right_Samples,
                         char Stereo,

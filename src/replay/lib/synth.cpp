@@ -66,6 +66,7 @@ short STOCK_WHITE[SIZE_WAVEFORMS_SPACE];
     short STOCK_PINK[SIZE_WAVEFORMS_SPACE];
 #endif
 
+static float ptk_math_func(ptk_synth *synth, float in_old, float in_new);
 static void ptk_synth_lfo_advance(ptk_synth *synth)
 {
 #if defined(PTK_SYNTH_LFO1)
@@ -2349,6 +2350,24 @@ float CSynth::MoogFilterR(void)
 #endif // defined(PTK_SYNTH_FILTER)
 
 // Combine both oscillators with a given function
+static float ptk_math_func(ptk_synth *synth, float in_old, float in_new)
+{
+    float sec_value;
+    switch(synth->Data.OSC_COMBINE)
+    {
+        default:
+        case COMBINE_ADD:
+            return in_old + in_new;
+        case COMBINE_SUB:
+            return in_old - in_new;
+        case COMBINE_MUL:
+            sec_value = (((in_new / 32767.0f) * 0.5f) + 0.5f);
+            return (in_old * sec_value);
+        case COMBINE_DIV:
+            sec_value = (((in_new / 32767.0f) * 0.5f) + 0.5f) + 1.0f;
+            return (in_old / sec_value);
+    }
+}
 float CSynth::Math_Func(float in_old, float in_new)
 {
     float sec_value;
@@ -2524,7 +2543,7 @@ void ptk_synth_reset(ptk_synth *synth)
 #endif
 }
 
-float ptk_synth_get_sample(ptk_data *ptk_synth,
+float ptk_synth_get_sample(ptk_synth *synth,
                         short *Left_Samples,
                         short *Right_Samples,
                         char Stereo,
@@ -2542,9 +2561,1125 @@ float ptk_synth_get_sample(ptk_data *ptk_synth,
                         Uint64 *position_osc3,
 #endif
                         int64 osc_speed,
-                        float Ampli_Vol) 
+                        float Ampi_Vol) 
 {
-    return 0.0;
+    s_access *pos_osc1 = (s_access *) position_osc1;
+    s_access *pos_osc2 = (s_access *) position_osc2;
+
+#if defined(PTK_SYNTH_OSC3)
+    s_access *pos_osc3 = (s_access *) position_osc3;
+#endif
+
+    short *Left_Samples1 = NULL;
+    short *Right_Samples1 = NULL;
+    unsigned int res_dec;
+
+#if defined(PTK_SYNTH_PITCH)
+    int64 osc_speed1;
+    int64 osc_speed1b;
+#endif
+    int64 osc_speed2;
+
+#if defined(PTK_SYNTH_OSC2)
+    int64 osc_speed_tune;
+#endif
+
+    float mul_datL;
+    float mul_datR;
+    unsigned int i_POSITION[4];
+
+    synth->GS_VAL = 0;
+    synth->GS_VAL2 = 0;
+
+    char Loop_Type1 = Loop_Type;
+    char Loop_Type2 = Loop_Type;
+
+    unsigned int Loop_Sub1 = Loop_Sub;
+    unsigned int Loop_Sub2 = Loop_Sub;
+    unsigned int Length1 = Length;
+    unsigned int Length2 = Length;
+
+// ------------------------------------------------
+// Oscillator 1
+
+    if(synth->ENV1_STAGE)
+    {
+        // Oscillator1 On
+        if(synth->Data.OSC1_WAVEFORM != WAVEFORM_NONE)
+        {
+            synth->T_OSC1_VOLUME = (
+#if defined(PTK_SYNTH_LFO1)
+                             synth->LFO1_VALUE * synth->Data.LFO1_OSC1_VOLUME
+#endif
+#if defined(PTK_SYNTH_LFO2)
+                             + synth->LFO2_VALUE * synth->Data.LFO2_OSC1_VOLUME
+#endif
+                             + synth->ENV1_MIN
+                            )
+                            * synth->ENV1_VOLUME
+                           ;
+            if(synth->Data.OSC1_WAVEFORM == WAVEFORM_NONE) synth->T_OSC1_VOLUME *= Ampi_Vol;
+
+            if(*track)
+            {
+                if(synth->Data.PTC_GLIDE64 != 0 && synth->OSC1_SPEED != 0)
+                {
+                    if(osc_speed > synth->OSC1_SPEED)
+                    {
+                        synth->OSC1_SPEED += synth->Data.PTC_GLIDE64;
+                        if(synth->OSC1_SPEED > osc_speed) synth->OSC1_SPEED = osc_speed;
+                    }
+                    else
+                    {
+                        synth->OSC1_SPEED -= synth->Data.PTC_GLIDE64;
+                        if(synth->OSC1_SPEED < osc_speed) synth->OSC1_SPEED = osc_speed;
+                    }
+                }
+                else
+                {
+                    synth->OSC1_SPEED = osc_speed;
+                }
+
+#if defined(PTK_SYNTH_PITCH)
+                osc_speed1 = (int64) ((double)
+                             (
+#if defined(PTK_SYNTH_LFO1_PITCH)
+                              synth->LFO1_VALUE * synth->Data.LFO1_OSC1_PITCH
+#endif
+#if defined(PTK_SYNTH_LFO2_PITCH)
+                            + synth->LFO2_VALUE * synth->Data.LFO2_OSC1_PITCH
+#endif
+#if defined(PTK_SYNTH_ENV1_PITCH)
+                            + synth->ENV1_VALUE * synth->Data.ENV1_OSC1_PITCH
+#endif
+#if defined(PTK_SYNTH_ENV2_PITCH)
+                            + synth->ENV2_VALUE * synth->Data.ENV2_OSC1_PITCH
+#endif
+                           ) * 4294967296.0);
+#endif
+
+                osc_speed2 = synth->OSC1_SPEED;
+                Left_Samples1 = Left_Samples;
+                Right_Samples1 = Right_Samples;
+
+#if defined(PTK_INSTRUMENTS)
+                if(synth->Data.OSC1_WAVEFORM != WAVEFORM_WAV)
+#endif
+                {
+
+#if defined(PTK_SYNTH_SIN) || defined(PTK_SYNTH_SAW) || defined(PTK_SYNTH_PULSE) || defined(PTK_SYNTH_WHITE) || defined(PTK_SYNTH_PINK)
+
+                    switch(synth->Data.OSC1_WAVEFORM)
+                    {
+
+#if defined(PTK_SYNTH_SIN)
+                        case WAVEFORM_SIN:
+                            Left_Samples1 = STOCK_SIN;
+                            Right_Samples1 = STOCK_SIN;
+                            break;
+#endif
+
+#if defined(PTK_SYNTH_SAW)
+                        case WAVEFORM_SAW:
+                            Left_Samples1 = STOCK_SAW;
+                            Right_Samples1 = STOCK_SAW;
+                            break;
+#endif
+
+#if defined(PTK_SYNTH_PULSE)
+                        case WAVEFORM_PULSE:
+                            Left_Samples1 = STOCK_PULSE;
+                            Right_Samples1 = STOCK_PULSE;
+                            break;
+#endif
+
+#if defined(PTK_SYNTH_WHITE)
+                        case WAVEFORM_WHITE:
+                            Left_Samples1 = STOCK_WHITE;
+                            Right_Samples1 = STOCK_WHITE;
+                            break;
+#endif
+
+#if defined(PTK_SYNTH_PINK)
+                        case WAVEFORM_PINK:
+                            Left_Samples1 = STOCK_PINK;
+                            Right_Samples1 = STOCK_PINK;
+                            break;
+#endif
+
+                    }
+
+#endif
+
+#if defined(PTK_SYNTH_PITCH)
+                    osc_speed1 *= 65;
+#endif
+                    osc_speed2 *= 65;
+
+                    Length1 = SIZE_WAVEFORMS;
+                    Loop_Sub1 = SIZE_WAVEFORMS;
+                    Loop_Type1 = SMP_LOOP_FORWARD;
+                }
+
+                if(Left_Samples1)
+                {
+                    res_dec = pos_osc1->half.last;
+                    
+                    Set_Spline_Boundaries(g_ptk, pos_osc1->half.first,
+                                          i_POSITION,
+                                          Loop_Type1,
+                                          synth->ENV1_LOOP_BACKWARD,
+                                          Length1,
+                                          Length1,
+                                          Length1 - Loop_Sub1);
+
+                    mul_datL = 1.0f;
+                    mul_datR = 1.0f;
+
+#if defined(PTK_SYNTH_PHASE1)
+                    if(synth->Data.OSC1_PW)
+                    {
+                        synth->T_OSC_PW = synth->Data.OSC1_PW * 
+                                (
+#if defined(PTK_SYNTH_LFO1)
+                                   (synth->LFO1_VALUE * synth->Data.LFO1_OSC1_PW) 
+#endif
+#if defined(PTK_SYNTH_LFO2)
+                                 + (synth->LFO2_VALUE * synth->Data.LFO2_OSC1_PW)
+#endif
+#if defined(PTK_SYNTH_ENV1)
+                                 + (synth->ENV1_VALUE * synth->Data.ENV1_OSC1_PW)
+#endif
+#if defined(PTK_SYNTH_ENV2)
+                                 + (synth->ENV2_VALUE * synth->Data.ENV2_OSC1_PW)
+#endif
+                                );
+                        if(*(Left_Samples1 + i_POSITION[0]) > 0) mul_datL = synth->T_OSC_PW * 2.0f;
+                        if(Stereo == 2) if(*(Right_Samples1 + i_POSITION[0]) > 0) mul_datR = synth->T_OSC_PW * 2.0f;
+                    }
+#endif
+
+#if defined(__STAND_ALONE__) && !defined(__WINAMP__)
+#if defined(PTK_USE_CUBIC)
+                    synth->GS_VAL = (Cubic_Work(
+                                (float) (*(Left_Samples1 + i_POSITION[3])) * mul_datL,
+                                (float) (*(Left_Samples1 + i_POSITION[0])) * mul_datL,
+                                (float) (*(Left_Samples1 + i_POSITION[1])) * mul_datL,
+                                (float) (*(Left_Samples1 + i_POSITION[2])) * mul_datL,
+                                res_dec)) * synth->T_OSC1_VOLUME;
+#elif defined(PTK_USE_SPLINE)
+                    synth->GS_VAL = (Spline_Work(
+                                (float) (*(Left_Samples1 + i_POSITION[3])) * mul_datL,
+                                (float) (*(Left_Samples1 + i_POSITION[0])) * mul_datL,
+                                (float) (*(Left_Samples1 + i_POSITION[1])) * mul_datL,
+                                (float) (*(Left_Samples1 + i_POSITION[2])) * mul_datL,
+                                res_dec)) * T_OSC1_VOLUME;
+#else
+                    synth->GS_VAL = (*(Left_Samples1 + i_POSITION[0]) * mul_datL)
+                              * synth->T_OSC1_VOLUME;
+#endif
+
+#else
+                    switch(Use_Cubic)
+                    {
+                        case CUBIC_INT:
+                            synth->GS_VAL = (Cubic_Work(
+                                        (float) (*(Left_Samples1 + i_POSITION[3])) * mul_datL,
+                                        (float) (*(Left_Samples1 + i_POSITION[0])) * mul_datL,
+                                        (float) (*(Left_Samples1 + i_POSITION[1])) * mul_datL,
+                                        (float) (*(Left_Samples1 + i_POSITION[2])) * mul_datL,
+                                        res_dec)) * synth->T_OSC1_VOLUME;
+                            break;
+                        case SPLINE_INT:
+                            synth->GS_VAL = (Spline_Work(
+                                        (float) (*(Left_Samples1 + i_POSITION[3])) * mul_datL,
+                                        (float) (*(Left_Samples1 + i_POSITION[0])) * mul_datL,
+                                        (float) (*(Left_Samples1 + i_POSITION[1])) * mul_datL,
+                                        (float) (*(Left_Samples1 + i_POSITION[2])) * mul_datL,
+                                        res_dec)) * synth->T_OSC1_VOLUME;
+                            break;
+                        default:
+                            synth->GS_VAL = (*(Left_Samples1 + i_POSITION[0]) * mul_datL)
+                                      * synth->T_OSC1_VOLUME;
+                            break;
+                    }
+#endif
+
+                    // Stereo sample
+                    if(Stereo == 2)
+                    {
+
+#if defined(__STAND_ALONE__) && !defined(__WINAMP__)
+#if defined(PTK_USE_CUBIC)
+                        synth->GS_VAL2 = (Cubic_Work(
+                                     (float) (*(Right_Samples1 + i_POSITION[3])) * mul_datR,
+                                     (float) (*(Right_Samples1 + i_POSITION[0])) * mul_datR,
+                                     (float) (*(Right_Samples1 + i_POSITION[1])) * mul_datR,
+                                     (float) (*(Right_Samples1 + i_POSITION[2])) * mul_datR,
+                                     res_dec)) * synth->T_OSC1_VOLUME;
+#elif defined(PTK_USE_SPLINE)
+                        synth->GS_VAL2 = (Spline_Work(
+                                     (float) (*(Right_Samples1 + i_POSITION[3])) * mul_datR,
+                                     (float) (*(Right_Samples1 + i_POSITION[0])) * mul_datR,
+                                     (float) (*(Right_Samples1 + i_POSITION[1])) * mul_datR,
+                                     (float) (*(Right_Samples1 + i_POSITION[2])) * mul_datR,
+                                     res_dec)) * synth->T_OSC1_VOLUME;
+#else
+                        synth->GS_VAL2 = (*(Right_Samples1 + i_POSITION[0]) * mul_datR)
+                                   * synth->T_OSC1_VOLUME;
+#endif
+
+#else
+                        switch(Use_Cubic)
+                        {
+                            case CUBIC_INT:
+                                synth->GS_VAL2 = (Cubic_Work(
+                                             (float) (*(Right_Samples1 + i_POSITION[3])) * mul_datR,
+                                             (float) (*(Right_Samples1 + i_POSITION[0])) * mul_datR,
+                                             (float) (*(Right_Samples1 + i_POSITION[1])) * mul_datR,
+                                             (float) (*(Right_Samples1 + i_POSITION[2])) * mul_datR,
+                                             res_dec)) * synth->T_OSC1_VOLUME;
+                                break;
+                            case SPLINE_INT:
+                                synth->GS_VAL2 = (Spline_Work(
+                                             (float) (*(Right_Samples1 + i_POSITION[3])) * mul_datR,
+                                             (float) (*(Right_Samples1 + i_POSITION[0])) * mul_datR,
+                                             (float) (*(Right_Samples1 + i_POSITION[1])) * mul_datR,
+                                             (float) (*(Right_Samples1 + i_POSITION[2])) * mul_datR,
+                                             res_dec)) * synth->T_OSC1_VOLUME;
+                                break;
+                            default:
+                                synth->GS_VAL2 = (*(Right_Samples1 + i_POSITION[0]) * mul_datR)
+                                           * synth->T_OSC1_VOLUME;
+                                break;
+                        }
+#endif
+                    }
+
+
+#if defined(PTK_SYNTH_PITCH)
+                    osc_speed2 += osc_speed1;
+                    if(osc_speed2 < 16) osc_speed2 = 16;
+#endif
+
+                    if(synth->ENV1_LOOP_BACKWARD == TRUE)
+                    {
+                        if(pos_osc1->half.first > 0)
+                        {
+                            pos_osc1->absolu -= osc_speed2;
+                        }
+                    }
+                    else pos_osc1->absolu += osc_speed2;
+
+#if defined(PTK_LOOP_FORWARD) || defined(PTK_LOOP_PINGPONG)
+                    switch(Loop_Type1)
+                    {
+                        case SMP_LOOP_NONE:
+#endif
+                            if(synth->ENV1_LOOP_BACKWARD)
+                            {
+                                if((int) pos_osc1->half.first <= 0)
+                                {
+                                    pos_osc1->half.first = 0;
+                                    *track = PLAYING_NOSAMPLE;
+                                }
+                            }
+                            else
+                            {
+                                if(pos_osc1->half.first >= Length1)
+                                {
+                                    pos_osc1->half.first = Length1;
+                                    *track = PLAYING_NOSAMPLE;
+                                }
+                            }
+#if defined(PTK_LOOP_FORWARD) || defined(PTK_LOOP_PINGPONG)
+                            break;
+#endif
+
+#if defined(PTK_LOOP_FORWARD)
+                        case SMP_LOOP_FORWARD:
+                            if(synth->ENV1_LOOP_BACKWARD)
+                            {
+                                if((int) pos_osc1->half.first <= (int) (Length1 - Loop_Sub1))
+                                {
+                                    pos_osc1->half.first += Length1;
+                                }
+                            }
+                            else
+                            {
+                                if(pos_osc1->half.first >= Length1)
+                                {
+                                    pos_osc1->half.first -= Loop_Sub1;
+                                }
+                            }
+                            break;
+#endif
+
+#if defined(PTK_LOOP_PINGPONG)
+                        case SMP_LOOP_PINGPONG:
+                            if(synth->ENV1_LOOP_BACKWARD)
+                            {
+                                if((int) pos_osc1->half.first <= (int) (Length1 - Loop_Sub1))
+                                {
+                                    pos_osc1->half.first = Length1 - Loop_Sub1;
+                                    synth->ENV1_LOOP_BACKWARD = FALSE;
+                                }
+                            }
+                            else
+                            {
+                                if(pos_osc1->half.first >= Length1)
+                                {
+                                    pos_osc1->half.first = Length1;
+                                    synth->ENV1_LOOP_BACKWARD = TRUE;
+                                }
+                            }
+                            break;
+#endif
+#if defined(PTK_LOOP_FORWARD) || defined(PTK_LOOP_PINGPONG)
+                    }
+#endif
+
+               }
+            }
+        }
+    }
+
+// ------------------------------------------------
+// Oscillator 3
+
+#if defined(PTK_SYNTH_OSC3)
+    if(synth->Data.OSC3_SWITCH)
+    {
+        // SubOscillator On
+        if(synth->Data.OSC1_WAVEFORM != WAVEFORM_NONE)
+        {
+            if(*track)
+            {
+                osc_speed2 = synth->OSC1_SPEED / 2;
+
+#if defined(PTK_SYNTH_PITCH)
+                osc_speed1 = ((int64) ((double) (
+#if defined(PTK_SYNTH_LFO1_PITCH)
+                                + synth->LFO1_VALUE * synth->Data.LFO1_OSC1_PITCH
+#endif
+#if defined(PTK_SYNTH_LFO2_PITCH)
+                                + synth->LFO2_VALUE * synth->Data.LFO2_OSC1_PITCH
+#endif
+#if defined(PTK_SYNTH_ENV1_PITCH)
+                                + synth->ENV1_VALUE * synth->Data.ENV1_OSC1_PITCH
+#endif
+#if defined(PTK_SYNTH_ENV2_PITCH)
+                                + synth->ENV2_VALUE * synth->Data.ENV2_OSC1_PITCH
+#endif
+                               ) * 4294967296.0)) / 2;
+#endif
+
+#if defined(PTK_INSTRUMENTS)
+                if(synth->Data.OSC1_WAVEFORM != WAVEFORM_WAV)
+#endif
+                {
+                    osc_speed2 *= 65;
+
+#if defined(PTK_SYNTH_PITCH)
+                    osc_speed1 *= 65;
+#endif
+                    Length = SIZE_WAVEFORMS;
+                    Loop_Sub = SIZE_WAVEFORMS;
+                    Loop_Type = SMP_LOOP_FORWARD;
+                    Stereo = 1;
+                }
+
+                if(Left_Samples1)
+                {
+                    res_dec = pos_osc3->half.last;
+
+                    Set_Spline_Boundaries(g_ptk, pos_osc3->half.first,
+                                          i_POSITION,
+                                          Loop_Type,
+                                          synth->ENV2_LOOP_BACKWARD,
+                                          Length,
+                                          Length,
+                                          Length - Loop_Sub);
+
+                    mul_datL = 1.0f;
+                    mul_datR = 1.0f;
+
+#if defined(PTK_SYNTH_PHASE1)
+                    if(synth->Data.OSC1_PW)
+                    {
+                        synth->T_OSC_PW = synth->Data.OSC1_PW * 
+                               (
+#if defined(PTK_SYNTH_LFO1)
+                                  (synth->LFO1_VALUE * synth->Data.LFO1_OSC1_PW) 
+#endif
+#if defined(PTK_SYNTH_LFO2)
+                                + (synth->LFO2_VALUE * synth->Data.LFO2_OSC1_PW)
+#endif
+#if defined(PTK_SYNTH_ENV1)
+                                + (synth->ENV1_VALUE * synth->Data.ENV1_OSC1_PW)
+#endif
+#if defined(PTK_SYNTH_ENV2)
+                                + (synth->ENV2_VALUE * synth->Data.ENV2_OSC1_PW)
+#endif
+                                );
+
+                        if(*(Left_Samples1 + i_POSITION[0]) > 0) mul_datL = 
+                            synth->T_OSC_PW * 2.0f;
+                        if(Stereo == 2) if(*(Right_Samples1 + i_POSITION[0]) > 0) 
+                            mul_datR = synth->T_OSC_PW * 2.0f;
+                    }
+#endif
+
+#if defined(__STAND_ALONE__) && !defined(__WINAMP__)
+#if defined(PTK_USE_CUBIC)
+                    synth->GS_VAL += (Cubic_Work(
+                                    (float) (*(Left_Samples1 + i_POSITION[3])) * mul_datL,
+                                    (float) (*(Left_Samples1 + i_POSITION[0])) * mul_datL,
+                                    (float) (*(Left_Samples1 + i_POSITION[1])) * mul_datL,
+                                    (float) (*(Left_Samples1 + i_POSITION[2])) * mul_datL,
+                                    res_dec)) * T_OSC1_VOLUME * Data.OSC3_VOLUME;
+#elif defined(PTK_USE_SPLINE)
+                    synth->GS_VAL += (Spline_Work(
+                                    (float) (*(Left_Samples1 + i_POSITION[3])) * mul_datL,
+                                    (float) (*(Left_Samples1 + i_POSITION[0])) * mul_datL,
+                                    (float) (*(Left_Samples1 + i_POSITION[1])) * mul_datL,
+                                    (float) (*(Left_Samples1 + i_POSITION[2])) * mul_datL,
+                                    res_dec)) * T_OSC1_VOLUME * Data.OSC3_VOLUME;
+#else
+                    synth->GS_VAL += (*(Left_Samples1 + i_POSITION[0]) * mul_datL)
+                               * synth->T_OSC1_VOLUME * synth->Data.OSC3_VOLUME;
+#endif
+
+#else
+                    switch(Use_Cubic)
+                    {
+                        case CUBIC_INT:
+                            synth->GS_VAL += (Cubic_Work(
+                                            (float) (*(Left_Samples1 + i_POSITION[3])) * mul_datL,
+                                            (float) (*(Left_Samples1 + i_POSITION[0])) * mul_datL,
+                                            (float) (*(Left_Samples1 + i_POSITION[1])) * mul_datL,
+                                            (float) (*(Left_Samples1 + i_POSITION[2])) * mul_datL,
+                                            res_dec)) * synth->T_OSC1_VOLUME * synth->Data.OSC3_VOLUME;
+                            break;
+                        case SPLINE_INT:
+                            synth->GS_VAL += (Spline_Work(
+                                            (float) (*(Left_Samples1 + i_POSITION[3])) * mul_datL,
+                                            (float) (*(Left_Samples1 + i_POSITION[0])) * mul_datL,
+                                            (float) (*(Left_Samples1 + i_POSITION[1])) * mul_datL,
+                                            (float) (*(Left_Samples1 + i_POSITION[2])) * mul_datL,
+                                            res_dec)) * synth->T_OSC1_VOLUME * synth->Data.OSC3_VOLUME;
+                            break;
+                        default:
+                            synth->GS_VAL += (*(Left_Samples1 + i_POSITION[0]) * mul_datL)
+                                       * synth->T_OSC1_VOLUME * synth->Data.OSC3_VOLUME;
+                            break;
+                    }
+#endif
+
+                    if(Stereo == 2)
+                    {
+
+#if defined(__STAND_ALONE__) && !defined(__WINAMP__)
+#if defined(PTK_USE_CUBIC)
+                        synth->GS_VAL2 += (Cubic_Work(
+                                        (float) (*(Right_Samples1 + i_POSITION[3])) * mul_datR,
+                                        (float) (*(Right_Samples1 + i_POSITION[0])) * mul_datR,
+                                        (float) (*(Right_Samples1 + i_POSITION[1])) * mul_datR,
+                                        (float) (*(Right_Samples1 + i_POSITION[2])) * mul_datR,
+                                        res_dec)) * synth->T_OSC1_VOLUME * synth->Data.OSC3_VOLUME;
+#elif defined(PTK_USE_SPLINE)
+                        synth->GS_VAL2 += (Spline_Work(
+                                        (float) (*(Right_Samples1 + i_POSITION[3])) * mul_datR,
+                                        (float) (*(Right_Samples1 + i_POSITION[0])) * mul_datR,
+                                        (float) (*(Right_Samples1 + i_POSITION[1])) * mul_datR,
+                                        (float) (*(Right_Samples1 + i_POSITION[2])) * mul_datR,
+                                        res_dec)) * synth->T_OSC1_VOLUME * synth->Data.OSC3_VOLUME;
+#else
+                        synth->GS_VAL2 += (*(Right_Samples1 + i_POSITION[0]) * mul_datR)
+                                    * synth->T_OSC1_VOLUME * synth->Data.OSC3_VOLUME;
+#endif
+
+#else
+                        switch(Use_Cubic)
+                        {
+                            case CUBIC_INT:
+                                synth->GS_VAL2 += (Cubic_Work(
+                                                (float) (*(Right_Samples1 + i_POSITION[3])) * mul_datR,
+                                                (float) (*(Right_Samples1 + i_POSITION[0])) * mul_datR,
+                                                (float) (*(Right_Samples1 + i_POSITION[1])) * mul_datR,
+                                                (float) (*(Right_Samples1 + i_POSITION[2])) * mul_datR,
+                                                res_dec)) * synth->T_OSC1_VOLUME * synth->Data.OSC3_VOLUME;
+                                break;
+                            case SPLINE_INT:
+                                synth->GS_VAL2 += (Spline_Work(
+                                                (float) (*(Right_Samples1 + i_POSITION[3])) * mul_datR,
+                                                (float) (*(Right_Samples1 + i_POSITION[0])) * mul_datR,
+                                                (float) (*(Right_Samples1 + i_POSITION[1])) * mul_datR,
+                                                (float) (*(Right_Samples1 + i_POSITION[2])) * mul_datR,
+                                                res_dec)) * synth->T_OSC1_VOLUME * synth->Data.OSC3_VOLUME;
+                                break;
+                            default:
+                                synth->GS_VAL2 += (*(Right_Samples1 + i_POSITION[0]) * mul_datR)
+                                            * synth->T_OSC1_VOLUME * synth->Data.OSC3_VOLUME;
+                                break;
+                        }
+#endif
+
+                    }
+                }
+
+#if defined(PTK_SYNTH_PITCH)
+                osc_speed2 += osc_speed1;
+                if(osc_speed2 < 16) osc_speed2 = 16;
+#endif
+
+                if(synth->ENV3_LOOP_BACKWARD == TRUE)
+                {
+                    if(pos_osc3->half.first > 0)
+                    {
+                        pos_osc3->absolu -= osc_speed2;
+                    }
+                }
+                else pos_osc3->absolu += osc_speed2;
+
+#if defined(PTK_LOOP_FORWARD) || defined(PTK_LOOP_PINGPONG)
+                switch(Loop_Type)
+                {
+                    case SMP_LOOP_NONE:
+#endif
+                        if(synth->ENV3_LOOP_BACKWARD)
+                        {
+                            if((int) pos_osc3->half.first <= 0)
+                            {
+                                pos_osc3->half.first = 0;
+                                *track = PLAYING_NOSAMPLE;
+                            }
+                        }
+                        else
+                        {
+                            if(pos_osc3->half.first >= Length)
+                            {
+                                pos_osc3->half.first = Length;
+                                *track = PLAYING_NOSAMPLE;
+                            }
+                        }
+#if defined(PTK_LOOP_FORWARD) || defined(PTK_LOOP_PINGPONG)
+                        break;
+#endif
+
+#if defined(PTK_LOOP_FORWARD)
+                    case SMP_LOOP_FORWARD:
+                        if(synth->ENV3_LOOP_BACKWARD)
+                        {
+                            if((int) pos_osc3->half.first <= (int) (Length - Loop_Sub))
+                            {
+                                pos_osc3->half.first += Length;
+                            }
+                        }
+                        else
+                        {
+                            if(pos_osc3->half.first >= Length)
+                            {
+                                pos_osc3->half.first -= Loop_Sub;
+                            }
+                        }
+                        break;
+#endif
+
+#if defined(PTK_LOOP_PINGPONG)
+                    case SMP_LOOP_PINGPONG:
+                        if(synth->ENV3_LOOP_BACKWARD)
+                        {
+                            if((int) pos_osc3->half.first <= (int) (Length - Loop_Sub))
+                            {
+                                pos_osc3->half.first = Length - Loop_Sub;
+                                synth->ENV3_LOOP_BACKWARD = FALSE;
+                            }
+                        }
+                        else
+                        {
+                            if(pos_osc3->half.first >= Length)
+                            {
+                                pos_osc3->half.first = Length;
+                                synth->ENV3_LOOP_BACKWARD = TRUE;
+                            }
+                        }
+                        break;
+#endif
+#if defined(PTK_LOOP_FORWARD) || defined(PTK_LOOP_PINGPONG)
+                }
+#endif
+            }
+        }
+    }
+#endif // PTK_SYNTH_OSC3
+
+// ------------------------------------------------
+// Oscillator 2
+
+#if defined(PTK_SYNTH_OSC2)
+    if(synth->ENV2_STAGE)
+    {
+        // Oscillator2 On 
+        if(synth->Data.OSC2_WAVEFORM != WAVEFORM_NONE)
+        {
+            if(*track2)
+            {
+                osc_speed_tune = osc_speed + (int64) ((double) synth->Data.OSC2_FINETUNE * 536870912.0)
+                                           + (int64) ((double) synth->Data.OSC2_DETUNE * 536870912.0);
+                if(synth->Data.PTC_GLIDE64 != 0 && synth->OSC2_SPEED != 0)
+                {
+                    if(osc_speed_tune > synth->OSC2_SPEED)
+                    {
+                        synth->OSC2_SPEED += synth->Data.PTC_GLIDE64;
+                        if(synth->OSC2_SPEED > osc_speed_tune) synth->OSC2_SPEED = osc_speed_tune;
+                    }
+                    else
+                    {
+                        synth->OSC2_SPEED -= synth->Data.PTC_GLIDE64;
+                        if(synth->OSC2_SPEED < osc_speed_tune) synth->OSC2_SPEED = osc_speed_tune;
+                    }
+                }
+                else
+                {
+                    synth->OSC2_SPEED = osc_speed_tune;
+                }
+
+#if defined(PTK_SYNTH_PITCH)
+                osc_speed1b = ((int64) ((double)
+                               (
+#if defined(PTK_SYNTH_LFO1_PITCH)
+                                  synth->LFO1_VALUE * synth->Data.LFO1_OSC2_PITCH
+#endif
+#if defined(PTK_SYNTH_LFO2_PITCH)
+                                + synth->LFO2_VALUE * synth->Data.LFO2_OSC2_PITCH
+#endif
+#if defined(PTK_SYNTH_ENV1_PITCH)
+                                + synth->ENV1_VALUE * synth->Data.ENV1_OSC2_PITCH
+#endif
+#if defined(PTK_SYNTH_ENV2_PITCH)
+                                + synth->ENV2_VALUE * synth->Data.ENV2_OSC2_PITCH
+#endif
+                               ) * 4294967296.0));
+#endif
+
+                osc_speed2 = synth->OSC2_SPEED;
+
+#if defined(PTK_INSTRUMENTS)
+                if(synth->Data.OSC2_WAVEFORM != WAVEFORM_WAV)
+#endif
+                {
+                    switch(synth->Data.OSC2_WAVEFORM)
+                    {
+
+#if defined(PTK_SYNTH_SIN)
+                        case WAVEFORM_SIN:
+                            Left_Samples = STOCK_SIN;
+                            Right_Samples = STOCK_SIN;
+                            break;
+#endif
+
+#if defined(PTK_SYNTH_SAW)
+                        case WAVEFORM_SAW:
+                            Left_Samples = STOCK_SAW;
+                            Right_Samples = STOCK_SAW;
+                            break;
+#endif
+
+#if defined(PTK_SYNTH_PULSE)
+                        case WAVEFORM_PULSE:
+                            Left_Samples = STOCK_PULSE;
+                            Right_Samples = STOCK_PULSE;
+                            break;
+#endif
+
+#if defined(PTK_SYNTH_WHITE)
+                        case WAVEFORM_WHITE:
+                            Left_Samples = STOCK_WHITE;
+                            Right_Samples = STOCK_WHITE;
+                            break;
+#endif
+
+#if defined(PTK_SYNTH_PINK)
+                        case WAVEFORM_PINK:
+                            Left_Samples = STOCK_PINK;
+                            Right_Samples = STOCK_PINK;
+                            break;
+#endif
+
+                    }
+
+#if defined(PTK_SYNTH_PITCH)
+                    osc_speed1b *= 65;
+#endif
+
+                    osc_speed2 *= 65;
+                    Length2 = SIZE_WAVEFORMS;
+                    Loop_Sub2 = SIZE_WAVEFORMS;
+                    Loop_Type2 = SMP_LOOP_FORWARD;
+                }
+
+                if(Left_Samples)
+                {
+                    synth->T_OSC2_VOLUME = ((
+#if defined(PTK_SYNTH_LFO1)
+                                    synth->LFO1_VALUE * synth->Data.LFO1_OSC2_VOLUME
+#endif
+#if defined(PTK_SYNTH_LFO2)
+                                    + synth->LFO2_VALUE * synth->Data.LFO2_OSC2_VOLUME
+#endif
+                                    + 0) + synth->ENV2_MIN)
+                                    * synth->ENV2_VOLUME;
+
+                    if(synth->Data.OSC2_WAVEFORM == WAVEFORM_NONE) synth->T_OSC2_VOLUME *= Ampi_Vol;
+
+                    res_dec = pos_osc2->half.last;
+
+                    Set_Spline_Boundaries(g_ptk, pos_osc2->half.first,
+                                          i_POSITION,
+                                          Loop_Type2,
+                                          synth->ENV2_LOOP_BACKWARD,
+                                          Length2,
+                                          Length2,
+                                          Length2 - Loop_Sub2);
+
+                    mul_datL = 1.0f;
+                    mul_datR = 1.0f;
+
+#if defined(PTK_SYNTH_PHASE2)
+                    if(synth->Data.OSC2_PW)
+                    {
+                        synth->T_OSC_PW = synth->Data.OSC2_PW * 
+                                  (
+#if defined(PTK_SYNTH_LFO1)
+                                    (synth->LFO1_VALUE * synth->Data.LFO1_OSC2_PW) 
+#endif
+#if defined(PTK_SYNTH_LFO2)
+                                    + (synth->LFO2_VALUE * synth->Data.LFO2_OSC2_PW)
+#endif
+#if defined(PTK_SYNTH_ENV1)
+                                    + (synth->ENV1_VALUE * synth->Data.ENV1_OSC2_PW)
+#endif
+#if defined(PTK_SYNTH_ENV2)
+                                    + (synth->ENV2_VALUE * synth->Data.ENV2_OSC2_PW)
+#endif
+                                   );
+                        if(*(Left_Samples + i_POSITION[0]) > 0) mul_datL = synth->T_OSC_PW * 2.0f;
+                        if(Stereo == 2) if(*(Right_Samples + i_POSITION[0]) > 0) mul_datR = synth->T_OSC_PW * 2.0f;
+                    }
+#endif
+
+#if defined(__STAND_ALONE__) && !defined(__WINAMP__)
+#if defined(PTK_USE_CUBIC)
+                    synth->GS_VAL = ptk_math_func(synth, synth->GS_VAL, Cubic_Work((float) (*(Left_Samples + i_POSITION[3])) * mul_datL,
+                                                          (float) (*(Left_Samples + i_POSITION[0])) * mul_datL,
+                                                          (float) (*(Left_Samples + i_POSITION[1])) * mul_datL,
+                                                          (float) (*(Left_Samples + i_POSITION[2])) * mul_datL,
+                                                          res_dec) * synth->T_OSC2_VOLUME);
+#elif defined(PTK_USE_SPLINE)
+                    synth->GS_VAL = ptk_math_func(synth, synth->GS_VAL, Spline_Work((float) (*(Left_Samples + i_POSITION[3])) * mul_datL,
+                                                           (float) (*(Left_Samples + i_POSITION[0])) * mul_datL,
+                                                           (float) (*(Left_Samples + i_POSITION[1])) * mul_datL,
+                                                           (float) (*(Left_Samples + i_POSITION[2])) * mul_datL,
+                                                           res_dec) * synth->T_OSC2_VOLUME);
+#else
+                    synth->GS_VAL = ptk_math_func(synth, GS_VAL, *(Left_Samples + i_POSITION[0]) * mul_datL) * synth->T_OSC2_VOLUME;
+#endif
+
+#else
+                    switch(Use_Cubic)
+                    {
+                        case CUBIC_INT:
+                            synth->GS_VAL = ptk_math_func(synth, synth->GS_VAL, Cubic_Work((float) (*(Left_Samples + i_POSITION[3])) * mul_datL,
+                                                                  (float) (*(Left_Samples + i_POSITION[0])) * mul_datL,
+                                                                  (float) (*(Left_Samples + i_POSITION[1])) * mul_datL,
+                                                                  (float) (*(Left_Samples + i_POSITION[2])) * mul_datL,
+                                                                  res_dec) * synth->T_OSC2_VOLUME);
+                            break;
+                        case SPLINE_INT:
+                            synth->GS_VAL = ptk_math_func(synth, synth->GS_VAL, Spline_Work((float) (*(Left_Samples + i_POSITION[3])) * mul_datL,
+                                                                   (float) (*(Left_Samples + i_POSITION[0])) * mul_datL,
+                                                                   (float) (*(Left_Samples + i_POSITION[1])) * mul_datL,
+                                                                   (float) (*(Left_Samples + i_POSITION[2])) * mul_datL,
+                                                                   res_dec) * synth->T_OSC2_VOLUME);
+                            break;
+                        default:
+                            synth->GS_VAL = ptk_math_func(synth, synth->GS_VAL, (*(Left_Samples + i_POSITION[0]) * mul_datL) * synth->T_OSC2_VOLUME);
+                            break;
+                    }
+#endif
+
+                    // Stereo sample
+                    if(Stereo == 2)
+                    {
+
+#if defined(__STAND_ALONE__) && !defined(__WINAMP__)
+#if defined(PTK_USE_CUBIC)
+                        synth->GS_VAL2 = ptk_math_func(synth, synth->GS_VAL2, Cubic_Work((float) (*(Right_Samples + i_POSITION[3])) * mul_datR,
+                                                                (float) (*(Right_Samples + i_POSITION[0])) * mul_datR,
+                                                                (float) (*(Right_Samples + i_POSITION[1])) * mul_datR,
+                                                                (float) (*(Right_Samples + i_POSITION[2])) * mul_datR,
+                                                                res_dec) * synth->T_OSC2_VOLUME);
+#elif defined(PTK_USE_SPLINE)
+                        synth->GS_VAL2 = ptk_math_func(synth, synth->GS_VAL2, Spline_Work((float) (*(Right_Samples + i_POSITION[3])) * mul_datR,
+                                                                 (float) (*(Right_Samples + i_POSITION[0])) * mul_datR,
+                                                                 (float) (*(Right_Samples + i_POSITION[1])) * mul_datR,
+                                                                 (float) (*(Right_Samples + i_POSITION[2])) * mul_datR,
+                                                                 res_dec) * synth->T_OSC2_VOLUME);
+#else
+                        GS_VAL2 = ptk_math_func(synth, synth->GS_VAL2, (*(Right_Samples + i_POSITION[0]) * mul_datR) * T_OSC2_VOLUME);
+#endif
+
+#else
+                        switch(Use_Cubic)
+                        {
+                            case CUBIC_INT:
+                                synth->GS_VAL2 = ptk_math_func(synth, synth->GS_VAL2, Cubic_Work((float) (*(Right_Samples + i_POSITION[3])) * mul_datR,
+                                                                        (float) (*(Right_Samples + i_POSITION[0])) * mul_datR,
+                                                                        (float) (*(Right_Samples + i_POSITION[1])) * mul_datR,
+                                                                        (float) (*(Right_Samples + i_POSITION[2])) * mul_datR,
+                                                                        res_dec) * synth->T_OSC2_VOLUME);
+                                break;
+                            case SPLINE_INT:
+                                synth->GS_VAL2 = ptk_math_func(synth, synth->GS_VAL2, Spline_Work((float) (*(Right_Samples + i_POSITION[3])) * mul_datR,
+                                                                         (float) (*(Right_Samples + i_POSITION[0])) * mul_datR,
+                                                                         (float) (*(Right_Samples + i_POSITION[1])) * mul_datR,
+                                                                         (float) (*(Right_Samples + i_POSITION[2])) * mul_datR,
+                                                                         res_dec) * synth->T_OSC2_VOLUME);
+                                break;
+                            default:
+                                synth->GS_VAL2 = ptk_math_func(synth, synth->GS_VAL2, (*(Right_Samples + i_POSITION[0]) * mul_datR) * synth->T_OSC2_VOLUME);
+                                break;
+                        }
+#endif
+                    }
+
+#if defined(PTK_SYNTH_PITCH)
+                    osc_speed2 += osc_speed1b;
+                    if(osc_speed2 < 16) osc_speed2 = 16;
+#endif
+
+                    if(synth->ENV2_LOOP_BACKWARD == TRUE)
+                    {
+                        if(pos_osc2->half.first > 0)
+                        {
+                            pos_osc2->absolu -= osc_speed2;
+                        }
+                    }
+                    else
+                    {
+                        pos_osc2->absolu += osc_speed2;
+                    }
+
+#if defined(PTK_LOOP_FORWARD) || defined(PTK_LOOP_PINGPONG)
+                    switch(Loop_Type2)
+                    {
+                        case SMP_LOOP_NONE:
+#endif
+                            if(synth->ENV2_LOOP_BACKWARD)
+                            {
+                                if((int) pos_osc2->half.first <= 0)
+                                {
+                                    pos_osc2->half.first = 0;
+                                    *track2 = PLAYING_NOSAMPLE;
+                                }
+                            }
+                            else
+                            {
+                                if(pos_osc2->half.first >= Length2)
+                                {
+                                    pos_osc2->half.first = Length2;
+                                    *track2 = PLAYING_NOSAMPLE;
+                                }
+                            }
+#if defined(PTK_LOOP_FORWARD) || defined(PTK_LOOP_PINGPONG)
+                            break;
+#endif
+
+#if defined(PTK_LOOP_FORWARD)
+                        case SMP_LOOP_FORWARD:
+                            if(synth->ENV2_LOOP_BACKWARD)
+                            {
+                                if((int) pos_osc2->half.first <= (int) (Length2 - Loop_Sub2))
+                                {
+                                    pos_osc2->half.first += Length2;
+                                }
+                            }
+                            else
+                            {
+                                if(pos_osc2->half.first >= Length2)
+                                {
+                                    pos_osc2->half.first -= Loop_Sub2;
+                                }
+                            }
+                            break;
+#endif
+
+#if defined(PTK_LOOP_PINGPONG)
+                        case SMP_LOOP_PINGPONG:
+                            if(synth->ENV2_LOOP_BACKWARD)
+                            {
+                                if((int) pos_osc2->half.first <= (int) (Length2 - Loop_Sub2))
+                                {
+                                    pos_osc2->half.first = Length2 - Loop_Sub2;
+                                    synth->ENV2_LOOP_BACKWARD = FALSE;
+                                }
+                            }
+                            else
+                            {
+                                if(pos_osc2->half.first >= Length2)
+                                {
+                                    pos_osc2->half.first = Length2;
+                                    synth->ENV2_LOOP_BACKWARD = TRUE;
+                                }
+                            }
+                            break;
+#endif
+#if defined(PTK_LOOP_FORWARD) || defined(PTK_LOOP_PINGPONG)
+                    }
+#endif
+
+                }
+            }
+        }
+    }
+#endif // PTK_SYNTH_OSC2
+
+// ------------------------------------------------
+// Left signal
+
+#if defined(PTK_SYNTH_DISTO)
+    if(synth->Data.DISTO != 1.0f)
+    {
+        synth->GS_VAL /= 32767.0f;
+        synth->GS_VAL = synth->GS_VAL * (fabsf(synth->GS_VAL) + synth->Data.DISTO) / 
+            ((synth->GS_VAL * synth->GS_VAL) + (synth->Data.DISTO - 1) *
+                 fabsf(synth->GS_VAL) + 1);
+        synth->GS_VAL *= 32767.0f;
+    }
+#endif
+
+#if defined(PTK_SYNTH_FILTER)
+    if(synth->Data.VCF_TYPE < 2)
+    {
+        synth->FILT_CUTO = synth->Data.VCF_CUTOFF
+#if defined(PTK_SYNTH_LFO1)
+                    + synth->LFO1_VALUE * synth->Data.LFO1_VCF_CUTOFF
+#endif
+#if defined(PTK_SYNTH_LFO2)
+                    + synth->LFO2_VALUE * synth->Data.LFO2_VCF_CUTOFF
+#endif
+#if defined(PTK_SYNTH_ENV1)
+                    + synth->ENV1_VALUE * synth->Data.ENV1_VCF_CUTOFF
+#endif
+#if defined(PTK_SYNTH_ENV2)
+                    + synth->ENV2_VALUE * synth->Data.ENV2_VCF_CUTOFF
+#endif
+                   ;
+
+        synth->FILT_RESO = synth->Data.VCF_RESONANCE
+#if defined(PTK_SYNTH_LFO1)
+                    + synth->LFO1_VALUE * synth->Data.LFO1_VCF_RESONANCE
+#endif
+#if defined(PTK_SYNTH_LFO2)
+                    + synth->LFO2_VALUE * synth->Data.LFO2_VCF_RESONANCE
+#endif
+#if defined(PTK_SYNTH_ENV1)
+                    + synth->ENV1_VALUE * synth->Data.ENV1_VCF_RESONANCE
+#endif
+#if defined(PTK_SYNTH_ENV2)
+                    + synth->ENV2_VALUE * synth->Data.ENV2_VCF_RESONANCE
+#endif
+                   ;
+        if(synth->FILT_CUTO < 0.05f) synth->FILT_CUTO = 0.05f;
+        if(synth->FILT_CUTO > 0.90f) synth->FILT_CUTO = 0.90f;
+        if(synth->FILT_RESO < 0.05f) synth->FILT_RESO = 0.05f;
+        if(synth->FILT_RESO > 0.98f) synth->FILT_RESO = 0.98f;
+        synth->FILT_A = float(1.0f - synth->FILT_CUTO); 
+        synth->FILT_B = float(synth->FILT_RESO * (1.0f + (1.0f / synth->FILT_A)));
+        synth->GS_VAL = ptk_synth_filter_left(synth);
+    }
+
+#if defined(PTK_SYNTH_FILTER_MOOG_LO) || defined(PTK_SYNTH_FILTER_MOOG_BAND)
+    else if(synth->Data.VCF_TYPE > 2)
+    {
+            synth->FILT_CUTO = synth->Data.VCF_CUTOFF
+#if defined(PTK_SYNTH_LFO1)
+                        + synth->LFO1_VALUE * synth->Data.LFO1_VCF_CUTOFF
+#endif
+#if defined(PTK_SYNTH_LFO2)
+                        + synth->LFO2_VALUE * synth->Data.LFO2_VCF_CUTOFF
+#endif
+#if defined(PTK_SYNTH_ENV1)
+                        + synth->ENV1_VALUE * synth->Data.ENV1_VCF_CUTOFF
+#endif
+#if defined(PTK_SYNTH_ENV2)
+                        + synth->ENV2_VALUE * synth->Data.ENV2_VCF_CUTOFF
+#endif
+                       ;
+
+            synth->FILT_RESO = synth->Data.VCF_RESONANCE
+#if defined(PTK_SYNTH_LFO1)
+                        + synth->LFO1_VALUE * synth->Data.LFO1_VCF_RESONANCE
+#endif
+#if defined(PTK_SYNTH_LFO2)
+                        + synth->LFO2_VALUE * synth->Data.LFO2_VCF_RESONANCE
+#endif
+#if defined(PTK_SYNTH_ENV1)
+                        + synth->ENV1_VALUE * synth->Data.ENV1_VCF_RESONANCE
+#endif
+#if defined(PTK_SYNTH_ENV2)
+                        + synth->ENV2_VALUE * synth->Data.ENV2_VCF_RESONANCE
+#endif
+                    ;
+            if(synth->FILT_CUTO < 0.0f) synth->FILT_CUTO = 0.0f;
+            synth->FILT_CUTO += 0.55f;
+            if(synth->FILT_CUTO  >  1.55f)  synth->FILT_CUTO  =  1.55f;
+            if(synth->FILT_RESO  <  0.0f)   synth->FILT_RESO  =  0.0f;
+            if(synth->FILT_RESO  >  1.0f)   synth->FILT_RESO  =  1.0f;
+            synth->GS_VAL = ptk_synth_moogfilter_left(synth);
+    }
+#endif      // defined(PTK_SYNTH_FILTER_MOOG)
+
+#endif      // defined(PTK_SYNTH_FILTER)
+
+
+// ------------------------------------------------
+// Right signal
+
+    if(Stereo == 2)
+    {
+
+#if defined(PTK_SYNTH_DISTO)
+        if(synth->Data.DISTO != 1.0f)
+        {
+            synth->GS_VAL2 /= 32767.0f;
+            synth->GS_VAL2 = synth->GS_VAL2 * (fabsf(synth->GS_VAL2) + synth->Data.DISTO) / ((synth->GS_VAL2 * synth->GS_VAL2) + (synth->Data.DISTO - 1) *
+                      fabsf(synth->GS_VAL2) + 1);
+            synth->GS_VAL2 *= 32767.0f;
+        }
+#endif
+
+#if defined(PTK_SYNTH_FILTER)
+        if(synth->Data.VCF_TYPE < 2) synth->GS_VAL2 = ptk_synth_filter_right(synth);
+#if defined(PTK_SYNTH_FILTER_MOOG_LO) || defined(PTK_SYNTH_FILTER_MOOG_BAND)
+        else if(synth->Data.VCF_TYPE > 2) synth->GS_VAL2 = ptk_synth_moogfilter_right(synth);
+#endif
+#endif
+
+        // Return right value
+        *Right_Signal += synth->GS_VAL2 * vol;
+    }
+
+    // Advance all, oscillator, envelopes, and lfo's
+    /* TODO: FIX THISSS ONCE IT COMPILEZZ*/
+    //EnvRun(track, track2);
+    ptk_synth_envrun(synth, track, track2);
+    //LfoAdvance();
+    ptk_synth_lfo_advance(synth);
+
+    // Return value
+    return synth->GS_VAL * vol;
 }
 
 void ptk_synth_change_parameters(ptk_synth *synth, SynthParameters TSP)
