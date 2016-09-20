@@ -416,7 +416,8 @@ extern int L_MaxLevel;
 extern int R_MaxLevel;
 
 #if defined(PTK_SYNTH)
-extern CSynth Synthesizer[MAX_TRACKS][MAX_POLYPHONY];
+//extern CSynth Synthesizer[MAX_TRACKS][MAX_POLYPHONY];
+extern ptk_synth Synthesizer[MAX_TRACKS][MAX_POLYPHONY];
 #endif
 
 extern float oldspawn[MAX_TRACKS];

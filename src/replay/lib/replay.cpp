@@ -78,7 +78,7 @@ int SamplesPerTick;
 #endif
 
 #if defined(PTK_SYNTH)
-CSynth Synthesizer[MAX_TRACKS][MAX_POLYPHONY];
+ptk_synth Synthesizer[MAX_TRACKS][MAX_POLYPHONY];
 #endif
 
 float Player_FD[MAX_TRACKS];
@@ -1738,7 +1738,8 @@ void Reset_Values(ptk_data *ptk)
             {
 
 #if defined(PTK_SYNTH)
-                Synthesizer[stopper][stopper_poly].Reset();
+                //Synthesizer[stopper][stopper_poly].Reset();
+                ptk_synth_reset(&Synthesizer[stopper][stopper_poly]);
                 sp_Stage2[stopper][stopper_poly] = PLAYING_NOSAMPLE;
                 sp_Stage3[stopper][stopper_poly] = PLAYING_NOSAMPLE;
 #endif
@@ -1904,7 +1905,8 @@ void Pre_Song_Init(ptk_data *ptk)
         {
 
 #if defined(PTK_SYNTH)
-            Synthesizer[ini][i].Reset();
+            //Synthesizer[ini][i].Reset();
+            ptk_synth_reset(&Synthesizer[ini][i]);
 #endif
 
             CHAN_ACTIVE_STATE[ini][i] = TRUE;
@@ -2535,7 +2537,8 @@ void Sp_Player(ptk_data *ptk)
 #if defined(PTK_SYNTH)
                         if(!glide)
                         {
-                            Synthesizer[ct][j].NoteOff();
+                            //Synthesizer[ct][j].NoteOff();
+                            ptk_synth_note_off(&Synthesizer[ct][j]);
                             sp_Stage[ct][j] = PLAYING_SAMPLE_NOTEOFF;
                         }
                         else
@@ -2642,7 +2645,8 @@ void Sp_Player(ptk_data *ptk)
 #endif
 
 #if defined(PTK_SYNTH)
-                            Synthesizer[ct][j].NoteOff();
+                            //Synthesizer[ct][j].NoteOff();
+                            ptk_synth_note_off(&Synthesizer[ct][j]);
                             sp_Stage[ct][j] = PLAYING_SAMPLE_NOTEOFF;
 #endif
 
@@ -3157,7 +3161,8 @@ ByPass_Wav:
                     }
                 }
 
-                Curr_Signal_L[i] += Synthesizer[c][i].GetSample(Player_WL[c][i],
+                //Curr_Signal_L[i] += Synthesizer[c][i].GetSample(Player_WL[c][i],
+                Curr_Signal_L[i] += ptk_synth_get_sample(&Synthesizer[c][i], Player_WL[c][i],
                                                                 Player_WR[c][i],
                                                                 Player_SC[c][i],
                                                                 Player_LT[c][i],
@@ -3235,7 +3240,8 @@ ByPass_Wav:
 #endif
 
 #if defined(PTK_SYNTH)
-                Synthesizer[c][i].NoteOff();
+                //Synthesizer[c][i].NoteOff();
+                ptk_synth_note_off(&Synthesizer[c][i]);
 #endif
 
             }
@@ -3924,9 +3930,11 @@ void Play_Instrument(ptk_data *ptk, int channel, int sub_channel)
 #if defined(__STAND_ALONE__) && !defined(__WINAMP__)
                     Synthesizer[channel][sub_channel].ChangeParameters(&PARASynth[sample]);
 #else
-                    Synthesizer[channel][sub_channel].ChangeParameters(PARASynth[sample]);
+                    //Synthesizer[channel][sub_channel].ChangeParameters(PARASynth[sample]);
+                    ptk_synth_change_parameters(&Synthesizer[channel][sub_channel], PARASynth[sample]);
 #endif
-                    Synthesizer[channel][sub_channel].NoteOn(note2,
+                    //Synthesizer[channel][sub_channel].NoteOn(note2,
+                    ptk_synth_note_on(&Synthesizer[channel][sub_channel], note2,
                                                              vol,
                                                              LoopType[associated_sample][split],
                                                              LoopType[associated_sample][split] > SMP_LOOP_NONE ? LoopEnd[associated_sample][split]: (SampleLength[associated_sample][split] - 2),
@@ -4581,7 +4589,8 @@ void Do_Effects_Ticks_X(ptk_data *ptk)
 #endif
 
 #if defined(PTK_SYNTH)
-                        Synthesizer[trackef][i].NoteOff();
+                        //Synthesizer[trackef][i].NoteOff();
+                        ptk_synth_note_off(&Synthesizer[trackef][i]);
 #endif
 
 #if !defined(__STAND_ALONE__)
@@ -4881,7 +4890,8 @@ void Do_Effects_Ticks_X(ptk_data *ptk)
                                 }
 #endif
 #if defined(PTK_SYNTH)
-                                Synthesizer[trackef][j].NoteOff();
+                                //Synthesizer[trackef][j].NoteOff();
+                                ptk_synth_note_off(&Synthesizer[trackef][j]);
 #endif
 
 #if !defined(__STAND_ALONE__)

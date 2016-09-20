@@ -2346,7 +2346,8 @@ void Newmod(ptk_data *ptk)
         {
             for(i = 0; i < MAX_POLYPHONY; i++)
             {
-                Synthesizer[ini][i].Reset();
+                //Synthesizer[ini][i].Reset();
+                ptk_synth_reset(&Synthesizer[ini][i]);
             }
         }
 
@@ -2932,7 +2933,8 @@ void DeleteInstrument(ptk_data *ptk)
         {
             for(i = 0; i < MAX_POLYPHONY; i++)
             {
-                Synthesizer[ini][i].Reset();
+                //Synthesizer[ini][i].Reset();
+                ptk_synth_reset(&Synthesizer[ini][i]);
             }
         }
 
@@ -6757,7 +6759,8 @@ void Note_Jazz_Off(ptk_data *ptk, int note)
     {
         if(ptk->Jazz_Edit || is_recording_2 || !is_editing)
         {
-            Synthesizer[Channel->Channel][Channel->Sub_Channel].NoteOff();
+            //Synthesizer[Channel->Channel][Channel->Sub_Channel].NoteOff();
+            ptk_synth_note_off(&Synthesizer[Channel->Channel][Channel->Sub_Channel]);
             if(sp_Stage[Channel->Channel][Channel->Sub_Channel] == PLAYING_SAMPLE)
             {
                 sp_Stage[Channel->Channel][Channel->Sub_Channel] = PLAYING_SAMPLE_NOTEOFF;
