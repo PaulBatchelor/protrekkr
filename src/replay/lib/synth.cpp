@@ -66,11 +66,120 @@ short STOCK_WHITE[SIZE_WAVEFORMS_SPACE];
     short STOCK_PINK[SIZE_WAVEFORMS_SPACE];
 #endif
 
+static void ptk_synth_lfo_advance(ptk_synth *synth)
+{
+#if defined(PTK_SYNTH_LFO1)
+    synth->LFO1_SUBGRCOUNTER++;
+#endif
+
+#if defined(PTK_SYNTH_LFO2)
+    synth->LFO2_SUBGRCOUNTER++;
+#endif
+
+#if defined(PTK_SYNTH_LFO1)
+    switch(synth->LFO1_STAGE)
+    {
+        case SYNTH_ATTACK:
+            synth->LFO1_ADSR_VALUE += synth->LFO1_A_COEF;
+            synth->LFO1_COUNTER++;
+            if(synth->LFO1_COUNTER >= synth->LFO1b_ATTACK)
+            {
+                if(synth->LFO1_ADSR_VALUE > 1.0f) synth->LFO1_ADSR_VALUE = 1.0f;
+                synth->LFO1_COUNTER = 0;
+                synth->LFO1_STAGE = 2;
+            }
+            break;
+        case SYNTH_DECAY:
+            synth->LFO1_ADSR_VALUE -= synth->LFO1_D_COEF;
+            synth->LFO1_COUNTER++;
+            if(synth->LFO1_COUNTER >= synth->LFO1b_DECAY)
+            {
+                if(synth->LFO1_ADSR_VALUE < 0.0f) synth->LFO1_ADSR_VALUE = 0.0f;
+                synth->LFO1_ADSR_VALUE = synth->Data.LFO1_SUSTAIN;
+                synth->LFO1_COUNTER = 0;
+                synth->LFO1_STAGE = 3;
+            }
+            break;
+        case SYNTH_SUSTAIN:
+            synth->LFO1_ADSR_VALUE = synth->Data.LFO1_SUSTAIN;
+            break;
+        case SYNTH_RELEASE:
+            synth->LFO1_ADSR_VALUE -= synth->LFO1_R_COEF;
+            synth->LFO1_COUNTER++;
+            if(synth->LFO1_COUNTER > synth->LFO1b_RELEASE)
+            {
+                synth->LFO1_ADSR_VALUE = 0.0f;
+                synth->LFO1_COUNTER = 0;
+                synth->LFO1_STAGE = 0;
+            }
+            break;
+    }
+
+    if(synth->LFO1_SUBGRCOUNTER > synth->Data.LFO1_SUBGRMAX)
+    {
+        synth->LFO1_SUBGRCOUNTER = 0;
+        synth->LFO1_GR++;
+        if(synth->LFO1_GR > 359) synth->LFO1_GR = 0;
+    }
+
+    synth->LFO1_VALUE = SIN[synth->LFO1_GR] * synth->LFO1_ADSR_VALUE;
+#endif
+
+#if defined(PTK_SYNTH_LFO2)
+    switch(synth->LFO2_STAGE)
+    {
+        case SYNTH_ATTACK:
+            synth->LFO2_ADSR_VALUE += synth->LFO2_A_COEF;
+            synth->LFO2_COUNTER++;
+            if(synth->LFO2_COUNTER >= synth->LFO2b_ATTACK)
+            {
+                if(synth->LFO2_ADSR_VALUE > 1.0f) synth->LFO2_ADSR_VALUE = 1.0f;
+                synth->LFO2_COUNTER = 0;
+                synth->LFO2_STAGE = 2;
+            }
+            break;
+        case SYNTH_DECAY:
+            synth->LFO2_ADSR_VALUE -= synth->LFO2_D_COEF;
+            synth->LFO2_COUNTER++;
+            if(synth->LFO2_COUNTER >= synth->LFO2b_DECAY)
+            {
+                if(synth->LFO2_ADSR_VALUE < 0.0f) synth->LFO2_ADSR_VALUE = 0.0f;
+                synth->LFO2_ADSR_VALUE = synth->Data.LFO2_SUSTAIN;
+                synth->LFO2_COUNTER = 0;
+                synth->LFO2_STAGE = 3;
+            }
+            break;
+        case SYNTH_SUSTAIN:
+            synth->LFO2_ADSR_VALUE = synth->Data.LFO2_SUSTAIN;
+            break;
+        case SYNTH_RELEASE:
+            synth->LFO2_ADSR_VALUE -= synth->LFO2_R_COEF;
+            synth->LFO2_COUNTER++;
+            if(synth->LFO2_COUNTER > synth->LFO2b_RELEASE)
+            {
+                synth->LFO2_ADSR_VALUE = 0.0f;
+                synth->LFO2_COUNTER = 0;
+                synth->LFO2_STAGE = 0;
+            }
+            break;
+    }
+
+    if(synth->LFO2_SUBGRCOUNTER > synth->Data.LFO2_SUBGRMAX)
+    {
+        synth->LFO2_SUBGRCOUNTER = 0;
+        synth->LFO2_GR++;
+        if(synth->LFO2_GR > 359) synth->LFO2_GR = 0;
+    }
+
+    synth->LFO2_VALUE = SIN[synth->LFO2_GR] * synth->LFO2_ADSR_VALUE;
+#endif
+
+}
+
 // ------------------------------------------------------
 // This next function resets the synthesizer to default values
 void CSynth::Reset(void)
 {
-
 #if !defined(__STAND_ALONE__) || defined(__WINAMP__)
     // Synthesizer General Reset
     Data.DISTO = 0.0f;
@@ -515,6 +624,166 @@ void CSynth::NoteOn(int note, float speed, int Looping, unsigned int Length,
     LFO2_D_COEF = (1.0f - Data.LFO2_SUSTAIN) / (float) LFO2b_DECAY;
     LFO2_R_COEF = Data.LFO2_SUSTAIN / (float) LFO2b_RELEASE;
     LFO2_A_COEF = (1.0f - LFO2_ADSR_VALUE) / LFO2b_ATTACK;
+#endif
+}
+
+static void ptk_synth_envrun(ptk_synth *synth, int *track, int *track2)
+{
+    /* ENV1 */
+    switch(synth->ENV1_STAGE)
+    {
+        /* Attack */
+        case SYNTH_ATTACK:
+            synth->ENV1_VALUE += synth->ENV1_A_COEF;
+            synth->ENV1_COUNTER++;
+            if(synth->ENV1_COUNTER >= synth->ENV1b_ATTACK)
+            {
+                if(synth->ENV1_VALUE > 1.0f) synth->ENV1_VALUE = 1.0f;
+                synth->ENV1_COUNTER = 0;
+                synth->ENV1_STAGE = SYNTH_DECAY;
+            }
+            break;
+
+        /* Decay */
+        case SYNTH_DECAY:
+            synth->ENV1_VALUE -= synth->ENV1_D_COEF;
+            synth->ENV1_COUNTER++;
+            if(synth->ENV1_COUNTER >= synth->ENV1b_DECAY)
+            {
+                if(synth->ENV1_VALUE < 0.0f) synth->ENV1_VALUE = 0.0f;
+                synth->ENV1_VALUE = synth->Data.ENV1_SUSTAIN;
+                synth->ENV1_COUNTER = 0;
+                synth->ENV1_STAGE = SYNTH_SUSTAIN;
+            }
+            break;
+
+        /* Sustain */
+        case SYNTH_SUSTAIN:
+            synth->ENV1_VALUE = synth->Data.ENV1_SUSTAIN;
+            break;
+
+        /* Release */
+        case SYNTH_RELEASE:
+            synth->ENV1_VALUE -= synth->ENV1_R_COEF;
+            synth->ENV1_COUNTER++;
+            if(synth->ENV1_COUNTER > synth->ENV1b_RELEASE)
+            {
+                synth->ENV1_VALUE = 0.0f;
+                synth->ENV1_COUNTER = 0;
+                synth->ENV1_STAGE = 0; /* Stop the rock ENV1 */
+                synth->OSC1_SPEED = 0;
+                synth->OSC3_SPEED = 0;
+                *track = PLAYING_NOSAMPLE;
+            }
+            break;
+    }
+
+    /* ENV2 */
+    switch(synth->ENV2_STAGE)
+    {
+        /* Attack */
+        case SYNTH_ATTACK:
+            synth->ENV2_VALUE += synth->ENV2_A_COEF;
+            synth->ENV2_COUNTER++;
+            if(synth->ENV2_COUNTER >= synth->ENV2b_ATTACK)
+            {
+                if(synth->ENV2_VALUE > 1.0f) synth->ENV2_VALUE = 1.0f;
+                synth->ENV2_COUNTER = 0;
+                synth->ENV2_STAGE = SYNTH_DECAY;
+            }
+            break;
+
+        /* Decay */
+        case SYNTH_DECAY:
+            synth->ENV2_VALUE -= synth->ENV2_D_COEF;
+            synth->ENV2_COUNTER++;
+            if(synth->ENV2_COUNTER >= synth->ENV2b_DECAY)
+            {
+                if(synth->ENV2_VALUE < 0.0f) synth->ENV2_VALUE = 0.0f;
+                synth->ENV2_VALUE = synth->Data.ENV2_SUSTAIN;
+                synth->ENV2_COUNTER = 0;
+                synth->ENV2_STAGE = SYNTH_SUSTAIN;
+            }
+            break;
+
+        /* Sustain */
+        case SYNTH_SUSTAIN:
+            synth->ENV2_VALUE = synth->Data.ENV2_SUSTAIN;
+            break;
+
+        /* Release */
+        case SYNTH_RELEASE:
+            synth->ENV2_VALUE -= synth->ENV2_R_COEF;
+            synth->ENV2_COUNTER++;
+            if(synth->ENV2_COUNTER > synth->ENV2b_RELEASE)
+            {
+                synth->ENV2_VALUE = 0.0f;
+                synth->ENV2_COUNTER = 0;
+                synth->ENV2_STAGE = 0; /* Stop the rock ENV2 */
+                synth->OSC2_SPEED = 0;
+                *track2 = PLAYING_NOSAMPLE;
+            }
+            break;
+    }
+
+    synth->ENV1_VOLUME = synth->ENV1_VALUE;
+#if defined(PTK_SYNTH_ENV1)
+    synth->ENV1_VOLUME *= synth->Data.ENV1_OSC1_VOLUME;
+#endif
+#if defined(PTK_SYNTH_ENV2)
+    synth->ENV1_VOLUME *= synth->Data.ENV2_OSC1_VOLUME;
+#endif
+
+    synth->ENV2_VOLUME = synth->ENV2_VALUE;
+#if defined(PTK_SYNTH_ENV1)
+    synth->ENV2_VOLUME *= synth->Data.ENV1_OSC2_VOLUME;
+#endif
+#if defined(PTK_SYNTH_ENV2)
+    synth->ENV2_VOLUME *= synth->Data.ENV2_OSC2_VOLUME;
+#endif
+
+#if !defined(PTK_SYNTH_LFO1) && !defined(PTK_SYNTH_LFO2)
+    synth->ENV1_MIN = 1.0f;
+#else
+    synth->ENV1_MIN = 0.0f;
+    if(
+#if defined(PTK_SYNTH_LFO1)
+    synth->Data.LFO1_OSC1_VOLUME == 0.0f
+#else
+    TRUE
+#endif
+    &&
+#if defined(PTK_SYNTH_LFO2)
+    synth->Data.LFO2_OSC1_VOLUME == 0.0f
+#else
+    TRUE
+#endif
+    )
+    {
+        synth->ENV1_MIN = 1.0f;
+    }
+#endif
+
+#if !defined(PTK_SYNTH_LFO1) && !defined(PTK_SYNTH_LFO2)
+    synth->ENV2_MIN = 1.0f;
+#else
+    synth->ENV2_MIN = 0.0f;
+    if(
+#if defined(PTK_SYNTH_LFO1)
+    synth->Data.LFO1_OSC2_VOLUME == 0.0f
+#else
+    TRUE
+#endif
+    &&
+#if defined(PTK_SYNTH_LFO2)
+    synth->Data.LFO2_OSC2_VOLUME == 0.0f
+#else
+    TRUE
+#endif
+    )
+    {
+        synth->ENV2_MIN = 1.0f;
+    }
 #endif
 }
 
@@ -2100,3 +2369,621 @@ float CSynth::Math_Func(float in_old, float in_new)
 }
 
 #endif // PTK_SYNTH
+
+
+void ptk_synth_reset(ptk_synth *synth)
+{
+#if !defined(__STAND_ALONE__) || defined(__WINAMP__)
+    // Synthesizer General Reset
+    synth->Data.DISTO = 0.0f;
+    synth->Data.OSC1_WAVEFORM = WAVEFORM_SAW;      /* Sawtooth */
+    synth->Data.OSC2_WAVEFORM = WAVEFORM_PULSE;    /* Pulse */
+
+    synth->T_OSC1_VOLUME = 0;
+    synth->T_OSC2_VOLUME = 0;
+
+    synth->Data.OSC2_DETUNE = 0;        /* No Semitone Detune */
+    synth->Data.OSC2_FINETUNE = 0.1f;   /* 1/10 Semitone detune */
+
+    synth->Data.VCF_CUTOFF = 0.5f;      /* 10000Hz Cutoff */
+    synth->Data.VCF_RESONANCE = 0.5f;   /* Not very weird =] */
+    synth->Data.VCF_TYPE = 0;           /* LowPass filter */
+
+    synth->Data.ENV1_ATTACK = 0.0f;
+    synth->Data.ENV1_DECAY = 0.1f;
+    synth->Data.ENV1_SUSTAIN = 0.3f;    /* Sustain volume at 1/3 */
+    synth->Data.ENV1_RELEASE = 0.0f;
+
+    synth->Data.ENV2_ATTACK = 0.0f;
+    synth->Data.ENV2_DECAY = 0.1f;
+    synth->Data.ENV2_SUSTAIN = 0.3f;    /* Sustain volume at 1/3 */
+    synth->Data.ENV2_RELEASE = 0.0f;
+
+    synth->Data.LFO1_PERIOD = 16;
+    synth->Data.LFO2_PERIOD = 16;
+
+    synth->LFO1_GR = 0;
+    synth->LFO2_GR = 0;
+
+    synth->LFO1_SUBGRCOUNTER = 0;
+    synth->LFO2_SUBGRCOUNTER = 0;
+
+    synth->Data.LFO1_SUBGRMAX = 200;
+    synth->Data.LFO2_SUBGRMAX = 200;
+
+    synth->Data.LFO1_OSC1_PW = 0;
+    synth->Data.LFO1_OSC2_PW = 0;
+    synth->Data.LFO1_OSC1_PITCH = 0;
+    synth->Data.LFO1_OSC2_PITCH = 0;
+    synth->Data.LFO1_OSC1_VOLUME = 0;
+    synth->Data.LFO1_OSC2_VOLUME = 0;   
+    synth->Data.LFO1_VCF_CUTOFF = 0;
+    synth->Data.LFO1_VCF_RESONANCE = 0; 
+
+    synth->Data.LFO2_OSC1_PW = 0;
+    synth->Data.LFO2_OSC2_PW = 0;
+    synth->Data.LFO2_OSC1_PITCH = 0;
+    synth->Data.LFO2_OSC2_PITCH = 0;
+    synth->Data.LFO2_OSC1_VOLUME = 0;
+    synth->Data.LFO2_OSC2_VOLUME = 0;   
+    synth->Data.LFO2_VCF_CUTOFF = 0;
+    synth->Data.LFO2_VCF_RESONANCE = 0; 
+
+    synth->Data.ENV1_OSC1_PW = 0;
+    synth->Data.ENV1_OSC2_PW = 0;
+    synth->Data.ENV1_OSC1_PITCH = 0;
+    synth->Data.ENV1_OSC2_PITCH = 0;
+    synth->Data.ENV1_OSC1_VOLUME = 1.0f;
+    synth->Data.ENV1_OSC2_VOLUME = 1.0f;   
+    synth->Data.ENV1_VCF_CUTOFF = 0;
+    synth->Data.ENV1_VCF_RESONANCE = 0; 
+
+    synth->Data.ENV2_OSC1_PW = 0;
+    synth->Data.ENV2_OSC2_PW = 0;
+    synth->Data.ENV2_OSC1_PITCH = 0;
+    synth->Data.ENV2_OSC2_PITCH = 0;
+    synth->Data.ENV2_OSC1_VOLUME = 0;
+    synth->Data.ENV2_OSC2_VOLUME = 0;   
+    synth->Data.ENV2_VCF_CUTOFF = 0;
+    synth->Data.ENV2_VCF_RESONANCE = 0; 
+
+    synth->Data.OSC3_SWITCH = FALSE;
+
+    synth->OSC1_STEP = 0;
+    synth->OSC2_STEP = 0;
+
+    synth->ENV1_VOLUME = 0;
+    synth->ENV2_VOLUME = 0;
+
+    synth->ENV1_MIN = 0;
+    synth->ENV2_MIN = 0;
+
+    synth->Data.LFO1_ATTACK = 0.0f;
+    synth->Data.LFO1_DECAY = 0.1f;
+    synth->Data.LFO1_SUSTAIN = 0.3f;
+    synth->Data.LFO1_RELEASE = 0.0f;
+
+    synth->Data.LFO2_ATTACK = 0.0f;
+    synth->Data.LFO2_DECAY = 0.1f;
+    synth->Data.LFO2_SUSTAIN = 0.3f;
+    synth->Data.LFO2_RELEASE = 0.0f;
+
+    synth->Data.OSC3_VOLUME = 0;
+
+    synth->Data.PTC_GLIDE64 = 0;
+
+#endif
+
+#if defined(PTK_SYNTH_LFO1)
+    synth->LFO1_COUNTER = 0;
+    synth->LFO1_STAGE = 0;
+    synth->LFO1_ADSR_VALUE = 0.0f;
+    synth->LFO1_VALUE = 0;
+#endif
+
+#if defined(PTK_SYNTH_LFO2)
+    synth->LFO2_COUNTER = 0;
+    synth->LFO2_STAGE = 0;
+    synth->LFO2_ADSR_VALUE = 0.0f;
+    synth->LFO2_VALUE = 0;
+#endif
+
+    synth->ENV1_STAGE = 0;
+    synth->ENV2_STAGE = 0;
+
+    synth->ENV1_COUNTER = 0;
+    synth->ENV2_COUNTER = 0;
+
+    synth->ENV1_VALUE = 0;
+    synth->ENV2_VALUE = 0;
+
+    synth->ENV1_A_COEF = 0.0f;
+    synth->ENV2_A_COEF = 0.0f;
+
+    synth->OSC1_SPEED = 0;
+    synth->OSC2_SPEED = 0;
+    synth->OSC3_SPEED = 0;
+
+    synth->sbuf0L = 0.0f;
+    synth->sbuf1L = 0.0f;
+    synth->sbuf0R = 0.0f;
+    synth->sbuf1R = 0.0f;
+
+#if defined(PTK_SYNTH_FILTER_MOOG_LO) || defined(PTK_SYNTH_FILTER_MOOG_BAND)
+    synth->MoogBufferL[0] = 0.0f;
+    synth->MoogBufferL[1] = 0.0f;
+    synth->MoogBufferL[2] = 0.0f;
+    synth->MoogBufferL[3] = 0.0f;
+    synth->MoogBufferL[4] = 0.0f;
+
+    synth->MoogBufferR[0] = 0.0f;
+    synth->MoogBufferR[1] = 0.0f;
+    synth->MoogBufferR[2] = 0.0f;
+    synth->MoogBufferR[3] = 0.0f;
+    synth->MoogBufferR[4] = 0.0f;
+#endif
+}
+
+float ptk_synth_get_sample(ptk_data *ptk_synth,
+                        short *Left_Samples,
+                        short *Right_Samples,
+                        char Stereo,
+                        char Loop_Type,
+                        unsigned int Length,
+                        unsigned int Loop_Sub,
+                        float *Right_Signal,
+                        float vol,
+                        int *track,
+                        int *track2,
+                        Uint64 *position_osc1,
+                        Uint64 *position_osc2,
+
+#if defined(PTK_SYNTH_OSC3)
+                        Uint64 *position_osc3,
+#endif
+                        int64 osc_speed,
+                        float Ampli_Vol) 
+{
+    return 0.0;
+}
+
+void ptk_synth_change_parameters(ptk_synth *synth, SynthParameters TSP)
+{
+
+    synth->Data.OSC1_WAVEFORM = TSP.osc1_waveform;
+    synth->Data.OSC2_WAVEFORM = TSP.osc2_waveform;
+    synth->Data.OSC_COMBINE = TSP.osc_combine;
+
+    synth->Data.OSC1_PW = (float) (TSP.osc1_pw - 256) / 256.0f;
+    synth->Data.OSC2_PW = (float) (TSP.osc2_pw - 256) / 256.0f;
+
+    synth->Data.OSC2_DETUNE = (float) (TSP.osc2_detune - 64.0f) * 0.0625f;
+    synth->Data.OSC2_FINETUNE = (float) TSP.osc2_finetune * 0.0078125f;
+
+    synth->Data.VCF_CUTOFF = (float) TSP.vcf_cutoff * 0.0078125f;
+    synth->Data.VCF_RESONANCE = (float) TSP.vcf_resonance * 0.0078125f;
+
+    synth->Data.VCF_TYPE = TSP.vcf_type;
+
+    // Sustain = 0 128
+    synth->Data.ENV1_ATTACK = ((float) (TSP.env1_attack + 1)) / 512.0f;
+    synth->Data.ENV1_DECAY = ((float) (TSP.env1_decay + 1)) / 512.0f;
+    synth->Data.ENV1_SUSTAIN = (float) TSP.env1_sustain * 0.0078125f;          // / 128
+    synth->Data.ENV1_RELEASE = ((float) (TSP.env1_release + 1)) / 512.0f;
+    if(synth->Data.ENV1_ATTACK   <  0.1f)   synth->Data.ENV1_ATTACK   =  0.1f;
+    if(synth->Data.ENV1_RELEASE  <  0.15f)  synth->Data.ENV1_RELEASE  =  0.15f;
+
+    synth->Data.ENV2_ATTACK = ((float) (TSP.env2_attack + 1)) / 512.0f;
+    synth->Data.ENV2_DECAY = ((float) (TSP.env2_decay + 1)) / 512.0f;
+    synth->Data.ENV2_SUSTAIN = (float) (TSP.env2_sustain * 0.0078125f);        // / 128
+    synth->Data.ENV2_RELEASE = ((float) (TSP.env2_release + 1)) / 512.0f;
+    if(synth->Data.ENV2_ATTACK   <  0.1f)   synth->Data.ENV2_ATTACK   =  0.1f;
+    if(synth->Data.ENV2_RELEASE  <  0.15f)  synth->Data.ENV2_RELEASE  =  0.15f;
+  
+    synth->Data.LFO1_PERIOD = (float) (TSP.lfo1_period * 2) + 1;
+    synth->Data.LFO1_SUBGRMAX = (int) (((float) SamplesPerTick * 0.000277f 
+            * synth->Data.LFO1_PERIOD));
+
+    synth->Data.LFO2_PERIOD = (float) (TSP.lfo2_period * 2) + 1;
+    synth->Data.LFO2_SUBGRMAX = (int) ((float) SamplesPerTick * 0.000277f 
+            * synth->Data.LFO2_PERIOD);
+
+    /* Envelopes and LFO's matrix modulation variables */
+    synth->Data.LFO1_OSC1_PW =       ((float) TSP.lfo1_osc1_pw - 64) * 0.015625f;
+    synth->Data.LFO1_OSC2_PW =       ((float) TSP.lfo1_osc2_pw - 64) * 0.015625f;
+    synth->Data.LFO1_OSC1_PITCH =    ((float) TSP.lfo1_osc1_pitch - 64) * 0.015625f;
+    synth->Data.LFO1_OSC2_PITCH =    ((float) TSP.lfo1_osc2_pitch - 64) * 0.015625f;
+    synth->Data.LFO1_OSC1_VOLUME =   ((float) TSP.lfo1_osc1_volume - 64) * 0.015625f;
+    synth->Data.LFO1_OSC2_VOLUME =   ((float) TSP.lfo1_osc2_volume - 64) * 0.015625f;
+    synth->Data.LFO1_VCF_CUTOFF =    ((float) TSP.lfo1_vcf_cutoff - 64) * 0.015625f;
+    synth->Data.LFO1_VCF_RESONANCE = ((float) TSP.lfo1_vcf_resonance - 64) * 0.015625f;
+
+    synth->Data.LFO2_OSC1_PW =       ((float) TSP.lfo2_osc1_pw - 64) * 0.015625f;
+    synth->Data.LFO2_OSC2_PW =       ((float) TSP.lfo2_osc2_pw - 64) * 0.015625f;
+    synth->Data.LFO2_OSC1_PITCH =    ((float) TSP.lfo2_osc1_pitch - 64) * 0.015625f;
+    synth->Data.LFO2_OSC2_PITCH =    ((float) TSP.lfo2_osc2_pitch - 64) * 0.015625f;
+    synth->Data.LFO2_OSC1_VOLUME =   ((float) TSP.lfo2_osc1_volume - 64) * 0.015625f;
+    synth->Data.LFO2_OSC2_VOLUME =   ((float) TSP.lfo2_osc2_volume - 64) * 0.015625f;
+    synth->Data.LFO2_VCF_CUTOFF =    ((float) TSP.lfo2_vcf_cutoff - 64) * 0.015625f;
+    synth->Data.LFO2_VCF_RESONANCE = ((float) TSP.lfo2_vcf_resonance - 64) * 0.015625f;
+
+    synth->Data.ENV1_OSC1_PW =       ((float) TSP.env1_osc1_pw - 64) * 0.015625f;
+    synth->Data.ENV1_OSC2_PW =       ((float) TSP.env1_osc2_pw - 64) * 0.015625f;
+    synth->Data.ENV1_OSC1_PITCH =    ((float) TSP.env1_osc1_pitch - 64) * 0.015625f;
+    synth->Data.ENV1_OSC2_PITCH =    ((float) TSP.env1_osc2_pitch - 64) * 0.015625f;
+    synth->Data.ENV1_OSC1_VOLUME =   ((float) TSP.env1_osc1_volume - 64) * 0.015625f;
+    synth->Data.ENV1_OSC2_VOLUME =   ((float) TSP.env1_osc2_volume - 64) * 0.015625f;
+    synth->Data.ENV1_VCF_CUTOFF =    ((float) TSP.env1_vcf_cutoff - 64) * 0.015625f;
+    synth->Data.ENV1_VCF_RESONANCE = ((float) TSP.env1_vcf_resonance - 64) * 0.015625f;
+
+    synth->Data.ENV2_OSC1_PW =       ((float) TSP.env2_osc1_pw - 64) * 0.015625f;
+    synth->Data.ENV2_OSC2_PW =       ((float) TSP.env2_osc2_pw - 64) * 0.015625f;
+    synth->Data.ENV2_OSC1_PITCH =    ((float) TSP.env2_osc1_pitch - 64) * 0.015625f;
+    synth->Data.ENV2_OSC2_PITCH =    ((float) TSP.env2_osc2_pitch - 64) * 0.015625f;
+    synth->Data.ENV2_OSC1_VOLUME =   ((float) TSP.env2_osc1_volume - 64) * 0.015625f;
+    synth->Data.ENV2_OSC2_VOLUME =   ((float) TSP.env2_osc2_volume - 64) * 0.015625f;
+    synth->Data.ENV2_VCF_CUTOFF =    ((float) TSP.env2_vcf_cutoff - 64) * 0.015625f;
+    synth->Data.ENV2_VCF_RESONANCE = ((float) TSP.env2_vcf_resonance - 64) * 0.015625f;
+
+    synth->Data.OSC3_VOLUME =        ((float) TSP.osc3_volume - 64) * 0.015625f;
+    synth->Data.OSC3_SWITCH =        TSP.osc3_switch;
+
+    synth->Data.PTC_GLIDE =          ((float) TSP.ptc_glide * (float) TSP.ptc_glide) * 0.0000015625f;
+    synth->Data.PTC_GLIDE64 =         (int64) ((double) synth->Data.PTC_GLIDE * 4294967296.0);
+
+    synth->Data.DISTO =              (((float) TSP.disto)) + 1.0f;
+
+    synth->Data.LFO1_ATTACK =        ((float) (TSP.lfo1_attack + 1)) / 512.0f;
+    synth->Data.LFO1_DECAY =         ((float) (TSP.lfo1_decay + 1)) / 512.0f;
+    synth->Data.LFO1_SUSTAIN =       (float) TSP.lfo1_sustain * 0.0078125f;
+    synth->Data.LFO1_RELEASE =       ((float) (TSP.lfo1_release + 1)) / 512.0f;
+    if(synth->Data.LFO1_ATTACK   <  0.1f)   synth->Data.LFO1_ATTACK   =  0.1f;
+    if(synth->Data.LFO1_RELEASE  <  0.15f)  synth->Data.LFO1_RELEASE  =  0.15f;
+
+    synth->Data.LFO2_ATTACK =        ((float) (TSP.lfo2_attack + 1)) / 512.0f;
+    synth->Data.LFO2_DECAY =         ((float) (TSP.lfo2_decay + 1)) / 512.0f;
+    synth->Data.LFO2_SUSTAIN =       (float) TSP.lfo2_sustain * 0.0078125f;
+    synth->Data.LFO2_RELEASE =       ((float) (TSP.lfo2_release + 1)) / 512.0f;
+    if(synth->Data.LFO2_ATTACK   <  0.1f)   synth->Data.LFO2_ATTACK   =  0.1f;
+    if(synth->Data.LFO2_RELEASE  <  0.15f)  synth->Data.LFO2_RELEASE  =  0.15f;
+}
+
+void ptk_synth_note_on(ptk_synth *synth, int note, float speed, int Looping, unsigned int Length,
+                    unsigned int Loop_Length
+#if defined(PTK_INSTRUMENTS)
+                    ,float note_smp
+#endif
+                    , int glide
+                   )
+{
+#if defined(PTK_INSTRUMENTS)
+    float note_1 = synth->Data.OSC1_WAVEFORM == WAVEFORM_WAV ? note_smp: (float) note;
+    float note_2 = synth->Data.OSC2_WAVEFORM == WAVEFORM_WAV ? note_smp: (float) note;
+#else
+    float note_1 = (float) note;
+    float note_2 = (float) note;
+#endif
+
+    float smp_freq;
+    float adsr_ratio;
+
+    synth->OSC1_STEP = POWF2(note_1 / 12.0f);
+    synth->OSC2_STEP = POWF2((note_2 + synth->Data.OSC2_FINETUNE + synth->Data.OSC2_DETUNE) / 12.0f);
+
+    if(!glide)
+    {
+        synth->ENV1_STAGE = SYNTH_ATTACK; /* '0' is off, '1' starts the attack */
+        synth->ENV2_STAGE = SYNTH_ATTACK;
+
+        synth->ENV1_COUNTER = 0; /* Envelope stage counter, in samples */
+        synth->ENV2_COUNTER = 0;
+
+        synth->ENV1_VALUE = 0;
+        synth->ENV2_VALUE = 0;
+
+        synth->ENV1_MIN = 0;
+        synth->ENV2_MIN = 0;
+
+        synth->ENV1_VOLUME = 0;
+        synth->ENV2_VOLUME = 0;
+
+        synth->sbuf0L = 0.0f;
+        synth->sbuf1L = 0.0f;
+        synth->sbuf0R = 0.0f;
+        synth->sbuf1R = 0.0f;
+
+#if defined(PTK_SYNTH_FILTER_MOOG_LO) || defined(PTK_SYNTH_FILTER_MOOG_BAND)
+        synth->MoogBufferL[0] = 0.0f;
+        synth->MoogBufferL[1] = 0.0f;
+        synth->MoogBufferL[2] = 0.0f;
+        synth->MoogBufferL[3] = 0.0f;
+        synth->MoogBufferL[4] = 0.0f;
+
+        synth->MoogBufferR[0] = 0.0f;
+        synth->MoogBufferR[1] = 0.0f;
+        synth->MoogBufferR[2] = 0.0f;
+        synth->MoogBufferR[3] = 0.0f;
+        synth->MoogBufferR[4] = 0.0f;
+#endif
+
+    }
+
+    if(synth->Data.OSC1_WAVEFORM != WAVEFORM_WAV)
+    {
+        Length = SIZE_WAVEFORMS;
+        Loop_Length = SIZE_WAVEFORMS;
+    }
+    smp_freq = ((float) Length) / synth->OSC1_STEP;
+    adsr_ratio = smp_freq / 1024.0f;
+    synth->ENV1b_ATTACK = (synth->Data.ENV1_ATTACK / adsr_ratio) * smp_freq;
+    synth->ENV1b_DECAY = (synth->Data.ENV1_DECAY / adsr_ratio) * smp_freq;
+
+#if defined(PTK_SYNTH_LFO1)
+    synth->LFO1b_ATTACK = (synth->Data.LFO1_ATTACK / adsr_ratio) * smp_freq;
+    synth->LFO1b_DECAY = (synth->Data.LFO1_DECAY / adsr_ratio) * smp_freq;
+#endif
+
+    if(Looping)
+    {
+        smp_freq = ((float) Loop_Length) / synth->OSC1_STEP;
+        adsr_ratio = smp_freq / 1024.0f;
+    }
+    synth->ENV1b_RELEASE = (synth->Data.ENV1_RELEASE / adsr_ratio) * smp_freq;
+
+#if defined(PTK_SYNTH_LFO1)
+    synth->LFO1b_RELEASE = (synth->Data.LFO1_RELEASE / adsr_ratio) * smp_freq;
+#endif
+
+    if(synth->Data.OSC2_WAVEFORM != WAVEFORM_WAV)
+    {
+        Length = SIZE_WAVEFORMS;
+        Loop_Length = SIZE_WAVEFORMS;
+    }
+    smp_freq = ((float) Length) / synth->OSC2_STEP;
+    adsr_ratio = smp_freq / 1024.0f;
+    synth->ENV2b_ATTACK = (synth->Data.ENV2_ATTACK / adsr_ratio) * smp_freq;
+    synth->ENV2b_DECAY = (synth->Data.ENV2_DECAY / adsr_ratio) * smp_freq;
+
+#if defined(PTK_SYNTH_LFO2)
+    synth->LFO2b_ATTACK = (synth->Data.LFO2_ATTACK / adsr_ratio) * smp_freq;
+    synth->LFO2b_DECAY = (synth->Data.LFO2_DECAY / adsr_ratio) * smp_freq;
+#endif
+
+    if(Looping)
+    {
+        smp_freq = ((float) Loop_Length) / synth->OSC2_STEP;
+        adsr_ratio = smp_freq / 1024.0f;
+    }
+    synth->ENV2b_RELEASE = (synth->Data.ENV2_RELEASE / adsr_ratio) * smp_freq;
+
+#if defined(PTK_SYNTH_LFO2)
+    synth->LFO2b_RELEASE = (synth->Data.LFO2_RELEASE / adsr_ratio) * smp_freq;
+#endif
+
+    if(synth->ENV1b_ATTACK   <  1.0f)  synth->ENV1b_ATTACK   =  1.0f;
+    if(synth->ENV1b_DECAY    <  1.0f)  synth->ENV1b_DECAY    =  1.0f;
+    if(synth->ENV1b_RELEASE  <  1.0f)  synth->ENV1b_RELEASE  =  1.0f;
+    if(synth->ENV2b_ATTACK   <  1.0f)  synth->ENV2b_ATTACK   =  1.0f;
+    if(synth->ENV2b_DECAY    <  1.0f)  synth->ENV2b_DECAY    =  1.0f;
+    if(synth->ENV2b_RELEASE  <  1.0f)  synth->ENV2b_RELEASE  =  1.0f;
+
+    /* Update ENV1 */
+    synth->ENV1_D_COEF = (1.0f - synth->Data.ENV1_SUSTAIN) / (float) synth->ENV1b_DECAY;
+    synth->ENV1_R_COEF = synth->Data.ENV1_SUSTAIN / (float) synth->ENV1b_RELEASE;
+
+    /* Update ENV2 */
+    synth->ENV2_D_COEF = (1.0f - synth->Data.ENV2_SUSTAIN) / (float) synth->ENV2b_DECAY;
+    synth->ENV2_R_COEF = synth->Data.ENV2_SUSTAIN / (float) synth->ENV2b_RELEASE;
+
+    synth->ENV1_A_COEF = (1.0f - synth->ENV1_VALUE) / synth->ENV1b_ATTACK;
+    synth->ENV2_A_COEF = (1.0f - synth->ENV2_VALUE) / synth->ENV2b_ATTACK;
+
+    if(!glide)
+    {
+        synth->ENV1_LOOP_BACKWARD = FALSE;
+        synth->ENV2_LOOP_BACKWARD = FALSE;
+        synth->ENV3_LOOP_BACKWARD = FALSE;
+
+#if defined(PTK_SYNTH_LFO1)
+        synth->LFO1_STAGE = SYNTH_ATTACK;
+        synth->LFO1_GR = 0;
+        synth->LFO1_VALUE = 0;
+        synth->LFO1_ADSR_VALUE = 0;
+        synth->LFO1_COUNTER = 0;
+        synth->LFO1_SUBGRCOUNTER = 0;
+#endif
+
+#if defined(PTK_SYNTH_LFO2)
+        synth->LFO2_STAGE = SYNTH_ATTACK;
+        synth->LFO2_GR = 0;
+        synth->LFO2_VALUE = 0;
+        synth->LFO2_ADSR_VALUE = 0;
+        synth->LFO2_COUNTER = 0;
+        synth->LFO2_SUBGRCOUNTER = 0;
+#endif
+    }
+
+#if defined(PTK_SYNTH_LFO1)
+    if(synth->LFO1b_ATTACK   <  1.0f)  synth->LFO1b_ATTACK   =  1.0f;
+    if(synth->LFO1b_DECAY    <  1.0f)  synth->LFO1b_DECAY    =  1.0f;
+    if(synth->LFO1b_RELEASE  <  1.0f)  synth->LFO1b_RELEASE  =  1.0f;
+#endif
+
+#if defined(PTK_SYNTH_LFO2)
+    if(synth->LFO2b_ATTACK   <  1.0f)  synth->LFO2b_ATTACK   =  1.0f;
+    if(synth->LFO2b_DECAY    <  1.0f)  synth->LFO2b_DECAY    =  1.0f;
+    if(synth->LFO2b_RELEASE  <  1.0f)  synth->LFO2b_RELEASE  =  1.0f;
+#endif
+
+#if defined(PTK_SYNTH_LFO1)
+    synth->LFO1_D_COEF = (1.0f - synth->Data.LFO1_SUSTAIN) / (float) synth->LFO1b_DECAY;
+    synth->LFO1_R_COEF = synth->Data.LFO1_SUSTAIN / (float) synth->LFO1b_RELEASE;
+    synth->LFO1_A_COEF = (1.0f - synth->LFO1_ADSR_VALUE) / synth->LFO1b_ATTACK;
+#endif
+
+#if defined(PTK_SYNTH_LFO2)
+    synth->LFO2_D_COEF = (1.0f - synth->Data.LFO2_SUSTAIN) / (float) synth->LFO2b_DECAY;
+    synth->LFO2_R_COEF = synth->Data.LFO2_SUSTAIN / (float) synth->LFO2b_RELEASE;
+    synth->LFO2_A_COEF = (1.0f - synth->LFO2_ADSR_VALUE) / synth->LFO2b_ATTACK;
+#endif
+}
+
+void ptk_synth_note_off(ptk_synth *synth)
+{
+    if(synth->ENV1_STAGE > PLAYING_NOSAMPLE && synth->ENV1_STAGE < SYNTH_RELEASE)
+    {
+        synth->ENV1_R_COEF = synth->ENV1_VALUE / (float) synth->ENV1b_RELEASE;
+        synth->ENV1_COUNTER = 0;
+        synth->ENV1_STAGE = SYNTH_RELEASE;
+    }
+
+    if(synth->ENV2_STAGE > PLAYING_NOSAMPLE && synth->ENV2_STAGE < SYNTH_RELEASE)
+    {
+        synth->ENV2_R_COEF = synth->ENV2_VALUE / (float) synth->ENV2b_RELEASE;
+        synth->ENV2_COUNTER = 0;
+        synth->ENV2_STAGE = SYNTH_RELEASE;
+    }
+
+#if defined(PTK_SYNTH_LFO1)
+    if(synth->LFO1_STAGE > PLAYING_NOSAMPLE && synth->LFO1_STAGE < SYNTH_RELEASE)
+    {
+        synth->LFO1_R_COEF = synth->LFO1_ADSR_VALUE / (float) synth->LFO1b_RELEASE;
+        synth->LFO1_COUNTER = 0;
+        synth->LFO1_STAGE = SYNTH_RELEASE;
+    }
+#endif
+
+#if defined(PTK_SYNTH_LFO2)
+    if(synth->LFO2_STAGE > PLAYING_NOSAMPLE && synth->LFO2_STAGE < SYNTH_RELEASE)
+    {
+        synth->LFO2_R_COEF = synth->LFO2_ADSR_VALUE / (float) synth->LFO2b_RELEASE;
+        synth->LFO2_COUNTER = 0;
+        synth->LFO2_STAGE = SYNTH_RELEASE;
+    }
+#endif
+
+}
+
+/*TODO: nix the left/right functions and merge into one */
+float ptk_synth_filter_left(ptk_synth *synth)
+{
+//    GS_VAL++;
+    synth->sbuf0L = synth->FILT_A * synth->sbuf0L + synth->FILT_CUTO * 
+        (synth->GS_VAL + synth->FILT_B * (synth->sbuf0L - synth->sbuf1L)); 
+    synth->sbuf1L = synth->FILT_A * synth->sbuf1L + 
+        synth->FILT_CUTO * synth->sbuf0L;
+#if defined(PTK_SYNTH_FILTER_LO) && defined(PTK_SYNTH_FILTER_HI)
+    return(synth->Data.VCF_TYPE == 0 ? 
+            synth->sbuf1L : synth->GS_VAL - synth->sbuf1L);
+#else
+    #if defined(PTK_SYNTH_FILTER_LO)
+        return(synth->sbuf1L);
+    #endif
+    #if defined(PTK_SYNTH_FILTER_HI)
+        return(synth->GS_VAL - synth->sbuf1L);
+    #endif
+#endif
+}
+
+float ptk_synth_filter_right(ptk_synth *synth)
+{
+  //  GS_VAL2++;
+    synth->sbuf0R = synth->FILT_A * synth->sbuf0R + 
+        synth->FILT_CUTO * 
+        (synth->GS_VAL2 + synth->FILT_B * (synth->sbuf0R - synth->sbuf1R));
+    synth->sbuf1R = synth->FILT_A * synth->sbuf1R + 
+        synth->FILT_CUTO * synth->sbuf0R;
+#if defined(PTK_SYNTH_FILTER_LO) && defined(PTK_SYNTH_FILTER_HI)
+    return(synth->Data.VCF_TYPE == 0 ? 
+            synth->sbuf1R : synth->GS_VAL2 - synth->sbuf1R);
+#else
+    #if defined(PTK_SYNTH_FILTER_LO)
+        return(synth->sbuf1R);
+    #endif
+    #if defined(PTK_SYNTH_FILTER_HI)
+        return(synth->GS_VAL2 - synth->sbuf1R);
+    #endif
+#endif
+}
+
+float ptk_synth_moogfilter_left(ptk_synth *synth)
+{
+    float f;
+    float p;
+    float q;
+    float t[4];
+    float cut = synth->FILT_CUTO;
+    float res = synth->FILT_RESO;
+
+    cut *= 0.50f;
+    q = (0.85f - cut);
+    p = ((cut * cut) * 0.45f);
+    f = (p + p) - 1.0f;
+    res *= 5.0f;
+    q = res * ((1.0f + (0.5f * q) * (1.0f - q + (5.6f * q * q))));
+    if(q > 2.42f) q = 2.42f;
+    float in = (synth->GS_VAL / 32767.0f) - (synth->MoogBufferL[4]);
+    t[1] = synth->MoogBufferL[1];
+    t[2] = synth->MoogBufferL[2];
+    t[3] = synth->MoogBufferL[3];
+    synth->MoogBufferL[1] = ((in + synth->MoogBufferL[0]) * p ) - (synth->MoogBufferL[1] * f);
+    synth->MoogBufferL[2] = ((synth->MoogBufferL[1] + t[1]) * p ) - (synth->MoogBufferL[2] * f);
+    synth->MoogBufferL[3] = ((synth->MoogBufferL[2] + t[2]) * p ) - (synth->MoogBufferL[3] * f);
+    synth->MoogBufferL[4] = ((synth->MoogBufferL[3] + t[3]) * p ) - (synth->MoogBufferL[4] * f);
+    synth->MoogBufferL[0] = in;
+
+#if defined(PTK_SYNTH_FILTER_MOOG_LO) && defined(PTK_SYNTH_FILTER_MOOG_BAND)
+    return((synth->Data.VCF_TYPE == 3 ? 
+                synth->MoogBufferL[4] : (3.0f * (synth->MoogBufferL[3] - synth->MoogBufferL[4]))) 
+            * 32767.0f);
+#else
+    #if defined(PTK_SYNTH_FILTER_MOOG_LO)
+        return(synth->MoogBufferL[4] * 32767.0f);
+    #endif
+    #if defined(PTK_SYNTH_FILTER_MOOG_BAND)
+        return((3.0f * (synth->MoogBufferL[3] - synth->MoogBufferL[4])) * 32767.0f);
+    #endif
+#endif
+}
+
+float ptk_synth_moogfilter_right(ptk_synth *synth)
+{
+    float f;
+    float p;
+    float q;
+    float t[4];
+    float cut = synth->FILT_CUTO;
+    float res = synth->FILT_RESO;
+
+    cut *= 0.50f;
+    q = (0.85f - cut);
+    p = ((cut * cut) * 0.45f);
+    f = (p + p) - 1.0f;
+    res *= 5.0f;
+    q = res * ((1.0f + (0.5f * q) * (1.0f - q + (5.6f * q * q))));
+    if(q > 2.42f) q = 2.42f;
+    float in = (synth->GS_VAL / 32767.0f) - (q * synth->MoogBufferR[4]);
+    t[1] = synth->MoogBufferR[1];
+    t[2] = synth->MoogBufferR[2];
+    t[3] = synth->MoogBufferR[3];
+    synth->MoogBufferR[1] = ((in + synth->MoogBufferR[0]) * p ) - (synth->MoogBufferR[1] * f);
+    synth->MoogBufferR[2] = ((synth->MoogBufferR[1] + t[1]) * p ) - (synth->MoogBufferR[2] * f);
+    synth->MoogBufferR[3] = ((synth->MoogBufferR[2] + t[2]) * p ) - (synth->MoogBufferR[3] * f);
+    synth->MoogBufferR[4] = ((synth->MoogBufferR[3] + t[3]) * p ) - (synth->MoogBufferR[4] * f);
+    synth->MoogBufferR[0] = in;
+
+#if defined(PTK_SYNTH_FILTER_MOOG_LO) && defined(PTK_SYNTH_FILTER_MOOG_BAND)
+    return((synth->Data.VCF_TYPE == 3 ? 
+                synth->MoogBufferR[4] : 
+                (3.0f * (synth->MoogBufferR[3] - synth->MoogBufferR[4]))) 
+            * 32767.0f);
+#else
+    #if defined(PTK_SYNTH_FILTER_MOOG_LO)
+        return(synth->MoogBufferR[4] * 32767.0f);
+    #endif
+    #if defined(PTK_SYNTH_FILTER_MOOG_BAND)
+        return((3.0f * (synth->MoogBufferR[3] - synth->MoogBufferR[4])) * 32767.0f);
+    #endif
+#endif
+
+}

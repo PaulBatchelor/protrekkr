@@ -478,6 +478,168 @@ class CSynth
         float GS_VAL2;
 };
 
+typedef struct  {
+
+    SYNTH_DATA Data;
+    char ENV1_STAGE;
+    char ENV2_STAGE;
+    char ENV1_LOOP_BACKWARD;
+    char ENV2_LOOP_BACKWARD;
+    char ENV3_LOOP_BACKWARD;
+
+#if defined(PTK_SYNTH_FILTER)
+    float FILT_CUTO;
+    float FILT_RESO;
+    float FILT_A;
+    float FILT_B;
+#endif
+
+    float T_OSC_PW;
+    float T_OSC1_VOLUME;
+    float T_OSC2_VOLUME;
+
+
+    int64 OSC1_SPEED;
+    int64 OSC2_SPEED;
+    int64 OSC3_SPEED;
+
+    /* Envelopes and LFO's properties */
+    float ENV1b_ATTACK;
+    float ENV1b_DECAY;
+    float ENV1b_RELEASE;
+
+    float ENV2b_ATTACK;
+    float ENV2b_DECAY;
+    float ENV2b_RELEASE;
+
+    float ENV1_A_COEF;
+    float ENV1_D_COEF;
+    float ENV1_R_COEF;
+
+    float ENV2_A_COEF;
+    float ENV2_D_COEF;
+    float ENV2_R_COEF;
+
+#if defined(PTK_SYNTH_LFO1)
+    float LFO1_COUNTER;
+    char LFO1_STAGE;
+    float LFO1b_ATTACK;
+    float LFO1b_DECAY;
+    float LFO1b_RELEASE;
+    float LFO1_A_COEF;
+    float LFO1_D_COEF;
+    float LFO1_R_COEF;
+    float LFO1_ADSR_VALUE;
+#endif
+
+#if defined(PTK_SYNTH_LFO2)
+    float LFO2_COUNTER;
+    char LFO2_STAGE;
+    float LFO2b_ATTACK;
+    float LFO2b_DECAY;
+    float LFO2b_RELEASE;
+    float LFO2_A_COEF;
+    float LFO2_D_COEF;
+    float LFO2_R_COEF;
+    float LFO2_ADSR_VALUE;
+#endif
+
+#if defined(PTK_SYNTH_LFO1)
+    int LFO1_GR;
+#endif
+
+#if defined(PTK_SYNTH_LFO2)
+    int LFO2_GR;
+#endif
+
+#if defined(PTK_SYNTH_LFO1)
+    int LFO1_SUBGRCOUNTER;
+#endif
+
+#if defined(PTK_SYNTH_LFO2)
+    int LFO2_SUBGRCOUNTER;
+#endif
+
+#if defined(PTK_SYNTH_LFO1)
+    float LFO1_VALUE;
+#endif
+
+#if defined(PTK_SYNTH_LFO2)
+    float LFO2_VALUE;
+#endif
+
+    /* Internal rendering variables */
+#if defined(PTK_SYNTH_FILTER_MOOG_LO) || defined(PTK_SYNTH_FILTER_MOOG_BAND)
+    float MoogBufferL[5];
+    float MoogBufferR[5];
+#endif
+
+    float OSC1_STEP;
+    float OSC2_STEP;
+
+    float ENV1_COUNTER;
+    float ENV2_COUNTER;
+
+    float ENV1_VOLUME;
+    float ENV2_VOLUME;
+
+    float ENV1_VALUE;
+    float ENV2_VALUE;
+
+    float ENV1_MIN;
+    float ENV2_MIN;
+
+    float sbuf0L;
+    float sbuf1L;
+
+    float sbuf0R;
+    float sbuf1R;
+
+    float GS_VAL;
+    float GS_VAL2;
+
+} ptk_synth;
+
+void ptk_synth_change_parameters(ptk_synth *synth, SynthParameters TSP);
+void ptk_synth_reset(ptk_synth *synth);
+        
+float ptk_synth_get_sample(ptk_data *ptk_synth,
+                        short *Left_Samples,
+                        short *Right_Samples,
+                        char Stereo,
+                        char Loop_Type,
+                        unsigned int Length,
+                        unsigned int Loop_Sub,
+                        float *Right_Signal,
+                        float vol,
+                        int *track,
+                        int *track2,
+                        Uint64 *position_osc1,
+                        Uint64 *position_osc2,
+
+#if defined(PTK_SYNTH_OSC3)
+                        Uint64 *position_osc3,
+#endif
+                        int64 osc_speed,
+                        float Ampli_Vol);
+
+void ptk_synth_note_on(ptk_synth *synth, int noten, float speed, int Looping, unsigned int Length,
+                    unsigned int Loop_Length
+#if defined(PTK_INSTRUMENTS)
+                    ,float note_smp
+#endif
+                    , int glide
+                   );
+
+void ptk_synth_note_off(ptk_synth *synth);
+
+/* TODO: combine left/rights */
+float ptk_synth_filter_left(ptk_synth *synth);
+float ptk_synth_filter_right(ptk_synth *synth);
+
+float ptk_synth_moogfilter_left(ptk_synth *synth);
+float ptk_synth_moogfilter_right(ptk_synth *synth);
+
 #endif // PTK_SYNTH
 
 #if defined(PTK_COMPRESSOR)
