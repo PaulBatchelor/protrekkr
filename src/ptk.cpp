@@ -4053,6 +4053,7 @@ void Keyboard_Handler(ptk_data *ptk)
 
         if(Keys[SDLK_DELETE])
         {
+            printf("delete!\n");
             retnote = -1;
             retnote_raw = -1;
         }
@@ -4066,6 +4067,7 @@ void Keyboard_Handler(ptk_data *ptk)
             retnote = -3;
             retnote_raw = -3;
         }
+
 
         // Key jazz
         if(Keys_Raw[0x10]) { retnote_raw = 12; ptk->Record_Keys[0] = 12 + 1; }
@@ -4197,6 +4199,7 @@ void Keyboard_Handler(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_EDIT_MODE;
         }
     }
+
 
     if(ptk->pos_space == 0 && !Keys[SDLK_SPACE]) ptk->pos_space = 1;
 
@@ -4721,7 +4724,6 @@ void Keyboard_Handler(ptk_data *ptk)
     if(!Get_LAlt() && !Get_LCtrl() && !Get_LShift() && ptk->snamesel == INPUT_NONE && !reelletter)
     {
         int go_note = FALSE;
-
         int i;
         for(i = 0; i < Keyboard_Nbr_Events; i++)
         {
@@ -4961,6 +4963,13 @@ No_Key:;
             }
         }
 
+        /* vi key: 'x' deletes a note */
+        if(vi_normal_mode(ptk, Keys[SDLK_x], Keys[SDLK_x], is_editing)) {
+            retnote = -4;
+            retnote_raw = -4;
+        }
+
+
         // Note off (RSHIFT)
         if(retnote == -3 && is_editing && !is_recording_2)
         {
@@ -4998,8 +5007,14 @@ No_Key:;
             }
         }
 
-        // Delete a note
-        if(retnote == -1 && is_editing && !is_recording_2)
+        /* Delete a note
+         * this conditional has been modified so that 'x' can also delete 
+         * outside of edit mode.
+         * When the 'x' key is pressed in normal mode, it returns the error
+         * code -4.
+         * 
+         */
+        if(((retnote == -1 && is_editing) || retnote == -4) && !is_recording_2)
         {
             int column = 0;
             int in_note = FALSE;
