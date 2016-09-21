@@ -153,7 +153,10 @@ void Draw_Scope_Files_Button(ptk_data *ptk);
 void Display_Tracks_To_Render(ptk_data *ptk);
 void Solo_Track(int track_to_solo);
 
-static int vi_normal_mode(ptk_data *ptk, unsigned short c, bool is_editing);
+static int vi_normal_mode(ptk_data *ptk, 
+        unsigned short l_c, 
+        unsigned short u_c, 
+        bool is_editing);
 
 JAZZ_KEY Sub_Channels_Jazz[MAX_TRACKS][MAX_POLYPHONY];
 
@@ -3433,27 +3436,27 @@ void Keyboard_Handler(ptk_data *ptk)
 
         // Previous column or previous track
         if(Keys[SDLK_LEFT] && !Get_LCtrl() && !Get_LAlt() ||
-                vi_normal_mode(ptk, Keys[SDLK_h], is_editing))
+                vi_normal_mode(ptk, Keys[SDLK_h], Keys['H'], is_editing))
         {
             Goto_Previous_Column(ptk);
         }
 
         // Next column or next track
         if(Keys[SDLK_RIGHT] && !Get_LCtrl() && !Get_LAlt() ||
-                vi_normal_mode(ptk, Keys[SDLK_l], is_editing))
+                vi_normal_mode(ptk, Keys[SDLK_l], Keys['L'], is_editing))
         {
             Goto_Next_Column(ptk);
         }
 
         // Previous row
-        if((Keys[SDLK_UP] || vi_normal_mode(ptk, Keys[SDLK_k], is_editing)) 
+        if((Keys[SDLK_UP] || vi_normal_mode(ptk, Keys[SDLK_k], Keys['K'], is_editing)) 
                     && !Songplaying)
         {
             Goto_Previous_Row(ptk);
         }
 
         // Next row
-        if((Keys[SDLK_DOWN] || vi_normal_mode(ptk, Keys[SDLK_j], is_editing)) 
+        if((Keys[SDLK_DOWN] || vi_normal_mode(ptk, Keys[SDLK_j], Keys['J'], is_editing)) 
             && !Songplaying)
         {
             Goto_Next_Row(ptk);
@@ -6893,7 +6896,11 @@ void ptk_close(ptk_data *ptk)
     if(ptk->sporth.use_sporth == TRUE) ptk_sporth_destroy(ptk);
 }
 
-static int vi_normal_mode(ptk_data *ptk, unsigned short c, bool is_editing)
+static int vi_normal_mode(ptk_data *ptk, 
+        unsigned short l_c, 
+        unsigned short u_c, 
+        bool is_editing)
 {
-    return (is_editing == FALSE) && c;
+    return (is_editing == FALSE) && 
+        (l_c || u_c) && ptk->snamesel == INPUT_NONE;
 }
