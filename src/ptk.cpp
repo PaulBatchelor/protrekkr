@@ -4092,24 +4092,23 @@ void Keyboard_Handler(ptk_data *ptk)
         if(Keys_Raw[0x1b]) { retnote_raw = 31; ptk->Record_Keys[19] = 31 + 1; }
         if(Keys_Raw[0x2c]) { retnote_raw = 0; ptk->Record_Keys[20] = 0 + 1; }
         if(Keys_Raw[0x1f]) { retnote_raw = 1; ptk->Record_Keys[21] = 1 + 1; }
-        if(Keys_Raw[0x2d]) { retnote_raw = 2; ptk->Record_Keys[22] = 2 + 1; }
+        //if(Keys_Raw[0x2d]) { retnote_raw = 2; ptk->Record_Keys[22] = 2 + 1; }
         if(Keys_Raw[0x20]) { retnote_raw = 3; ptk->Record_Keys[23] = 3 + 1; }
         if(Keys_Raw[0x2e]) { retnote_raw = 4; ptk->Record_Keys[24] = 4 + 1; }
         if(Keys_Raw[0x2f]) { retnote_raw = 5; ptk->Record_Keys[25] = 5 + 1; }
         if(Keys_Raw[0x22]) { retnote_raw = 6; ptk->Record_Keys[26] = 6 + 1; }
         if(Keys_Raw[0x30]) { retnote_raw = 7; ptk->Record_Keys[27] = 7 + 1; }
-        if(Keys_Raw[0x23]) { retnote_raw = 8; ptk->Record_Keys[28] = 8 + 1; }
+        //if(Keys_Raw[0x23]) { retnote_raw = 8; ptk->Record_Keys[28] = 8 + 1; }
         if(Keys_Raw[0x31]) { retnote_raw = 9; ptk->Record_Keys[29] = 9 + 1; }
-        if(Keys_Raw[0x24]) { retnote_raw = 10; ptk->Record_Keys[30] = 10 + 1; }
+        //if(Keys_Raw[0x24]) { retnote_raw = 10; ptk->Record_Keys[30] = 10 + 1; }
         if(Keys_Raw[0x32]) { retnote_raw = 11; ptk->Record_Keys[31] = 11 + 1; }
         if(Keys_Raw[0x33]) { retnote_raw = 12; ptk->Record_Keys[32] = 12 + 1; }
-        if(Keys_Raw[0x26]) { retnote_raw = 13; ptk->Record_Keys[33] = 13 + 1; }
+        //if(Keys_Raw[0x26]) { retnote_raw = 13; ptk->Record_Keys[33] = 13 + 1; }
         if(Keys_Raw[0x34]) { retnote_raw = 14; ptk->Record_Keys[34] = 14 + 1; }
-        if(Keys_Raw[0x27]) { retnote_raw = 15; ptk->Record_Keys[35] = 15 + 1; }
+        //if(Keys_Raw[0x27]) { retnote_raw = 15; ptk->Record_Keys[35] = 15 + 1; }
         if(Keys_Raw[0x35]) { retnote_raw = 16; ptk->Record_Keys[36] = 16 + 1; }
 
         int i;
-
         if(is_recording) { // Start the real recording
             if(!is_recording_2 && (retnote_raw < NOTE_OFF && retnote_raw > 0) && ptk->key_record_first_time) {
                 // Start recording
