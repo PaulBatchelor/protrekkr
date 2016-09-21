@@ -34,6 +34,14 @@ static int set_callback(lua_State *L)
     return 0;
 }
 
+static int set_note_callback(lua_State *L)
+{
+    ptk_data *ptk = get_ptk_data(L);
+    lua_settop(L, 1);
+    ptk->note_cb_ref = luaL_ref(L, LUA_REGISTRYINDEX);
+    return 0;
+}
+
 static int get_sporth_var(lua_State *L)
 {
     ptk_data *ptk = get_ptk_data(L);
@@ -48,6 +56,14 @@ static int get_sporth_var(lua_State *L)
     } else {
         lua_pushlightuserdata(L, ud);
     }
+    return 1;
+}
+
+static int toggle_note_callback(lua_State *L)
+{
+    ptk_data *ptk = get_ptk_data(L);
+    int sample = lua_tointeger(L, 1);
+    ptk->note_cb ^= 1 << sample;
     return 1;
 }
 
@@ -69,6 +85,8 @@ void ptk_lua_init(ptk_data *ptk)
     lua_register(L, "foo", foo);
     lua_register(L, "ptk_compile_sporth", compile_sporth);
     lua_register(L, "ptk_set_effect_callback", set_callback);
+    lua_register(L, "ptk_set_note_callback", set_note_callback);
+    lua_register(L, "ptk_toggle_note_callback", toggle_note_callback);
     lua_register(L, "ptk_var_get", get_sporth_var);
     lua_register(L, "ptk_var_set", set_sporth_var);
     if(luaL_loadfile(L, "config.lua") || lua_pcall(L, 0, 0, 0))
@@ -86,3 +104,15 @@ void ptk_lua_call(ptk_data *ptk, int dat, int row)
         printf("row callback not set!\n");
     }
 }
+
+void ptk_lua_note_call(ptk_data *ptk, int note, int sample, int vol)
+{
+    if(ptk->note_cb_ref != -1) {
+        lua_rawgeti(ptk->L, LUA_REGISTRYINDEX, ptk->note_cb_ref);
+        lua_pushinteger(ptk->L, note);
+        lua_pushinteger(ptk->L, sample);
+        lua_pushinteger(ptk->L, vol);
+        lua_pcall(ptk->L, 3, 0, 0);
+    }
+}
+

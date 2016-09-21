@@ -167,6 +167,9 @@ typedef struct {
 
     int volatile AUDIO_Acknowledge;
 
+    uint32_t note_cb;
+    int note_cb_ref;
+
     int lref;
     lua_State *L;
     ptk_sporth sporth;

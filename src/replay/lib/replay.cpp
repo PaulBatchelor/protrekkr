@@ -3841,6 +3841,10 @@ void Play_Instrument(ptk_data *ptk, int channel, int sub_channel)
             if(glide) no_retrig_adsr = TRUE;
         }
 
+        if((ptk->note_cb) & 1 << sample) {
+            ptk_lua_note_call(ptk, inote, sample, vol);
+        }
+
 #if defined(PTK_SYNTH)
         switch(Synthprg[sample])
         {

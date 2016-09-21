@@ -6903,6 +6903,11 @@ void ptk_init(ptk_data *ptk)
     ptk->Ticks_Synchro_Left = 1;
     ptk->Ticks_Synchro_Right = 1;
     ptk->sl3 = 0;
+
+    /* note callback - bits set to zero */
+    ptk->note_cb = 0;
+    /* lua note callback reference */
+    ptk->note_cb_ref = -1;
 }
 
 void ptk_close(ptk_data *ptk) 
