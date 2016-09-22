@@ -683,10 +683,12 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 
 
 	if(argc > 0) {
+        printf("loading file %s\n", argv[1]);
 		LoadFile(ptk, 0, argv[1]);
 	}
 
     ptk_lua_init(ptk);
+
 	if(ptk->render_mode == TRUE) {
 		WavRenderizer(ptk);
 	}

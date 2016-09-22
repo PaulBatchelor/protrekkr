@@ -5274,13 +5274,14 @@ void GetPlayerValues(ptk_data *ptk)
 					ptk,
 					ptk_sporth_set_vars);
 			pd->recompile = 0;
+            ptk_lua_call_noargs(ptk, ptk->recompile_cb);
 		}
         plumber_compute(pd, PLUMBER_COMPUTE);
         ptk->right_float = sporth_stack_pop_float(&pd->sporth.stack);
         ptk->left_float = sporth_stack_pop_float(&pd->sporth.stack);
         if(ptk->render_mode == TRUE) {
-            sp_progress_compute(pd->sp, ptk->sporth.prog, NULL, NULL);
-            pd->sp->pos++;
+            /*sp_progress_compute(pd->sp, ptk->sporth.prog, NULL, NULL);*/
+            /*pd->sp->pos++;*/
         }
     }
 

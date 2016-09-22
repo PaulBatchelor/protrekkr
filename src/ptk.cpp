@@ -4199,6 +4199,12 @@ void Keyboard_Handler(ptk_data *ptk)
         }
     }
 
+    /* vi mode: 'i' to "insert" */
+    if(vi_normal_mode(ptk, Keys[SDLK_i], Keys[SDLK_i], is_editing)) 
+    {
+        ptk->gui_action = GUI_CMD_EDIT_MODE;
+    }
+
 
     if(ptk->pos_space == 0 && !Keys[SDLK_SPACE]) ptk->pos_space = 1;
 
@@ -6907,6 +6913,9 @@ void ptk_init(ptk_data *ptk)
     ptk->note_cb = 0;
     /* lua note callback reference */
     ptk->note_cb_ref = -1;
+    
+    /* lua sporth recompile callback */
+    ptk->recompile_cb = -1;
 }
 
 void ptk_close(ptk_data *ptk) 

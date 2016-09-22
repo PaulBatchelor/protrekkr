@@ -170,6 +170,8 @@ typedef struct {
     uint32_t note_cb;
     int note_cb_ref;
 
+    int recompile_cb;
+
     int lref;
     lua_State *L;
     ptk_sporth sporth;
