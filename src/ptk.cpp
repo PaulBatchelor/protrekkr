@@ -137,7 +137,7 @@ Uint32 (*Timer_Ptr)(Uint32 interval, void *param) = &Timer_CallBack;
 
 extern s_access sp_Position[MAX_TRACKS][MAX_POLYPHONY];
 
-//extern int done;
+extern int done;
 //extern float local_curr_mas_vol;
 
 SDL_Surface *LOGOPIC;
@@ -2741,7 +2741,8 @@ void WavRenderizer(ptk_data *ptk)
             }
 
             filesize = 0;
-            ptk->done = FALSE;
+            //ptk->done = FALSE;
+            done = FALSE;
 
             if(!do_multi)
             {
@@ -2760,7 +2761,8 @@ void WavRenderizer(ptk_data *ptk)
             {
                 case RENDER_TO_FILE:
                     SongPlay(ptk);
-                    while(Song_Position < Max_Position && ptk->done == FALSE)
+                    //while(Song_Position < Max_Position && ptk->done == FALSE)
+                    while(Song_Position < Max_Position && done == FALSE)
                     {
                         GetPlayerValues(ptk);
                         if(rawrender_32float)
@@ -2799,7 +2801,8 @@ void WavRenderizer(ptk_data *ptk)
                         }
                         Pos_In_Memory = 0;
                         SongPlay(ptk);
-                        while(Song_Position < Max_Position && ptk->done == FALSE)
+                        //while(Song_Position < Max_Position && ptk->done == FALSE)
+                        while(Song_Position < Max_Position && done == FALSE)
                         {
                             if(!Mem_Buffer_Size)
                             {
