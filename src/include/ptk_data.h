@@ -175,6 +175,8 @@ typedef struct {
     int lref;
     lua_State *L;
     ptk_sporth sporth;
+
+    int play_cb;
 } ptk_data;
 
 #ifdef __cplusplus

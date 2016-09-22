@@ -42,6 +42,14 @@ static int set_recompile_callback(lua_State *L)
     return 0;
 }
 
+static int set_play_callback(lua_State *L)
+{
+    ptk_data *ptk = get_ptk_data(L);
+    lua_settop(L, 1);
+    ptk->play_cb = luaL_ref(L, LUA_REGISTRYINDEX);
+    return 0;
+}
+
 static int set_note_callback(lua_State *L)
 {
     ptk_data *ptk = get_ptk_data(L);
@@ -121,6 +129,7 @@ void ptk_lua_init(ptk_data *ptk)
     lua_register(L, "ptk_set_effect_callback", set_callback);
     lua_register(L, "ptk_set_note_callback", set_note_callback);
     lua_register(L, "ptk_set_recompile_callback", set_recompile_callback);
+    lua_register(L, "ptk_set_play_callback", set_play_callback);
     lua_register(L, "ptk_toggle_note_callback", toggle_note_callback);
     lua_register(L, "ptk_var_get", get_sporth_var);
     lua_register(L, "ptk_var_set", set_sporth_var);

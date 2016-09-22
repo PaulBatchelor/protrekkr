@@ -2217,6 +2217,7 @@ void SongPlay(ptk_data *ptk)
     ptk->livevalue = 0;
     ptk->player_pos = -1;
 
+    ptk_lua_call_noargs(ptk, ptk->play_cb);
     Post_Song_Init(ptk);
     Ptk_Play(ptk);
 	if(ptk->start_gui) Notify_Play(ptk);
