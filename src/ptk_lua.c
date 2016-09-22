@@ -59,6 +59,31 @@ static int get_sporth_var(lua_State *L)
     return 1;
 }
 
+static int l_get_pointer(lua_State *L)
+{
+    ptk_data *ptk = get_ptk_data(L);
+    const char *str = lua_tostring(L, 1);
+    plumber_data *pd = &ptk->sporth.pd;
+    plumber_ptr *ptr = lua_newuserdata(L, sizeof(plumber_ptr));
+    
+    if(plumber_get_userdata(pd, str, &ptr) == PLUMBER_NOTOK) {
+        fprintf(stderr, "There was a problem getting table %s\n", str);
+        lua_pushnil(L);
+    } else {
+        lua_pushlightuserdata(L, ptr);
+    }
+
+    return 1;
+}
+
+static int l_ps_eval(lua_State *L)
+{
+    plumber_ptr *ptr = lua_touserdata(L, 1);
+    const char *str = lua_tostring(L, 2);
+    polysporth_eval(ptr, str);
+    return 0;
+}
+
 static int toggle_note_callback(lua_State *L)
 {
     ptk_data *ptk = get_ptk_data(L);
@@ -89,6 +114,8 @@ void ptk_lua_init(ptk_data *ptk)
     lua_register(L, "ptk_toggle_note_callback", toggle_note_callback);
     lua_register(L, "ptk_var_get", get_sporth_var);
     lua_register(L, "ptk_var_set", set_sporth_var);
+    lua_register(L, "ptk_get_pointer", l_get_pointer);
+    lua_register(L, "ptk_ps_eval", l_ps_eval);
     if(luaL_loadfile(L, "config.lua") || lua_pcall(L, 0, 0, 0))
         fprintf(stderr, "cannot run file %s\n", lua_tostring(L, -1));
 }
