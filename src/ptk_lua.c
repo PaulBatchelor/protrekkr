@@ -137,6 +137,9 @@ void ptk_lua_init(ptk_data *ptk)
     lua_register(L, "ptk_ps_eval", l_ps_eval);
     if(luaL_loadfile(L, "config.lua") || lua_pcall(L, 0, 0, 0))
         fprintf(stderr, "cannot run file %s\n", lua_tostring(L, -1));
+    /* lua lock needed for thread-safety */
+    ptk->lua_lock = 0;
+
 }
 
 void ptk_lua_call(ptk_data *ptk, int dat, int row)
@@ -153,9 +156,17 @@ void ptk_lua_call(ptk_data *ptk, int dat, int row)
 
 void ptk_lua_call_noargs(ptk_data *ptk, int ref)
 {
+    int lock = ptk->lua_lock;
+    if(lock) {
+        printf("Couldn't call function at reference %d: thread is locked!\n",
+                ref);
+        return;
+    }
     if(ref != -1) {
+        ptk->lua_lock = 1;
         lua_rawgeti(ptk->L, LUA_REGISTRYINDEX, ref);
         lua_pcall(ptk->L, 0, 0, 0);
+        ptk->lua_lock = 0;
     } 
 }
 

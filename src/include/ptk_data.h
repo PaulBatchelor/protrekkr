@@ -177,6 +177,7 @@ typedef struct {
     ptk_sporth sporth;
 
     int play_cb;
+    int lua_lock;
 } ptk_data;
 
 #ifdef __cplusplus
