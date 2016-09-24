@@ -14,6 +14,7 @@ int ptk_sporth_set_vars(plumber_data *pd, void *ud)
     plumber_ftmap_add_userdata(pd, "tick", &sporth->tick);
     plumber_ftmap_add_userdata(pd, "pos", &sporth->linepos);
     plumber_ftmap_add_userdata(pd, "play", &sporth->play);
+    plumber_ftmap_add_userdata(pd, "bpm", &sporth->bpm);
     plumber_ftmap_add(pd, "notes", sporth->notes);
     plumber_ftmap_add(pd, "gates", sporth->gates);
     plumber_ftmap_add(pd, "tracks", sporth->tracks);
@@ -48,6 +49,7 @@ int ptk_sporth_init(ptk_data *ptk, char *str)
 	sporth->tick = 0;
 	sporth->linepos = 0;
 	sporth->play = 0;
+	sporth->bpm = 0;
 
     if(plumber_parse_string(&sporth->pd, str) == PLUMBER_OK) {
         sporth->use_sporth = TRUE;

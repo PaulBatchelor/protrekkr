@@ -19,6 +19,7 @@ typedef struct {
     float tick; 
 	float linepos;
     float play;
+    float bpm;
 	sp_ftbl *notes;
 	sp_ftbl *gates;
     sp_ftbl *tracks;

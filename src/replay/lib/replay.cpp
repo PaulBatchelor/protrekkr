@@ -2332,6 +2332,9 @@ void Sp_Player(ptk_data *ptk)
 #endif
     ptk->sporth.tick =0;
     ptk->sporth.play = Songplaying;
+
+    ptk->sporth.bpm = BeatsPerMin;
+
     if(Songplaying)
     {
         if(PosInTick == 0)
