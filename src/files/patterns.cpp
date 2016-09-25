@@ -171,7 +171,8 @@ void SavePattern(ptk_data *ptk)
     sprintf(extension, "PROTBLK2");
     sprintf(Temph, "Saving '%s.ppb' data in patterns directory...", Selection_Name);
     Status_Box(ptk, Temph);
-    sprintf(Temph, "%s"SLASH"%s.ppb", Dir_Patterns, Selection_Name);
+    //sprintf(Temph, "%s"SLASH"%s.ppb", Dir_Patterns, Selection_Name);
+    sprintf(Temph, "%s.ppb", Selection_Name);
 
     in = fopen(Temph, "wb");
     if(in != NULL)

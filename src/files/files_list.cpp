@@ -265,31 +265,31 @@ void Set_Current_Dir(ptk_data *ptk)
     switch(ptk->Scopish)
     {
         case SCOPE_ZONE_MOD_DIR:
-            CHDIR(filename);
+            //CHDIR(filename);
             GETCWD(Dir_Mods, MAX_PATH);
             break;
         case SCOPE_ZONE_INSTR_DIR:
-            CHDIR(filename);
+            //CHDIR(filename);
             GETCWD(Dir_Instrs, MAX_PATH);
             break;
         case SCOPE_ZONE_PRESET_DIR:
-            CHDIR(filename);
+            //CHDIR(filename);
             GETCWD(Dir_Presets, MAX_PATH);
             break;
         case SCOPE_ZONE_REVERB_DIR:
-            CHDIR(filename);
+            //CHDIR(filename);
             GETCWD(Dir_Reverbs, MAX_PATH);
             break;
         case SCOPE_ZONE_MIDICFG_DIR:
-            CHDIR(filename);
+            //CHDIR(filename);
             GETCWD(Dir_MidiCfg, MAX_PATH);
             break;
         case SCOPE_ZONE_PATTERN_DIR:
-            CHDIR(filename);
+            //CHDIR(filename);
             GETCWD(Dir_Patterns, MAX_PATH);
             break;
         case SCOPE_ZONE_SAMPLE_DIR:
-            CHDIR(filename);
+            //CHDIR(filename);
             GETCWD(Dir_Samples, MAX_PATH);
             break;
     }
@@ -402,7 +402,7 @@ void Read_SMPT(ptk_data *ptk)
             cur_dir = Dir_MidiCfg;
             break;
     }
-    CHDIR(cur_dir);
+    //CHDIR(cur_dir);
 
     // Find first .c file in current directory
     strcpy(Dir_Act, cur_dir);

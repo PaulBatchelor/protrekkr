@@ -479,7 +479,7 @@ int Init_Context(ptk_data *ptk)
 
     Read_SMPT(ptk);
 
-    CHDIR(ptk->Prog_Path);
+    //CHDIR(ptk->Prog_Path);
 
     if(ptk->start_gui == TRUE) if(!Init_Block_Work(ptk)) return(FALSE);
 
