@@ -4300,6 +4300,17 @@ void Keyboard_Handler(ptk_data *ptk)
 
         if(Get_LCtrl())
         {
+
+            if(Keys[SDLK_PERIOD])
+            {
+                ptk->gui_action = GUI_CMD_INCREASE_STEP_ADD;
+            }
+
+            if(Keys[SDLK_COMMA])
+            {
+                ptk->gui_action = GUI_CMD_DECREASE_STEP_ADD;
+            }
+
             if(!Get_LAlt() && !Get_LShift())
             {
                 if(Keys[SDLK_1] || Keys[SDLK_KP1])
@@ -4339,6 +4350,7 @@ void Keyboard_Handler(ptk_data *ptk)
                     }
                     Keys[SDLK_RIGHT] = FALSE;
                 }
+
             }
 
             if(Key_Unicode)
