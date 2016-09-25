@@ -996,8 +996,31 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_EDIT_MODE)
         {
+
             is_recording = 0;
             is_editing ^= 1;
+
+            if(is_editing) {
+                /* make record bar red */
+                ptk->edit_old_r = Ptk_Palette[COL_PATTERN_SEL_BACK].r;
+                ptk->edit_old_g = Ptk_Palette[COL_PATTERN_SEL_BACK].g;
+                ptk->edit_old_b = Ptk_Palette[COL_PATTERN_SEL_BACK].b;
+                Get_Phony_Palette();
+                /* turkey red! */
+                Phony_Palette[COL_PATTERN_SEL_BACK].r = 169;
+                Phony_Palette[COL_PATTERN_SEL_BACK].g = 17;
+                Phony_Palette[COL_PATTERN_SEL_BACK].b = 1;
+                Set_Phony_Palette();
+            } else {
+
+                Get_Phony_Palette();
+                Phony_Palette[COL_PATTERN_SEL_BACK].r = ptk->edit_old_r;
+                Phony_Palette[COL_PATTERN_SEL_BACK].g = ptk->edit_old_g;
+                Phony_Palette[COL_PATTERN_SEL_BACK].b = ptk->edit_old_b;
+                Set_Phony_Palette();
+            }
+            Refresh_Palette();
+
             is_recording_2 = 0;
             ptk->Nbr_Sub_NoteOff = 0;
             SongStop(ptk);

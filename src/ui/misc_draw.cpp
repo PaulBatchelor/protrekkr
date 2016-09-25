@@ -2837,7 +2837,11 @@ void Create_Pattern_font(SDL_Surface *Dest, int offset,
             Surface_offset = (j * Dest->pitch) + i;
             if(Pix[Surface_offset] == COL_PATTERN_SEL_BACK)
             {
-                Pix2[Surface_offset] = COL_VUMETERPEAK;
+                if(is_editing == TRUE) {
+                    Pix2[Surface_offset] = COL_VUMETERPEAK;
+                } else {
+                    Pix2[Surface_offset] = COL_FONT_HI;
+                }
             }
             else
             {

@@ -179,6 +179,10 @@ typedef struct {
 
     int play_cb;
     int lua_lock;
+
+    char edit_old_r;
+    char edit_old_g;
+    char edit_old_b;
 } ptk_data;
 
 #ifdef __cplusplus
