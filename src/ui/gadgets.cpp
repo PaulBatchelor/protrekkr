@@ -795,11 +795,12 @@ void Gadgets::__Run_Event(LPMOUSE mouse,
                           LPGADGET gadget,
                           int Last_Button)
 {
-    LOCALPOINT local;
-
+    //LOCALPOINT local;
+    ptk_localpoint local;
     if(gadget->button_event != NULL)
     {
-        local.Load(mouse, gadget);
+        //local.Load(mouse, gadget);
+        ptk_localpoint_load(&local, mouse, gadget);
         gadget->button_event(gadget->id,
                              Last_Button ? gadget->last_button : mouse->button,
                              mouse->wheel,
@@ -984,11 +985,13 @@ int Gadgets::__Calc_ScrollBar_Pos(GADGETID id, int value)
 void Gadgets::__Calc_Scrollbar_Grip(LPMOUSE mouse,
                                     LPGADGET gadget)
 {
-    LOCALPOINT local;
+    //LOCALPOINT local;
+    ptk_localpoint local;
     int local_coord;
     int gap = 0;
 
-    local.Load(mouse, gadget);
+    //local.Load(mouse, gadget);
+    ptk_localpoint_load(&local, mouse, gadget);
 
     switch(gadget->type)
     {
@@ -1108,4 +1111,14 @@ ptk_boundrect ptk_boundrect_init(int x, int y, int width, int height)
     br.width = width;
     br.height = height;
     return br;
+}
+
+void ptk_localpoint_load(ptk_localpoint *lp, LPMOUSE mouse, LPGADGET gadget)
+{
+    lp->x = mouse->x - gadget->x;
+    lp->y = mouse->y - gadget->y;
+    if(lp->x < 0) lp->x = 0;
+    if(lp->y < 0) lp->y = 0;
+    if(lp->x > gadget->width) lp->x = gadget->width;
+    if(lp->y > gadget->height) lp->y = gadget->height;
 }

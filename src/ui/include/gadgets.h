@@ -207,6 +207,13 @@ class LOCALPOINT
         int y;
 };
 
+typedef struct {
+    int x, y;
+} ptk_localpoint;
+
+
+void ptk_localpoint_load(ptk_localpoint *lp, LPMOUSE mouse, LPGADGET gadget);
+
 class Gadgets
 {
     public:
