@@ -156,25 +156,34 @@ typedef struct
 
 // ------------------------------------------------------
 // Classes
-class BOUNDRECT
-{
-    public:
-        BOUNDRECT(int x, int y,
-                  int width, int height)
-        {
-            this->x  = x;
-            this->y  = y;
-            this->width = width;
-            this->height = height;
-        }
-        ~BOUNDRECT()
-        {
-        }
-        int x;
-        int y;
-        int width;
-        int height;
-};
+//class BOUNDRECT
+//{
+//    public:
+//        BOUNDRECT(int x, int y,
+//                  int width, int height)
+//        {
+//            this->x  = x;
+//            this->y  = y;
+//            this->width = width;
+//            this->height = height;
+//        }
+//        ~BOUNDRECT()
+//        {
+//        }
+//        int x;
+//        int y;
+//        int width;
+//        int height;
+//};
+
+typedef struct {
+    int x;
+    int y;
+    int width;
+    int height;
+}ptk_boundrect;
+
+ptk_boundrect ptk_boundrect_init(int x, int y, int width, int height);
 
 class LOCALPOINT
 {
@@ -257,7 +266,7 @@ class Gadgets
                       int bevel);
         void Free(GADGETID id);
         int Check_Coordinates(int srcx, int srcy,
-                              BOUNDRECT dst);
+                              ptk_boundrect dst);
         int Nbr_Gadgets;
         LPGADGET *GadgetsArray;
         int Screen_Width;

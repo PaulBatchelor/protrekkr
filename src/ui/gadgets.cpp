@@ -521,8 +521,15 @@ LPGADGET Gadgets::__Check_Mouse_Over(LPMOUSE mouse)
             if(Gadget_Y < 0) Gadget_Y = Screen_Height + Gadget_Y;
             
             // Check if the mouse is still over the gadget
+            //if(Check_Coordinates(mouse->x, mouse->y,
+            //                     BOUNDRECT(Gadget_X, Gadget_Y,
+            //                               Clicked_Gadget->width,
+            //                               Clicked_Gadget->height
+            //                              )
+            //                    )
+            //  )
             if(Check_Coordinates(mouse->x, mouse->y,
-                                 BOUNDRECT(Gadget_X, Gadget_Y,
+                                 ptk_boundrect_init(Gadget_X, Gadget_Y,
                                            Clicked_Gadget->width,
                                            Clicked_Gadget->height
                                           )
@@ -569,8 +576,13 @@ LPGADGET Gadgets::__Check_Mouse_Over(LPMOUSE mouse)
         if(Gadget_X < 0) Gadget_X = Screen_Width + Gadget_X;
         if(Gadget_Y < 0) Gadget_Y = Screen_Height + Gadget_Y;
 
+        //if(Check_Coordinates(x, y,
+        //                     BOUNDRECT(Gadget_X + Bound_Left,
+        //                               Gadget_Y + Bound_Top,
+        //                               Bound_Width - (Bound_Left * 2),
+        //                               Bound_Height)))
         if(Check_Coordinates(x, y,
-                             BOUNDRECT(Gadget_X + Bound_Left,
+                             ptk_boundrect_init(Gadget_X + Bound_Left,
                                        Gadget_Y + Bound_Top,
                                        Bound_Width - (Bound_Left * 2),
                                        Bound_Height)))
@@ -699,8 +711,12 @@ void Gadgets::Process_Click(LPMOUSE mouse)
                     __Run_Event(mouse, Cur_Gadget, FALSE);
                 }
             }
+            //else if(Check_Coordinates(x, y,
+            //                          BOUNDRECT(Gadget_X, Gadget_Y,
+            //                                    Cur_Gadget->width,
+            //                                    Cur_Gadget->height)))
             else if(Check_Coordinates(x, y,
-                                      BOUNDRECT(Gadget_X, Gadget_Y,
+                                      ptk_boundrect_init(Gadget_X, Gadget_Y,
                                                 Cur_Gadget->width,
                                                 Cur_Gadget->height)))
             {
@@ -761,7 +777,7 @@ LPGADGET Gadgets::__Check_Clicked(void)
 // ------------------------------------------------------
 // Check if a coordinate is within boundaries
 int Gadgets::Check_Coordinates(int srcx, int srcy,
-                               BOUNDRECT dst)
+                               ptk_boundrect dst)
 {
     if(srcx >= dst.x && srcx < dst.x + dst.width)
     {
@@ -1082,4 +1098,14 @@ void Gadgets::Set_Timer(GADGETID id, int value)
         Gadget->vint = value;
         Display(id, GADGET_NOHIGHLIGHT);
     }
+}
+
+ptk_boundrect ptk_boundrect_init(int x, int y, int width, int height)
+{
+    ptk_boundrect br;
+    br.x  = x;
+    br.y  = y;
+    br.width = width;
+    br.height = height;
+    return br;
 }
