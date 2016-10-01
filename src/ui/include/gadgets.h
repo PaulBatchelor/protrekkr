@@ -185,27 +185,27 @@ typedef struct {
 
 ptk_boundrect ptk_boundrect_init(int x, int y, int width, int height);
 
-class LOCALPOINT
-{
-    public:
-        LOCALPOINT()
-        {
-        }
-        ~LOCALPOINT()
-        {
-        }
-        void Load(LPMOUSE mouse, LPGADGET gadget)
-        {
-            this->x = mouse->x - gadget->x;
-            this->y = mouse->y - gadget->y;
-            if(this->x < 0) this->x = 0;
-            if(this->y < 0) this->y = 0;
-            if(this->x > gadget->width) this->x = gadget->width;
-            if(this->y > gadget->height) this->y = gadget->height;
-        }
-        int x;
-        int y;
-};
+//class LOCALPOINT
+//{
+//    public:
+//        LOCALPOINT()
+//        {
+//        }
+//        ~LOCALPOINT()
+//        {
+//        }
+//        void Load(LPMOUSE mouse, LPGADGET gadget)
+//        {
+//            this->x = mouse->x - gadget->x;
+//            this->y = mouse->y - gadget->y;
+//            if(this->x < 0) this->x = 0;
+//            if(this->y < 0) this->y = 0;
+//            if(this->x > gadget->width) this->x = gadget->width;
+//            if(this->y > gadget->height) this->y = gadget->height;
+//        }
+//        int x;
+//        int y;
+//};
 
 typedef struct {
     int x, y;
