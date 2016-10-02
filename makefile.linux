@@ -30,6 +30,8 @@ FLAGS += -Isrc/replay/lib/sounddriver/include
 FLAGS += -Isrc/samples/include
 FLAGS += -Isrc/samples/wavpack/include
 
+MAIN = src/support/main.o
+
 OBJS = \
 	src/ui/requesters.o \
 	src/ui/draw_primitives.o \
@@ -45,7 +47,6 @@ OBJS = \
 	src/replay/lib/wavpack.o \
 	src/replay/lib/sounddriver/sounddriver_linux.o \
 	src/replay/lib/synth.o \
-	src/support/main.o \
 	src/support/timer.o \
 	src/files/synths.o \
 	src/files/patterns.o \
@@ -95,14 +96,14 @@ clean: RemObj
 	rm -rf bin/protrekkr
 
 RemObj:
-	-rm -f $(OBJS)
+	rm -f $(OBJS) $(MAIN)
 
 protrekkr: bin/protrekkr 
-bin/protrekkr: $(OBJS)
+bin/protrekkr: $(OBJS) $(MAIN)
 	(cd src/extralibs/sdl_draw; make -f makefile.linux)
 	(cd src/extralibs/tinyxml; make)
 	(cd src/extralibs/zlib-1.2.3; make)
-	$(CC) -o $@ -L./ $(FLAGS) -lstdc++ $(OBJS) $(LIBS)
+	$(CC) -o $@ -L./ $(FLAGS) -lstdc++ $(OBJS) $(MAIN) $(LIBS)
 	#strip -s -x $@
 
 install: protrekkr
