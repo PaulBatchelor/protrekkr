@@ -6829,6 +6829,7 @@ void Note_Jazz_Off(ptk_data *ptk, int note)
         {
             //Synthesizer[Channel->Channel][Channel->Sub_Channel].NoteOff();
             ptk_synth_note_off(&Synthesizer[Channel->Channel][Channel->Sub_Channel]);
+            printf("REALTIME NOTEOFF! %d %d\n", Channel->Channel, Channel->Sub_Channel);
             if(sp_Stage[Channel->Channel][Channel->Sub_Channel] == PLAYING_SAMPLE)
             {
                 sp_Stage[Channel->Channel][Channel->Sub_Channel] = PLAYING_SAMPLE_NOTEOFF;

@@ -2365,9 +2365,11 @@ void Sp_Player(ptk_data *ptk)
 						if(note < 120) {
 							ptk->sporth.notes->tbl[ct] = note;
 							ptk->sporth.gates->tbl[ct] = 1;
+                            printf("NRT NOTEON %d %d \n", ct, note);
 						} else if(note == 120) {
 							ptk->sporth.notes->tbl[ct] = 0;
 							ptk->sporth.gates->tbl[ct] = 0;
+                            printf("NRT NOTEOFF %d \n", ct);
 						} else if(note == 121) {
                             ptk->sporth.notes->tbl[ct] = -1;
                         }
@@ -2973,7 +2975,6 @@ void Sp_Player(ptk_data *ptk)
             {
 
 #if defined(PTK_SYNTH)
-
                 // Synth bypassing
                 if(!Synth_Was[c][i]) goto ByPass_Wav;
 
@@ -2985,7 +2986,7 @@ ByPass_Wav:
                     if(Cut_Stage[c][i])
                     {
                         // Volume ramping
-                        if(sp_Cvol[c][i] > 0.0f)
+                        if(sp_Cvol[c][i] > 1.0f)
                         {
                             sp_Cvol[c][i] -= 0.01f;
                             if(sp_Cvol[c][i] < 0.0f) sp_Cvol[c][i] = 0.0f;
@@ -3140,7 +3141,9 @@ ByPass_Wav:
                     if(sp_Cvol_Synth[c][i] > 0.0f)
                     {
                         sp_Cvol_Synth[c][i] -= 0.01f;
-                        if(sp_Cvol_Synth[c][i] < 0.0f) sp_Cvol_Synth[c][i] = 0.0f;
+                        if(sp_Cvol_Synth[c][i] < 0.0f){
+                            sp_Cvol_Synth[c][i] = 0.0f;
+                        }
                     }
                 }
                 else
@@ -3258,7 +3261,6 @@ ByPass_Wav:
             Midi_NoteOff(ptk, c, -1);
     #endif
 #endif
-
         }
 
         // A rather clumsy cross fading to avoid the most outrageous clicks
@@ -3273,6 +3275,7 @@ ByPass_Wav:
             {
                 New_Instrument[c] = FALSE;
             }
+
         }
         else
         {
@@ -3845,7 +3848,7 @@ void Play_Instrument(ptk_data *ptk, int channel, int sub_channel)
         }
 
         if((ptk->note_cb) & 1 << sample) {
-            ptk_lua_note_call(ptk, inote, sample, vol);
+            ptk_lua_note_call(ptk, channel, sub_channel, inote);
         }
 
 #if defined(PTK_SYNTH)
