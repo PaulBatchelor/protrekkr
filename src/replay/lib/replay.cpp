@@ -2365,11 +2365,11 @@ void Sp_Player(ptk_data *ptk)
 						if(note < 120) {
 							ptk->sporth.notes->tbl[ct] = note;
 							ptk->sporth.gates->tbl[ct] = 1;
-                            printf("NRT NOTEON %d %d \n", ct, note);
+                            //printf("NRT NOTEON %d %d \n", ct, note);
 						} else if(note == 120) {
 							ptk->sporth.notes->tbl[ct] = 0;
 							ptk->sporth.gates->tbl[ct] = 0;
-                            printf("NRT NOTEOFF %d \n", ct);
+                            //printf("NRT NOTEOFF %d %d\n", ct, sp_channelnote[ct][0]);
 						} else if(note == 121) {
                             ptk->sporth.notes->tbl[ct] = -1;
                         }
@@ -2379,6 +2379,16 @@ void Sp_Player(ptk_data *ptk)
                 {
                     pl_note[i] = *(RawPatterns + efactor + PATTERN_NOTE1 + (i * 2));
                     pl_sample[i] = *(RawPatterns + efactor + PATTERN_INSTR1 + (i * 2));
+                    if(pl_note[i] < 120) {
+                        if((ptk->note_cb) & 1 << ct) {
+                            ptk_lua_note_call(ptk, ct, i, pl_note[i]);
+                        }
+
+                    } else if(pl_note[i] == 120) {
+                        if((ptk->note_cb) & 1 << ct) {
+                            ptk_lua_note_call(ptk, ct, i, 0);
+                        }
+                    }
                 }
 
                 pl_vol_row = *(RawPatterns + efactor + PATTERN_VOLUME);
@@ -3845,10 +3855,6 @@ void Play_Instrument(ptk_data *ptk, int channel, int sub_channel)
             vol = sp_Tvol[channel][sub_channel];
             vol_synth = sp_Tvol_Synth[channel][sub_channel];
             if(glide) no_retrig_adsr = TRUE;
-        }
-
-        if((ptk->note_cb) & 1 << sample) {
-            ptk_lua_note_call(ptk, channel, sub_channel, inote);
         }
 
 #if defined(PTK_SYNTH)
