@@ -12,6 +12,7 @@ int ptk_tab_please_dump(ptk_tab *tab);
 int ptk_tab_dont_dump(ptk_tab *tab);
 int ptk_tab_dump(ptk_tab *tab);
 void ptk_tab_note(ptk_data *ptk,
+    unsigned char pat,
     unsigned char track,
     unsigned char row,
     unsigned char voice,
@@ -19,6 +20,7 @@ void ptk_tab_note(ptk_data *ptk,
     unsigned char instr);
 
 void ptk_tab_noteoff(ptk_data *ptk,
+    unsigned char pat,
     unsigned char track,
     unsigned char row,
     unsigned char voice);

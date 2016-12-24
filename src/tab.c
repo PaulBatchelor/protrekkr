@@ -11,6 +11,7 @@ void ptk_tab_write(ptk_data *ptk)
     int voice;
     int row;
     int track;
+    int pat;
     ptk_tab *tab = &ptk->tab;
     FILE *fp = tab->fp;
     int i;
@@ -28,23 +29,29 @@ void ptk_tab_write(ptk_data *ptk)
     }
 
     for(track = 0; track < MAX_TRACKS; track++) {
-        for(row = 0; row < MAX_ROWS * MAX_PATTERNS; row++) {
-            for(voice = 0; voice < PATTERN_INSTR16; voice += 2) {
-                off = PATTERN_ROW_LEN * row + PATTERN_BYTES * track; 
-                switch(ptk->RawPatterns[voice + off]) {
-                    case NO_NOTE: break;
-                    case NOTE_OFF: 
-                        fprintf(fp, "%d %d %d noteoff\n", track, row, voice);
+        for(pat = 0; pat < MAX_PATTERNS; pat++) {
+            for(row = 0; row < MAX_ROWS; row++) {
+                for(voice = 0; voice < PATTERN_INSTR16; voice += 2) {
+                    off = PATTERN_ROW_LEN * row + 
+                        PATTERN_BYTES * track +
+                        PATTERN_LEN * pat;
+                    switch(ptk->RawPatterns[voice + off]) {
+                        case NO_NOTE: break;
+                        case NOTE_OFF: 
+                            fprintf(fp, "%d %d %d %d noteoff\n", 
+                                pat, track, row, voice);
+                            break;
+                        default:
+                            fprintf(fp, "%d %d %d %d %d %d note\n", 
+                                pat,
+                                track,
+                                row, 
+                                voice,
+                                ptk->RawPatterns[voice + off], 
+                                ptk->RawPatterns[voice + 1 + off] 
+                                );
                         break;
-                    default:
-                        fprintf(fp, "%d %d %d %d %d note\n", 
-                            track,
-                            row, 
-                            voice,
-                            ptk->RawPatterns[voice + off], 
-                            ptk->RawPatterns[voice + 1 + off] 
-                            );
-                    break;
+                    }
                 }
             }
         }
@@ -65,36 +72,36 @@ static void ptk_define(ptk_data *data,
 
 static int rproc_note(runt_vm *vm, runt_ptr p)
 {
-    unsigned char args[5];
+    unsigned char args[6];
     runt_int i, rc;
     runt_stacklet *s;
     ptk_data *ptk = runt_to_cptr(p);
     
-    for(i = 0; i < 5; i++) {
+    for(i = 0; i < 6; i++) {
         rc = runt_ppop(vm, &s);
         RUNT_ERROR_CHECK(rc);
         args[i] = s->f;
     }
 
-    ptk_tab_note(ptk, args[4], args[3], args[2], args[1], args[0]);    
+    ptk_tab_note(ptk, args[5], args[4], args[3], args[2], args[1], args[0]);    
 
     return RUNT_OK;
 }
 
 static int rproc_noteoff(runt_vm *vm, runt_ptr p)
 {
-    unsigned char args[3];
+    unsigned char args[4];
     runt_int i, rc;
     runt_stacklet *s;
     ptk_data *ptk = runt_to_cptr(p);
     
-    for(i = 0; i < 3; i++) {
+    for(i = 0; i < 4; i++) {
         rc = runt_ppop(vm, &s);
         RUNT_ERROR_CHECK(rc);
         args[i] = s->f;
     }
 
-    ptk_tab_noteoff(ptk, args[2], args[1], args[0]);
+    ptk_tab_noteoff(ptk, args[3], args[2], args[1], args[0]);
     return RUNT_OK;
 }
 
@@ -220,6 +227,7 @@ int ptk_tab_dump(ptk_tab *tab)
 }
 
 void ptk_tab_note(ptk_data *ptk,
+    unsigned char pat,
     unsigned char track,
     unsigned char row,
     unsigned char voice,
@@ -227,7 +235,10 @@ void ptk_tab_note(ptk_data *ptk,
     unsigned char instr)
 {
     int off;
-    off = PATTERN_ROW_LEN * row + PATTERN_BYTES * track + 2 * voice; 
+    off = PATTERN_ROW_LEN * row + 
+        PATTERN_BYTES * track + 
+        2 * voice +
+        PATTERN_LEN * pat;
     ptk->RawPatterns[off] = note;
     ptk->RawPatterns[off + 1] = instr;
     voice += 1;
@@ -238,12 +249,16 @@ void ptk_tab_note(ptk_data *ptk,
 
 
 void ptk_tab_noteoff(ptk_data *ptk,
+    unsigned char pat,
     unsigned char track,
     unsigned char row,
     unsigned char voice)
 {
     int off;
-    off = PATTERN_ROW_LEN * row + PATTERN_BYTES * track + 2 * voice; 
+    off = PATTERN_ROW_LEN * row + 
+        PATTERN_BYTES * track + 
+        2 * voice +
+        PATTERN_LEN * pat;
     ptk->RawPatterns[off] = NOTE_OFF;
 }
 
