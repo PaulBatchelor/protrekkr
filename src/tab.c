@@ -5,6 +5,8 @@
 #include "ptk.h"
 #include "tab.h"
 
+extern char Songtracks;
+
 void ptk_tab_write(ptk_data *ptk)
 {
     int off;
@@ -19,6 +21,8 @@ void ptk_tab_write(ptk_data *ptk)
     fprintf(fp, "%d length\n", ptk->Song_Length);
 
     fprintf(fp, "%d npat\n", ptk->nPatterns);
+    
+    fprintf(fp, "%d ntracks\n", Songtracks);
 
     for(i = 0; i < ptk->Song_Length; i++) {
         fprintf(fp, "%d %d pseq\n", i, ptk->pSequence[i]);
@@ -153,6 +157,22 @@ static int rproc_length(runt_vm *vm, runt_ptr p)
     return RUNT_OK;
 }
 
+static int rproc_ntracks(runt_vm *vm, runt_ptr p)
+{
+    unsigned char length;
+    runt_int i, rc;
+    runt_stacklet *s;
+    ptk_data *ptk = runt_to_cptr(p);
+    
+    rc = runt_ppop(vm, &s);
+    RUNT_ERROR_CHECK(rc);
+    length = s->f;
+
+    Songtracks = length;
+
+    return RUNT_OK;
+}
+
 static int rproc_plen(runt_vm *vm, runt_ptr p)
 {
     unsigned char args[2];
@@ -188,6 +208,7 @@ void ptk_tab_init(ptk_data *ptk, ptk_tab *tab)
     ptk_define(ptk, &tab->vm, "pseq", 4, rproc_pseq, p);
     ptk_define(ptk, &tab->vm, "length", 6, rproc_length, p);
     ptk_define(ptk, &tab->vm, "plen", 4, rproc_plen, p);
+    ptk_define(ptk, &tab->vm, "ntracks", 7, rproc_ntracks, p);
 
     runt_set_state(&tab->vm, RUNT_MODE_INTERACTIVE, RUNT_ON);
 }
