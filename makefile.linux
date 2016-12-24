@@ -7,7 +7,7 @@ LIBS = src/extralibs/tinyxml/tinyxml.o \
        src/extralibs/tinyxml/tinyxmlerror.o \
        -lasound -lSDL -lsdldraw -lz -ljack -lpthread \
 	   -llua -ldl -lsndfile -lsporth -lsoundpipe -lm -llo \
-	   -lc
+	   -lc -lrunt
 
 FLAGS = -g -O3 -fno-strict-aliasing -ffast-math -fno-rtti -fexceptions 
 FLAGS += -Wno-write-strings -Wno-multichar -Lsrc/extralibs/sdl_draw 

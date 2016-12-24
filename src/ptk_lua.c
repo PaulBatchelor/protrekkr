@@ -117,6 +117,14 @@ static int set_sporth_var(lua_State *L)
     return 0;
 }
 
+static int load_runt(lua_State *L)
+{
+    ptk_data *ptk = get_ptk_data(L);
+    const char *filename = lua_tostring(L, 1);
+    ptk_tab_load(&ptk->tab, filename);
+    return 0;
+}
+
 
 void ptk_lua_init(ptk_data *ptk)
 {
@@ -135,6 +143,8 @@ void ptk_lua_init(ptk_data *ptk)
     lua_register(L, "ptk_var_set", set_sporth_var);
     lua_register(L, "ptk_get_pointer", l_get_pointer);
     lua_register(L, "ptk_ps_eval", l_ps_eval);
+    lua_register(L, "ptk_load_runt", load_runt);
+
     if(luaL_loadfile(L, "config.lua") || lua_pcall(L, 0, 0, 0))
         fprintf(stderr, "cannot run file %s\n", lua_tostring(L, -1));
     /* lua lock needed for thread-safety */

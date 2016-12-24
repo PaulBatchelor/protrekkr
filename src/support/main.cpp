@@ -383,6 +383,11 @@ int ptk_parse_args(ptk_data *ptk, int argc, char ***argvp)
 				case 'n':
 					ptk->start_gui = FALSE;
 					break;
+                case 'd':
+                    argc--;
+                    *argv++;
+                    ptk_tab_open(&ptk->tab, argv[1]);
+                    break;
 				default:
 					break;
 			}
@@ -689,13 +694,17 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 		LoadFile(ptk, 0, argv[1]);
 	}
 
+    ptk_tab_init(ptk, &ptk->tab);
     ptk_lua_init(ptk);
 
 	if(ptk->render_mode == TRUE) {
 		WavRenderizer(ptk);
 	}
 
-    ptk_tab_write(ptk);
+    if(ptk_tab_dump(&ptk->tab)) {
+        ptk_tab_write(ptk);
+        ptk_tab_close(&ptk->tab);
+    }
 
     while(!Prog_End)
     {
@@ -971,6 +980,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 	if(ptk->start_gui == TRUE) SaveConfig(ptk);
     
     Destroy_Context(ptk);
+    ptk_tab_clean(&ptk->tab);
     ptk_close(ptk);
 
 	if(ExePath) free(ExePath);

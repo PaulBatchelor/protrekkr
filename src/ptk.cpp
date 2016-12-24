@@ -38,6 +38,7 @@
 #include "ptk.h"
 #include "ptk_lua.h"
 #include "ptk_sporth.h"
+#include "tab.h"
 
 #include "reverbs.h"
 #include "editor_303.h"
@@ -6956,6 +6957,8 @@ void ptk_init(ptk_data *ptk)
     
     /* lua sporth recompile callback */
     ptk->recompile_cb = -1;
+
+    ptk_tab_dont_dump(&ptk->tab);
 }
 
 void ptk_close(ptk_data *ptk) 

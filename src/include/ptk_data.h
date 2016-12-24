@@ -10,6 +10,8 @@ extern "C" {
 #include <lauxlib.h>
 #include <soundpipe.h>
 #include <sporth.h>
+#include <runt.h>
+
 
 typedef struct {
     sp_data *sp;
@@ -25,6 +27,14 @@ typedef struct {
     sp_ftbl *tracks;
     sp_progress *prog;
 } ptk_sporth;
+
+typedef struct {
+    runt_vm vm;
+    unsigned char *mem;
+    runt_cell *cells;
+    FILE *fp;
+    char write_data;
+} ptk_tab;
 
 typedef struct {
     int CONSOLE_WIDTH;
@@ -185,6 +195,8 @@ typedef struct {
     char edit_old_b;
 
     unsigned char *RawPatterns;
+
+    ptk_tab tab;
 } ptk_data;
 
 #ifdef __cplusplus
