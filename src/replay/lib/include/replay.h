@@ -238,7 +238,6 @@ extern char Compress_Track[MAX_TRACKS];
 extern float mas_comp_threshold_Master;
 extern float mas_comp_ratio_Master;
 extern char Compress_Master;
-extern unsigned char nPatterns;
 extern char Songtracks;
 extern unsigned char Song_Length;
 extern unsigned char pSequence[256];

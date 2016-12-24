@@ -615,40 +615,40 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                 }
             } // FOR
 
-            Read_Mod(&Song_Length, 1);
+            Read_Mod(&ptk->Song_Length, 1);
             Getc_Mod();
 
             last_speed = 4;
             last_tempo = 125;
 
             // PATTERN PROGRESSION;
-            nPatterns = 1;
+            ptk->nPatterns = 1;
 
             for(tps = 0; tps < 128; tps++)
             {
-                pSequence[tps] = Getc_Mod();
-                if(pSequence[tps] >= nPatterns) nPatterns = pSequence[tps] + 1;
-                patternLines[tps] = 64;
+                ptk->pSequence[tps] = Getc_Mod();
+                if(ptk->pSequence[tps] >= ptk->nPatterns) ptk->nPatterns = ptk->pSequence[tps] + 1;
+                ptk->patternLines[tps] = 64;
             }
             if(digibooster)
             {
-                nPatterns = Patterns;
+                ptk->nPatterns = Patterns;
             }
 
             // JUMP OVER THE HEADER
             Seek_Mod(4, SEEK_CUR);
 
-            for(pwrite = 0; pwrite < Song_Length; pwrite++)
+            for(pwrite = 0; pwrite < ptk->Song_Length; pwrite++)
             {
                 // All 64 rows of the .mod
                 for(li2 = 0; li2 < 64; li2++)
                 {
-                    Seek_Mod(1084 + (pSequence[pwrite] * (4 * channels * 64) + (4 * channels * li2)), SEEK_SET);
+                    Seek_Mod(1084 + (ptk->pSequence[pwrite] * (4 * channels * 64) + (4 * channels * li2)), SEEK_SET);
 
                     // Precalc the speed for that row
                     for(pw2 = 0; pw2 < channels; pw2++)
                     {
-                        int tmo = Get_Pattern_Offset(ptk, pSequence[pwrite], pw2, li2);
+                        int tmo = Get_Pattern_Offset(ptk, ptk->pSequence[pwrite], pw2, li2);
                         int f_byte = Getc_Mod();
                         int t_sample = f_byte >> 4;
                         int t_period = ((f_byte - (t_sample << 4)) << 8) + (int) Getc_Mod();
@@ -697,7 +697,7 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                                             // Check if we already have recorded it
                                             for(k = 0; k < channels; k++)
                                             {
-                                                int free_chan = Get_Pattern_Offset(ptk, pSequence[pwrite], k, li2);
+                                                int free_chan = Get_Pattern_Offset(ptk, ptk->pSequence[pwrite], k, li2);
                                                 if(*(ptk->RawPatterns + free_chan + PATTERN_FX2) == 0xf0 &&
                                                    *(ptk->RawPatterns + free_chan + PATTERN_FXDATA2) == found_tempo)
                                                 {
@@ -709,7 +709,7 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                                             {
                                                 for(k = 0; k < channels; k++)
                                                 {
-                                                    int free_chan = Get_Pattern_Offset(ptk, pSequence[pwrite], k, li2);
+                                                    int free_chan = Get_Pattern_Offset(ptk, ptk->pSequence[pwrite], k, li2);
                                                     if(!*(ptk->RawPatterns + free_chan + PATTERN_FX2))
                                                     {
                                                         found_free_chan = TRUE;
@@ -753,10 +753,10 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                     }
 
                     // Jump to the pattern to retrieve
-                    Seek_Mod(1084 + (pSequence[pwrite] * (4 * channels * 64) + (4 * channels * li2)), SEEK_SET);
+                    Seek_Mod(1084 + (ptk->pSequence[pwrite] * (4 * channels * 64) + (4 * channels * li2)), SEEK_SET);
                     for(pw2 = 0; pw2 < channels; pw2++)
                     {
-                        int tmo = Get_Pattern_Offset(ptk, pSequence[pwrite], pw2, li2);
+                        int tmo = Get_Pattern_Offset(ptk, ptk->pSequence[pwrite], pw2, li2);
                         int f_byte = Getc_Mod();
                         int t_sample = f_byte >> 4;
                         int t_period = ((f_byte - (t_sample << 4)) << 8) + (int) Getc_Mod();
@@ -1119,7 +1119,7 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                 }
             }
 
-            Seek_Mod(1084 + (nPatterns * (4 * channels * 64)), SEEK_SET);
+            Seek_Mod(1084 + (ptk->nPatterns * (4 * channels * 64)), SEEK_SET);
 
             // Load the samples
             for(swrite = 0; swrite < 31; swrite++)

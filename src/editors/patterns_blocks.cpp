@@ -261,14 +261,14 @@ void Mark_Block_End(ptk_data *ptk, int end_nibble, int start_track, int start_li
 // Blocks routines support stuff
 int Get_Pattern_Column(ptk_data *ptk, int Position, int xbc, int ybc)
 {
-   return(*(ptk->RawPatterns + (pSequence[Position] * PATTERN_LEN) +
+   return(*(ptk->RawPatterns + (ptk->pSequence[Position] * PATTERN_LEN) +
            (ybc * PATTERN_ROW_LEN) + (Get_Track_From_Nibble(ptk, Channels_MultiNotes, Channels_Effects, xbc) * PATTERN_BYTES) +
                                       Get_Byte_From_Column(ptk, Channels_MultiNotes, Channels_Effects, xbc)));
 }
 
 void Set_Pattern_Column(ptk_data *ptk, int Position, int xbc, int ybc, int Data)
 {
-    *(ptk->RawPatterns + (pSequence[Position] * PATTERN_LEN) +
+    *(ptk->RawPatterns + (ptk->pSequence[Position] * PATTERN_LEN) +
      (ybc * PATTERN_ROW_LEN) + (Get_Track_From_Nibble(ptk, Channels_MultiNotes, Channels_Effects, xbc) * PATTERN_BYTES) +
                                 Get_Byte_From_Column(ptk, Channels_MultiNotes, Channels_Effects, xbc)) = Data;
 }
@@ -830,11 +830,11 @@ void Paste_Selection_From_Buffer(ptk_data *ptk, int Position, int Go_Across)
         axbc = Get_Track_Relative_Column(ptk, Buff_MultiNotes[Curr_Buff_Block], Buff_Effects[Curr_Buff_Block], start_buff_nibble[Curr_Buff_Block]);
         start_buff_x = axbc;
 
-        if(Go_Across && ybc >= patternLines[pSequence[Position]])
+        if(Go_Across && ybc >= ptk->patternLines[ptk->pSequence[Position]])
         {
-            if(Position < (Song_Length - 1))
+            if(Position < (ptk->Song_Length - 1))
             {
-                if(pSequence[Position] == pSequence[Position + 1])
+                if(ptk->pSequence[Position] == ptk->pSequence[Position + 1])
                 {
                     break;
                 }
@@ -852,7 +852,7 @@ void Paste_Selection_From_Buffer(ptk_data *ptk, int Position, int Go_Across)
         xbc = start_x;
         while(xbc < start_x + b_buff_xsize[Curr_Buff_Block] + expanded)
         {
-            if(ybc < patternLines[pSequence[Position]])
+            if(ybc < ptk->patternLines[ptk->pSequence[Position]])
             {
                 if(xbc < max_columns)
                 {
@@ -973,7 +973,7 @@ SELECTION Select_Track(ptk_data *ptk, int Track)
 
     // Default selection
     Cur_Sel.y_start = 0;
-    Cur_Sel.y_end = patternLines[pSequence[Song_Position]] - 1;
+    Cur_Sel.y_end = ptk->patternLines[ptk->pSequence[Song_Position]] - 1;
     Cur_Sel.x_start = 0;
     for(i = 0; i < Track; i++)
     {
@@ -1604,7 +1604,7 @@ void Select_Track_Block(ptk_data *ptk)
     if(!Songplaying)
     {
         Mark_Block_Start(ptk, 0, ptk->Track_Under_Caret, 0);
-        nlines = patternLines[pSequence[Song_Position]];
+        nlines = ptk->patternLines[ptk->pSequence[Song_Position]];
         Mark_Block_End(ptk, Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, ptk->Track_Under_Caret) - 1,
                        ptk->Track_Under_Caret,
                        nlines,
@@ -1621,7 +1621,7 @@ void Select_Pattern_Block(ptk_data *ptk)
     if(!Songplaying)
     {
         Mark_Block_Start(ptk, 0, 0, 0);
-        nlines = patternLines[pSequence[Song_Position]];
+        nlines = ptk->patternLines[ptk->pSequence[Song_Position]];
         Mark_Block_End(ptk, Get_Track_Nibble_Start(ptk, Channels_MultiNotes, Channels_Effects, ptk->Track_Under_Caret) - 1,
                        Songtracks,
                        nlines,
@@ -1665,7 +1665,7 @@ void Select_Note_Block(ptk_data *ptk)
             {
                 column_to_select = Table_Select_Notes[i];
                 Mark_Block_Start(ptk, column_to_select, ptk->Track_Under_Caret, 0);
-                nlines = patternLines[pSequence[Song_Position]];
+                nlines = ptk->patternLines[ptk->pSequence[Song_Position]];
                 Mark_Block_End(ptk, column_to_select + 2,
                                ptk->Track_Under_Caret,
                                nlines,
@@ -1684,7 +1684,7 @@ void Select_All_Notes_Block(ptk_data *ptk)
     if(!Songplaying)
     {
         Mark_Block_Start(ptk, 0, ptk->Track_Under_Caret, 0);
-        nlines = patternLines[pSequence[Song_Position]];
+        nlines = ptk->patternLines[ptk->pSequence[Song_Position]];
         Mark_Block_End(ptk, Get_Max_Nibble_Track(ptk, Channels_MultiNotes, Channels_Effects, ptk->Track_Under_Caret) - 1 -
                        EXTRA_NIBBLE_DAT - (Channels_Effects[ptk->Track_Under_Caret] * 4),
                        ptk->Track_Under_Caret,
@@ -1752,7 +1752,7 @@ void Insert_Track_Line(ptk_data *ptk, int track, int Position)
 
     for(int interval = (MAX_ROWS - 2); interval > Pattern_Line - 1; interval--)
     {
-        xoffseted = Get_Pattern_Offset(ptk, pSequence[Position], track, interval);
+        xoffseted = Get_Pattern_Offset(ptk, ptk->pSequence[Position], track, interval);
 
         for(i = 0; i < MAX_POLYPHONY; i++)
         {
@@ -1770,7 +1770,7 @@ void Insert_Track_Line(ptk_data *ptk, int track, int Position)
         *(ptk->RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FX4) = *(ptk->RawPatterns + xoffseted + PATTERN_FX4);
         *(ptk->RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FXDATA4) = *(ptk->RawPatterns + xoffseted + PATTERN_FXDATA4);
     }
-    xoffseted = Get_Pattern_Offset(ptk, pSequence[Position], track, Pattern_Line);
+    xoffseted = Get_Pattern_Offset(ptk, ptk->pSequence[Position], track, Pattern_Line);
  
     Clear_Track_Data(ptk, xoffseted);
     Actupated(ptk, 0);
@@ -1798,8 +1798,8 @@ void Remove_Track_Line(ptk_data *ptk, int track, int Position)
 
     for(int interval = Pattern_Line + 1; interval < MAX_ROWS; interval++)
     {
-        xoffseted = Get_Pattern_Offset(ptk, pSequence[Position], track, interval);
-        xoffseted2 = Get_Pattern_Offset(ptk, pSequence[Position], track, interval) - PATTERN_ROW_LEN;
+        xoffseted = Get_Pattern_Offset(ptk, ptk->pSequence[Position], track, interval);
+        xoffseted2 = Get_Pattern_Offset(ptk, ptk->pSequence[Position], track, interval) - PATTERN_ROW_LEN;
         
         for(i = 0; i < MAX_POLYPHONY; i++)
         {
@@ -1817,7 +1817,7 @@ void Remove_Track_Line(ptk_data *ptk, int track, int Position)
         *(ptk->RawPatterns + xoffseted2 + PATTERN_FX4) = *(ptk->RawPatterns + xoffseted + PATTERN_FX4);
         *(ptk->RawPatterns + xoffseted2 + PATTERN_FXDATA4) = *(ptk->RawPatterns + xoffseted + PATTERN_FXDATA4);
     }
-    xoffseted = Get_Pattern_Offset(ptk, pSequence[Position], track, 0) + (PATTERN_LEN - PATTERN_ROW_LEN);
+    xoffseted = Get_Pattern_Offset(ptk, ptk->pSequence[Position], track, 0) + (PATTERN_LEN - PATTERN_ROW_LEN);
 
     Clear_Track_Data(ptk, xoffseted);
 
@@ -1869,10 +1869,10 @@ int Alloc_Patterns_Pool(ptk_data *ptk)
 {
     for(int api = 0; api < MAX_ROWS; api++)
     {
-        patternLines[api] = DEFAULT_PATTERN_LEN;
+        ptk->patternLines[api] = DEFAULT_PATTERN_LEN;
     }
 
-    nPatterns = 1;
+    ptk->nPatterns = 1;
 
     if((ptk->RawPatterns = (unsigned char *) malloc(PATTERN_POOL_SIZE)) != NULL)
     {
@@ -2105,9 +2105,9 @@ void Reset_Track(ptk_data *ptk, int Position, int Track)
     int offset;
     int pattern;
 
-    pattern = pSequence[Position];
+    pattern = ptk->pSequence[Position];
 
-    for(i = 0 ; i < patternLines[pattern]; i++)
+    for(i = 0 ; i < ptk->patternLines[pattern]; i++)
     {
         offset = Get_Pattern_Offset(ptk, pattern, Track, i);
         Clear_Track_Data(ptk, offset);
@@ -2161,7 +2161,7 @@ void Reset_Track(ptk_data *ptk, int Position, int Track)
     init_eq(ptk, &EqDat[Track]);
 
     CHAN_MUTE_STATE[Track] = FALSE;
-    for(i = 0; i < Song_Length; i++)
+    for(i = 0; i < ptk->Song_Length; i++)
     {
         CHAN_ACTIVE_STATE[i][Track] = TRUE;
     }
@@ -2181,9 +2181,9 @@ void Copy_Track(ptk_data *ptk, int Position, int Track_Src, int Track_Dst)
     int offset_dst;
     int pattern;
 
-    pattern = pSequence[Position];
+    pattern = ptk->pSequence[Position];
 
-    for(i = 0 ; i < patternLines[pattern]; i++)
+    for(i = 0 ; i < ptk->patternLines[pattern]; i++)
     {
         offset_src = Get_Pattern_Offset(ptk, pattern, Track_Src, i);
         offset_dst = Get_Pattern_Offset(ptk, pattern, Track_Dst, i);
@@ -2253,7 +2253,7 @@ void Copy_Track(ptk_data *ptk, int Position, int Track_Src, int Track_Dst)
 
     memcpy(&EqDat[Track_Dst], &EqDat[Track_Src], sizeof(EQSTATE));
 
-    for(i = 0; i < Song_Length; i++)
+    for(i = 0; i < ptk->Song_Length; i++)
     {
         CHAN_ACTIVE_STATE[i][Track_Dst] = CHAN_ACTIVE_STATE[i][Track_Src];
     }

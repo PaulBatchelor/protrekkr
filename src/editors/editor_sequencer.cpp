@@ -85,11 +85,11 @@ int Ext_Track_Switch;
 // ------------------------------------------------------
 // Functions
 void SeqFill(int st, int en, char n);
-void SeqDelete(int st);
-void SeqInsert(int st);
-void SeqCopy(int st);
+void SeqDelete(ptk_data *ptk, int st);
+void SeqInsert(ptk_data *ptk, int st);
+void SeqCopy(ptk_data *ptk, int st);
 void Display_Seq_Buffer(void);
-void SeqPaste(int st);
+void SeqPaste(ptk_data *ptk, int st);
 void Bound_Patt_Pos(ptk_data *ptk);
 
 void Draw_Sequencer_Ed(ptk_data *ptk)
@@ -164,10 +164,10 @@ void Actualize_Seq_Ed(ptk_data *ptk, char gode)
             int rel;
             int Cur_Position = Get_Song_Position(ptk);
             rel = lseq + Cur_Position;
-            if(rel > -1 && rel < Song_Length)
+            if(rel > -1 && rel < ptk->Song_Length)
             {
                 out_decchar(93, (Cur_Height - 95) + lseq * 12, rel, 0);
-                out_decchar(261, (Cur_Height - 95) + lseq * 12, pSequence[rel], 0);
+                out_decchar(261, (Cur_Height - 95) + lseq * 12, ptk->pSequence[rel], 0);
 
                 for(int rel2 = 0; rel2 < Songtracks; rel2++)
                 {
@@ -311,20 +311,20 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
             // We need an array to mark the patterns we already transposed
             // otherwise we could transpose them several times and that's not what we want.
             nbr_patterns = 0;
-            for(i = 0; i < Song_Length; i++)
+            for(i = 0; i < ptk->Song_Length; i++)
             {
-                if(pSequence[i] > nbr_patterns)
+                if(ptk->pSequence[i] > nbr_patterns)
                 {
-                    nbr_patterns = pSequence[i];
+                    nbr_patterns = ptk->pSequence[i];
                 }
             }
             Done_Pattern = (char *) malloc(nbr_patterns + 1);
             memset(Done_Pattern, 0, nbr_patterns + 1);
             if(Done_Pattern)
             {
-                for(j = 0; j < Song_Length; j++)
+                for(j = 0; j < ptk->Song_Length; j++)
                 {
-                    if(!Done_Pattern[pSequence[j]])
+                    if(!Done_Pattern[ptk->pSequence[j]])
                     {
                         for(i = 0; i < Songtracks; i++)
                         {
@@ -347,7 +347,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
                             }
                             Instrument_Remap_Sel(ptk, j, Select_Track(ptk, i), Remap_From, Remap_To);
                         }
-                        Done_Pattern[pSequence[j]] = TRUE;
+                        Done_Pattern[ptk->pSequence[j]] = TRUE;
                     }
                 }
                 free(Done_Pattern);
@@ -433,14 +433,14 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         // Insert position
         if(zcheckMouse(ptk, 308, (Cur_Height - 78), 80, 16))
         {
-            SeqInsert(Cur_Position);
+            SeqInsert(ptk, Cur_Position);
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
 
         // Delete position
         if(zcheckMouse(ptk, 308, (Cur_Height - 60), 80, 16))
         {
-            SeqDelete(Cur_Position);
+            SeqDelete(ptk, Cur_Position);
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
 
@@ -485,29 +485,29 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         // Cut
         if(zcheckMouse(ptk, 396, (Cur_Height - 134), 32, 16))
         {
-            SeqCopy(Cur_Position);
-            SeqDelete(Cur_Position);
+            SeqCopy(ptk, Cur_Position);
+            SeqDelete(ptk, Cur_Position);
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
 
         // Copy
         if(zcheckMouse(ptk, 396 + 34, (Cur_Height - 134), 32, 16))
         {
-            SeqCopy(Cur_Position);
+            SeqCopy(ptk, Cur_Position);
         }
 
         // Paste
         if(zcheckMouse(ptk, 396, (Cur_Height - 116), 66, 16))
         {
-            SeqPaste(Cur_Position);
+            SeqPaste(ptk, Cur_Position);
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
 
         // Insert/Paste
         if(zcheckMouse(ptk, 396, (Cur_Height - 98), 66, 16))
         {
-            SeqInsert(Cur_Position);
-            SeqPaste(Cur_Position);
+            SeqInsert(ptk, Cur_Position);
+            SeqPaste(ptk, Cur_Position);
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
 
@@ -516,8 +516,8 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         {
             if(Cur_Position < 128)
             {
-                pSequence[Cur_Position] = Cur_Position;
-                Anat(Cur_Position);
+                ptk->pSequence[Cur_Position] = Cur_Position;
+                Anat(ptk, Cur_Position);
                 ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
             }
         }
@@ -527,7 +527,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         {
             for(int xpos = 0; xpos < 128; xpos++)
             {
-                pSequence[xpos] = xpos;
+                ptk->pSequence[xpos] = xpos;
             }
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
@@ -557,13 +557,13 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         {
             int posindex = ((Mouse.y - ((Cur_Height - 132) + 1)) / 12) - 3;
             posindex += Cur_Position;
-            if(posindex >= 0 && posindex < Song_Length)
+            if(posindex >= 0 && posindex < ptk->Song_Length)
             {
-                if(pSequence[posindex] < 127)
+                if(ptk->pSequence[posindex] < 127)
                 {
-                    pSequence[posindex] += 100;   
-                    if(pSequence[posindex] >= 128) pSequence[posindex] = 127;
-                    Anat(posindex);
+                    ptk->pSequence[posindex] += 100;   
+                    if(ptk->pSequence[posindex] >= 128) ptk->pSequence[posindex] = 127;
+                    Anat(ptk, posindex);
 
                     if(posindex != Cur_Position) ptk->gui_action = GUI_CMD_UPDATE_SEQ_ED;
                     else ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -581,13 +581,13 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         {
             int posindex = ((Mouse.y - ((Cur_Height - 132) + 1)) / 12) - 3;
             posindex += Cur_Position;
-            if(posindex >= 0 && posindex < Song_Length)
+            if(posindex >= 0 && posindex < ptk->Song_Length)
             {
-                if(pSequence[posindex] < 127)
+                if(ptk->pSequence[posindex] < 127)
                 {
-                    pSequence[posindex] += 10; 
-                    if(pSequence[posindex] >= 128) pSequence[posindex] = 127;
-                    Anat(posindex);
+                    ptk->pSequence[posindex] += 10; 
+                    if(ptk->pSequence[posindex] >= 128) ptk->pSequence[posindex] = 127;
+                    Anat(ptk, posindex);
 
                     if(posindex != Cur_Position) ptk->gui_action = GUI_CMD_UPDATE_SEQ_ED;
                     else ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -605,12 +605,12 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         {
             int posindex = ((Mouse.y - ((Cur_Height - 132) + 1)) / 12) - 3;
             posindex += Cur_Position;
-            if(posindex >= 0 && posindex < Song_Length)
+            if(posindex >= 0 && posindex < ptk->Song_Length)
             {
-                if(pSequence[posindex] < 127)
+                if(ptk->pSequence[posindex] < 127)
                 {
-                    pSequence[posindex]++;
-                    Anat(posindex);
+                    ptk->pSequence[posindex]++;
+                    Anat(ptk, posindex);
                     if(posindex != Cur_Position) ptk->gui_action = GUI_CMD_UPDATE_SEQ_ED;
                     else ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
                 }
@@ -634,7 +634,7 @@ void Mouse_Left_Sequencer_Ed(ptk_data *ptk)
         {
             int posindex = ((Mouse.y - (Cur_Height - 131)) / 12) - 3;
             posindex += Cur_Position;
-            if(posindex >= 0 && posindex < Song_Length && posindex != Cur_Position)
+            if(posindex >= 0 && posindex < ptk->Song_Length && posindex != Cur_Position)
             {
                 Song_Position = posindex;
                 ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -711,13 +711,13 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         {
             int posindex = ((Mouse.y - ((Cur_Height - 132) + 1)) / 12) - 3;
             posindex += Cur_Position;
-            if(posindex >= 0 && posindex < Song_Length)
+            if(posindex >= 0 && posindex < ptk->Song_Length)
             {
-                int reak = pSequence[posindex];
+                int reak = ptk->pSequence[posindex];
                 reak -= 100;
                 if(reak < 0) reak = 0;
-                pSequence[posindex] = reak;
-                Anat(posindex);
+                ptk->pSequence[posindex] = reak;
+                Anat(ptk, posindex);
                 if(posindex != Cur_Position) ptk->gui_action = GUI_CMD_UPDATE_SEQ_ED;
                 else ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
             }
@@ -728,13 +728,13 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         {
             int posindex = ((Mouse.y - ((Cur_Height - 132) + 1)) / 12) - 3;
             posindex += Cur_Position;
-            if(posindex >= 0 && posindex < Song_Length)
+            if(posindex >= 0 && posindex < ptk->Song_Length)
             {
-                int reak = pSequence[posindex];
+                int reak = ptk->pSequence[posindex];
                 reak -= 10;
                 if(reak < 0) reak = 0;
-                pSequence[posindex] = reak;
-                Anat(posindex);
+                ptk->pSequence[posindex] = reak;
+                Anat(ptk, posindex);
 
                 if(posindex != Cur_Position) ptk->gui_action = GUI_CMD_UPDATE_SEQ_ED;
                 else ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -746,12 +746,12 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         {
             int posindex = ((Mouse.y - ((Cur_Height - 132) + 1)) / 12) - 3;
             posindex += Cur_Position;
-            if(posindex >= 0 && posindex < Song_Length)
+            if(posindex >= 0 && posindex < ptk->Song_Length)
             {
-                if(pSequence[posindex] > 0)
+                if(ptk->pSequence[posindex] > 0)
                 {
-                    pSequence[posindex]--;
-                    Anat(posindex);
+                    ptk->pSequence[posindex]--;
+                    Anat(ptk, posindex);
 
                     if(posindex != Cur_Position) ptk->gui_action = GUI_CMD_UPDATE_SEQ_ED;
                     else ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
@@ -772,7 +772,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         {
             for(i = 0; i < 10; i++)
             {
-                SeqInsert(Cur_Position);
+                SeqInsert(ptk, Cur_Position);
             }
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
@@ -782,7 +782,7 @@ void Mouse_Right_Sequencer_Ed(ptk_data *ptk)
         {
             for(i = 0; i < 10; i++)
             {
-                SeqDelete(Cur_Position);
+                SeqDelete(ptk, Cur_Position);
             }
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
@@ -814,9 +814,9 @@ void Actualize_Sequencer(ptk_data *ptk)
     if(Songplaying)
     {
         if(Song_Position < 0) Song_Position = 0;
-        if(Song_Position > Song_Length - 1)
+        if(Song_Position > ptk->Song_Length - 1)
         {
-            Song_Position = Song_Length - 1;
+            Song_Position = ptk->Song_Length - 1;
             Bound_Patt_Pos(ptk);
             Actupated(ptk, 0);
         }
@@ -828,9 +828,9 @@ void Actualize_Sequencer(ptk_data *ptk)
     else
     {
         if(Song_Position < 0) Song_Position = 0;
-        if(Song_Position > Song_Length - 1)
+        if(Song_Position > ptk->Song_Length - 1)
         {
-            Song_Position = Song_Length - 1;
+            Song_Position = ptk->Song_Length - 1;
             Bound_Patt_Pos(ptk);
             Actupated(ptk, 0);
         }
@@ -840,16 +840,16 @@ void Actualize_Sequencer(ptk_data *ptk)
     }
     Cur_Position = Get_Song_Position(ptk);
 
-    value = pSequence[Cur_Position];
-    if(value > 127) pSequence[Cur_Position] = 127;
-    if(value < 0) pSequence[Cur_Position] = 0;
+    value = ptk->pSequence[Cur_Position];
+    if(value > 127) ptk->pSequence[Cur_Position] = 127;
+    if(value < 0) ptk->pSequence[Cur_Position] = 0;
 
     Gui_Draw_Arrows_Number_Box(188, 28, Cur_Position, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
-    Gui_Draw_Arrows_Number_Box(188, 46, pSequence[Cur_Position], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
-    Anat(Cur_Position);
-    if(ptk->Rows_Decimal) Gui_Draw_Arrows_Number_Box(188, 82, patternLines[pSequence[Cur_Position]], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
-    else value_box(188, 82, patternLines[pSequence[Cur_Position]], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
-    Gui_Draw_Arrows_Number_Box(188, 64, Song_Length, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
+    Gui_Draw_Arrows_Number_Box(188, 46, ptk->pSequence[Cur_Position], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
+    Anat(ptk, Cur_Position);
+    if(ptk->Rows_Decimal) Gui_Draw_Arrows_Number_Box(188, 82, ptk->patternLines[ptk->pSequence[Cur_Position]], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
+    else value_box(188, 82, ptk->patternLines[ptk->pSequence[Cur_Position]], BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
+    Gui_Draw_Arrows_Number_Box(188, 64, ptk->Song_Length, BUTTON_NORMAL | BUTTON_TEXT_CENTERED | BUTTON_RIGHT_MOUSE);
     if(ptk->userscreen == USER_SCREEN_SEQUENCER) Actualize_Seq_Ed(ptk, 0);
 }
 
@@ -867,72 +867,72 @@ void SeqFill(int st, int en, char n)
 
 // ------------------------------------------------------
 // Delete a position
-void SeqDelete(int st)
+void SeqDelete(ptk_data *ptk, int st)
 {
     int cl;
 
-    if(Song_Length > 1)
+    if(ptk->Song_Length > 1)
     {
-        for(cl = st; cl < Song_Length - 1; cl++)
+        for(cl = st; cl < ptk->Song_Length - 1; cl++)
         {
-            pSequence[cl] = pSequence[cl + 1];
+            ptk->pSequence[cl] = ptk->pSequence[cl + 1];
             for(char trk = 0; trk < Songtracks; trk++)
             {
                 CHAN_ACTIVE_STATE[cl][trk] = CHAN_ACTIVE_STATE[cl + 1][trk];
                 CHAN_HISTORY_STATE[cl][trk] = CHAN_HISTORY_STATE[cl + 1][trk];
             }
         }
-        pSequence[cl] = 0;
+        ptk->pSequence[cl] = 0;
         for(char trk = 0; trk < Songtracks; trk++)
         {
             CHAN_ACTIVE_STATE[cl][trk] = TRUE;
             CHAN_HISTORY_STATE[cl][trk] = FALSE;
         }
-        Song_Length--;
+        ptk->Song_Length--;
     }
 }     
 
 // ------------------------------------------------------
 // Insert a position
-void SeqInsert(int st)
+void SeqInsert(ptk_data *ptk, int st)
 {
     int cl;
 
-    if(Song_Length < 255)
+    if(ptk->Song_Length < 255)
     {
-        for(cl = Song_Length - 1; cl >= st; cl--)
+        for(cl = ptk->Song_Length - 1; cl >= st; cl--)
         {
-            pSequence[cl + 1] = pSequence[cl];
+            ptk->pSequence[cl + 1] = ptk->pSequence[cl];
             for(char trk = 0; trk < Songtracks; trk++)
             {
                 CHAN_ACTIVE_STATE[cl + 1][trk] = CHAN_ACTIVE_STATE[cl][trk];
                 CHAN_HISTORY_STATE[cl + 1][trk] = CHAN_HISTORY_STATE[cl][trk];
             }
         }
-        pSequence[st] = 0;
+        ptk->pSequence[st] = 0;
         for(char trk = 0; trk < Songtracks; trk++)
         {
             CHAN_ACTIVE_STATE[st][trk] = TRUE;
             CHAN_HISTORY_STATE[st][trk] = FALSE;
         }
-    Song_Length++;
+    ptk->Song_Length++;
     }
 }     
 
-void Anat(int posil)
+void Anat(ptk_data *ptk, int posil)
 {
-    if(pSequence[posil] >= nPatterns)
+    if(ptk->pSequence[posil] >= ptk->nPatterns)
     {
-        nPatterns = pSequence[posil] + 1;
+        ptk->nPatterns = ptk->pSequence[posil] + 1;
     }
 }
 
 // ------------------------------------------------------
 // Copy a position
-void SeqCopy(int st)
+void SeqCopy(ptk_data *ptk, int st)
 {
     Seq_Buffers_Full[Cur_Seq_Buffer] = TRUE;
-    Seq_Buffers[Cur_Seq_Buffer].pattern = pSequence[st];
+    Seq_Buffers[Cur_Seq_Buffer].pattern = ptk->pSequence[st];
     for(char trk = 0; trk < Songtracks; trk++)
     {
         Seq_Buffers[Cur_Seq_Buffer].active_state[trk] = CHAN_ACTIVE_STATE[st][trk];
@@ -942,9 +942,9 @@ void SeqCopy(int st)
 
 // ------------------------------------------------------
 // Paste a position
-void SeqPaste(int st)
+void SeqPaste(ptk_data *ptk, int st)
 {
-    pSequence[st] = Seq_Buffers[Cur_Seq_Buffer].pattern;
+    ptk->pSequence[st] = Seq_Buffers[Cur_Seq_Buffer].pattern;
     for(char trk = 0; trk < Songtracks; trk++)
     {
         CHAN_ACTIVE_STATE[st][trk] = Seq_Buffers[Cur_Seq_Buffer].active_state[trk];
@@ -966,7 +966,7 @@ void Display_Seq_Buffer(void)
 // Turn a channel active state on/off
 void Toggle_Track_On_Off_Status(ptk_data *ptk, int posindex, int seqindex)
 {
-    if(posindex >= 0 && posindex < Song_Length)
+    if(posindex >= 0 && posindex < ptk->Song_Length)
     {
         if(seqindex < 0) seqindex = 0;
         if(seqindex > Songtracks - 1) seqindex = Songtracks - 1;
@@ -991,7 +991,7 @@ void Solo_Track_On_Off(ptk_data *ptk, int posindex, int seqindex)
 {
     int Already_Solo;
 
-    if(posindex >= 0 && posindex < Song_Length)
+    if(posindex >= 0 && posindex < ptk->Song_Length)
     {
         if(seqindex < 0) seqindex = 0;
         if(seqindex > Songtracks - 1) seqindex = Songtracks - 1;

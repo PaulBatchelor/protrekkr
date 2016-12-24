@@ -540,7 +540,7 @@ Skip_Header2:
                 if(rel <= -1)
                 {
                     // See previous pattern
-                    rel2 = patternLines[pSequence[Cur_Position2 - 1]] + rel;
+                    rel2 = ptk->patternLines[ptk->pSequence[Cur_Position2 - 1]] + rel;
                     if(rel2 < 0)
                     {
                         rel2_size = -rel;
@@ -552,7 +552,7 @@ Skip_Header2:
                             while(rel2_size2 != 0)
                             {
                                 Cur_Position2--;
-                                rel2_size2 -= patternLines[pSequence[Cur_Position2]];
+                                rel2_size2 -= ptk->patternLines[ptk->pSequence[Cur_Position2]];
                                 if(rel2_size2 < 0)
                                 {
                                     rel2 += -rel2_size2;
@@ -570,11 +570,11 @@ Skip_Header2:
                         In_Prev_Next = TRUE;
                         for(i = 0; i < rel2_size; i++)
                         {
-                            pattern = pSequence[Cur_Position2];
+                            pattern = ptk->pSequence[Cur_Position2];
                             Display_Patt_Line(ptk, In_Prev_Next, Shadow_Pattern, y, rel, track, tVisible_Columns, pattern);
                             y += 8;
                             rel++;
-                            if(rel >= patternLines[pSequence[Cur_Position2]])
+                            if(rel >= ptk->patternLines[ptk->pSequence[Cur_Position2]])
                             {
                                 Cur_Position2++;
                                 if(Cur_Position == Cur_Position2)
@@ -592,16 +592,16 @@ Skip_Header2:
                     }
                     rel = rel2;
                     In_Prev_Next = TRUE;
-                    pattern = pSequence[Cur_Position2 - 1];
+                    pattern = ptk->pSequence[Cur_Position2 - 1];
                     goto Go_Display;
                 } 
             }
-            if(Cur_Position2 < Song_Length - 1)
+            if(Cur_Position2 < ptk->Song_Length - 1)
             {
-                if(rel >= patternLines[pSequence[Cur_Position2]])
+                if(rel >= ptk->patternLines[ptk->pSequence[Cur_Position2]])
                 {
                     // See next pattern
-                    line -= patternLines[pSequence[Cur_Position2]];
+                    line -= ptk->patternLines[ptk->pSequence[Cur_Position2]];
                     rel = liner + line;
                     Cur_Position2++;
                     In_Prev_Next2 = TRUE;
@@ -610,9 +610,9 @@ Skip_Header2:
             } 
         }
 
-        if(rel > -1 && rel < patternLines[pSequence[Cur_Position2]])
+        if(rel > -1 && rel < ptk->patternLines[ptk->pSequence[Cur_Position2]])
         {
-            pattern = pSequence[Cur_Position2];
+            pattern = ptk->pSequence[Cur_Position2];
 Go_Display:
             // Display the highlight line at approx the middle of the pattern
             if(liner != 0)
@@ -1073,7 +1073,7 @@ void draw_pated_highlight(ptk_data *ptk, int track, int line, int petrack, int r
 
     Cur_Position = Get_Song_Position(ptk);
 
-    pattern = pSequence[Cur_Position];
+    pattern = ptk->pSequence[Cur_Position];
 
     if(ptk->RawPatterns)
     {
@@ -1584,15 +1584,15 @@ void Actupated(ptk_data *ptk, int modac)
     }
 
     Cur_Position = Get_Song_Position(ptk);
-    nlines = patternLines[pSequence[Cur_Position]];
+    nlines = ptk->patternLines[ptk->pSequence[Cur_Position]];
 
-    if(Cur_Position != 0 || Cur_Position < (Song_Length - 1))
+    if(Cur_Position != 0 || Cur_Position < (ptk->Song_Length - 1))
     {
         if(Continuous_Scroll)
         {
             if(Pattern_Line < 0)
             {
-                nlines = patternLines[pSequence[Cur_Position - 1]];
+                nlines = ptk->patternLines[ptk->pSequence[Cur_Position - 1]];
                 Pattern_Line = nlines + Pattern_Line;
                 Unselect_Selection(ptk);
                 ptk->gui_action = GUI_CMD_PREVIOUS_POSITION;
@@ -1724,9 +1724,9 @@ void Actupated(ptk_data *ptk, int modac)
     {
         // Count the number of rows in the song
         Max_Lines_Song = 0;
-        for(i = 0; i < Song_Length; i++)
+        for(i = 0; i < ptk->Song_Length; i++)
         {   
-            Max_Lines_Song += patternLines[pSequence[i]];
+            Max_Lines_Song += ptk->patternLines[ptk->pSequence[i]];
         }
         // Slider for the entire song
         Realslider_Vert(MAX_PATT_SCREEN_X + 1, 200, Get_Song_Line(ptk),
@@ -1740,7 +1740,7 @@ void Actupated(ptk_data *ptk, int modac)
         // Just for the pattern
         Realslider_Vert(MAX_PATT_SCREEN_X + 1, 200, Cur_Line,
                         DISPLAYED_LINES,
-                        patternLines[pSequence[Cur_Position]] + DISPLAYED_LINES,
+                        ptk->patternLines[ptk->pSequence[Cur_Position]] + DISPLAYED_LINES,
                         (Cur_Height - 452) + Patterns_Lines_Offset, TRUE);
     }
 }
@@ -2555,7 +2555,7 @@ int Get_Line_Over_Mouse(ptk_data *ptk)
     mouse_line /= 8;
     mouse_line -= VIEWLINE;
     mouse_line += Pattern_Line;
-    if(mouse_line > patternLines[pSequence[Cur_Position]] - 1) mouse_line = patternLines[pSequence[Cur_Position]] - 1;
+    if(mouse_line > ptk->patternLines[ptk->pSequence[Cur_Position]] - 1) mouse_line = ptk->patternLines[ptk->pSequence[Cur_Position]] - 1;
     if(mouse_line < 0) mouse_line = 0;
     return(mouse_line);
 }
@@ -2602,9 +2602,9 @@ int Get_Visible_Partial_Tracks(ptk_data *ptk)
 // Make sure the position isn't beyond current pattern lines range
 void Bound_Patt_Pos(ptk_data *ptk)
 {
-    if(Pattern_Line >= patternLines[pSequence[Song_Position]])
+    if(Pattern_Line >= ptk->patternLines[ptk->pSequence[Song_Position]])
     {
-        Pattern_Line = patternLines[pSequence[Song_Position]] - 1;
+        Pattern_Line = ptk->patternLines[ptk->pSequence[Song_Position]] - 1;
     }
 }
 
@@ -2666,11 +2666,11 @@ void Mouse_Wheel_Pattern_Ed(ptk_data *ptk, int roll_amount, int allow)
         {
             Pattern_Line += roll_amount;
             if(Continuous_Scroll && !Cur_Position) if(Pattern_Line < 0) Pattern_Line = 0;
-            if(Continuous_Scroll && (Cur_Position == Song_Length - 1))
+            if(Continuous_Scroll && (Cur_Position == ptk->Song_Length - 1))
             {
-                if(Pattern_Line >= patternLines[pSequence[Cur_Position]])
+                if(Pattern_Line >= ptk->patternLines[ptk->pSequence[Cur_Position]])
                 {
-                    Pattern_Line = patternLines[pSequence[Cur_Position]] - 1;
+                    Pattern_Line = ptk->patternLines[ptk->pSequence[Cur_Position]] - 1;
                 }
             }
             Actupated(ptk, 0);
@@ -2785,9 +2785,9 @@ void Mouse_Sliders_Pattern_Ed(ptk_data *ptk)
 
             // Max rows
             Max_Lines_Song = 0;
-            for(i = 0; i < Song_Length; i++)
+            for(i = 0; i < ptk->Song_Length; i++)
             {
-                Max_Lines_Song += patternLines[pSequence[i]];
+                Max_Lines_Song += ptk->patternLines[ptk->pSequence[i]];
             }
 
             // Use linear position
@@ -2806,9 +2806,9 @@ void Mouse_Sliders_Pattern_Ed(ptk_data *ptk)
             if(final_row > Max_Lines_Song - 1) final_row = Max_Lines_Song - 1;
             // Convert it back to segmented pattern/position structure
             i = 0;
-            while(final_row >= patternLines[pSequence[i]])
+            while(final_row >= ptk->patternLines[ptk->pSequence[i]])
             {
-                final_row -= patternLines[pSequence[i]];
+                final_row -= ptk->patternLines[ptk->pSequence[i]];
                 i++;
             }
             Pattern_Line = final_row;
@@ -2823,7 +2823,7 @@ void Mouse_Sliders_Pattern_Ed(ptk_data *ptk)
         {
             int final_row;
             int Cur_Position = Get_Song_Position(ptk);
-            int max_length = patternLines[pSequence[Cur_Position]] + DISPLAYED_LINES;
+            int max_length = ptk->patternLines[ptk->pSequence[Cur_Position]] + DISPLAYED_LINES;
             int Center = Slider_Get_Center(DISPLAYED_LINES, max_length, ((Cur_Height - 452) - (Continuous_Scroll * 80)) + Patterns_Lines_Offset);
             float Pos_Mouse = ((float) ((Mouse.y - (200 + (Continuous_Scroll * 80))) - 
                               (Center / 2))) / (((float) (Cur_Height - 452) - (Continuous_Scroll * 80)) + (float) Patterns_Lines_Offset);
@@ -2835,7 +2835,7 @@ void Mouse_Sliders_Pattern_Ed(ptk_data *ptk)
             }
             final_row = (int32) s_offset;
             if(final_row < 0) final_row = 0;
-            if(final_row > patternLines[pSequence[Cur_Position]] - 1) final_row = patternLines[pSequence[Cur_Position]] - 1;
+            if(final_row > ptk->patternLines[ptk->pSequence[Cur_Position]] - 1) final_row = ptk->patternLines[ptk->pSequence[Cur_Position]] - 1;
             Pattern_Line = final_row;
             Actupated(ptk, 0);
         }
@@ -3151,7 +3151,7 @@ void Goto_Next_Row(ptk_data *ptk)
 
     Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS);
     Pattern_Line++;
-    if(Continuous_Scroll && (Cur_Position == Song_Length - 1)) if(Pattern_Line >= patternLines[pSequence[Cur_Position]]) Pattern_Line = patternLines[pSequence[Cur_Position]] - 1;
+    if(Continuous_Scroll && (Cur_Position == ptk->Song_Length - 1)) if(Pattern_Line >= ptk->patternLines[ptk->pSequence[Cur_Position]]) Pattern_Line = ptk->patternLines[ptk->pSequence[Cur_Position]] - 1;
     Actupated(ptk, 0);
     Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS);
 }
@@ -3178,8 +3178,8 @@ void Goto_Next_Page(ptk_data *ptk)
 
     Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS);
     Pattern_Line += 16;
-    if(!is_recording && !Continuous_Scroll) if(Pattern_Line >= patternLines[pSequence[Cur_Position]]) Pattern_Line = patternLines[pSequence[Cur_Position]] - 1;
-    if(Continuous_Scroll && (Cur_Position == Song_Length - 1)) if(Pattern_Line >= patternLines[pSequence[Cur_Position]]) Pattern_Line = patternLines[pSequence[Cur_Position]] - 1;
+    if(!is_recording && !Continuous_Scroll) if(Pattern_Line >= ptk->patternLines[ptk->pSequence[Cur_Position]]) Pattern_Line = ptk->patternLines[ptk->pSequence[Cur_Position]] - 1;
+    if(Continuous_Scroll && (Cur_Position == ptk->Song_Length - 1)) if(Pattern_Line >= ptk->patternLines[ptk->pSequence[Cur_Position]]) Pattern_Line = ptk->patternLines[ptk->pSequence[Cur_Position]] - 1;
     Actupated(ptk, 0);
     Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS);
 }
@@ -3227,7 +3227,7 @@ void Goto_Top_Left(ptk_data *ptk)
 void Goto_Bottom_Right(ptk_data *ptk)
 {
     Select_Block_Keyboard(ptk, BLOCK_MARK_ROWS | BLOCK_MARK_TRACKS);
-    if(!Get_LCtrl()) Pattern_Line = patternLines[pSequence[Get_Song_Position(ptk)]] - 1;
+    if(!Get_LCtrl()) Pattern_Line = ptk->patternLines[ptk->pSequence[Get_Song_Position(ptk)]] - 1;
     else
     {
         ptk->Column_Under_Caret = 0;
@@ -3285,7 +3285,7 @@ int Get_Song_Line(ptk_data *ptk)
     Cur_Lines_Song = 0;
     for(i = 0; i < Start_Pos; i++)
     {
-        Cur_Lines_Song += patternLines[pSequence[i]];
+        Cur_Lines_Song += ptk->patternLines[ptk->pSequence[i]];
     }
     if(Songplaying) return(Cur_Lines_Song + Pattern_Line_Visual);
     else return(Cur_Lines_Song + Pattern_Line);

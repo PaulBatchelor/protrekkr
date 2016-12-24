@@ -298,8 +298,6 @@ char Channels_Polyphony[MAX_TRACKS];
 char Channels_MultiNotes[MAX_TRACKS];
 char Channels_Effects[MAX_TRACKS];
 
-unsigned char pSequence[256];
-
 int Pattern_Line;
 int Song_Position;
 int Song_Position_Visual;
@@ -321,12 +319,6 @@ int shuffle;
 #if defined(PTK_SHUFFLE)
 int shufflestep;
 int shuffleswitch;
-#endif
-
-#if !defined(__STAND_ALONE__) || defined(__WINAMP__)
-    unsigned char Song_Length = 1;
-#else
-    unsigned char Song_Length;
 #endif
 
 #if defined(PTK_FX_REVERSE)
@@ -353,7 +345,6 @@ int repeat_loop_counter;
 int repeat_loop_counter_in;
 #endif
 
-short patternLines[MAX_ROWS];
 char grown;
 float Curr_Signal_L[MAX_POLYPHONY];
 float Curr_Signal_R[MAX_POLYPHONY];
@@ -561,13 +552,11 @@ int delay_time;
     int wait_level;
     char nameins[128][20];
     char SampleName[128][16][64];
-    unsigned char nPatterns = 1;
     void Actualize_303_Ed(ptk_data *ptk, char gode);
     extern char sr_isrecording;
     extern int32 sed_range_start;
     extern int32 sed_range_end;
 #else
-    unsigned char nPatterns;
 #endif
 
 #if defined(PTK_SYNTH_PINK)
@@ -1152,24 +1141,24 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
 
         Pre_Song_Init(ptk);
 
-        Mod_Dat_Read(&nPatterns, sizeof(char));
+        Mod_Dat_Read(&ptk->nPatterns, sizeof(char));
         Mod_Dat_Read(&Songtracks, sizeof(char));
-        Mod_Dat_Read(&Song_Length, sizeof(char));
+        Mod_Dat_Read(&ptk->Song_Length, sizeof(char));
 
         Mod_Dat_Read(&Use_Cubic, sizeof(char));
 
-        Mod_Dat_Read(pSequence, sizeof(char) * Song_Length);
+        Mod_Dat_Read(ptk->pSequence, sizeof(char) * ptk->Song_Length);
 
         // Patterns lines
-        for(i = 0; i < nPatterns; i++)
+        for(i = 0; i < ptk->nPatterns; i++)
         {
-            patternLines[i] = 0;
-            Mod_Dat_Read(&patternLines[i], sizeof(char));
-            patternLines[i] = Swap_16(patternLines[i]);
+            ptk->patternLines[i] = 0;
+            Mod_Dat_Read(&ptk->patternLines[i], sizeof(char));
+            ptk->patternLines[i] = Swap_16(ptk->patternLines[i]);
         }
 
         // Allocated the necessary room for the patterns
-        int max_lines = (PATTERN_LEN * nPatterns);
+        int max_lines = (PATTERN_LEN * ptk->nPatterns);
 
         // Free the patterns block
         if(RawPatterns) free(RawPatterns);
@@ -1201,7 +1190,7 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
         }
 
         TmpPatterns = RawPatterns;
-        for(int pwrite = 0; pwrite < nPatterns; pwrite++)
+        for(int pwrite = 0; pwrite < ptk->nPatterns; pwrite++)
         {
             TmpPatterns_Rows = TmpPatterns + (pwrite * PATTERN_LEN);
             for(i = 0; i < PATTERN_BYTES; i++)
@@ -1209,7 +1198,7 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
                 for(k = 0; k < Songtracks; k++)
                 {   // Tracks
                     TmpPatterns_Tracks = TmpPatterns_Rows + (k * PATTERN_BYTES);
-                    for(j = 0; j < patternLines[pwrite]; j++)
+                    for(j = 0; j < ptk->patternLines[pwrite]; j++)
                     {   // Rows
                         TmpPatterns_Notes = TmpPatterns_Tracks + (j * PATTERN_ROW_LEN);
                         Mod_Dat_Read(TmpPatterns_Notes + i, sizeof(char));
@@ -1499,7 +1488,7 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
         Mod_Dat_Read(&shuffle, sizeof(int));
 
         // Reading track part sequence
-        for(int tps_pos = 0; tps_pos < Song_Length; tps_pos++)
+        for(int tps_pos = 0; tps_pos < ptk->Song_Length; tps_pos++)
         {
             for(tps_trk = 0; tps_trk < Songtracks; tps_trk++)
             {
@@ -1629,9 +1618,9 @@ int PTKEXPORT Ptk_GetPosition(void)
 
 // ------------------------------------------------------
 // Set the current position in the song
-void PTKEXPORT Ptk_SetPosition(int new_position)
+void PTKEXPORT Ptk_SetPosition(ptk_data *ptk, int new_position)
 {
-    if(new_position >= Song_Length) new_position = Song_Length - 1;
+    if(new_position >= ptk->Song_Length) new_position = ptk->Song_Length - 1;
     if(new_position < 0) new_position = 0;
 
 /*#if !defined(__WINAMP__)
@@ -2356,7 +2345,7 @@ void Sp_Player(ptk_data *ptk)
 
             for(int ct = 0; ct < Songtracks; ct++)
             {
-                int efactor = Get_Pattern_Offset(ptk, pSequence[Song_Position], ct, Pattern_Line);
+                int efactor = Get_Pattern_Offset(ptk, ptk->pSequence[Song_Position], ct, Pattern_Line);
                 
                 // Store the notes & instruments numbers
 				if(ptk->sporth.use_sporth) {
@@ -2831,7 +2820,7 @@ void Sp_Player(ptk_data *ptk)
                     if(!is_recording_2)
 #endif
                     {
-                        if(Song_Position >= Song_Length)
+                        if(Song_Position >= ptk->Song_Length)
                         {
                             Song_Position = 0;
 #if !defined(__STAND_ALONE__) || defined(__WINAMP__)
@@ -2859,13 +2848,13 @@ void Sp_Player(ptk_data *ptk)
 #endif  // PTK_FX_PATTERNBREAK
 
                 // Normal end of pattern
-                if(Pattern_Line == patternLines[pSequence[Song_Position]])
+                if(Pattern_Line == ptk->patternLines[ptk->pSequence[Song_Position]])
                 {
 
 #if !defined(__STAND_ALONE__)
                     if(is_recording_2)
                     {
-                        Next_Line_Pattern_Auto(ptk, &Song_Position, patternLines[pSequence[Song_Position]], &Pattern_Line);
+                        Next_Line_Pattern_Auto(ptk, &Song_Position, ptk->patternLines[ptk->pSequence[Song_Position]], &Pattern_Line);
                     }
                     else
 #endif
@@ -2905,7 +2894,7 @@ void Sp_Player(ptk_data *ptk)
                     if(!is_recording_2)
 #endif
                     {
-                        if(Song_Position >= Song_Length)
+                        if(Song_Position >= ptk->Song_Length)
                         {
                             Song_Position = 0;
 #if !defined(__STAND_ALONE__) || defined(__WINAMP__)
@@ -4323,7 +4312,7 @@ void Do_Effects_Tick_0(ptk_data *ptk)
 
     for(int trackef = 0; trackef < Songtracks; trackef++)
     {
-        int tefactor = Get_Pattern_Offset(ptk, pSequence[Song_Position], trackef, Pattern_Line);
+        int tefactor = Get_Pattern_Offset(ptk, ptk->pSequence[Song_Position], trackef, Pattern_Line);
 
         for(j = 0; j < Channels_Effects[trackef]; j++)
         {
@@ -4469,7 +4458,7 @@ void Do_Pattern_Loop(ptk_data *ptk, int track)
     int pltr_eff_row[MAX_FX];
     int pltr_dat_row[MAX_FX];
 
-    int tefactor = Get_Pattern_Offset(ptk, pSequence[Song_Position], track, Pattern_Line);
+    int tefactor = Get_Pattern_Offset(ptk, ptk->pSequence[Song_Position], track, Pattern_Line);
 
     for(j = 0; j < Channels_Effects[track]; j++)
     {
@@ -4543,7 +4532,7 @@ void Do_Effects_Ticks_X(ptk_data *ptk)
 
     for(int trackef = 0; trackef < Songtracks; trackef++)
     {
-        int tefactor = Get_Pattern_Offset(ptk, pSequence[Song_Position], trackef, Pattern_Line);
+        int tefactor = Get_Pattern_Offset(ptk, ptk->pSequence[Song_Position], trackef, Pattern_Line);
 
         // Get the notes for this track
         for(i = 0; i < Channels_MultiNotes[trackef]; i++)
@@ -5842,7 +5831,7 @@ void init_sample_bank(ptk_data *ptk)
             CHAN_ACTIVE_STATE[inico][inico2] = TRUE;
             CHAN_HISTORY_STATE[inico][inico2] = FALSE;
         }
-        pSequence[inico] = 0;
+        ptk->pSequence[inico] = 0;
 
         if(inico < 128)
         {

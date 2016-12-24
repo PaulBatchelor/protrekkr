@@ -800,20 +800,20 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_PREV_PATT)
         {
-            pSequence[Song_Position]--;
+            ptk->pSequence[Song_Position]--;
             Bound_Patt_Pos(ptk);
             Actualize_Sequencer(ptk);
             Actupated(ptk, 0);
-            Anat(Song_Position);
+            Anat(ptk, Song_Position);
         }
 
         if(ptk->gui_action == GUI_CMD_NEXT_PATT)
         {
-            pSequence[Song_Position]++;
+            ptk->pSequence[Song_Position]++;
             Bound_Patt_Pos(ptk);
             Actualize_Sequencer(ptk);
             Actupated(ptk, 0);
-            Anat(Song_Position);
+            Anat(ptk, Song_Position);
         }
 
         if(ptk->gui_action == GUI_CMD_GOTO_PREVIOUS_ROW)
@@ -828,14 +828,14 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_REDUCE_SONG_LENGTH)
         {
-            Song_Length--;
+            ptk->Song_Length--;
             Actualize_Sequencer(ptk);
             Actupated(ptk, 0);
         }
 
         if(ptk->gui_action == GUI_CMD_INCREASE_SONG_LENGTH)
         {
-            Song_Length++;
+            ptk->Song_Length++;
             Actualize_Sequencer(ptk);
             Actupated(ptk, 0);
         }
@@ -1537,20 +1537,20 @@ int Screen_Update(ptk_data *ptk)
 
         if(ptk->gui_action == GUI_CMD_REDUCE_PATTERNS_10)
         {
-            if(pSequence[Song_Position] > 9) pSequence[Song_Position] -= 10;
-            else pSequence[Song_Position] = 0;
+            if(ptk->pSequence[Song_Position] > 9) ptk->pSequence[Song_Position] -= 10;
+            else ptk->pSequence[Song_Position] = 0;
             Bound_Patt_Pos(ptk);
-            Anat(Song_Position);
+            Anat(ptk, Song_Position);
             Actualize_Sequencer(ptk);
             Actupated(ptk, 0);
         }
 
         if(ptk->gui_action == GUI_CMD_INCREASE_PATTERNS_10)
         {
-            if(pSequence[Song_Position] < 118) pSequence[Song_Position] += 10;
-            else pSequence[Song_Position] = 127;
+            if(ptk->pSequence[Song_Position] < 118) ptk->pSequence[Song_Position] += 10;
+            else ptk->pSequence[Song_Position] = 127;
             Bound_Patt_Pos(ptk);
-            Anat(Song_Position);
+            Anat(ptk, Song_Position);
             Actualize_Sequencer(ptk);
             Actupated(ptk, 0);
         }
@@ -2396,14 +2396,14 @@ void Newmod(ptk_data *ptk)
         Songtracks = 6;
         for(int api = 0; api < MAX_ROWS; api++)
         {
-            patternLines[api] = 64;
+            ptk->patternLines[api] = 64;
         }
         Clear_Patterns_Pool(ptk);
-        nPatterns = 1;
+        ptk->nPatterns = 1;
         Set_Default_Channels_Polyphony();
         for(int inico = 0; inico < 256; inico++)
         {
-            pSequence[inico] = 0;
+            ptk->pSequence[inico] = 0;
             for(int inico2 = 0; inico2 < MAX_TRACKS; inico2++)
             {
                 CHAN_ACTIVE_STATE[inico][inico2] = TRUE;
@@ -2411,7 +2411,7 @@ void Newmod(ptk_data *ptk)
             }
         }
 
-        Song_Length = 1;
+        ptk->Song_Length = 1;
         ptk->Track_Under_Caret = 0;
         ptk->Column_Under_Caret = 0;
         Pattern_Line = 0;
@@ -2762,7 +2762,7 @@ void WavRenderizer(ptk_data *ptk)
             else
             {
                 Song_Position = 0;
-                Max_Position = Song_Length;
+                Max_Position = ptk->Song_Length;
             }
 
             filesize = 0;
@@ -3072,7 +3072,7 @@ void Set_Default_Channels_Polyphony(void)
 void ShowInfo(ptk_data *ptk)
 {
     char tmp[256];
-    int pattsize = nPatterns * PATTERN_LEN;
+    int pattsize = ptk->nPatterns * PATTERN_LEN;
     int sampsize = 0;
     int nbr_samp = 0;
     int nbr_synth = 0;
@@ -3102,7 +3102,7 @@ void ShowInfo(ptk_data *ptk)
                  "%d patterns (%d bytes).",
                  nbr_samp, sampsize,
                  nbr_synth, 
-                 nPatterns, pattsize);
+                 ptk->nPatterns, pattsize);
     Status_Box(ptk, tmp);
 }
 
@@ -3417,35 +3417,35 @@ void Keyboard_Handler(ptk_data *ptk)
             // Jump to row 16
             if(Keys[SDLK_F6])
             {
-                int line = patternLines[pSequence[Cur_Position]] / 4;
-                if(line > patternLines[pSequence[Cur_Position]] - 1) line = patternLines[pSequence[Cur_Position]] - 1;
+                int line = ptk->patternLines[ptk->pSequence[Cur_Position]] / 4;
+                if(line > ptk->patternLines[ptk->pSequence[Cur_Position]] - 1) line = ptk->patternLines[ptk->pSequence[Cur_Position]] - 1;
                 if(Pattern_Line != line) Goto_Row(ptk, line);
             }
 
             // Jump to row 32
             if(Keys[SDLK_F7])
             {
-                int line = patternLines[pSequence[Cur_Position]] / 4;
+                int line = ptk->patternLines[ptk->pSequence[Cur_Position]] / 4;
                 line *= 2;
-                if(line > patternLines[pSequence[Cur_Position]] - 1) line = patternLines[pSequence[Cur_Position]] - 1;
+                if(line > ptk->patternLines[ptk->pSequence[Cur_Position]] - 1) line = ptk->patternLines[ptk->pSequence[Cur_Position]] - 1;
                 if(Pattern_Line != line) Goto_Row(ptk, line);
             }
 
             // Jump to row 48
             if(Keys[SDLK_F8])
             {
-                int line = patternLines[pSequence[Cur_Position]] / 4;
+                int line = ptk->patternLines[ptk->pSequence[Cur_Position]] / 4;
                 line *= 3;
-                if(line > patternLines[pSequence[Cur_Position]] - 1) line = patternLines[pSequence[Cur_Position]] - 1;
+                if(line > ptk->patternLines[ptk->pSequence[Cur_Position]] - 1) line = ptk->patternLines[ptk->pSequence[Cur_Position]] - 1;
                 if(Pattern_Line != line) Goto_Row(ptk, line);
             }
 
             // Jump to row 63
             if(Keys[SDLK_F9])
             {
-                int line = patternLines[pSequence[Cur_Position]] / 4;
+                int line = ptk->patternLines[ptk->pSequence[Cur_Position]] / 4;
                 line *= 4;
-                if(line > patternLines[pSequence[Cur_Position]] - 1) line = patternLines[pSequence[Cur_Position]] - 1;
+                if(line > ptk->patternLines[ptk->pSequence[Cur_Position]] - 1) line = ptk->patternLines[ptk->pSequence[Cur_Position]] - 1;
                 if(Pattern_Line != line) Goto_Row(ptk, line);
             }
         }
@@ -3503,13 +3503,13 @@ void Keyboard_Handler(ptk_data *ptk)
         }
 
         // Previous pattern
-        if((Keys_Sym[SDLK_KP_MINUS]) && pSequence[Cur_Position] > 0)
+        if((Keys_Sym[SDLK_KP_MINUS]) && ptk->pSequence[Cur_Position] > 0)
         {
             ptk->gui_action = GUI_CMD_PREV_PATT;
         }
 
         // Next pattern
-        if((Keys_Sym[SDLK_KP_PLUS]) && pSequence[Cur_Position] < 254)
+        if((Keys_Sym[SDLK_KP_PLUS]) && ptk->pSequence[Cur_Position] < 254)
         {
             ptk->gui_action = GUI_CMD_NEXT_PATT;
         }
@@ -4337,7 +4337,7 @@ void Keyboard_Handler(ptk_data *ptk)
 
                 if(Keys[SDLK_LEFT])
                 {
-                    if(pSequence[Cur_Position] > 0)
+                    if(ptk->pSequence[Cur_Position] > 0)
                     {
                         ptk->gui_action = GUI_CMD_PREV_PATT;
                     }
@@ -4345,7 +4345,7 @@ void Keyboard_Handler(ptk_data *ptk)
                 }
                 if(Keys[SDLK_RIGHT])
                 {
-                    if(pSequence[Cur_Position] < 254)
+                    if(ptk->pSequence[Cur_Position] < 254)
                     {
                         ptk->gui_action = GUI_CMD_NEXT_PATT;
                     }
@@ -4564,7 +4564,7 @@ void Keyboard_Handler(ptk_data *ptk)
                     ptk->ltretvalue = retvalue;
                     xoffseted = (ptk->Track_Under_Caret * PATTERN_BYTES) + (Pattern_Line * PATTERN_ROW_LEN) + ped_cell;
 
-                    int oldval = *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted);
+                    int oldval = *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted);
 
                     if(retvalue < 16)
                     {
@@ -4572,24 +4572,24 @@ void Keyboard_Handler(ptk_data *ptk)
                         if(oldval == 255 && ptk->Column_Under_Caret == (3 + j)) oldval = 0;
                         if(oldval == 255 && ptk->Column_Under_Caret == (5 + j)) oldval = 0;
                         oldval = (oldval & 0xf) + (retvalue << 4);
-                        *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = oldval;
+                        *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = oldval;
 
                         // Max panning
                         if(oldval != 255 && ptk->Column_Under_Caret == (5 + j) &&
-                           *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) != 0x90)
+                           *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) != 0x90)
                         {
                             if(oldval != 255 && ptk->Column_Under_Caret == (5 + j) &&
-                            *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x80)
+                            *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x80)
                             {
-                                *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x80;
+                                *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x80;
                             }
                         }
 
                         // Max instrument
                         if(oldval != 255 && ptk->Column_Under_Caret == (1 + (i * 3)) &&
-                           *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x7f)
+                           *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x7f)
                         {
-                            *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x7f;
+                            *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x7f;
                         }
 
                         if(!is_recording) if(!Songplaying)
@@ -4610,24 +4610,24 @@ void Keyboard_Handler(ptk_data *ptk)
                             if(ptk->Column_Under_Caret == (1 + (i * 3))) oldval = 255;
                             if(ptk->Column_Under_Caret == (3 + j)) oldval = 255;
                             if(ptk->Column_Under_Caret == (5 + j)) oldval = 255;
-                            *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = oldval;
+                            *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = oldval;
 
                             // Max panning
                             if(oldval != 255 && ptk->Column_Under_Caret == (5 + j) &&
-                               *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) != 0x90)
+                               *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) != 0x90)
                             {
                                 if(oldval != 255 && ptk->Column_Under_Caret == (5 + j) &&
-                                   *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x80)
+                                   *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x80)
                                 {
-                                    *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x80;
+                                    *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x80;
                                 }
                             }
 
                             // Max instrument
                             if(oldval != 255 && ptk->Column_Under_Caret == (1 + (i * 3)) &&
-                               *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x7f)
+                               *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x7f)
                             {
-                                *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x7f;
+                                *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x7f;
                             }
 
                             if(!is_recording) if(!Songplaying)
@@ -4682,7 +4682,7 @@ void Keyboard_Handler(ptk_data *ptk)
 
                         ptk->ltretvalue = retvalue;
                         xoffseted = (ptk->Track_Under_Caret * PATTERN_BYTES) + (Pattern_Line * PATTERN_ROW_LEN) + ped_cell;
-                        int oldval = *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted);
+                        int oldval = *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted);
 
                         if(retvalue < 16)
                         {
@@ -4690,24 +4690,24 @@ void Keyboard_Handler(ptk_data *ptk)
                             if(oldval == 255 && ptk->Column_Under_Caret == (4 + j)) oldval = 0;
                             if(oldval == 255 && ptk->Column_Under_Caret == (6 + j)) oldval = 0;
                             oldval = (oldval & 0xf0) + retvalue;
-                            *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = oldval;
+                            *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = oldval;
 
                             // Max panning
                             if(oldval != 255 && ptk->Column_Under_Caret == (6 + j) &&
-                               *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) != 0x90)
+                               *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) != 0x90)
                             {
                                 if(oldval != 255 && ptk->Column_Under_Caret == (6 + j) &&
-                                   *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x80)
+                                   *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x80)
                                 {
-                                    *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x80;
+                                    *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x80;
                                 }
                             }
 
                             // Max instrument
                             if(oldval != 255 && ptk->Column_Under_Caret == (2 + (i * 3)) &&
-                               *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 127)
+                               *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 127)
                             {
-                                *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 127;
+                                *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 127;
                             }
 
                             if(!is_recording) if(!Songplaying)
@@ -4727,24 +4727,24 @@ void Keyboard_Handler(ptk_data *ptk)
                                 if(ptk->Column_Under_Caret == (2 + (i * 3))) oldval = 255;
                                 if(ptk->Column_Under_Caret == (4 + j)) oldval = 255;
                                 if(ptk->Column_Under_Caret == (6 + j)) oldval = 255;
-                                *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = oldval;
+                                *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = oldval;
 
                                 // Max panning
                                 if(oldval != 255 && ptk->Column_Under_Caret == (6 + j) &&
-                                   *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) != 0x90)
+                                   *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) != 0x90)
                                 {
                                     if(oldval != 255 && ptk->Column_Under_Caret == (6 + j) &&
-                                       *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x80)
+                                       *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x80)
                                     {
-                                        *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x80;
+                                        *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x80;
                                     }
                                 }
 
                                 // Max instrument
                                 if(oldval != 255 && ptk->Column_Under_Caret == (2 + (i * 3)) &&
-                                   *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x7f)
+                                   *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) > 0x7f)
                                 {
-                                    *(ptk->RawPatterns + pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x7f;
+                                    *(ptk->RawPatterns + ptk->pSequence[Cur_Position] * PATTERN_LEN + xoffseted) = 0x7f;
                                 }
 
                                 if(!is_recording) if(!Songplaying)
@@ -4914,7 +4914,7 @@ void Keyboard_Handler(ptk_data *ptk)
                         // Note
                         if(retnote > -1)
                         {
-                            xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], ptk->Track_Under_Caret, line);
+                            xoffseted = Get_Pattern_Offset(ptk, ptk->pSequence[Cur_Position], ptk->Track_Under_Caret, line);
 
                             // Select the sub channel
                             pos = i;
@@ -4962,7 +4962,7 @@ void Keyboard_Handler(ptk_data *ptk)
                             {
                                 if(is_recording_2)
                                 {
-                                    xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], Channel->Channel, line);
+                                    xoffseted = Get_Pattern_Offset(ptk, ptk->pSequence[Cur_Position], Channel->Channel, line);
                                     pos = Channel->Sub_Channel;
                                     if(pos > (Channels_MultiNotes[ptk->Track_Under_Caret] - 1))
                                     {
@@ -5035,7 +5035,7 @@ No_Key:;
 
             if(in_note)
             {
-                xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], ptk->Track_Under_Caret, Pattern_Line);
+                xoffseted = Get_Pattern_Offset(ptk, ptk->pSequence[Cur_Position], ptk->Track_Under_Caret, Pattern_Line);
 
                 *(ptk->RawPatterns + xoffseted + PATTERN_NOTE1 + column) = NOTE_OFF;
                 *(ptk->RawPatterns + xoffseted + PATTERN_INSTR1 + column) = NO_INSTR;
@@ -5078,7 +5078,7 @@ No_Key:;
 
             if(in_note)
             {
-                xoffseted = Get_Pattern_Offset(ptk, pSequence[Cur_Position], ptk->Track_Under_Caret, Pattern_Line);
+                xoffseted = Get_Pattern_Offset(ptk, ptk->pSequence[Cur_Position], ptk->Track_Under_Caret, Pattern_Line);
 
                 if(!Delete_Selection(ptk, Cur_Position))
                 {
@@ -5465,34 +5465,34 @@ void Mouse_Handler(ptk_data *ptk)
         {
             ptk->gui_action = GUI_CMD_NEXT_POSITION;
         }
-        if(zcheckMouse(ptk, 188, 46, 16, 16) && pSequence[Cur_Position] > 0)
+        if(zcheckMouse(ptk, 188, 46, 16, 16) && ptk->pSequence[Cur_Position] > 0)
         {
             ptk->gui_action = GUI_CMD_PREV_PATT;
         }
-        if(zcheckMouse(ptk, 232, 46, 16, 16) && pSequence[Cur_Position] < 254)
+        if(zcheckMouse(ptk, 232, 46, 16, 16) && ptk->pSequence[Cur_Position] < 254)
         {
             ptk->gui_action = GUI_CMD_NEXT_PATT;
         }
-        if(zcheckMouse(ptk, 188, 64, 16, 16) && Song_Length > 1)
+        if(zcheckMouse(ptk, 188, 64, 16, 16) && ptk->Song_Length > 1)
         {
             ptk->gui_action = GUI_CMD_REDUCE_SONG_LENGTH;
         }
-        if(zcheckMouse(ptk, 232, 64, 16, 16) && Song_Length < 255)
+        if(zcheckMouse(ptk, 232, 64, 16, 16) && ptk->Song_Length < 255)
         {
             ptk->gui_action = GUI_CMD_INCREASE_SONG_LENGTH;
         }
 
         // Decrease the number of lines for this pattern
-        if(zcheckMouse(ptk, 188, 82, 16, 16) && patternLines[pSequence[Cur_Position]] > 1)
+        if(zcheckMouse(ptk, 188, 82, 16, 16) && ptk->patternLines[ptk->pSequence[Cur_Position]] > 1)
         {
-            patternLines[pSequence[Cur_Position]]--;
-            if(Pattern_Line >= patternLines[pSequence[Cur_Position]]) Pattern_Line = patternLines[pSequence[Cur_Position]] - 1;
+            ptk->patternLines[ptk->pSequence[Cur_Position]]--;
+            if(Pattern_Line >= ptk->patternLines[ptk->pSequence[Cur_Position]]) Pattern_Line = ptk->patternLines[ptk->pSequence[Cur_Position]] - 1;
             ptk->gui_action = GUI_CMD_SET_PATTERN_LENGTH;
         }
         // Increase the number of lines for this pattern
-        if(zcheckMouse(ptk, 232, 82, 16, 16) && patternLines[pSequence[Cur_Position]] < 128)
+        if(zcheckMouse(ptk, 232, 82, 16, 16) && ptk->patternLines[ptk->pSequence[Cur_Position]] < 128)
         {
-            patternLines[pSequence[Cur_Position]]++;
+            ptk->patternLines[ptk->pSequence[Cur_Position]]++;
             ptk->gui_action = GUI_CMD_SET_PATTERN_LENGTH;
         }
 
@@ -5523,7 +5523,7 @@ void Mouse_Handler(ptk_data *ptk)
             {
                 Songtracks = 1;
                 // Just clear it
-                Reset_Track(ptk, pSequence[Song_Position], ptk->Track_Under_Caret);
+                Reset_Track(ptk, ptk->pSequence[Song_Position], ptk->Track_Under_Caret);
             }
             else
             {
@@ -5763,20 +5763,20 @@ void Mouse_Handler(ptk_data *ptk)
 
         if(zcheckMouse(ptk, 188, 82, 16, 16))
         {
-            int ltp = patternLines[pSequence[Cur_Position]];
+            int ltp = ptk->patternLines[ptk->pSequence[Cur_Position]];
             ltp -= 8;
             if(ltp < 1) ltp = 1;
-            patternLines[pSequence[Cur_Position]] = ltp;
-            if(Pattern_Line >= patternLines[pSequence[Cur_Position]]) Pattern_Line = patternLines[pSequence[Cur_Position]] - 1;
+            ptk->patternLines[ptk->pSequence[Cur_Position]] = ltp;
+            if(Pattern_Line >= ptk->patternLines[ptk->pSequence[Cur_Position]]) Pattern_Line = ptk->patternLines[ptk->pSequence[Cur_Position]] - 1;
             ptk->gui_action = GUI_CMD_SET_PATTERN_LENGTH;
         }
 
         if(zcheckMouse(ptk, 232, 82, 16, 16))
         {
-            int ltp = patternLines[pSequence[Cur_Position]];
+            int ltp = ptk->patternLines[ptk->pSequence[Cur_Position]];
             ltp += 8;
             if(ltp > 128) ltp = 128;
-            patternLines[pSequence[Cur_Position]] = ltp;
+            ptk->patternLines[ptk->pSequence[Cur_Position]] = ltp;
             ptk->gui_action = GUI_CMD_SET_PATTERN_LENGTH;
         }
 
@@ -5869,23 +5869,23 @@ void Mouse_Handler(ptk_data *ptk)
             ptk->teac = 2;
         }
 
-        // Song_Length - 10
-        if(zcheckMouse(ptk, 188, 64, 16, 16) == 1 && Song_Length != 1)
+        // ptk->Song_Length - 10
+        if(zcheckMouse(ptk, 188, 64, 16, 16) == 1 && ptk->Song_Length != 1)
         {
-            int tLength = Song_Length;
+            int tLength = ptk->Song_Length;
             tLength -= 10;
             if(tLength < 1) tLength = 1;
-            Song_Length = tLength;
+            ptk->Song_Length = tLength;
             Actupated(ptk, 0);
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
-        // Song_Length + 10
-        if(zcheckMouse(ptk, 232, 64, 16, 16) == 1 && Song_Length != 255)
+        // ptk->Song_Length + 10
+        if(zcheckMouse(ptk, 232, 64, 16, 16) == 1 && ptk->Song_Length != 255)
         {
-            int tLength = Song_Length;
+            int tLength = ptk->Song_Length;
             tLength += 10;
             if(tLength > 255) tLength = 255;
-            Song_Length = tLength;
+            ptk->Song_Length = tLength;
             Actupated(ptk, 0);
             ptk->gui_action = GUI_CMD_UPDATE_SEQUENCER;
         }
@@ -6015,18 +6015,18 @@ void Mouse_Handler(ptk_data *ptk)
 
 // ------------------------------------------------------
 // Search the first free slot in the sequences pool
-int Search_Free_Pattern(void)
+int Search_Free_Pattern(ptk_data *ptk)
 {
     int i;
     int j;
     int found;
 
-    for(i = 0; i < Song_Length; i++)
+    for(i = 0; i < ptk->Song_Length; i++)
     {
         found = FALSE;
         for(j = 0; j < 128; j++)
         {
-            if(pSequence[j] == i)
+            if(ptk->pSequence[j] == i)
             {
                 found = TRUE;
                 break;
@@ -6049,18 +6049,18 @@ int Next_Line_Pattern_Auto(ptk_data *ptk, int *position, int lines, int *line)
         // Normal end of pattern
         *line = *line - lines;
         *position += 1;
-        if(*position >= Song_Length - 1)
+        if(*position >= ptk->Song_Length - 1)
         {
-            Song_Length++;
-            max_value = Song_Length;
+            ptk->Song_Length++;
+            max_value = ptk->Song_Length;
             if(max_value > 255)
             {
-                Song_Length = 255;
+                ptk->Song_Length = 255;
                 Song_Position = 0;
             }
             // Alloc a new pattern position
-            new_pattern = Search_Free_Pattern();
-            if(new_pattern > -1) pSequence[*position] = new_pattern;
+            new_pattern = Search_Free_Pattern(ptk);
+            if(new_pattern > -1) ptk->pSequence[*position] = new_pattern;
         }
     }
     return(*position);

@@ -309,10 +309,10 @@ Read_Mod_File:
         }
 
         Read_Mod_Data(ptk, FileName, sizeof(char), 20, in);
-        Read_Mod_Data(ptk, &nPatterns, sizeof(char), 1, in);
+        Read_Mod_Data(ptk, &ptk->nPatterns, sizeof(char), 1, in);
 
         Songtracks = MAX_TRACKS;
-        Read_Mod_Data(ptk, &Song_Length, sizeof(char), 1, in);
+        Read_Mod_Data(ptk, &ptk->Song_Length, sizeof(char), 1, in);
 
         Use_Cubic = CUBIC_INT;
 
@@ -321,7 +321,7 @@ Read_Mod_File:
             Read_Mod_Data(ptk, &Use_Cubic, sizeof(char), 1, in);
         }
 
-        Read_Mod_Data(ptk, pSequence, sizeof(char), 256, in);
+        Read_Mod_Data(ptk, ptk->pSequence, sizeof(char), 256, in);
 
         Clear_Patterns_Pool(ptk);
 
@@ -330,7 +330,7 @@ Read_Mod_File:
         {
             for(i = 0; i < MAX_ROWS; i++)
             {
-                Read_Mod_Data_Swap(ptk, &patternLines[i], sizeof(short), 1, in);
+                Read_Mod_Data_Swap(ptk, &ptk->patternLines[i], sizeof(short), 1, in);
             }
         }
 
@@ -365,7 +365,7 @@ Read_Mod_File:
         }
 
         TmpPatterns = ptk->RawPatterns;
-        for(int pwrite = 0; pwrite < nPatterns; pwrite++)
+        for(int pwrite = 0; pwrite < ptk->nPatterns; pwrite++)
         {
             TmpPatterns_Rows = TmpPatterns + (pwrite * PATTERN_LEN);
             int Rows_To_Read = MAX_ROWS;
@@ -1180,7 +1180,7 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
             if(strlen(FileName)) rtrim_string(ptk, FileName, 20);
             Write_Mod_Data(ptk, FileName, sizeof(char), 20, in);
 
-            nPatterns = 0;
+            ptk->nPatterns = 0;
 
             int found_dat_in_patt;
 
@@ -1194,7 +1194,7 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
                 {
                     cur_pattern = cur_pattern_col + (i * PATTERN_BYTES);
                     // Next pattern
-                    for(k = 0; k < patternLines[j]; k++)
+                    for(k = 0; k < ptk->patternLines[j]; k++)
                     {
                         for(l = 0; l < MAX_POLYPHONY; l += 2)
                         {
@@ -1228,27 +1228,27 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
                 }
                 if(found_dat_in_patt)
                 {
-                    nPatterns = j + 1;
+                    ptk->nPatterns = j + 1;
                 }
             }
 
 /*            for(i = 0 ; i < Song_Length; i++)
             {
-                if((pSequence[i] + 1) > nPatterns)
+                if((ptk->pSequence[i] + 1) > ptk->nPatterns)
                 {
-                    nPatterns = pSequence[i] + 1;
+                    ptk->nPatterns = ptk->pSequence[i] + 1;
                 }
             }
 */
-            Write_Mod_Data(ptk, &nPatterns, sizeof(char), 1, in);
-            Write_Mod_Data(ptk, &Song_Length, sizeof(char), 1, in);
+            Write_Mod_Data(ptk, &ptk->nPatterns, sizeof(char), 1, in);
+            Write_Mod_Data(ptk, &ptk->Song_Length, sizeof(char), 1, in);
             Write_Mod_Data(ptk, &Use_Cubic, sizeof(char), 1, in);
 
-            Write_Mod_Data(ptk, pSequence, sizeof(char), MAX_SEQUENCES, in);
+            Write_Mod_Data(ptk, ptk->pSequence, sizeof(char), MAX_SEQUENCES, in);
 
-            Swap_Short_Buffer(ptk, patternLines, MAX_ROWS);
-            Write_Mod_Data(ptk, patternLines, sizeof(short), MAX_ROWS, in);
-            Swap_Short_Buffer(ptk, patternLines, MAX_ROWS);
+            Swap_Short_Buffer(ptk, ptk->patternLines, MAX_ROWS);
+            Write_Mod_Data(ptk, ptk->patternLines, sizeof(short), MAX_ROWS, in);
+            Swap_Short_Buffer(ptk, ptk->patternLines, MAX_ROWS);
 
             Write_Mod_Data(ptk, Channels_MultiNotes, sizeof(char), MAX_TRACKS, in);
             Write_Mod_Data(ptk, Channels_Effects, sizeof(char), MAX_TRACKS, in);
@@ -1268,11 +1268,11 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
             {
                 // Next column
                 cur_pattern_col = ptk->RawPatterns + (i * PATTERN_BYTES);
-                for(j = 0; j < nPatterns; j++)
+                for(j = 0; j < ptk->nPatterns; j++)
                 {
                     // Next pattern
                     cur_pattern = cur_pattern_col + (j * PATTERN_LEN);
-                    for(k = 0; k < patternLines[j]; k++)
+                    for(k = 0; k < ptk->patternLines[j]; k++)
                     {
                         for(l = 0; l < MAX_POLYPHONY; l += 2)
                         {
@@ -1296,7 +1296,7 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
                 }
             }
 
-            for(int pwrite = 0; pwrite < nPatterns; pwrite++)
+            for(int pwrite = 0; pwrite < ptk->nPatterns; pwrite++)
             {
                 Write_Mod_Data(ptk, ptk->RawPatterns + (pwrite * PATTERN_LEN),
                                sizeof(char), PATTERN_LEN, in);
@@ -1894,14 +1894,14 @@ unsigned long Calc_Length(ptk_data *ptk)
     nbr_ticks = 0;
     len = 0;
     i = 0;
-    while(i < Song_Length)
+    while(i < ptk->Song_Length)
     {
         if(have_break < MAX_ROWS) pos_patt = have_break;
         else pos_patt = 0;
         have_break = 255;
-        while(pos_patt < patternLines[pSequence[i]])
+        while(pos_patt < ptk->patternLines[ptk->pSequence[i]])
         {
-            Cur_Patt = ptk->RawPatterns + (pSequence[i] * PATTERN_LEN) + (pos_patt * PATTERN_ROW_LEN);
+            Cur_Patt = ptk->RawPatterns + (ptk->pSequence[i] * PATTERN_LEN) + (pos_patt * PATTERN_ROW_LEN);
             if(!PosTicks)
             {
                 for(k = 0; k < Songtracks; k++)
@@ -1959,7 +1959,7 @@ unsigned long Calc_Length(ptk_data *ptk)
                         
                             case 0x1f:
                                 // Avoid looping the song when jumping
-                                if(i == (Song_Length - 1) || patt_datas[l] <= i)
+                                if(i == (ptk->Song_Length - 1) || patt_datas[l] <= i)
                                 {
                                     early_exit = TRUE;
                                 }
@@ -2007,7 +2007,7 @@ unsigned long Calc_Length(ptk_data *ptk)
                 else
                 {
                     // End the pattern here
-                    pos_patt = patternLines[pSequence[i]];
+                    pos_patt = ptk->patternLines[ptk->pSequence[i]];
                     rep_counter = -1;
                     already_in_loop = FALSE;
                     rep_pos = 0;

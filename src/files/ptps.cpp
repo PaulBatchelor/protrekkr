@@ -329,26 +329,26 @@ int SavePtp(ptk_data *ptk, FILE *in, int Simulate, char *FileName)
     memset(done_pattern, 0, sizeof(done_pattern));
     memset(Old_pSequence, -1, sizeof(Old_pSequence));
 
-    for(i = 0; i < Song_Length; i++)
+    for(i = 0; i < ptk->Song_Length; i++)
     {
-        if(!done_pattern[pSequence[i]])
+        if(!done_pattern[ptk->pSequence[i]])
         {
             memcpy(New_RawPatterns + (int_pattern * PATTERN_LEN),
-                   ptk->RawPatterns + (pSequence[i] * PATTERN_LEN),
+                   ptk->RawPatterns + (ptk->pSequence[i] * PATTERN_LEN),
                    PATTERN_LEN);
-            New_patternLines[int_pattern] = patternLines[pSequence[i]];
-            Old_pSequence[i] = pSequence[i];
+            New_patternLines[int_pattern] = ptk->patternLines[ptk->pSequence[i]];
+            Old_pSequence[i] = ptk->pSequence[i];
             New_pSequence[i] = int_pattern;
         }
         else
         {
             // Pattern is already known
-            New_pSequence[i] = New_pSequence[Search_Sequence(pSequence[i])];
+            New_pSequence[i] = New_pSequence[Search_Sequence(ptk->pSequence[i])];
         }
-        if(!done_pattern[pSequence[i]])
+        if(!done_pattern[ptk->pSequence[i]])
         {
             int_pattern++;
-            done_pattern[pSequence[i]] = TRUE;
+            done_pattern[ptk->pSequence[i]] = TRUE;
         }
     }
 
@@ -376,11 +376,11 @@ int SavePtp(ptk_data *ptk, FILE *in, int Simulate, char *FileName)
     char_value = (char) Real_SongTracks;
     Write_Mod_Data(ptk, &char_value, sizeof(char), 1, in);
 
-    Write_Mod_Data(ptk, &Song_Length, sizeof(char), 1, in);
+    Write_Mod_Data(ptk, &ptk->Song_Length, sizeof(char), 1, in);
     Write_Mod_Data(ptk, &Use_Cubic, sizeof(char), 1, in);
 
     // Patterns sequence
-    Write_Mod_Data(ptk, New_pSequence, sizeof(char), Song_Length, in);
+    Write_Mod_Data(ptk, New_pSequence, sizeof(char), ptk->Song_Length, in);
 
     for(i = 0; i < int_pattern; i++)
     {
@@ -523,7 +523,7 @@ int SavePtp(ptk_data *ptk, FILE *in, int Simulate, char *FileName)
             Out_FX = fopen(FileName_FX, "wb");
 
             // Save the FX data
-            for(l = 0; l < Song_Length; l++)
+            for(l = 0; l < ptk->Song_Length; l++)
             {
                 TmpPatterns_Rows = New_RawPatterns + (New_pSequence[l] * PATTERN_LEN);
                 for(i = 0; i < PATTERN_BYTES; i++)
@@ -563,7 +563,7 @@ int SavePtp(ptk_data *ptk, FILE *in, int Simulate, char *FileName)
                 int real_fx_nbr = 0;
 
                 // Save the FX data
-                for(l = 0; l < Song_Length; l++)
+                for(l = 0; l < ptk->Song_Length; l++)
                 {
                     TmpPatterns_Rows = New_RawPatterns + (New_pSequence[l] * PATTERN_LEN);
                     for(i = 0; i < PATTERN_BYTES; i++)
@@ -1857,7 +1857,7 @@ int SavePtp(ptk_data *ptk, FILE *in, int Simulate, char *FileName)
     
     Save_Constant("PTK_COMPRESSOR", compressor);
 
-    for(int tps_pos = 0; tps_pos < Song_Length; tps_pos++)
+    for(int tps_pos = 0; tps_pos < ptk->Song_Length; tps_pos++)
     {
         for(tps_trk = 0; tps_trk < Songtracks; tps_trk++)
         {

@@ -195,6 +195,12 @@ typedef struct {
     char edit_old_b;
 
     unsigned char *RawPatterns;
+    unsigned char pSequence[256];
+    unsigned char nPatterns;
+    unsigned char Song_Length;
+
+    /* short patternLines[MAX_ROWS]; */
+    short patternLines[128];
 
     ptk_tab tab;
 } ptk_data;

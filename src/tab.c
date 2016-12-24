@@ -13,6 +13,19 @@ void ptk_tab_write(ptk_data *ptk)
     int track;
     ptk_tab *tab = &ptk->tab;
     FILE *fp = tab->fp;
+    int i;
+
+    fprintf(fp, "%d length\n", ptk->Song_Length);
+
+    fprintf(fp, "%d npat\n", ptk->nPatterns);
+
+    for(i = 0; i < ptk->Song_Length; i++) {
+        fprintf(fp, "%d %d pseq\n", i, ptk->pSequence[i]);
+    }
+
+    for(i = 0; i < ptk->nPatterns; i++) {
+        fprintf(fp, "%d %d plen\n", i, ptk->patternLines[i]);
+    }
 
     for(track = 0; track < MAX_TRACKS; track++) {
         for(row = 0; row < MAX_ROWS * MAX_PATTERNS; row++) {
@@ -81,9 +94,75 @@ static int rproc_noteoff(runt_vm *vm, runt_ptr p)
         args[i] = s->f;
     }
 
+    ptk_tab_noteoff(ptk, args[2], args[1], args[0]);
     return RUNT_OK;
 }
 
+static int rproc_npat(runt_vm *vm, runt_ptr p)
+{
+    unsigned char npat;
+    runt_int i, rc;
+    runt_stacklet *s;
+    ptk_data *ptk = runt_to_cptr(p);
+    
+    rc = runt_ppop(vm, &s);
+    RUNT_ERROR_CHECK(rc);
+    npat = s->f;
+
+    ptk->nPatterns = npat;
+
+    return RUNT_OK;
+}
+
+static int rproc_pseq(runt_vm *vm, runt_ptr p)
+{
+    unsigned char args[2];
+    runt_int i, rc;
+    runt_stacklet *s;
+    ptk_data *ptk = runt_to_cptr(p);
+    
+    for(i = 0; i < 2; i++) {
+        rc = runt_ppop(vm, &s);
+        RUNT_ERROR_CHECK(rc);
+        args[i] = s->f;
+    }
+    ptk->pSequence[args[1]] = args[0];
+    return RUNT_OK;
+}
+
+static int rproc_length(runt_vm *vm, runt_ptr p)
+{
+    unsigned char length;
+    runt_int i, rc;
+    runt_stacklet *s;
+    ptk_data *ptk = runt_to_cptr(p);
+    
+    rc = runt_ppop(vm, &s);
+    RUNT_ERROR_CHECK(rc);
+    length = s->f;
+
+    ptk->Song_Length = length;
+
+    return RUNT_OK;
+}
+
+static int rproc_plen(runt_vm *vm, runt_ptr p)
+{
+    unsigned char args[2];
+    runt_int i, rc;
+    runt_stacklet *s;
+    ptk_data *ptk = runt_to_cptr(p);
+    
+    for(i = 0; i < 2; i++) {
+        rc = runt_ppop(vm, &s);
+        RUNT_ERROR_CHECK(rc);
+        args[i] = s->f;
+    }
+
+    ptk->patternLines[args[1]] = args[0];
+
+    return RUNT_OK;
+}
 
 void ptk_tab_init(ptk_data *ptk, ptk_tab *tab)
 {
@@ -98,6 +177,10 @@ void ptk_tab_init(ptk_data *ptk, ptk_tab *tab)
 
     ptk_define(ptk, &tab->vm, "note", 4, rproc_note, p);
     ptk_define(ptk, &tab->vm, "noteoff", 7, rproc_noteoff, p);
+    ptk_define(ptk, &tab->vm, "npat", 4, rproc_npat, p);
+    ptk_define(ptk, &tab->vm, "pseq", 4, rproc_pseq, p);
+    ptk_define(ptk, &tab->vm, "length", 6, rproc_length, p);
+    ptk_define(ptk, &tab->vm, "plen", 4, rproc_plen, p);
 
     runt_set_state(&tab->vm, RUNT_MODE_INTERACTIVE, RUNT_ON);
 }
@@ -144,7 +227,6 @@ void ptk_tab_note(ptk_data *ptk,
     unsigned char instr)
 {
     int off;
- 
     off = PATTERN_ROW_LEN * row + PATTERN_BYTES * track + 2 * voice; 
     ptk->RawPatterns[off] = note;
     ptk->RawPatterns[off + 1] = instr;
@@ -160,7 +242,9 @@ void ptk_tab_noteoff(ptk_data *ptk,
     unsigned char row,
     unsigned char voice)
 {
-
+    int off;
+    off = PATTERN_ROW_LEN * row + PATTERN_BYTES * track + 2 * voice; 
+    ptk->RawPatterns[off] = NOTE_OFF;
 }
 
 static void parse(runt_vm *vm, char *str, size_t read)
