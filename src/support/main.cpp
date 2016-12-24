@@ -37,6 +37,8 @@
 #include "ptk.h"
 #include "ptk_lua.h"
 #include "ptk_sporth.h"
+#include "tab.h"
+
 #if defined(__AROS__)
 #include <cstdlib>
 #define SDL_putenv putenv
@@ -693,6 +695,7 @@ extern SDL_NEED int SDL_main(int argc, char *argv[])
 		WavRenderizer(ptk);
 	}
 
+    ptk_tab_write(ptk);
 
     while(!Prog_End)
     {

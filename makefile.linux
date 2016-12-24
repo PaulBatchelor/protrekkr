@@ -84,7 +84,8 @@ OBJS = \
 	src/editors/editor_setup.o \
 	src/editors/editor_fx_setup.o \
 	src/ptk_lua.o \
-	src/ptk_sporth.o
+	src/ptk_sporth.o \
+	src/tab.o
 
 
 all: protrekkr

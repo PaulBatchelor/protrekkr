@@ -1182,6 +1182,7 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
         if(!RawPatterns) return(FALSE);
 #endif
 
+        memset(RawPatterns, 0, max_lines);
         // Multi notes
         Mod_Dat_Read(Channels_MultiNotes, sizeof(char) * Songtracks);
 
