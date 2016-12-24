@@ -670,7 +670,7 @@ void Display_Patt_Line(ptk_data *ptk, int In_Prev_Next, int Shadow_Pattern,
 
         for(i = 0; i < Channels_Effects[tracky]; i++)
         {
-            p_e_sync = *(RawPatterns + offset_t + PATTERN_FX + (i * 2));
+            p_e_sync = *(ptk->RawPatterns + offset_t + PATTERN_FX + (i * 2));
             if(p_e_sync == 0x7) synchro_fx = TRUE;
         }
     }
@@ -688,9 +688,9 @@ void Display_Patt_Line(ptk_data *ptk, int In_Prev_Next, int Shadow_Pattern,
         unsigned char p_b;
         unsigned char p_bh;
         
-        unsigned char p_c = *(RawPatterns + offset_t + PATTERN_VOLUME);
+        unsigned char p_c = *(ptk->RawPatterns + offset_t + PATTERN_VOLUME);
         unsigned char p_ch = p_c & 0xf;
-        unsigned char p_d = *(RawPatterns + offset_t + PATTERN_PANNING);
+        unsigned char p_d = *(ptk->RawPatterns + offset_t + PATTERN_PANNING);
         unsigned char p_dh = p_d & 0xf;
         
         unsigned char p_e[MAX_FX];
@@ -700,9 +700,9 @@ void Display_Patt_Line(ptk_data *ptk, int In_Prev_Next, int Shadow_Pattern,
          
          for(i = 0 ; i < Channels_Effects[cur_track]; i++)
          {
-            p_e[i] = *(RawPatterns + offset_t + PATTERN_FX + (i * 2));
+            p_e[i] = *(ptk->RawPatterns + offset_t + PATTERN_FX + (i * 2));
             p_eh[i] = p_e[i] & 0xf;
-            p_f[i] = *(RawPatterns + offset_t + PATTERN_FXDATA + (i * 2));
+            p_f[i] = *(ptk->RawPatterns + offset_t + PATTERN_FXDATA + (i * 2));
             p_fh[i] = p_f[i] & 0xf;
         }
 
@@ -717,8 +717,8 @@ void Display_Patt_Line(ptk_data *ptk, int In_Prev_Next, int Shadow_Pattern,
         // Notes/Instruments
         for(i = 0; i < Channels_MultiNotes[cur_track]; i++)
         {
-            p_a = *(RawPatterns + offset_t + PATTERN_NOTE1 + (i * 2));
-            p_b = *(RawPatterns + offset_t + PATTERN_INSTR1 + (i * 2));
+            p_a = *(ptk->RawPatterns + offset_t + PATTERN_NOTE1 + (i * 2));
+            p_b = *(ptk->RawPatterns + offset_t + PATTERN_INSTR1 + (i * 2));
             p_bh = p_b & 0xf;
 
             dover_break = dover + (Cur_Char_size[cur_track] * 3);
@@ -1004,17 +1004,17 @@ Write_Fx:
     for(i = 0; i < Channels_Effects[Cur_Track]; i++)
     {
         // A fx similar is already there: let's replace it with a new value
-        if(*(RawPatterns + offset_t + PATTERN_FX + (i * 2)) == Cmd)
+        if(*(ptk->RawPatterns + offset_t + PATTERN_FX + (i * 2)) == Cmd)
         {
-            *(RawPatterns + offset_t + PATTERN_FXDATA + (i * 2)) = Data;
+            *(ptk->RawPatterns + offset_t + PATTERN_FXDATA + (i * 2)) = Data;
             return;
         }
         // Place it on the first empty column otherwise
-        if(*(RawPatterns + offset_t + PATTERN_FX + (i * 2)) == 0 &&
-           *(RawPatterns + offset_t + PATTERN_FXDATA + (i * 2)) == 0)
+        if(*(ptk->RawPatterns + offset_t + PATTERN_FX + (i * 2)) == 0 &&
+           *(ptk->RawPatterns + offset_t + PATTERN_FXDATA + (i * 2)) == 0)
         {
-            *(RawPatterns + offset_t + PATTERN_FX + (i * 2)) = Cmd;
-            *(RawPatterns + offset_t + PATTERN_FXDATA + (i * 2)) = Data;
+            *(ptk->RawPatterns + offset_t + PATTERN_FX + (i * 2)) = Cmd;
+            *(ptk->RawPatterns + offset_t + PATTERN_FXDATA + (i * 2)) = Data;
             return;
         }
     }
@@ -1035,8 +1035,8 @@ Write_Fx:
     if(Channels_Effects[Cur_Track] < MAX_FX)
     {
         Channels_Effects[Cur_Track]++;
-        *(RawPatterns + offset_t + PATTERN_FX + ((Channels_Effects[Cur_Track] - 1) * 2)) = Cmd;
-        *(RawPatterns + offset_t + PATTERN_FXDATA + ((Channels_Effects[Cur_Track] - 1) * 2)) = Data;
+        *(ptk->RawPatterns + offset_t + PATTERN_FX + ((Channels_Effects[Cur_Track] - 1) * 2)) = Cmd;
+        *(ptk->RawPatterns + offset_t + PATTERN_FXDATA + ((Channels_Effects[Cur_Track] - 1) * 2)) = Data;
         return;
     }
     // We couldn't record the command
@@ -1075,7 +1075,7 @@ void draw_pated_highlight(ptk_data *ptk, int track, int line, int petrack, int r
 
     pattern = pSequence[Cur_Position];
 
-    if(RawPatterns)
+    if(ptk->RawPatterns)
     {
         if(tVisible_Columns > Songtracks) tVisible_Columns = Songtracks;
 
@@ -1087,7 +1087,7 @@ void draw_pated_highlight(ptk_data *ptk, int track, int line, int petrack, int r
 
             for(i = 0; i < Channels_Effects[tracky]; i++)
             {
-                p_e_sync = *(RawPatterns + offset_t + PATTERN_FX + (i * 2));
+                p_e_sync = *(ptk->RawPatterns + offset_t + PATTERN_FX + (i * 2));
                 if(p_e_sync == 0x7) synchro_fx = TRUE;
             }
         }
@@ -1113,9 +1113,9 @@ void draw_pated_highlight(ptk_data *ptk, int track, int line, int petrack, int r
             unsigned char p_b;
             unsigned char p_bh;
 
-            unsigned char p_c = *(RawPatterns + offset_t + PATTERN_VOLUME);
+            unsigned char p_c = *(ptk->RawPatterns + offset_t + PATTERN_VOLUME);
             unsigned char p_ch = p_c & 0xf;
-            unsigned char p_d = *(RawPatterns + offset_t + PATTERN_PANNING);
+            unsigned char p_d = *(ptk->RawPatterns + offset_t + PATTERN_PANNING);
             unsigned char p_dh = p_d & 0xf;
             
             unsigned char p_e[MAX_FX];
@@ -1125,9 +1125,9 @@ void draw_pated_highlight(ptk_data *ptk, int track, int line, int petrack, int r
          
             for(i = 0 ; i < Channels_Effects[cur_track]; i++)
             {
-                p_e[i] = *(RawPatterns + offset_t + PATTERN_FX + (i * 2));
+                p_e[i] = *(ptk->RawPatterns + offset_t + PATTERN_FX + (i * 2));
                 p_eh[i] = p_e[i] & 0xf;
-                p_f[i] = *(RawPatterns + offset_t + PATTERN_FXDATA + (i * 2));
+                p_f[i] = *(ptk->RawPatterns + offset_t + PATTERN_FXDATA + (i * 2));
                 p_fh[i] = p_f[i] & 0xf;
             }
 
@@ -1148,8 +1148,8 @@ void draw_pated_highlight(ptk_data *ptk, int track, int line, int petrack, int r
             // Notes/Instruments
             for(i = 0; i < Channels_MultiNotes[cur_track]; i++)
             {
-                p_a = *(RawPatterns + offset_t + PATTERN_NOTE1 + (i * 2));
-                p_b = *(RawPatterns + offset_t + PATTERN_INSTR1 + (i * 2));
+                p_a = *(ptk->RawPatterns + offset_t + PATTERN_NOTE1 + (i * 2));
+                p_b = *(ptk->RawPatterns + offset_t + PATTERN_INSTR1 + (i * 2));
                 p_bh = p_b & 0xf;
 
                 // Note
@@ -1480,10 +1480,10 @@ void draw_pated_highlight(ptk_data *ptk, int track, int line, int petrack, int r
                             break;
                         case LIVE_PARAM_TRACK_PANNING:
                             if(ptk->livevalue > 0x80) ptk->livevalue = 0x80;
-                            *(RawPatterns + offset_t + PATTERN_PANNING) = ptk->livevalue;
+                            *(ptk->RawPatterns + offset_t + PATTERN_PANNING) = ptk->livevalue;
                             break;
                         case LIVE_PARAM_TRACK_VOLUME:
-                            *(RawPatterns + offset_t + PATTERN_VOLUME) = ptk->livevalue;
+                            *(ptk->RawPatterns + offset_t + PATTERN_VOLUME) = ptk->livevalue;
                             break;
                         case LIVE_PARAM_303_1_CUTOFF:
                             Record_Live_Fx(ptk, cur_track, pattern, line, 0x33, ptk->livevalue, TRUE);

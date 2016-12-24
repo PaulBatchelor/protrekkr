@@ -223,7 +223,7 @@ extern unsigned char track3031;
 extern unsigned char track3032;
 #endif
 
-extern unsigned char *RawPatterns;
+//extern unsigned char *RawPatterns;
 extern int Song_Position;
 extern unsigned int lchorus_counter;
 extern unsigned int rchorus_counter;

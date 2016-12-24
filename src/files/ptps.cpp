@@ -334,7 +334,7 @@ int SavePtp(ptk_data *ptk, FILE *in, int Simulate, char *FileName)
         if(!done_pattern[pSequence[i]])
         {
             memcpy(New_RawPatterns + (int_pattern * PATTERN_LEN),
-                   RawPatterns + (pSequence[i] * PATTERN_LEN),
+                   ptk->RawPatterns + (pSequence[i] * PATTERN_LEN),
                    PATTERN_LEN);
             New_patternLines[int_pattern] = patternLines[pSequence[i]];
             Old_pSequence[i] = pSequence[i];

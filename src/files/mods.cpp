@@ -698,8 +698,8 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                                             for(k = 0; k < channels; k++)
                                             {
                                                 int free_chan = Get_Pattern_Offset(ptk, pSequence[pwrite], k, li2);
-                                                if(*(RawPatterns + free_chan + PATTERN_FX2) == 0xf0 &&
-                                                   *(RawPatterns + free_chan + PATTERN_FXDATA2) == found_tempo)
+                                                if(*(ptk->RawPatterns + free_chan + PATTERN_FX2) == 0xf0 &&
+                                                   *(ptk->RawPatterns + free_chan + PATTERN_FXDATA2) == found_tempo)
                                                 {
                                                     found_free_chan = TRUE;
                                                 }
@@ -710,13 +710,13 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                                                 for(k = 0; k < channels; k++)
                                                 {
                                                     int free_chan = Get_Pattern_Offset(ptk, pSequence[pwrite], k, li2);
-                                                    if(!*(RawPatterns + free_chan + PATTERN_FX2))
+                                                    if(!*(ptk->RawPatterns + free_chan + PATTERN_FX2))
                                                     {
                                                         found_free_chan = TRUE;
                                                         //if(last_tempo != found_tempo)
                                                         {
-                                                            *(RawPatterns + free_chan + PATTERN_FX2) = 0xf0;
-                                                            *(RawPatterns + free_chan + PATTERN_FXDATA2) = found_tempo;
+                                                            *(ptk->RawPatterns + free_chan + PATTERN_FX2) = 0xf0;
+                                                            *(ptk->RawPatterns + free_chan + PATTERN_FXDATA2) = found_tempo;
                                                             Channels_Effects[k] = 2;
                                                             last_tempo = found_tempo;
                                                         }
@@ -729,8 +729,8 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                                                 // Extend more (now we can do that)
                                                 //if(last_tempo != found_tempo)
                                                 {
-                                                    *(RawPatterns + tmo + PATTERN_FX3) = 0xf0;
-                                                    *(RawPatterns + tmo + PATTERN_FXDATA3) = found_tempo;
+                                                    *(ptk->RawPatterns + tmo + PATTERN_FX3) = 0xf0;
+                                                    *(ptk->RawPatterns + tmo + PATTERN_FXDATA3) = found_tempo;
                                                     Channels_Effects[pw2] = 3;
                                                     last_tempo = found_tempo;
                                                 }
@@ -744,8 +744,8 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                                 }
                                 //if(last_speed != Cmd_Dat)
                                 {
-                                    *(RawPatterns + tmo + PATTERN_FX) = Cmd;
-                                    *(RawPatterns + tmo + PATTERN_FXDATA) = Cmd_Dat;
+                                    *(ptk->RawPatterns + tmo + PATTERN_FX) = Cmd;
+                                    *(ptk->RawPatterns + tmo + PATTERN_FXDATA) = Cmd_Dat;
                                     last_speed = Cmd_Dat;
                                 }
                                 break;
@@ -773,8 +773,8 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                         // Period Conversion Table
                         Note = Conv_Amiga_Note(t_period);
 
-                        *(RawPatterns + tmo + PATTERN_NOTE1) = Note;
-                        *(RawPatterns + tmo + PATTERN_INSTR1) = t_sample;
+                        *(ptk->RawPatterns + tmo + PATTERN_NOTE1) = Note;
+                        *(ptk->RawPatterns + tmo + PATTERN_INSTR1) = t_sample;
 
                         // There was a vibrato
                         if(vib_chan[pw2] == TRUE)
@@ -782,17 +782,17 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                             // But no more
                             if(Cmd != 4 && Cmd != 6)
                             {
-                                if(*(RawPatterns + tmo + PATTERN_FX2) == 0x1d)
+                                if(*(ptk->RawPatterns + tmo + PATTERN_FX2) == 0x1d)
                                 {
                                     vib_chan[pw2] = FALSE;
                                 }
                                 else
                                 {
                                     // Stop it or delay it
-                                    if(!*(RawPatterns + tmo + PATTERN_FX2))
+                                    if(!*(ptk->RawPatterns + tmo + PATTERN_FX2))
                                     {
-                                        *(RawPatterns + tmo + PATTERN_FX2) = 0x1d;
-                                        *(RawPatterns + tmo + PATTERN_FXDATA2) = 0;
+                                        *(ptk->RawPatterns + tmo + PATTERN_FX2) = 0x1d;
+                                        *(ptk->RawPatterns + tmo + PATTERN_FXDATA2) = 0;
                                         Channels_Effects[pw2] = 2;
                                         vib_chan[pw2] = FALSE;
                                     }
@@ -806,17 +806,17 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                             // But no more
                             if(Cmd != 0 || (Cmd == 0 && Cmd_Dat == 0))
                             {
-                                if(*(RawPatterns + tmo + PATTERN_FX2) == 0x1b)
+                                if(*(ptk->RawPatterns + tmo + PATTERN_FX2) == 0x1b)
                                 {
                                     arp_chan[pw2] = FALSE;
                                 }
                                 else
                                 {
                                     // Stop it or delay it
-                                    if(!*(RawPatterns + tmo + PATTERN_FX2))
+                                    if(!*(ptk->RawPatterns + tmo + PATTERN_FX2))
                                     {
-                                        *(RawPatterns + tmo + PATTERN_FX2) = 0x1b;
-                                        *(RawPatterns + tmo + PATTERN_FXDATA2) = 0;
+                                        *(ptk->RawPatterns + tmo + PATTERN_FX2) = 0x1b;
+                                        *(ptk->RawPatterns + tmo + PATTERN_FXDATA2) = 0;
                                         Channels_Effects[pw2] = 2;
                                         arp_chan[pw2] = FALSE;
                                     }
@@ -874,16 +874,16 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                                     if(Cmd_Dat >= 16)
                                     {
                                         // Vol SlideUp
-                                        *(RawPatterns + tmo + PATTERN_FX2) = 0x19;
-                                        *(RawPatterns + tmo + PATTERN_FXDATA2) = (int) Scale_AmigaMod_Value(Cmd_Dat >> 4,
+                                        *(ptk->RawPatterns + tmo + PATTERN_FX2) = 0x19;
+                                        *(ptk->RawPatterns + tmo + PATTERN_FXDATA2) = (int) Scale_AmigaMod_Value(Cmd_Dat >> 4,
                                                                                                             (31 - (cur_speed - 1)) * 2.5f,
                                                                                                             255.0f);
                                         Channels_Effects[pw2] = 2;
                                     }
                                     else
                                     {
-                                        *(RawPatterns + tmo + PATTERN_FX2) = 0x1a;
-                                        *(RawPatterns + tmo + PATTERN_FXDATA2) = (int) Scale_AmigaMod_Value(Cmd_Dat & 0xf,
+                                        *(ptk->RawPatterns + tmo + PATTERN_FX2) = 0x1a;
+                                        *(ptk->RawPatterns + tmo + PATTERN_FXDATA2) = (int) Scale_AmigaMod_Value(Cmd_Dat & 0xf,
                                                                                                             (31 - (cur_speed - 1)) * 2.5f,
                                                                                                             255.0f);
                                         Channels_Effects[pw2] = 2;
@@ -899,16 +899,16 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                                     if(Cmd_Dat >= 16)
                                     {
                                         // Vol SlideUp
-                                        *(RawPatterns + tmo + PATTERN_FX2) = 0x19;
-                                        *(RawPatterns + tmo + PATTERN_FXDATA2) = (int) Scale_AmigaMod_Value(Cmd_Dat >> 4,
+                                        *(ptk->RawPatterns + tmo + PATTERN_FX2) = 0x19;
+                                        *(ptk->RawPatterns + tmo + PATTERN_FXDATA2) = (int) Scale_AmigaMod_Value(Cmd_Dat >> 4,
                                                                                                             (31 - (cur_speed - 1)) * 2.5f,
                                                                                                             255.0f);
                                         Channels_Effects[pw2] = 2;
                                     }
                                     else
                                     {
-                                        *(RawPatterns + tmo + PATTERN_FX2) = 0x1a;
-                                        *(RawPatterns + tmo + PATTERN_FXDATA2) = (int) Scale_AmigaMod_Value(Cmd_Dat & 0xf,
+                                        *(ptk->RawPatterns + tmo + PATTERN_FX2) = 0x1a;
+                                        *(ptk->RawPatterns + tmo + PATTERN_FXDATA2) = (int) Scale_AmigaMod_Value(Cmd_Dat & 0xf,
                                                                                                             (31 - (cur_speed - 1)) * 2.5f,
                                                                                                             255.0f);
                                         Channels_Effects[pw2] = 2;
@@ -926,7 +926,7 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                                     if(channels > 4)
                                     {
                                         Cmd_Dat >>= 1;
-                                        *(RawPatterns + tmo + PATTERN_PANNING) = Cmd_Dat;
+                                        *(ptk->RawPatterns + tmo + PATTERN_PANNING) = Cmd_Dat;
                                         Cmd = 0;
                                         Cmd_Dat = 0;
                                     }
@@ -1083,7 +1083,7 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
                                     // NOTE CUT
                                     if(Cmd_Dat >= 0xc0 && Cmd_Dat < 0xd0)
                                     {
-                                        *(RawPatterns + tmo + PATTERN_VOLUME) = (Cmd_Dat & 0xf) | 0xf0;
+                                        *(ptk->RawPatterns + tmo + PATTERN_VOLUME) = (Cmd_Dat & 0xf) | 0xf0;
                                         Cmd = 0;
                                         Cmd_Dat = 0;
                                     }
@@ -1112,8 +1112,8 @@ void LoadAmigaMod(ptk_data *ptk, char *Name, const char *FileName, int channels,
 
                             } // Pattern FX adapter end.
 
-                            *(RawPatterns + tmo + PATTERN_FX) = Cmd;
-                            *(RawPatterns + tmo + PATTERN_FXDATA) = Cmd_Dat;
+                            *(ptk->RawPatterns + tmo + PATTERN_FX) = Cmd;
+                            *(ptk->RawPatterns + tmo + PATTERN_FXDATA) = Cmd_Dat;
                         }
                     }
                 }

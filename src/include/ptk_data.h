@@ -183,6 +183,8 @@ typedef struct {
     char edit_old_r;
     char edit_old_g;
     char edit_old_b;
+
+    unsigned char *RawPatterns;
 } ptk_data;
 
 #ifdef __cplusplus

@@ -261,14 +261,14 @@ void Mark_Block_End(ptk_data *ptk, int end_nibble, int start_track, int start_li
 // Blocks routines support stuff
 int Get_Pattern_Column(ptk_data *ptk, int Position, int xbc, int ybc)
 {
-   return(*(RawPatterns + (pSequence[Position] * PATTERN_LEN) +
+   return(*(ptk->RawPatterns + (pSequence[Position] * PATTERN_LEN) +
            (ybc * PATTERN_ROW_LEN) + (Get_Track_From_Nibble(ptk, Channels_MultiNotes, Channels_Effects, xbc) * PATTERN_BYTES) +
                                       Get_Byte_From_Column(ptk, Channels_MultiNotes, Channels_Effects, xbc)));
 }
 
 void Set_Pattern_Column(ptk_data *ptk, int Position, int xbc, int ybc, int Data)
 {
-    *(RawPatterns + (pSequence[Position] * PATTERN_LEN) +
+    *(ptk->RawPatterns + (pSequence[Position] * PATTERN_LEN) +
      (ybc * PATTERN_ROW_LEN) + (Get_Track_From_Nibble(ptk, Channels_MultiNotes, Channels_Effects, xbc) * PATTERN_BYTES) +
                                 Get_Byte_From_Column(ptk, Channels_MultiNotes, Channels_Effects, xbc)) = Data;
 }
@@ -1756,19 +1756,19 @@ void Insert_Track_Line(ptk_data *ptk, int track, int Position)
 
         for(i = 0; i < MAX_POLYPHONY; i++)
         {
-            *(RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_NOTE1 + (i * 2)) = *(RawPatterns + xoffseted + PATTERN_NOTE1 + (i * 2));
-            *(RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_INSTR1 + (i * 2)) = *(RawPatterns + xoffseted + PATTERN_INSTR1 + (i * 2));
+            *(ptk->RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_NOTE1 + (i * 2)) = *(ptk->RawPatterns + xoffseted + PATTERN_NOTE1 + (i * 2));
+            *(ptk->RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_INSTR1 + (i * 2)) = *(ptk->RawPatterns + xoffseted + PATTERN_INSTR1 + (i * 2));
         }
-        *(RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_VOLUME) = *(RawPatterns + xoffseted + PATTERN_VOLUME);
-        *(RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_PANNING) = *(RawPatterns + xoffseted + PATTERN_PANNING);
-        *(RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FX) = *(RawPatterns + xoffseted + PATTERN_FX);
-        *(RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FXDATA) = *(RawPatterns + xoffseted + PATTERN_FXDATA);
-        *(RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FX2) = *(RawPatterns + xoffseted + PATTERN_FX2);
-        *(RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FXDATA2) = *(RawPatterns + xoffseted + PATTERN_FXDATA2);
-        *(RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FX3) = *(RawPatterns + xoffseted + PATTERN_FX3);
-        *(RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FXDATA3) = *(RawPatterns + xoffseted + PATTERN_FXDATA3);
-        *(RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FX4) = *(RawPatterns + xoffseted + PATTERN_FX4);
-        *(RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FXDATA4) = *(RawPatterns + xoffseted + PATTERN_FXDATA4);
+        *(ptk->RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_VOLUME) = *(ptk->RawPatterns + xoffseted + PATTERN_VOLUME);
+        *(ptk->RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_PANNING) = *(ptk->RawPatterns + xoffseted + PATTERN_PANNING);
+        *(ptk->RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FX) = *(ptk->RawPatterns + xoffseted + PATTERN_FX);
+        *(ptk->RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FXDATA) = *(ptk->RawPatterns + xoffseted + PATTERN_FXDATA);
+        *(ptk->RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FX2) = *(ptk->RawPatterns + xoffseted + PATTERN_FX2);
+        *(ptk->RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FXDATA2) = *(ptk->RawPatterns + xoffseted + PATTERN_FXDATA2);
+        *(ptk->RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FX3) = *(ptk->RawPatterns + xoffseted + PATTERN_FX3);
+        *(ptk->RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FXDATA3) = *(ptk->RawPatterns + xoffseted + PATTERN_FXDATA3);
+        *(ptk->RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FX4) = *(ptk->RawPatterns + xoffseted + PATTERN_FX4);
+        *(ptk->RawPatterns + xoffseted + PATTERN_ROW_LEN + PATTERN_FXDATA4) = *(ptk->RawPatterns + xoffseted + PATTERN_FXDATA4);
     }
     xoffseted = Get_Pattern_Offset(ptk, pSequence[Position], track, Pattern_Line);
  
@@ -1803,19 +1803,19 @@ void Remove_Track_Line(ptk_data *ptk, int track, int Position)
         
         for(i = 0; i < MAX_POLYPHONY; i++)
         {
-            *(RawPatterns + xoffseted2 + PATTERN_NOTE1 + (i * 2)) = *(RawPatterns + xoffseted + PATTERN_NOTE1 + (i * 2));
-            *(RawPatterns + xoffseted2 + PATTERN_INSTR1 + (i * 2)) = *(RawPatterns + xoffseted + PATTERN_INSTR1 + (i * 2));
+            *(ptk->RawPatterns + xoffseted2 + PATTERN_NOTE1 + (i * 2)) = *(ptk->RawPatterns + xoffseted + PATTERN_NOTE1 + (i * 2));
+            *(ptk->RawPatterns + xoffseted2 + PATTERN_INSTR1 + (i * 2)) = *(ptk->RawPatterns + xoffseted + PATTERN_INSTR1 + (i * 2));
         }
-        *(RawPatterns + xoffseted2 + PATTERN_VOLUME) = *(RawPatterns + xoffseted + PATTERN_VOLUME);
-        *(RawPatterns + xoffseted2 + PATTERN_PANNING) = *(RawPatterns + xoffseted + PATTERN_PANNING);
-        *(RawPatterns + xoffseted2 + PATTERN_FX) = *(RawPatterns + xoffseted + PATTERN_FX);
-        *(RawPatterns + xoffseted2 + PATTERN_FXDATA) = *(RawPatterns + xoffseted + PATTERN_FXDATA);
-        *(RawPatterns + xoffseted2 + PATTERN_FX2) = *(RawPatterns + xoffseted + PATTERN_FX2);
-        *(RawPatterns + xoffseted2 + PATTERN_FXDATA2) = *(RawPatterns + xoffseted + PATTERN_FXDATA2);
-        *(RawPatterns + xoffseted2 + PATTERN_FX3) = *(RawPatterns + xoffseted + PATTERN_FX3);
-        *(RawPatterns + xoffseted2 + PATTERN_FXDATA3) = *(RawPatterns + xoffseted + PATTERN_FXDATA3);
-        *(RawPatterns + xoffseted2 + PATTERN_FX4) = *(RawPatterns + xoffseted + PATTERN_FX4);
-        *(RawPatterns + xoffseted2 + PATTERN_FXDATA4) = *(RawPatterns + xoffseted + PATTERN_FXDATA4);
+        *(ptk->RawPatterns + xoffseted2 + PATTERN_VOLUME) = *(ptk->RawPatterns + xoffseted + PATTERN_VOLUME);
+        *(ptk->RawPatterns + xoffseted2 + PATTERN_PANNING) = *(ptk->RawPatterns + xoffseted + PATTERN_PANNING);
+        *(ptk->RawPatterns + xoffseted2 + PATTERN_FX) = *(ptk->RawPatterns + xoffseted + PATTERN_FX);
+        *(ptk->RawPatterns + xoffseted2 + PATTERN_FXDATA) = *(ptk->RawPatterns + xoffseted + PATTERN_FXDATA);
+        *(ptk->RawPatterns + xoffseted2 + PATTERN_FX2) = *(ptk->RawPatterns + xoffseted + PATTERN_FX2);
+        *(ptk->RawPatterns + xoffseted2 + PATTERN_FXDATA2) = *(ptk->RawPatterns + xoffseted + PATTERN_FXDATA2);
+        *(ptk->RawPatterns + xoffseted2 + PATTERN_FX3) = *(ptk->RawPatterns + xoffseted + PATTERN_FX3);
+        *(ptk->RawPatterns + xoffseted2 + PATTERN_FXDATA3) = *(ptk->RawPatterns + xoffseted + PATTERN_FXDATA3);
+        *(ptk->RawPatterns + xoffseted2 + PATTERN_FX4) = *(ptk->RawPatterns + xoffseted + PATTERN_FX4);
+        *(ptk->RawPatterns + xoffseted2 + PATTERN_FXDATA4) = *(ptk->RawPatterns + xoffseted + PATTERN_FXDATA4);
     }
     xoffseted = Get_Pattern_Offset(ptk, pSequence[Position], track, 0) + (PATTERN_LEN - PATTERN_ROW_LEN);
 
@@ -1848,19 +1848,19 @@ void Clear_Track_Data(ptk_data *ptk, int offset)
 
     for(i = 0; i < MAX_POLYPHONY; i++)
     {
-        *(RawPatterns + offset + PATTERN_NOTE1 + (i * 2)) = 121;
-        *(RawPatterns + offset + PATTERN_INSTR1 + (i * 2)) = 255;
+        *(ptk->RawPatterns + offset + PATTERN_NOTE1 + (i * 2)) = 121;
+        *(ptk->RawPatterns + offset + PATTERN_INSTR1 + (i * 2)) = 255;
     }
-    *(RawPatterns + offset + PATTERN_VOLUME) = 255;
-    *(RawPatterns + offset + PATTERN_PANNING) = 255;
-    *(RawPatterns + offset + PATTERN_FX) = 0;
-    *(RawPatterns + offset + PATTERN_FXDATA) = 0;
-    *(RawPatterns + offset + PATTERN_FX2) = 0;
-    *(RawPatterns + offset + PATTERN_FXDATA2) = 0;
-    *(RawPatterns + offset + PATTERN_FX3) = 0;
-    *(RawPatterns + offset + PATTERN_FXDATA3) = 0;
-    *(RawPatterns + offset + PATTERN_FX4) = 0;
-    *(RawPatterns + offset + PATTERN_FXDATA4) = 0;
+    *(ptk->RawPatterns + offset + PATTERN_VOLUME) = 255;
+    *(ptk->RawPatterns + offset + PATTERN_PANNING) = 255;
+    *(ptk->RawPatterns + offset + PATTERN_FX) = 0;
+    *(ptk->RawPatterns + offset + PATTERN_FXDATA) = 0;
+    *(ptk->RawPatterns + offset + PATTERN_FX2) = 0;
+    *(ptk->RawPatterns + offset + PATTERN_FXDATA2) = 0;
+    *(ptk->RawPatterns + offset + PATTERN_FX3) = 0;
+    *(ptk->RawPatterns + offset + PATTERN_FXDATA3) = 0;
+    *(ptk->RawPatterns + offset + PATTERN_FX4) = 0;
+    *(ptk->RawPatterns + offset + PATTERN_FXDATA4) = 0;
 }
 
 // ------------------------------------------------------
@@ -1874,7 +1874,7 @@ int Alloc_Patterns_Pool(ptk_data *ptk)
 
     nPatterns = 1;
 
-    if((RawPatterns = (unsigned char *) malloc(PATTERN_POOL_SIZE)) != NULL)
+    if((ptk->RawPatterns = (unsigned char *) malloc(PATTERN_POOL_SIZE)) != NULL)
     {
         Clear_Patterns_Pool(ptk);
         return TRUE;
@@ -2190,19 +2190,19 @@ void Copy_Track(ptk_data *ptk, int Position, int Track_Src, int Track_Dst)
 
         for(j = 0; j < MAX_POLYPHONY; j++)
         {
-            *(RawPatterns + offset_dst + PATTERN_NOTE1 + (j * 2)) = *(RawPatterns + offset_src + PATTERN_NOTE1 + (j * 2));
-            *(RawPatterns + offset_dst + PATTERN_INSTR1 + (j * 2)) = *(RawPatterns + offset_src + PATTERN_INSTR1 + (j * 2));
+            *(ptk->RawPatterns + offset_dst + PATTERN_NOTE1 + (j * 2)) = *(ptk->RawPatterns + offset_src + PATTERN_NOTE1 + (j * 2));
+            *(ptk->RawPatterns + offset_dst + PATTERN_INSTR1 + (j * 2)) = *(ptk->RawPatterns + offset_src + PATTERN_INSTR1 + (j * 2));
         }
-        *(RawPatterns + offset_dst + PATTERN_VOLUME) = *(RawPatterns + offset_src + PATTERN_VOLUME);
-        *(RawPatterns + offset_dst + PATTERN_PANNING) = *(RawPatterns + offset_src + PATTERN_PANNING);
-        *(RawPatterns + offset_dst + PATTERN_FX) = *(RawPatterns + offset_src + PATTERN_FX);
-        *(RawPatterns + offset_dst + PATTERN_FXDATA) = *(RawPatterns + offset_src + PATTERN_FXDATA);
-        *(RawPatterns + offset_dst + PATTERN_FX2) = *(RawPatterns + offset_src + PATTERN_FX2);
-        *(RawPatterns + offset_dst + PATTERN_FXDATA2) = *(RawPatterns + offset_src + PATTERN_FXDATA2);
-        *(RawPatterns + offset_dst + PATTERN_FX3) = *(RawPatterns + offset_src + PATTERN_FX3);
-        *(RawPatterns + offset_dst + PATTERN_FXDATA3) = *(RawPatterns + offset_src + PATTERN_FXDATA3);
-        *(RawPatterns + offset_dst + PATTERN_FX4) = *(RawPatterns + offset_src + PATTERN_FX4);
-        *(RawPatterns + offset_dst + PATTERN_FXDATA4) = *(RawPatterns + offset_src + PATTERN_FXDATA4);
+        *(ptk->RawPatterns + offset_dst + PATTERN_VOLUME) = *(ptk->RawPatterns + offset_src + PATTERN_VOLUME);
+        *(ptk->RawPatterns + offset_dst + PATTERN_PANNING) = *(ptk->RawPatterns + offset_src + PATTERN_PANNING);
+        *(ptk->RawPatterns + offset_dst + PATTERN_FX) = *(ptk->RawPatterns + offset_src + PATTERN_FX);
+        *(ptk->RawPatterns + offset_dst + PATTERN_FXDATA) = *(ptk->RawPatterns + offset_src + PATTERN_FXDATA);
+        *(ptk->RawPatterns + offset_dst + PATTERN_FX2) = *(ptk->RawPatterns + offset_src + PATTERN_FX2);
+        *(ptk->RawPatterns + offset_dst + PATTERN_FXDATA2) = *(ptk->RawPatterns + offset_src + PATTERN_FXDATA2);
+        *(ptk->RawPatterns + offset_dst + PATTERN_FX3) = *(ptk->RawPatterns + offset_src + PATTERN_FX3);
+        *(ptk->RawPatterns + offset_dst + PATTERN_FXDATA3) = *(ptk->RawPatterns + offset_src + PATTERN_FXDATA3);
+        *(ptk->RawPatterns + offset_dst + PATTERN_FX4) = *(ptk->RawPatterns + offset_src + PATTERN_FX4);
+        *(ptk->RawPatterns + offset_dst + PATTERN_FXDATA4) = *(ptk->RawPatterns + offset_src + PATTERN_FXDATA4);
     }
     Channels_Polyphony[Track_Dst] = Channels_Polyphony[Track_Src];
     Channels_MultiNotes[Track_Dst] = Channels_MultiNotes[Track_Src];

@@ -364,7 +364,7 @@ Read_Mod_File:
             Bytes_Per_Track = 6;
         }
 
-        TmpPatterns = RawPatterns;
+        TmpPatterns = ptk->RawPatterns;
         for(int pwrite = 0; pwrite < nPatterns; pwrite++)
         {
             TmpPatterns_Rows = TmpPatterns + (pwrite * PATTERN_LEN);
@@ -1187,7 +1187,7 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
             // Calc the real number of patterns
             for(j = 0; j < MAX_PATTERNS; j++)
             {
-                cur_pattern_col = RawPatterns + (j * PATTERN_LEN);
+                cur_pattern_col = ptk->RawPatterns + (j * PATTERN_LEN);
                 found_dat_in_patt = FALSE;
                 // Next column
                 for(i = 0; i < Songtracks; i++)
@@ -1267,7 +1267,7 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
             for(i = Songtracks; i < MAX_TRACKS; i++)
             {
                 // Next column
-                cur_pattern_col = RawPatterns + (i * PATTERN_BYTES);
+                cur_pattern_col = ptk->RawPatterns + (i * PATTERN_BYTES);
                 for(j = 0; j < nPatterns; j++)
                 {
                     // Next pattern
@@ -1298,7 +1298,7 @@ int SavePtk(ptk_data *ptk, char *FileName, int NewFormat, int Simulate, Uint8 *M
 
             for(int pwrite = 0; pwrite < nPatterns; pwrite++)
             {
-                Write_Mod_Data(ptk, RawPatterns + (pwrite * PATTERN_LEN),
+                Write_Mod_Data(ptk, ptk->RawPatterns + (pwrite * PATTERN_LEN),
                                sizeof(char), PATTERN_LEN, in);
             }
 
@@ -1901,7 +1901,7 @@ unsigned long Calc_Length(ptk_data *ptk)
         have_break = 255;
         while(pos_patt < patternLines[pSequence[i]])
         {
-            Cur_Patt = RawPatterns + (pSequence[i] * PATTERN_LEN) + (pos_patt * PATTERN_ROW_LEN);
+            Cur_Patt = ptk->RawPatterns + (pSequence[i] * PATTERN_LEN) + (pos_patt * PATTERN_ROW_LEN);
             if(!PosTicks)
             {
                 for(k = 0; k < Songtracks; k++)
