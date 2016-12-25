@@ -307,7 +307,6 @@ int pl_note[MAX_POLYPHONY];
 int pl_sample[MAX_POLYPHONY];
 int pl_vol_row;
 int pl_pan_row;
-unsigned char *RawPatterns;
 int pl_eff_row[MAX_FX];
 int pl_dat_row[MAX_FX];
 int glide;
@@ -1161,17 +1160,17 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
         int max_lines = (PATTERN_LEN * ptk->nPatterns);
 
         // Free the patterns block
-        if(RawPatterns) free(RawPatterns);
+        if(ptk->RawPatterns) free(ptk->RawPatterns);
 
 #if defined(__PSP__)
-        RawPatterns = (unsigned char *) AUDIO_malloc_64(&max_lines);
-        if(!RawPatterns) return(FALSE);
+        ptk->RawPatterns = (unsigned char *) AUDIO_malloc_64(&max_lines);
+        if(!ptk->RawPatterns) return(FALSE);
 #else
-        RawPatterns = (unsigned char *) malloc(max_lines);
-        if(!RawPatterns) return(FALSE);
+        ptk->RawPatterns = (unsigned char *) malloc(max_lines);
+        if(!ptk->RawPatterns) return(FALSE);
 #endif
 
-        memset(RawPatterns, 0, max_lines);
+        memset(ptk->RawPatterns, 0, max_lines);
         // Multi notes
         Mod_Dat_Read(Channels_MultiNotes, sizeof(char) * Songtracks);
 
@@ -1189,7 +1188,7 @@ int PTKEXPORT Ptk_InitModule(Uint8 *Module, int start_position)
             Mod_Dat_Read(&EqDat[i].hg, sizeof(float));
         }
 
-        TmpPatterns = RawPatterns;
+        TmpPatterns = ptk->RawPatterns;
         for(int pwrite = 0; pwrite < ptk->nPatterns; pwrite++)
         {
             TmpPatterns_Rows = TmpPatterns + (pwrite * PATTERN_LEN);
@@ -1868,8 +1867,8 @@ void PTKEXPORT Ptk_Stop(ptk_data *ptk)
 
 #if defined(__STAND_ALONE__) && !defined(__WINAMP__)
     // Free the patterns block
-    if(RawPatterns) free(RawPatterns);
-    RawPatterns = NULL;
+    if(ptk->RawPatterns) free(ptk->RawPatterns);
+    ptk->RawPatterns = NULL;
 #endif
 
 }
@@ -2351,7 +2350,7 @@ void Sp_Player(ptk_data *ptk)
 				if(ptk->sporth.use_sporth) {
 					if(ct < 16) {
 						int note = 
-							*(RawPatterns + efactor + PATTERN_NOTE1 + (0 * 2));
+							*(ptk->RawPatterns + efactor + PATTERN_NOTE1 + (0 * 2));
 						if(note < 120) {
 							ptk->sporth.notes->tbl[ct] = note;
 							ptk->sporth.gates->tbl[ct] = 1;
@@ -2367,8 +2366,8 @@ void Sp_Player(ptk_data *ptk)
 				}
                 for(i = 0; i < Channels_MultiNotes[ct]; i++)
                 {
-                    pl_note[i] = *(RawPatterns + efactor + PATTERN_NOTE1 + (i * 2));
-                    pl_sample[i] = *(RawPatterns + efactor + PATTERN_INSTR1 + (i * 2));
+                    pl_note[i] = *(ptk->RawPatterns + efactor + PATTERN_NOTE1 + (i * 2));
+                    pl_sample[i] = *(ptk->RawPatterns + efactor + PATTERN_INSTR1 + (i * 2));
                     if(pl_note[i] < 120) {
                         if((ptk->note_cb) & 1 << ct) {
                             ptk_lua_note_call(ptk, ct, i, pl_note[i]);
@@ -2381,14 +2380,14 @@ void Sp_Player(ptk_data *ptk)
                     }
                 }
 
-                pl_vol_row = *(RawPatterns + efactor + PATTERN_VOLUME);
-                pl_pan_row = *(RawPatterns + efactor + PATTERN_PANNING);
+                pl_vol_row = *(ptk->RawPatterns + efactor + PATTERN_VOLUME);
+                pl_pan_row = *(ptk->RawPatterns + efactor + PATTERN_PANNING);
                 
                 // Store the effects
                 for(i = 0; i < Channels_Effects[ct]; i++)
                 {
-                    pl_eff_row[i] = *(RawPatterns + efactor + PATTERN_FX + (i * 2));
-                    pl_dat_row[i] = *(RawPatterns + efactor + PATTERN_FXDATA + (i * 2));
+                    pl_eff_row[i] = *(ptk->RawPatterns + efactor + PATTERN_FX + (i * 2));
+                    pl_dat_row[i] = *(ptk->RawPatterns + efactor + PATTERN_FXDATA + (i * 2));
 
 #if defined(PTK_303)
                     // 303 are always available
@@ -4316,8 +4315,8 @@ void Do_Effects_Tick_0(ptk_data *ptk)
 
         for(j = 0; j < Channels_Effects[trackef]; j++)
         {
-            pltr_eff_row[j] = *(RawPatterns + tefactor + PATTERN_FX + (j * 2));
-            pltr_dat_row[j] = *(RawPatterns + tefactor + PATTERN_FXDATA + (j * 2));
+            pltr_eff_row[j] = *(ptk->RawPatterns + tefactor + PATTERN_FX + (j * 2));
+            pltr_dat_row[j] = *(ptk->RawPatterns + tefactor + PATTERN_FXDATA + (j * 2));
 
             switch(pltr_eff_row[j])
             {
@@ -4462,8 +4461,8 @@ void Do_Pattern_Loop(ptk_data *ptk, int track)
 
     for(j = 0; j < Channels_Effects[track]; j++)
     {
-        pltr_eff_row[j] = *(RawPatterns + tefactor + PATTERN_FX + (j * 2));
-        pltr_dat_row[j] = *(RawPatterns + tefactor + PATTERN_FXDATA + (j * 2));
+        pltr_eff_row[j] = *(ptk->RawPatterns + tefactor + PATTERN_FX + (j * 2));
+        pltr_dat_row[j] = *(ptk->RawPatterns + tefactor + PATTERN_FXDATA + (j * 2));
 
         switch(pltr_eff_row[j])
         {
@@ -4537,17 +4536,17 @@ void Do_Effects_Ticks_X(ptk_data *ptk)
         // Get the notes for this track
         for(i = 0; i < Channels_MultiNotes[trackef]; i++)
         {
-            pltr_note[i] = *(RawPatterns + tefactor + PATTERN_NOTE1 + (i * 2));
-            pltr_sample[i] = *(RawPatterns + tefactor + PATTERN_INSTR1 + (i * 2));
+            pltr_note[i] = *(ptk->RawPatterns + tefactor + PATTERN_NOTE1 + (i * 2));
+            pltr_sample[i] = *(ptk->RawPatterns + tefactor + PATTERN_INSTR1 + (i * 2));
         }
 
-        unsigned char pltr_vol_row = *(RawPatterns + tefactor + PATTERN_VOLUME);
+        unsigned char pltr_vol_row = *(ptk->RawPatterns + tefactor + PATTERN_VOLUME);
 
 #if defined(PTK_FX_0) || defined(PTK_FX_X)
         for(i = 0; i < Channels_Effects[trackef]; i++)
         {
-            pltr_eff_row[i] = *(RawPatterns + tefactor + PATTERN_FX + (i * 2));
-            pltr_dat_row[i] = *(RawPatterns + tefactor + PATTERN_FXDATA + (i * 2));
+            pltr_eff_row[i] = *(ptk->RawPatterns + tefactor + PATTERN_FX + (i * 2));
+            pltr_dat_row[i] = *(ptk->RawPatterns + tefactor + PATTERN_FXDATA + (i * 2));
         }
 #endif
 
