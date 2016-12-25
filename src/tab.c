@@ -6,6 +6,7 @@
 #include "tab.h"
 
 extern char Songtracks;
+extern char CHAN_ACTIVE_STATE[256][MAX_TRACKS];
 
 void ptk_tab_write(ptk_data *ptk)
 {
@@ -16,7 +17,8 @@ void ptk_tab_write(ptk_data *ptk)
     int pat;
     ptk_tab *tab = &ptk->tab;
     FILE *fp = tab->fp;
-    int i;
+    int i, p, t;
+    unsigned int pstate;
 
     fprintf(fp, "%d length\n", ptk->Song_Length);
 
@@ -30,6 +32,14 @@ void ptk_tab_write(ptk_data *ptk)
 
     for(i = 0; i < ptk->nPatterns; i++) {
         fprintf(fp, "%d %d plen\n", i, ptk->patternLines[i]);
+    }
+
+    for(p = 0; p < ptk->Song_Length; p++) {
+        pstate = 0;
+        for(t = 0; t < Songtracks; t++) {
+            if(CHAN_ACTIVE_STATE[p][t] == TRUE) pstate |= (1 << t);
+        }
+        fprintf(fp, "%d %d pstate\n", p, pstate);
     }
 
     for(track = 0; track < MAX_TRACKS; track++) {
@@ -191,6 +201,24 @@ static int rproc_plen(runt_vm *vm, runt_ptr p)
     return RUNT_OK;
 }
 
+static int rproc_pstate(runt_vm *vm, runt_ptr p)
+{
+    unsigned char args[2];
+    runt_int i, rc;
+    runt_stacklet *s;
+    ptk_data *ptk = runt_to_cptr(p);
+    
+    for(i = 0; i < 2; i++) {
+        rc = runt_ppop(vm, &s);
+        RUNT_ERROR_CHECK(rc);
+        args[i] = s->f;
+    }
+
+    ptk_tab_pstate(ptk, args[1], args[0]);
+
+    return RUNT_OK;
+}
+
 void ptk_tab_init(ptk_data *ptk, ptk_tab *tab)
 {
     runt_ptr p = runt_mk_cptr(&tab->vm, ptk);
@@ -209,6 +237,7 @@ void ptk_tab_init(ptk_data *ptk, ptk_tab *tab)
     ptk_define(ptk, &tab->vm, "length", 6, rproc_length, p);
     ptk_define(ptk, &tab->vm, "plen", 4, rproc_plen, p);
     ptk_define(ptk, &tab->vm, "ntracks", 7, rproc_ntracks, p);
+    ptk_define(ptk, &tab->vm, "pstate", 6, rproc_pstate, p);
 
     runt_set_state(&tab->vm, RUNT_MODE_INTERACTIVE, RUNT_ON);
 }
@@ -312,4 +341,18 @@ int ptk_tab_load(ptk_tab *tab, const char *filename)
 
     free(line);
     return RUNT_OK;
+}
+
+void ptk_tab_pstate(ptk_data *ptk,
+    unsigned char pat,
+    unsigned char state)
+{
+    int i;
+    for(i = 0; i < MAX_TRACKS; i++) {
+        if(state & (1 << i)) {
+            CHAN_ACTIVE_STATE[pat][i] = TRUE;
+        } else {
+            CHAN_ACTIVE_STATE[pat][i] = FALSE;
+        }
+    }
 }

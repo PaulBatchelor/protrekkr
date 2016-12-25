@@ -26,6 +26,9 @@ void ptk_tab_noteoff(ptk_data *ptk,
     unsigned char voice);
     
 int ptk_tab_load(ptk_tab *tab, const char *filename);
+void ptk_tab_pstate(ptk_data *ptk, 
+    unsigned char pat,
+    unsigned char state);
 #ifdef __cplusplus 
 }
 #endif
