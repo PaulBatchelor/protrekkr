@@ -79,6 +79,13 @@ void SaveConfig(ptk_data *ptk)
     sprintf(KeyboardName, "%s", Keyboard_Name);
 
     out = fopen(FileName, "wb");
+
+    /* make sure that the record bar is set to default color, not red */
+    Get_Phony_Palette();
+    Phony_Palette[COL_PATTERN_SEL_BACK].r = ptk->edit_old_r;
+    Phony_Palette[COL_PATTERN_SEL_BACK].g = ptk->edit_old_g;
+    Phony_Palette[COL_PATTERN_SEL_BACK].b = ptk->edit_old_b;
+    Set_Phony_Palette();
     if(out != NULL)
     {
         Write_Data(ptk, extension, sizeof(char), 9, out);
