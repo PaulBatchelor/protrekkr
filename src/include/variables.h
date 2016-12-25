@@ -509,9 +509,17 @@ void Newmod(ptk_data *ptk);
 void Initreverb(ptk_data *ptk);
 int Get_Number_Of_Splits(int n_index);
 void Clear_Instrument_Dat(int n_index, int split, int lenfir);
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 void AllocateWave(int n_index, int split, long lenfir,
                   int samplechans, int clear,
                   short *Waveform1, short *Waveform2);
+#ifdef __cplusplus
+}
+#endif
+
 void LoadFile(ptk_data *ptk, int Freeindex, const char *str);
 void RefreshSample(ptk_data *ptk);
 void ShowInfo(ptk_data *ptk);

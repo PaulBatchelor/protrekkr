@@ -2101,6 +2101,7 @@ void Clear_Instrument_Dat(int n_index, int split, int lenfir)
     }
 }
 
+extern "C" {
 // ------------------------------------------------------
 // Allocate space for a waveform
 void AllocateWave(int n_index, int split, long lenfir,
@@ -2157,6 +2158,7 @@ void AllocateWave(int n_index, int split, long lenfir,
     }
 }
 
+}
 // ------------------------------------------------------
 // Clear any pending input
 void Clear_Input(ptk_data *ptk)

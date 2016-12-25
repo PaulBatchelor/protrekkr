@@ -1013,7 +1013,6 @@ int Screen_Update(ptk_data *ptk)
                 Phony_Palette[COL_PATTERN_SEL_BACK].b = 1;
                 Set_Phony_Palette();
             } else {
-
                 Get_Phony_Palette();
                 Phony_Palette[COL_PATTERN_SEL_BACK].r = ptk->edit_old_r;
                 Phony_Palette[COL_PATTERN_SEL_BACK].g = ptk->edit_old_g;

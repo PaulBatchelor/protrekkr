@@ -1,4 +1,8 @@
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <errno.h>
 
 #include "ptk_data.h"
 #include "variables.h"
@@ -7,6 +11,59 @@
 
 extern char Songtracks;
 extern char CHAN_ACTIVE_STATE[256][MAX_TRACKS];
+extern short *RawSamples[MAX_INSTRS][2][MAX_INSTRS_SPLITS];
+extern char SampleType[MAX_INSTRS][16];
+
+extern Uint32 SampleLength[MAX_INSTRS][MAX_INSTRS_SPLITS];
+
+extern char Basenote[MAX_INSTRS][16];
+
+extern float Sample_Amplify[MAX_INSTRS][MAX_INSTRS_SPLITS];
+
+void AllocateWave(int n_index, int split, long lenfir,
+                  int samplechans, int clear,
+                  short *Waveform1, short *Waveform2);
+
+static void ptk_tab_write_raw(ptk_data *ptk, FILE *fp)
+{
+    DIR *dir = opendir("raw");
+    int index, split = 0;
+    char name[20];
+    FILE *tmp;
+
+    if(dir) closedir(dir);
+    else if(ENOENT == errno) {
+        mkdir("raw", 0755);
+    }
+
+    for(index = 0; index < MAX_INSTRS; index++) {
+        if(SampleType[index][split] != 0 ) {
+            sprintf(name, "raw/%02d%02d.raw", index, split);
+            tmp = fopen(name, "w");
+            fwrite(RawSamples[index][0][split],
+                sizeof(short),
+                SampleLength[index][split],
+                tmp);
+            fclose(tmp);
+            fprintf(fp, "%d %d %d \"%s\" loadraw\n",
+                index, split, SampleLength[index][split], name);
+        }
+    }
+}
+
+static void ptk_tab_load_raw(ptk_data *ptk,
+    int index,
+    int split,
+    Uint32 len,
+    const char *name)
+{
+    FILE *tmp = fopen(name, "rb");
+    SampleLength[index][split] = len;
+    AllocateWave(index, split, len, 1, FALSE, NULL, NULL);
+    fread(RawSamples[index][0][split], sizeof(short), len, tmp);
+    Sample_Amplify[index][split] = 1.0;
+    fclose(tmp);
+}
 
 void ptk_tab_write(ptk_data *ptk)
 {
@@ -41,6 +98,8 @@ void ptk_tab_write(ptk_data *ptk)
         }
         fprintf(fp, "%d %d pstate\n", p, pstate);
     }
+
+    ptk_tab_write_raw(ptk, fp);
 
     for(track = 0; track < MAX_TRACKS; track++) {
         for(pat = 0; pat < MAX_PATTERNS; pat++) {
@@ -219,6 +278,38 @@ static int rproc_pstate(runt_vm *vm, runt_ptr p)
     return RUNT_OK;
 }
 
+static int rproc_loadraw(runt_vm *vm, runt_ptr p)
+{
+    runt_int rc;
+    runt_stacklet *s;
+    runt_int index;
+    runt_int split;
+    Uint32 len;
+    const char *name;
+
+    ptk_data *ptk = runt_to_cptr(p);
+    
+    rc = runt_ppop(vm, &s);
+    RUNT_ERROR_CHECK(rc);
+    name = runt_to_string(s->p);
+    
+    rc = runt_ppop(vm, &s);
+    RUNT_ERROR_CHECK(rc);
+    len = s->f;
+
+    rc = runt_ppop(vm, &s);
+    RUNT_ERROR_CHECK(rc);
+    split = s->f;
+
+    rc = runt_ppop(vm, &s);
+    RUNT_ERROR_CHECK(rc);
+    index = s->f;
+
+    ptk_tab_load_raw(ptk, index, split, len, name);
+
+    return RUNT_OK;
+}
+
 void ptk_tab_init(ptk_data *ptk, ptk_tab *tab)
 {
     runt_ptr p = runt_mk_cptr(&tab->vm, ptk);
@@ -238,6 +329,7 @@ void ptk_tab_init(ptk_data *ptk, ptk_tab *tab)
     ptk_define(ptk, &tab->vm, "plen", 4, rproc_plen, p);
     ptk_define(ptk, &tab->vm, "ntracks", 7, rproc_ntracks, p);
     ptk_define(ptk, &tab->vm, "pstate", 6, rproc_pstate, p);
+    ptk_define(ptk, &tab->vm, "loadraw", 7, rproc_loadraw, p);
 
     runt_set_state(&tab->vm, RUNT_MODE_INTERACTIVE, RUNT_ON);
 }
