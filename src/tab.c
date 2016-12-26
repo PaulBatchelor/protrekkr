@@ -448,3 +448,12 @@ void ptk_tab_pstate(ptk_data *ptk,
         }
     }
 }
+
+void ptk_tab_globaldump(ptk_data *ptk)
+{
+    char file_name[MAX_PATH + 4];
+    snprintf(file_name, MAX_PATH + 4, "%s.rnt", ptk->name);
+    ptk_tab_open(&ptk->tab, file_name);
+    ptk_tab_write(ptk);
+    ptk_tab_close(&ptk->tab);
+}

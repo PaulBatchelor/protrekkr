@@ -29,6 +29,9 @@ int ptk_tab_load(ptk_tab *tab, const char *filename);
 void ptk_tab_pstate(ptk_data *ptk, 
     unsigned char pat,
     unsigned char state);
+
+void ptk_tab_globaldump(ptk_data *ptk);
+
 #ifdef __cplusplus 
 }
 #endif

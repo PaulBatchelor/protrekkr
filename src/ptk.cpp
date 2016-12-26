@@ -4390,6 +4390,18 @@ void Keyboard_Handler(ptk_data *ptk)
                     Cut_Selection(ptk, Cur_Position);
                 }
 
+        
+                // Dump File
+
+                if(Keys[SDLK_x - UNICODE_OFFSET2] &&
+                    Get_LShift() && !is_editing) 
+                {
+                    char tmp_msg[255];
+                    ptk_tab_globaldump(ptk);
+                    snprintf(tmp_msg, 255, "Successfully wrote to file %s.rnt", ptk->name);
+                    Status_Box(ptk, tmp_msg);
+                }
+
                 // Copy selected block
                 if(Keys[SDLK_c - UNICODE_OFFSET2] &&
                    block_start_track[Curr_Buff_Block] != -1 &&
