@@ -77,6 +77,8 @@ void ptk_tab_write(ptk_data *ptk)
     int i, p, t;
     unsigned int pstate;
 
+    fprintf(fp, "\"%s\" title\n", ptk->name);
+
     fprintf(fp, "%d length\n", ptk->Song_Length);
 
     fprintf(fp, "%d npat\n", ptk->nPatterns);
@@ -310,6 +312,23 @@ static int rproc_loadraw(runt_vm *vm, runt_ptr p)
     return RUNT_OK;
 }
 
+static int rproc_title(runt_vm *vm, runt_ptr p)
+{
+    runt_int rc;
+    runt_stacklet *s;
+    const char *name;
+
+    ptk_data *ptk = runt_to_cptr(p);
+
+    rc = runt_ppop(vm, &s);
+    RUNT_ERROR_CHECK(rc);
+    name = runt_to_string(s->p);
+
+    strncpy(ptk->name, name, MAX_PATH);
+
+    return RUNT_OK;
+}
+
 void ptk_tab_init(ptk_data *ptk, ptk_tab *tab)
 {
     runt_ptr p = runt_mk_cptr(&tab->vm, ptk);
@@ -330,6 +349,7 @@ void ptk_tab_init(ptk_data *ptk, ptk_tab *tab)
     ptk_define(ptk, &tab->vm, "ntracks", 7, rproc_ntracks, p);
     ptk_define(ptk, &tab->vm, "pstate", 6, rproc_pstate, p);
     ptk_define(ptk, &tab->vm, "loadraw", 7, rproc_loadraw, p);
+    ptk_define(ptk, &tab->vm, "title", 5, rproc_title, p);
 
     runt_set_state(&tab->vm, RUNT_MODE_INTERACTIVE, RUNT_ON);
 }
