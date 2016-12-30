@@ -189,6 +189,8 @@ typedef struct {
 
     int play_cb;
     int lua_lock;
+    
+    int stop_cb;
 
     char edit_old_r;
     char edit_old_g;

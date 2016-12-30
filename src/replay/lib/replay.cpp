@@ -2369,13 +2369,13 @@ void Sp_Player(ptk_data *ptk)
                     pl_note[i] = *(ptk->RawPatterns + efactor + PATTERN_NOTE1 + (i * 2));
                     pl_sample[i] = *(ptk->RawPatterns + efactor + PATTERN_INSTR1 + (i * 2));
                     if(pl_note[i] < 120) {
-                        if((ptk->note_cb) & 1 << ct) {
-                            ptk_lua_note_call(ptk, ct, i, pl_note[i]);
+                        if((ptk->note_cb) & 1 << pl_sample[i]) {
+                            ptk_lua_note_call(ptk, ct, i, pl_note[i], pl_sample[i]);
                         }
 
                     } else if(pl_note[i] == 120) {
-                        if((ptk->note_cb) & 1 << ct) {
-                            ptk_lua_note_call(ptk, ct, i, 0);
+                        if((ptk->note_cb) & 1 << pl_sample[i]) {
+                            ptk_lua_note_call(ptk, ct, i, 0, pl_sample[i]);
                         }
                     }
                 }

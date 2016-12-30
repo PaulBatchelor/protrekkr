@@ -2321,6 +2321,7 @@ void Notify_Play(ptk_data *ptk)
 // Stop replaying
 void SongStop(ptk_data *ptk)
 {
+    ptk_lua_call_noargs(ptk, ptk->stop_cb);
     Ptk_Stop(ptk);
 	if(ptk->start_gui == TRUE) {
 		Gui_Draw_Button_Box(8, 28, 39, 16, "\04", BUTTON_NORMAL | BUTTON_RIGHT_MOUSE | BUTTON_TEXT_CENTERED);
