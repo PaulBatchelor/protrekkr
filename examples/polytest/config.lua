@@ -32,6 +32,7 @@ ptk_set_stop_callback(stop)
 ptk_toggle_note_callback(0)
 ptk_toggle_note_callback(1)
 
+ptk_load_runt("polytest.rnt")
 
 ptk_compile_sporth([[
 (

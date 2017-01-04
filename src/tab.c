@@ -113,8 +113,10 @@ void ptk_tab_write(ptk_data *ptk)
                     switch(ptk->RawPatterns[voice + off]) {
                         case NO_NOTE: break;
                         case NOTE_OFF: 
-                            fprintf(fp, "%d %d %d %d noteoff\n", 
-                                pat, track, row, voice);
+                            fprintf(fp, "%d %d %d %d %d noteoff\n", 
+                                pat, track, row, voice,
+                                ptk->RawPatterns[voice + 1 + off] 
+                                );
                             break;
                         default:
                             fprintf(fp, "%d %d %d %d %d %d note\n", 
@@ -165,18 +167,18 @@ static int rproc_note(runt_vm *vm, runt_ptr p)
 
 static int rproc_noteoff(runt_vm *vm, runt_ptr p)
 {
-    unsigned char args[4];
+    unsigned char args[5];
     runt_int i, rc;
     runt_stacklet *s;
     ptk_data *ptk = runt_to_cptr(p);
     
-    for(i = 0; i < 4; i++) {
+    for(i = 0; i < 5; i++) {
         rc = runt_ppop(vm, &s);
         RUNT_ERROR_CHECK(rc);
         args[i] = s->f;
     }
 
-    ptk_tab_noteoff(ptk, args[3], args[2], args[1], args[0]);
+    ptk_tab_noteoff(ptk, args[4], args[3], args[2], args[1], args[0]);
     return RUNT_OK;
 }
 
@@ -414,7 +416,8 @@ void ptk_tab_noteoff(ptk_data *ptk,
     unsigned char pat,
     unsigned char track,
     unsigned char row,
-    unsigned char voice)
+    unsigned char voice,
+    unsigned char instr)
 {
     int off;
     off = PATTERN_ROW_LEN * row + 
@@ -422,6 +425,7 @@ void ptk_tab_noteoff(ptk_data *ptk,
         2 * voice +
         PATTERN_LEN * pat;
     ptk->RawPatterns[off] = NOTE_OFF;
+    ptk->RawPatterns[off + 1] = instr;
 }
 
 static void parse(runt_vm *vm, char *str, size_t read)

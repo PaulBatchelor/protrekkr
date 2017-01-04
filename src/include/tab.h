@@ -23,7 +23,9 @@ void ptk_tab_noteoff(ptk_data *ptk,
     unsigned char pat,
     unsigned char track,
     unsigned char row,
-    unsigned char voice);
+    unsigned char voice,
+    unsigned char instr
+    );
     
 int ptk_tab_load(ptk_tab *tab, const char *filename);
 void ptk_tab_pstate(ptk_data *ptk, 

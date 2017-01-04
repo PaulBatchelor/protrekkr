@@ -1,1 +1,1 @@
---dofile("examples/polyphony.lua")
+dofile("examples/config.lua")
