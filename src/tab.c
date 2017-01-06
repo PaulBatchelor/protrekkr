@@ -114,7 +114,7 @@ void ptk_tab_write(ptk_data *ptk)
                         case NO_NOTE: break;
                         case NOTE_OFF: 
                             fprintf(fp, "%d %d %d %d %d noteoff\n", 
-                                pat, track, row, voice,
+                                pat, track, row, voice / 2,
                                 ptk->RawPatterns[voice + 1 + off] 
                                 );
                             break;
@@ -123,7 +123,7 @@ void ptk_tab_write(ptk_data *ptk)
                                 pat,
                                 track,
                                 row, 
-                                voice,
+                                voice / 2,
                                 ptk->RawPatterns[voice + off], 
                                 ptk->RawPatterns[voice + 1 + off] 
                                 );

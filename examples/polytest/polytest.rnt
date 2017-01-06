@@ -9,19 +9,9 @@
 0 63 pstate
 1 63 pstate
 0 0 0 0 60 0 note
-0 0 0 4 64 0 note
-0 0 2 0 62 0 note
-0 0 2 4 65 0 note
-0 0 4 0 64 0 note
-0 0 4 4 67 0 note
-0 0 6 0 65 0 note
-0 0 6 4 71 0 note
-0 0 8 0 67 0 note
-0 0 8 4 72 0 note
+0 0 0 1 64 0 note
 0 0 10 0 0 noteoff
-0 0 10 4 0 noteoff
-0 1 0 0 62 1 note
-0 1 4 0 64 1 note
+0 0 10 1 0 noteoff
+0 1 0 0 74 1 note
+0 1 6 0 76 1 note
 0 1 10 0 1 noteoff
-1 1 0 0 62 0 note
-1 1 16 0 255 noteoff
