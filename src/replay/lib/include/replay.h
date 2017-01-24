@@ -55,7 +55,19 @@
 #endif
 #include "samples_unpack.h"
 #include "ptkreplay.h"
-#include "synth.h"
+
+// Types
+#if defined(__WIN32__) && !defined(__GCC__)
+typedef __int64 int64;
+typedef unsigned __int64 Uint64;
+#else
+typedef long long int64;
+#if defined(__LINUX__) && !defined(__FREEBSD__)
+typedef uint64_t Uint64;
+#else
+typedef unsigned long long Uint64;
+#endif
+#endif
 
 // ------------------------------------------------------
 // Constants
@@ -245,10 +257,6 @@ extern short patternLines[MAX_ROWS];
 extern char nameins[MAX_INSTRS][20];
 extern char Midiprg[MAX_INSTRS];
 
-#if defined(PTK_SYNTH)
-extern unsigned char Synthprg[MAX_INSTRS];
-#endif
-
 #if !defined(__STAND_ALONE__)
 extern char SamplesSwap[MAX_INSTRS];
 extern short *RawSamples_Swap[MAX_INSTRS][2][MAX_INSTRS_SPLITS];
@@ -340,18 +348,8 @@ extern int sp_Stage[MAX_TRACKS][MAX_POLYPHONY];
 extern int Cut_Stage[MAX_TRACKS][MAX_POLYPHONY];
 extern int Glide_Stage[MAX_TRACKS][MAX_POLYPHONY];
 
-#if defined(PTK_SYNTH)
-extern int sp_Stage2[MAX_TRACKS][MAX_POLYPHONY];
-extern int sp_Stage3[MAX_TRACKS][MAX_POLYPHONY];
-#endif
-
 extern int L_MaxLevel;
 extern int R_MaxLevel;
-
-#if defined(PTK_SYNTH)
-//extern CSynth Synthesizer[MAX_TRACKS][MAX_POLYPHONY];
-extern ptk_synth Synthesizer[MAX_TRACKS][MAX_POLYPHONY];
-#endif
 
 extern float oldspawn[MAX_TRACKS];
 extern float roldspawn[MAX_TRACKS];
@@ -367,13 +365,6 @@ extern int Songplaying;
 extern int left_value;
 extern int right_value;
 
-#if defined(PTK_SYNTH)
-#if !defined(__STAND_ALONE__) || defined(__WINAMP__)
-extern SynthParameters PARASynth[128];
-#else
-extern SYNTH_DATA PARASynth[128];
-#endif
-#endif
 
 extern float ramper[MAX_TRACKS];
 extern unsigned char nPatterns;
@@ -408,10 +399,6 @@ void init_sample_bank(ptk_data *ptk);
 void KillInst(ptk_data *ptk, int inst_nbr, int all_splits);
 void Post_Song_Init(ptk_data *ptk);
 
-#if !defined(__STAND_ALONE__) || defined(__WINAMP__)
-void ResetSynthParameters(ptk_data *ptk, SynthParameters *TSP);
-#endif
-
 #if defined(PTK_LIMITER_MASTER)
 void Mas_Compressor_Set_Variables_Master(ptk_data *ptk, float treshold, float ratio);
 float Mas_Compressor_Master(ptk_data *ptk, float input, float *rms_sum, float *Buffer, float *Env);
@@ -438,6 +425,39 @@ void init_eq(ptk_data *pt, LPEQSTATE es);
 float do_eq(ptk_data *ptk, LPEQSTATE es, float sample, int Left);
 #if defined(PTK_SHUFFLE)
 void Update_Shuffle(ptk_data *ptk);
+#endif
+
+#if defined(PTK_COMPRESSOR)
+class rFilter
+{
+    private: 
+
+        float buffy0;
+        float buffy1;
+
+    public:
+
+        rFilter()
+        {
+            Reset();
+        };
+
+        void Reset()
+        {
+            buffy0 = 0.0f;
+            buffy1 = 0.0f;
+        };
+
+        float fWork(float input, float f, float q)
+        {
+            float fa = 1.0f - f;
+            float fb = float(q * (1.0f + (1.0f / fa)));
+
+            buffy0 = fa * buffy0 + f * (input + fb * (buffy0 - buffy1));
+            buffy1 = fa * buffy1 + f * buffy0;
+            return buffy1;
+        };
+};
 #endif
 
 #endif

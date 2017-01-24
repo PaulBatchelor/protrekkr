@@ -2358,14 +2358,8 @@ void Newmod(ptk_data *ptk)
         Actualize_Master(ptk, 0);
         for(i = 0; i < MAX_INSTRS; i++)
         {
-            Old_Prg = Synthprg[i];
             KillInst(ptk, i, TRUE);
-            Synthprg[i] = Old_Prg;
             sprintf(nameins[i], "Untitled");
-            if((Synthprg[i] - 2) == i)
-            {
-                Synthprg[i] = 1;
-            }
         }
         Renew_Sample_Ed(ptk);
     }
@@ -2376,15 +2370,7 @@ void Newmod(ptk_data *ptk)
         {
             for(i = 0; i < MAX_POLYPHONY; i++)
             {
-                //Synthesizer[ini][i].Reset();
-                ptk_synth_reset(&Synthesizer[ini][i]);
             }
-        }
-
-        for(i = 0; i < MAX_INSTRS; i++)
-        {
-            ResetSynthParameters(ptk, &PARASynth[i]);
-            Synthprg[i] = 0;
         }
         Final_Mod_Length = 0;
         Actualize_Master(ptk, 0);
@@ -2967,12 +2953,9 @@ void DeleteInstrument(ptk_data *ptk)
             for(i = 0; i < MAX_POLYPHONY; i++)
             {
                 //Synthesizer[ini][i].Reset();
-                ptk_synth_reset(&Synthesizer[ini][i]);
             }
         }
 
-        ResetSynthParameters(ptk, &PARASynth[ptk->Current_Instrument]);
-        Synthprg[ptk->Current_Instrument] = 0;
         Actualize_Master(ptk, 0);
         Final_Mod_Length = 0;
         Actualize_Synth_Ed(ptk, UPDATE_SYNTH_ED_ALL);
@@ -2984,14 +2967,8 @@ void DeleteInstrument(ptk_data *ptk)
         ptk->seditor = 0;
         Final_Mod_Length = 0;
         Actualize_Master(ptk, 0);
-        Old_Prg = Synthprg[ptk->Current_Instrument];
         KillInst(ptk, ptk->Current_Instrument, FALSE);
-        Synthprg[ptk->Current_Instrument] = Old_Prg;
         sprintf(nameins[ptk->Current_Instrument], "Untitled");
-        if((Synthprg[ptk->Current_Instrument] - 2) == ptk->Current_Instrument)
-        {
-            Synthprg[ptk->Current_Instrument] = 1;
-        }
         Renew_Sample_Ed(ptk);
         Status_Box(ptk, "Instrument deleted.");
         RefreshSample(ptk);
@@ -3003,14 +2980,8 @@ void DeleteInstrument(ptk_data *ptk)
         ptk->seditor = 0;
         Final_Mod_Length = 0;
         Actualize_Master(ptk, 0);
-        Old_Prg = Synthprg[ptk->Current_Instrument];
         KillInst(ptk, ptk->Current_Instrument, TRUE);
-        Synthprg[ptk->Current_Instrument] = Old_Prg;
         sprintf(nameins[ptk->Current_Instrument], "Untitled");
-        if((Synthprg[ptk->Current_Instrument] - 2) == ptk->Current_Instrument)
-        {
-            Synthprg[ptk->Current_Instrument] = 1;
-        }
         Renew_Sample_Ed(ptk);
         Status_Box(ptk, "Instrument deleted.");
         RefreshSample(ptk);
@@ -3078,14 +3049,6 @@ void ShowInfo(ptk_data *ptk)
     int nbr_synth = 0;
     int i;
 
-    for(i = 0; i < MAX_INSTRS; i++)
-    {
-        if(Synthprg[i])
-        {
-            nbr_synth++;
-        }
-    }
-
     for(int pp = 0; pp < MAX_INSTRS; pp++)
     {
         for(int z = 0; z < MAX_INSTRS_SPLITS; z++)
@@ -3148,13 +3111,6 @@ void Actualize_Input(ptk_data *ptk)
         case INPUT_INSTRUMENT_NAME:
             Actualize_Name(ptk, ptk->retletter, nameins[ptk->Current_Instrument]);
             ptk->gui_action = GUI_CMD_UPDATE_PATTERN_ED;
-            break;
-
-        // Synth name
-        case INPUT_SYNTH_NAME:
-            Actualize_Name(ptk, ptk->retletter, PARASynth[ptk->Current_Instrument].presetname);
-            ptk->teac = UPDATE_SYNTH_CHANGE_NAME;
-            ptk->gui_action = GUI_CMD_UPDATE_SYNTH_ED;
             break;
 
         // Module ptk->artist
@@ -5285,7 +5241,6 @@ void Mouse_Handler(ptk_data *ptk)
         Mouse_Sliders_Sample_Ed(ptk);
         Mouse_Sliders_Instrument_Ed(ptk);
         Mouse_Sliders_Master_Ed(ptk);
-        Mouse_Sliders_Synth_Ed(ptk);
         Mouse_Sliders_Track_Fx_Ed(ptk);
         Mouse_Sliders_Fx_Ed(ptk);
         Mouse_Sliders_Track_Ed(ptk);
@@ -6841,7 +6796,6 @@ void Note_Jazz_Off(ptk_data *ptk, int note)
         if(ptk->Jazz_Edit || is_recording_2 || !is_editing)
         {
             //Synthesizer[Channel->Channel][Channel->Sub_Channel].NoteOff();
-            ptk_synth_note_off(&Synthesizer[Channel->Channel][Channel->Sub_Channel]);
             /*printf("REALTIME NOTEOFF! %d %d\n", Channel->Channel, Channel->Sub_Channel);*/
             if(sp_Stage[Channel->Channel][Channel->Sub_Channel] == PLAYING_SAMPLE)
             {

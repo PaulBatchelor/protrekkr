@@ -1348,66 +1348,9 @@ void Dump_Instruments_Synths_List(ptk_data *ptk, int xr, int yr)
                         case SCOPE_ZONE_SYNTH_LIST:
 
                             Font = USE_FONT_LOW;
-                            if(Synthprg[rel_val])
-                            {
-                                Font = USE_FONT;
-                            }
-                            
                             sprintf(Line, "%.2x:", rel_val);
                             PrintString(xr, yr + (counter * 12), Font, Line);
 
-                            sprintf(Line, "%s", PARASynth[rel_val].presetname);
-                            PrintString(xr + 18, yr + (counter * 12), Font, Line);
-
-                            int instr_to_search = Synthprg[rel_val];
-                            if(instr_to_search == 0)
-                            {
-                                sprintf(Line, "No waveform");
-                            }
-                            else
-                            {
-                                Nbr_Splits = 0;
-                                if(instr_to_search == 1) instr_to_search = rel_val;
-                                else instr_to_search -= 2;
-                                for(i = 0; i < MAX_INSTRS_SPLITS; i++)
-                                {
-                                    if(SampleType[instr_to_search][i])
-                                    {
-                                        Nbr_Splits++;
-                                    }
-                                }
-                                switch(Nbr_Splits)
-                                {
-                                    case 0:
-                                        sprintf(Line, "No waveform");
-                                        break;
-
-                                    case 1:
-                                        sprintf(Line, "%d waveform", Nbr_Splits);
-                                        break;
-
-                                    default:
-                                        sprintf(Line, "%d waveforms", Nbr_Splits);
-                                        break;
-                                }
-                            }
-                            PrintString(xr + (Cur_Width - 632), yr + (counter * 12), Font, Line);
-
-                            if(Synthprg[rel_val] == 0)
-                            {
-                                sprintf(Line, "No Instr.");
-                                PrintString(xr + (Cur_Width - 540), yr + (counter * 12), Font, Line);
-                            }
-                            else if(Synthprg[rel_val] == 1)
-                            {
-                                sprintf(Line, "Rel. Instr.: Curr");
-                                PrintString(xr + (Cur_Width - 540), yr + (counter * 12), USE_FONT, Line);
-                            }
-                            else
-                            {
-                                sprintf(Line, "Rel. Instr.: %.2x", Synthprg[rel_val] - 2);
-                                PrintString(xr + (Cur_Width - 540), yr + (counter * 12), USE_FONT, Line);
-                            }
                             break;
                     }
                 }
@@ -1491,13 +1434,6 @@ void Actualize_Instruments_Synths_List(ptk_data *ptk, int modeac)
 
                 case SCOPE_ZONE_SYNTH_LIST:
                     Nbr_Entries = 0;
-                    for(i = 0; i < MAX_INSTRS; i++)
-                    {
-                        if(Synthprg[i])
-                        {
-                            Nbr_Entries++;
-                        }
-                    }
                     sprintf(Line, "Synths List (%d)", Nbr_Entries);
                     PrintString(398, 26, USE_FONT, Line);
                     break;

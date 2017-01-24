@@ -46,7 +46,6 @@ OBJS = \
 	src/replay/lib/samples_unpack.o \
 	src/replay/lib/wavpack.o \
 	src/replay/lib/sounddriver/sounddriver_linux.o \
-	src/replay/lib/synth.o \
 	src/support/timer.o \
 	src/files/synths.o \
 	src/files/patterns.o \
