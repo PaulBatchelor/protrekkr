@@ -5681,19 +5681,18 @@ void Mouse_Handler(ptk_data *ptk)
             ptk->gui_action = GUI_CMD_SELECT_INSTRUMENT_EDIT;
             ptk->seditor = 0;
         }
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 2), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_SYNTH_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_SYNTH_EDIT;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 3), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_SAMPLE_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_SAMPLE_EDIT;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 4), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_TB303_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_TB303_EDIT;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 5), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_TRACK_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_TRACK_EDIT;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 6), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_TRACK_FX_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_TRACK_FX_EDIT;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 7), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_FX_SETUP_EDIT || Patterns_Lines_Offset))
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 2), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_SAMPLE_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_SAMPLE_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 3), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_TB303_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_TB303_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 4), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_TRACK_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_TRACK_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 5), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_TRACK_FX_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_TRACK_FX_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 6), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_FX_SETUP_EDIT || Patterns_Lines_Offset))
         {
             ptk->gui_action = GUI_CMD_SELECT_FX_EDIT;
             ptk->teac = 0;
         }
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 8), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_REVERB_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_REVERB_EDIT;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 9), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_DISKIO_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_DISKIO_EDIT;
-        if(zcheckMouse(ptk, 20 + (TAB_LARG * 10), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_SETUP_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_SCREEN_SETUP_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 7), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_REVERB_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_REVERB_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 8), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_DISKIO_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_DISKIO_EDIT;
+        if(zcheckMouse(ptk, 20 + (TAB_LARG * 9), (Cur_Height - 171) + Add_Offset, TAB_LARG - 2, 16) && (ptk->userscreen != USER_SCREEN_SETUP_EDIT || Patterns_Lines_Offset)) ptk->gui_action = GUI_CMD_SELECT_SCREEN_SETUP_EDIT;
         if(zcheckMouse(ptk, 
 					20 + (TAB_LARG * 11), (Cur_Height - 171) + Add_Offset, 
 					TAB_LARG - 2, 16) && 
@@ -6907,7 +6906,7 @@ void ptk_init(ptk_data *ptk)
 	ptk->render_mode = FALSE;
 
 	/* number of tabs in toolbar */
-	ptk->ntabs = 11;
+	ptk->ntabs = 10;
 
     /* lua reference value, storing callback function */
     ptk->lref = -1;

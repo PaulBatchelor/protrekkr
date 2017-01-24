@@ -1622,24 +1622,21 @@ void Draw_Editors_Bar(ptk_data *ptk, int Highlight)
     Gui_Draw_Button_Box(20 + TAB_LARG, (Cur_Height - 171) + Patterns_Lines_Offset, 
 			TAB_LARG - 2, 16, "Instrument", Highlight_Tab[2] | BUTTON_TEXT_CENTERED);
     Gui_Draw_Button_Box(20 + (TAB_LARG * 2), (Cur_Height - 171) + Patterns_Lines_Offset, 
-			TAB_LARG - 2, 16, "Synth", Highlight_Tab[6] | BUTTON_TEXT_CENTERED);
-    Gui_Draw_Button_Box(20 + (TAB_LARG * 3), (Cur_Height - 171) + Patterns_Lines_Offset, 
 			TAB_LARG - 2, 16, "Sample Ed.", Highlight_Tab[8] | BUTTON_TEXT_CENTERED);
-    Gui_Draw_Button_Box(20 + (TAB_LARG * 4), (Cur_Height - 171) + Patterns_Lines_Offset, 
+    Gui_Draw_Button_Box(20 + (TAB_LARG * 3), (Cur_Height - 171) + Patterns_Lines_Offset, 
 			TAB_LARG - 2, 16, "303 Units", Highlight_Tab[9] | BUTTON_TEXT_CENTERED);
-    Gui_Draw_Button_Box(20 + (TAB_LARG * 5), (Cur_Height - 171) + Patterns_Lines_Offset, 
+    Gui_Draw_Button_Box(20 + (TAB_LARG * 4), (Cur_Height - 171) + Patterns_Lines_Offset, 
 			TAB_LARG - 2, 16, "Track (I)", Highlight_Tab[1] | BUTTON_TEXT_CENTERED);
-    Gui_Draw_Button_Box(20 + (TAB_LARG * 6), (Cur_Height - 171) + Patterns_Lines_Offset, 
+    Gui_Draw_Button_Box(20 + (TAB_LARG * 5), (Cur_Height - 171) + Patterns_Lines_Offset, 
 			TAB_LARG - 2, 16, "Track (II)", Highlight_Tab[7] | BUTTON_TEXT_CENTERED);
-    Gui_Draw_Button_Box(20 + (TAB_LARG * 7), (Cur_Height - 171) + Patterns_Lines_Offset, 
+    Gui_Draw_Button_Box(20 + (TAB_LARG * 6), (Cur_Height - 171) + Patterns_Lines_Offset, 
 			TAB_LARG - 2, 16, "FX Setup", Highlight_Tab[3] | BUTTON_TEXT_CENTERED);
-    Gui_Draw_Button_Box(20 + (TAB_LARG * 8), (Cur_Height - 171) + Patterns_Lines_Offset, 
+    Gui_Draw_Button_Box(20 + (TAB_LARG * 7), (Cur_Height - 171) + Patterns_Lines_Offset, 
 			TAB_LARG - 2, 16, "Reverb", Highlight_Tab[10] | BUTTON_TEXT_CENTERED);
-    Gui_Draw_Button_Box(20 + (TAB_LARG * 9), (Cur_Height - 171) + Patterns_Lines_Offset, 
+    Gui_Draw_Button_Box(20 + (TAB_LARG * 8), (Cur_Height - 171) + Patterns_Lines_Offset, 
 			TAB_LARG - 2, 16, "Disk IO", Highlight_Tab[0] | BUTTON_TEXT_CENTERED);
-    Gui_Draw_Button_Box(20 + (TAB_LARG * 10), (Cur_Height - 171) + Patterns_Lines_Offset, 
+    Gui_Draw_Button_Box(20 + (TAB_LARG * 9), (Cur_Height - 171) + Patterns_Lines_Offset, 
 			TAB_LARG - 2, 16, "UI Setup", Highlight_Tab[5] | BUTTON_TEXT_CENTERED);
-    //Gui_Draw_Button_Box(20 + (TAB_LARG * 11), (Cur_Height - 171) + Patterns_Lines_Offset, TAB_LARG - 2, 16, "Midi Setup", Highlight_Tab[12] | BUTTON_TEXT_CENTERED);
 
     if(Highlight != USER_SCREEN_LARGE_PATTERN)
     {
