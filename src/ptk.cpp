@@ -378,7 +378,8 @@ SDL_Surface *Load_Skin_Picture(char *name)
     sprintf(filepath, "skins\\%s", pic_filename);
 #else
 /*TODO: handle file loading better*/
-    sprintf(filepath, "/usr/local/share/protrekkr/skins/%s", pic_filename);
+    // sprintf(filepath, "/usr/local/share/protrekkr/skins/%s", pic_filename);
+    sprintf(filepath, "skins/%s", pic_filename);
 #endif
 
     surface = Load_Picture(filepath);
@@ -412,7 +413,8 @@ int Load_Font_Datas(char *name)
 #else
     //sprintf(filepath, "skins/%s", pic_filename);
     /* TODO: handle filepaths better*/
-    sprintf(filepath, "/usr/local/share/protrekkr/skins/%s", pic_filename);
+    // sprintf(filepath, "/usr/local/share/protrekkr/skins/%s", pic_filename);
+    sprintf(filepath, "skins/%s", pic_filename);
 #endif
     if(!Create_Font_Datas(filepath))
     {

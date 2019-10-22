@@ -7,7 +7,8 @@ LIBS = src/extralibs/tinyxml/tinyxml.o \
        src/extralibs/tinyxml/tinyxmlerror.o \
        -lasound -lSDL -lsdldraw -lz -ljack -lpthread \
 	   -llua -ldl -lsndfile -lsporth -lsoundpipe -lm -llo \
-	   -lc -lrunt
+	   -lc -lrunt -L$(HOME)/.runt/lib -lstdc++ \
+       -lsndfile
 
 FLAGS = -g -O3 -fno-strict-aliasing -ffast-math -fno-rtti -fexceptions 
 FLAGS += -Wno-write-strings -Wno-multichar -Lsrc/extralibs/sdl_draw 
@@ -29,6 +30,7 @@ FLAGS += -Isrc/extralibs/sdl_draw/include
 FLAGS += -Isrc/replay/lib/sounddriver/include
 FLAGS += -Isrc/samples/include
 FLAGS += -Isrc/samples/wavpack/include
+FLAGS += -I$(HOME)/.runt/include
 
 MAIN = src/support/main.o
 
